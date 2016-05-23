@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:background="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/ic_arrow_back_white"
+        app:title="会议日程"
+        app:titleTextColor="@color/white"
+        app:subtitle="2016.5"
+        app:subtitleTextColor="@color/white">
+
+    </android.support.v7.widget.Toolbar>
+
+    <include layout="@layout/top_week_title" />
+
+    <cn.edu.jumy.oa.widget.datepicker.ScrollLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/main_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <cn.edu.jumy.oa.widget.datepicker.calendar.views.MonthView
+                android:id="@+id/month_calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <cn.edu.jumy.oa.widget.datepicker.view.MyTextView
+                android:id="@+id/week_text"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@android:color/white"
+                android:layout_width="70dp"
+                android:visibility="invisible"
+                android:textSize="12sp"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_height="18dp" />
+            <LinearLayout
+                android:id="@+id/content_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <cn.edu.jumy.oa.widget.datepicker.calendar.views.WeekView
+            android:id="@+id/week_calendar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible" />
+
+    </cn.edu.jumy.oa.widget.datepicker.ScrollLayout>
+
+
+</LinearLayout>

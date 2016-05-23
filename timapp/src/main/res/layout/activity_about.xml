@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.tencent.qcloud.timchat.ui.AboutActivity">
+    <cn.edu.jumy.oa.timchat.ui.customview.TemplateTitle
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:canBack="true"
+        app:titleText="@string/about_title" />
+
+
+    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+        android:id="@+id/imsdk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:name="@string/about_imsdk" />
+    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+        android:id="@+id/qalsdk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:name="@string/about_qalsdk" />
+    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+        android:id="@+id/tlssdk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:name="@string/about_tlssdk" />
+    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+        android:id="@+id/logLevel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:isBottom="true"
+        app:canNav="true"
+        app:name="@string/about_log" />
+</LinearLayout>

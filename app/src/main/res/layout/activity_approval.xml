@@ -1,0 +1,82 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <!--<cn.edu.jumy.oa.timchat.ui.customview.TemplateTitle-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:titleText="审批"/>-->
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="审批"
+        app:titleTextColor="@color/white"
+        android:background="@color/colorAccent"
+        app:navigationIcon="@drawable/ic_arrow_back_white">
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/approval_wait"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:minHeight="150dp"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:text="待我审批"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/approval_mine"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:minHeight="150dp"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:text="我发起的"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/approval_sick_leave_visible"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/pressed"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/approval_sick_leave"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="销假点这里"
+            android:padding="5dp"
+            android:textColor="@color/white"/>
+
+        <ImageView
+            android:id="@+id/approval_sick_leave_invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:src="@drawable/ic_highlight_off_white"/>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>
