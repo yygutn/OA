@@ -22,9 +22,11 @@ android {
     }
     buildTypes{
         debug{
+            buildConfigField "boolean","LOG_DEBUG","true"
             debuggable true
         }
         release{
+            buildConfigField "boolean","LOG_DEBUG","false"
             debuggable false
             signingConfig signingConfigs.release
         }

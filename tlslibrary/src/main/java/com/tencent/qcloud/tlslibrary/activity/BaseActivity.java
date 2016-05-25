@@ -18,6 +18,9 @@ import com.tencent.qcloud.tlslibrary.BuildConfig;
  * Date: 16/5/17  下午2:57
  */
 public class BaseActivity extends AppCompatActivity {
+
+    private boolean DEBUG = true;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,5 +73,15 @@ public class BaseActivity extends AppCompatActivity {
 
     public void showToast(@StringRes int resId) {
             Toast.makeText(this,getResources().getText(resId), Toast.LENGTH_SHORT).show();
+    }
+    public void showDebugLoge(CharSequence message){
+        if (DEBUG){
+            Log.e("jumy",message.toString());
+        }
+    }
+    public void showDebugLogw(CharSequence message){
+        if (DEBUG){
+            Log.w("jumy",message.toString());
+        }
     }
 }

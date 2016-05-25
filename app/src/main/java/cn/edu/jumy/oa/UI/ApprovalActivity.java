@@ -88,9 +88,12 @@ public class ApprovalActivity extends BaseActivity implements MyItemTouchCallbac
         ////////////////////////////////////////////////////////
         /////////初始化数据，如果缓存中有就使用缓存中的
         ArrayList<Item> items = (ArrayList<Item>) ACache.get(mContext).getAsObject("approval_items");
-        if (items != null && false)
+        if (items != null && items.size() > 0) {
             results.addAll(items);
+            showDebugLoge("from local cache");
+        }
         else {
+            showDebugLoge("from new data");
             results.add(new Item(0, "请假", R.drawable.takeout_ic_category_flower));
             results.add(new Item(1, "报销", R.drawable.takeout_ic_category_fruit));
             results.add(new Item(2, "物品领用", R.drawable.takeout_ic_category_medicine));
@@ -98,8 +101,8 @@ public class ApprovalActivity extends BaseActivity implements MyItemTouchCallbac
             results.add(new Item(4, "付款", R.drawable.takeout_ic_category_public));
             results.add(new Item(5, "采购", R.drawable.takeout_ic_category_store));
         }
-        results.remove(results.size() - 1);
-        results.add(new Item(results.size(), "更多", R.drawable.takeout_ic_more));
+//        results.remove(results.size() - 1);
+//        results.add(new Item(results.size(), "更多", R.drawable.takeout_ic_more));
         ////////////////////////////////////////////////////////
         initRecyclerViews();
         mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -124,7 +127,7 @@ public class ApprovalActivity extends BaseActivity implements MyItemTouchCallbac
                 break;
             }
             case R.id.approval_sick_leave_invisible:{
-                mAppVisible.setVisibility(View.INVISIBLE);
+                mAppVisible.setVisibility(View.GONE);
                 break;
             }
             default:break;

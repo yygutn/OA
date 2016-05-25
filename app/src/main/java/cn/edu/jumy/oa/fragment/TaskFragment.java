@@ -11,10 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import cn.edu.jumy.oa.UI.ApprovalActivity;
+import com.tencent.qcloud.tlslibrary.activity.BaseFragment;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.ApprovalActivity_;
 import cn.edu.jumy.oa.UI.CalendarActivity_;
-import cn.edu.jumy.oa.UI.NotifyActivity_;
 import cn.edu.jumy.oa.dragrecyclerview.adapter.RecyclerAdapter;
 import cn.edu.jumy.oa.dragrecyclerview.common.DividerGridItemDecoration;
 import cn.edu.jumy.oa.dragrecyclerview.entity.Item;
@@ -22,11 +26,6 @@ import cn.edu.jumy.oa.dragrecyclerview.helper.MyItemTouchCallback;
 import cn.edu.jumy.oa.dragrecyclerview.helper.OnRecyclerItemClickListener;
 import cn.edu.jumy.oa.dragrecyclerview.utils.ACache;
 import cn.edu.jumy.oa.dragrecyclerview.utils.VibratorUtil;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import cn.edu.jumy.oa.R;
 
 /**
  * Created by Jumy on 16/5/19 12:07.
@@ -56,7 +55,7 @@ import cn.edu.jumy.oa.R;
  * #                                                   #
  * *****************************************************
  */
-public class TaskFragment extends Fragment implements MyItemTouchCallback.OnDragListener {
+public class TaskFragment extends BaseFragment implements MyItemTouchCallback.OnDragListener {
 
     private List<Item> results = new ArrayList<Item>();
 
@@ -65,26 +64,30 @@ public class TaskFragment extends Fragment implements MyItemTouchCallback.OnDrag
         super.onCreate(savedInstanceState);
         ////////////////////////////////////////////////////////
         /////////初始化数据，如果缓存中有就使用缓存中的
-        ArrayList<Item> items = (ArrayList<Item>) ACache.get(getActivity()).getAsObject("items");
-        if (items != null && false)
+        ArrayList<Item> items = (ArrayList<Item>) ACache.get(getActivity()).getAsObject("task_items");
+        if (items != null && items.size() > 0) {
+            showDebugLoge("from local cache");
             results.addAll(items);
+        }
         else {
+            showDebugLoge("from new data");
             for (int i = 0; i < 1; i++) {
                 results.add(new Item(0, "审批", R.drawable.takeout_ic_category_flower));
 //                results.add(new Item(i * 7 + 1, "公告", R.drawable.takeout_ic_category_fruit));
                 results.add(new Item(1, "签到", R.drawable.takeout_ic_category_medicine));
-                results.add(new Item(2, "日志", R.drawable.takeout_ic_category_motorcycle));
-                results.add(new Item(3, "邮件", R.drawable.takeout_ic_category_sweet));
-                results.add(new Item(4, "会议", R.drawable.takeout_ic_category_store));
-                results.add(new Item(5, "收文", R.drawable.takeout_ic_category_public));
-                results.add(new Item(6, "发文", R.drawable.takeout_ic_category_medicine));
-                results.add(new Item(7, "公文阅读", R.drawable.takeout_ic_category_motorcycle));
+                results.add(new Item(2, "邮件", R.drawable.takeout_ic_category_sweet));
+                results.add(new Item(3, "会议", R.drawable.takeout_ic_category_store));
+                results.add(new Item(4, "收文", R.drawable.takeout_ic_category_public));
+                results.add(new Item(5, "发文", R.drawable.takeout_ic_category_medicine));
+                results.add(new Item(6, "公文阅读", R.drawable.takeout_ic_category_motorcycle));
+                results.add(new Item(7, "在线学习", R.drawable.takeout_ic_category_motorcycle));
             }
         }
 //        results.remove(results.size() - 1);
-        results.add(new Item(results.size(), "更多", R.drawable.takeout_ic_more));
+//        results.add(new Item(results.size(), "更多", R.drawable.takeout_ic_more));
         ////////////////////////////////////////////////////////
     }
+
 
     @Nullable
     @Override
@@ -127,7 +130,7 @@ public class TaskFragment extends Fragment implements MyItemTouchCallback.OnDrag
                         ApprovalActivity_.intent(getActivity()).start();
                         break;
                     }
-                    case 4:{
+                    case 3:{
                         CalendarActivity_.intent(getActivity()).start();
                         break;
                     }
@@ -141,6 +144,6 @@ public class TaskFragment extends Fragment implements MyItemTouchCallback.OnDrag
     @Override
     public void onFinishDrag() {
         //存入缓存
-        ACache.get(getActivity()).put("items", (ArrayList<Item>) results);
+        ACache.get(getActivity()).put("task_items", (ArrayList<Item>) results);
     }
 }

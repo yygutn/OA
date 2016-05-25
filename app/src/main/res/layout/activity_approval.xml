@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         app:title="审批"
         app:titleTextColor="@color/white"
-        android:background="@color/colorAccent"
+        android:background="@color/pressed"
         app:navigationIcon="@drawable/ic_arrow_back_white">
 
     </android.support.v7.widget.Toolbar>
@@ -50,6 +50,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="visible"
         android:id="@+id/approval_sick_leave_visible"
         android:layout_width="match_parent"
         android:layout_height="30dp"

@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
-
+apply plugin: 'realm-android'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -14,9 +14,11 @@ android {
     }
     buildTypes {
         debug{
+            buildConfigField "boolean","LOG_DEBUG","true"
             debuggable true
         }
         release {
+            buildConfigField "boolean","LOG_DEBUG","false"
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

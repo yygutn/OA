@@ -157,6 +157,7 @@ public class AppManager {
     }
 
     private void showDebugLog(CharSequence message) {
+        Log.w("Jumy",BuildConfig.DEBUG+"");
         if (BuildConfig.DEBUG) {
             Log.w("AppManager", message.toString());
         }

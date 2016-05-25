@@ -1,6 +1,5 @@
 package cn.edu.jumy.oa.UI;
 
-import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,7 +10,11 @@ import android.widget.Toast;
 import com.tencent.qcloud.tlslibrary.activity.AppManager;
 import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.res.HtmlRes;
+import org.androidannotations.annotations.res.StringRes;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,37 +27,32 @@ import cn.edu.jumy.oa.widget.datepicker.calendar.views.MonthView;
 import cn.edu.jumy.oa.widget.datepicker.calendar.views.WeekView;
 import cn.edu.jumy.oa.widget.datepicker.view.ContentItemViewAbs;
 
-@EActivity
+@EActivity(R.layout.activity_calendar)
 public class CalendarActivity extends BaseActivity implements MonthView.OnDateChangeListener, MonthView.OnDatePickedListener {
 
-    private MonthView monthView;
-    private WeekView weekView;
-    private Toolbar toolbar;
-    private LinearLayout contentLayout;
-    private TextView weekTxt;
-    private Calendar now;
+    @ViewById(R.id.month_calendar)
+    MonthView monthView;
+    @ViewById(R.id.week_calendar)
+    WeekView weekView;
+    @ViewById(R.id.toolbar)
+    Toolbar toolbar;
+    @ViewById(R.id.content_layout)
+    LinearLayout contentLayout;
+    @ViewById(R.id.week_text)
+    TextView weekTxt;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar);
+    @StringRes(R.string.message)
+    CharSequence mNotification;
+
+    Calendar now;
+
+    @AfterViews
+    void start() {
         AppManager.getInstance().addActivity(this);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
         now = Calendar.getInstance();
         toolbar.setSubtitle(now.get(Calendar.YEAR) + "." + (now.get(Calendar.MONTH) + 1));
         setSupportActionBar(toolbar);
-
-
-        monthView = (MonthView) findViewById(R.id.month_calendar);
-        weekView = (WeekView) findViewById(R.id.week_calendar);
-        contentLayout = (LinearLayout) findViewById(R.id.content_layout);
-        weekTxt = (TextView) findViewById(R.id.week_text);
+        printLayout(contentLayout);
 
         monthView.setDPMode(DPMode.SINGLE);
         monthView.setDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1);
@@ -69,14 +67,37 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
         weekView.setTodayDisplay(true);
         weekView.setOnDatePickedListener(this);
         initNotification();
-
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private void initNotification() {
-        for (int i = 0; i < new Random().nextInt(10); i++) {
-            ContentItemViewAbs cia = new ContentItemViewAbs(this);
-            contentLayout.addView(cia);
+        try {
+            for (int i = 0; i < new Random().nextInt(10); i++) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                String time = sdf.format(new Date());
+                time = time + "在" + new Random().nextInt(1000) + "开会";
+                String message = mNotification.toString();
+                if (i != 0) {
+                    message = "会议提纲" + i;
+                }
+                ContentItemViewAbs cia = new ContentItemViewAbs(this, "会议", time, message);
+                contentLayout.addView(cia);
+            }
+            printLayout(contentLayout);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    private void printLayout(View view) {
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+        showDebugLoge(location[0] + "\n" + location[1]);
     }
 
     @Override
@@ -99,12 +120,19 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
                 weekTxt.setVisibility(View.VISIBLE);
             }
             contentLayout.removeAllViews();
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String time=   sdf.format( new  Date());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String time = sdf.format(new Date());
             for (int i = 0; i < new Random().nextInt(10); i++) {
-                ContentItemViewAbs cia = new ContentItemViewAbs(this,R.style.MainLayout,"会议",time+"在"+new Random().nextInt(1000)+"开会","会议提纲");
+
+                time = time + "在" + new Random().nextInt(1000) + "开会";
+                String message = mNotification.toString();
+                if (i != 0) {
+                    message = "会议提纲" + i;
+                }
+                ContentItemViewAbs cia = new ContentItemViewAbs(this, "会议", time, message);
                 contentLayout.addView(cia);
             }
+            printLayout(contentLayout);
             Toast.makeText(this, "" + date, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
