@@ -1,5 +1,6 @@
 package cn.edu.jumy.oa.fragment;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,12 +14,20 @@ import android.widget.Toast;
 
 import com.tencent.qcloud.tlslibrary.activity.BaseFragment;
 
+import org.androidannotations.annotations.res.DrawableRes;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.ApprovalActivity_;
 import cn.edu.jumy.oa.UI.CalendarActivity_;
+import cn.edu.jumy.oa.UI.MyFileActivity_;
+import cn.edu.jumy.oa.UI.ReceiveFileActivity_;
+import cn.edu.jumy.oa.UI.SendFileWebActivity_;
+import cn.edu.jumy.oa.UI.TempActivity;
+import cn.edu.jumy.oa.UI.TempActivity_;
 import cn.edu.jumy.oa.dragrecyclerview.adapter.RecyclerAdapter;
 import cn.edu.jumy.oa.dragrecyclerview.common.DividerGridItemDecoration;
 import cn.edu.jumy.oa.dragrecyclerview.entity.Item;
@@ -65,22 +74,22 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
         ////////////////////////////////////////////////////////
         /////////初始化数据，如果缓存中有就使用缓存中的
         ArrayList<Item> items = (ArrayList<Item>) ACache.get(getActivity()).getAsObject("task_items");
-        if (items != null && items.size() > 0) {
+        if (items != null && items.size() > 0 && false) {
             showDebugLoge("from local cache");
             results.addAll(items);
         }
         else {
             showDebugLoge("from new data");
             for (int i = 0; i < 1; i++) {
-                results.add(new Item(0, "审批", R.drawable.takeout_ic_category_flower));
+                results.add(new Item(0, "审批", R.drawable.shenpi));
 //                results.add(new Item(i * 7 + 1, "公告", R.drawable.takeout_ic_category_fruit));
-                results.add(new Item(1, "签到", R.drawable.takeout_ic_category_medicine));
-                results.add(new Item(2, "邮件", R.drawable.takeout_ic_category_sweet));
-                results.add(new Item(3, "会议", R.drawable.takeout_ic_category_store));
-                results.add(new Item(4, "收文", R.drawable.takeout_ic_category_public));
-                results.add(new Item(5, "发文", R.drawable.takeout_ic_category_medicine));
-                results.add(new Item(6, "公文阅读", R.drawable.takeout_ic_category_motorcycle));
-                results.add(new Item(7, "在线学习", R.drawable.takeout_ic_category_motorcycle));
+                results.add(new Item(1, "签到", R.drawable.location));
+                results.add(new Item(2, "邮件", R.drawable.mail));
+                results.add(new Item(3, "会议", R.drawable.approval));
+                results.add(new Item(4, "收文", R.drawable.receive_file));
+                results.add(new Item(5, "发文", R.drawable.send_file));
+                results.add(new Item(6, "公文阅读", R.drawable.read_file));
+                results.add(new Item(7, "在线学习", R.drawable.learn_online));
             }
         }
 //        results.remove(results.size() - 1);
@@ -123,6 +132,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
 
             @Override
             public void onItemClick(RecyclerView.ViewHolder vh) {
+                Bundle bundle;
                 Item item = results.get(vh.getLayoutPosition());
                 Toast.makeText(getActivity(), item.getId() + " " + item.getName(), Toast.LENGTH_SHORT).show();
                 switch (item.getId()) {
@@ -130,9 +140,27 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                         ApprovalActivity_.intent(getActivity()).start();
                         break;
                     }
+                    case 1:{
+                        bundle = new Bundle();
+                        bundle.putString("title","签到");
+                        bundle.putString("img","file:///android_asset/img/img_2225.png");
+                        TempActivity_.intent(getActivity()).extra("temp",bundle).start();
+                        break;
+                    }
                     case 3:{
                         CalendarActivity_.intent(getActivity()).start();
                         break;
+                    }
+                    case 4:{
+                        ReceiveFileActivity_.intent(getActivity()).start();
+                        break;
+                    }
+                    case 5:{
+                        SendFileWebActivity_.intent(getActivity()).start();
+                        break;
+                    }
+                    case 6:{
+                        MyFileActivity_.intent(getActivity()).start();
                     }
                     default:
                         break;

@@ -2,9 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 apply plugin: 'realm-android'
 android {
+    signingConfigs {
+        release {
+            keyAlias 'yygutn'
+            keyPassword 'yygutn'
+            storeFile file('/Volumes/software/Users/Jumy/Desktop/OA/OA.jks')
+            storePassword 'yygutn'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
-
     defaultConfig {
         applicationId "cn.edu.jumy.oa"
         minSdkVersion 14
@@ -13,12 +20,12 @@ android {
         versionName "1.0"
     }
     buildTypes {
-        debug{
-            buildConfigField "boolean","LOG_DEBUG","true"
+        debug {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
             debuggable true
         }
         release {
-            buildConfigField "boolean","LOG_DEBUG","false"
+            buildConfigField "boolean", "LOG_DEBUG", "false"
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -27,7 +34,7 @@ android {
     lintOptions {
         abortOnError false
     }
-    dexOptions{
+    dexOptions {
         incremental true
     }
 }

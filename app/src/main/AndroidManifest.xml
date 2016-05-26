@@ -100,6 +100,15 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".UI.CalendarActivity_"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".UI.SendFileWebActivity_"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".UI.MyFileActivity_"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".UI.ReceiveFileActivity_"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".UI.TempActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
 
     </application>
 

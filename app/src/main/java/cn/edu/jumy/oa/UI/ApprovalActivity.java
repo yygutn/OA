@@ -1,6 +1,7 @@
 package cn.edu.jumy.oa.UI;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -91,15 +92,14 @@ public class ApprovalActivity extends BaseActivity implements MyItemTouchCallbac
         if (items != null && items.size() > 0) {
             results.addAll(items);
             showDebugLoge("from local cache");
-        }
-        else {
+        } else {
             showDebugLoge("from new data");
-            results.add(new Item(0, "请假", R.drawable.takeout_ic_category_flower));
-            results.add(new Item(1, "报销", R.drawable.takeout_ic_category_fruit));
-            results.add(new Item(2, "物品领用", R.drawable.takeout_ic_category_medicine));
-            results.add(new Item(3, "通用审批", R.drawable.takeout_ic_category_motorcycle));
-            results.add(new Item(4, "付款", R.drawable.takeout_ic_category_public));
-            results.add(new Item(5, "采购", R.drawable.takeout_ic_category_store));
+            results.add(new Item(0, "请假", R.drawable.ask_for_leave));
+            results.add(new Item(1, "报销", R.drawable.purchase));
+            results.add(new Item(2, "物品领用", R.drawable.recipients));
+            results.add(new Item(3, "通用审批", R.drawable.approval_normal));
+            results.add(new Item(4, "付款", R.drawable.payment));
+            results.add(new Item(5, "采购", R.drawable.write_off));
         }
 //        results.remove(results.size() - 1);
 //        results.add(new Item(results.size(), "更多", R.drawable.takeout_ic_more));
@@ -112,27 +112,30 @@ public class ApprovalActivity extends BaseActivity implements MyItemTouchCallbac
             }
         });
     }
-    @Click({R.id.approval_sick_leave,R.id.approval_sick_leave_invisible,R.id.approval_wait,R.id.approval_mine})
-    void click(View view){
-        switch (view.getId()){
-            case R.id.approval_mine:{
+
+    @Click({R.id.approval_sick_leave, R.id.approval_sick_leave_invisible, R.id.approval_wait, R.id.approval_mine})
+    void click(View view) {
+        switch (view.getId()) {
+            case R.id.approval_mine: {
                 showToast("我发起的");
                 break;
             }
-            case R.id.approval_wait:{
+            case R.id.approval_wait: {
                 showToast("待我审批");
                 break;
             }
-            case R.id.approval_sick_leave:{
+            case R.id.approval_sick_leave: {
                 break;
             }
-            case R.id.approval_sick_leave_invisible:{
+            case R.id.approval_sick_leave_invisible: {
                 mAppVisible.setVisibility(View.GONE);
                 break;
             }
-            default:break;
+            default:
+                break;
         }
     }
+
     private void initRecyclerViews() {
         RecyclerAdapter adapter = new RecyclerAdapter(R.layout.item_grid, results);
         mListView = (RecyclerView) findViewById(R.id.recView);
@@ -155,9 +158,46 @@ public class ApprovalActivity extends BaseActivity implements MyItemTouchCallbac
 
             @Override
             public void onItemClick(RecyclerView.ViewHolder vh) {
+                Bundle bundle;
                 Item item = results.get(vh.getLayoutPosition());
                 Toast.makeText(mContext, item.getId() + " " + item.getName(), Toast.LENGTH_SHORT).show();
                 switch (item.getId()) {
+                    case 0: {
+                        bundle = new Bundle();
+                        bundle.putString("title", "请假");
+                        bundle.putString("img", "file:///android_asset/img/img_2226.png");
+                        TempActivity_.intent(mContext).extra("temp", bundle).start();
+                        break;
+                    }
+                    case 1: {
+                        bundle = new Bundle();
+                        bundle.putString("title", "报销");
+                        bundle.putString("img", "file:///android_asset/img/img_2227.png");
+                        TempActivity_.intent(mContext).extra("temp", bundle).start();
+                        break;
+                    }
+                    case 2: {
+                        bundle = new Bundle();
+                        bundle.putString("title", "物品领用");
+                        bundle.putString("img", "file:///android_asset/img/img_2228.png");
+                        TempActivity_.intent(mContext).extra("temp", bundle).start();
+                        break;
+                    }
+                    case 4: {
+                        bundle = new Bundle();
+                        bundle.putString("title", "付款");
+                        bundle.putString("img", "file:///android_asset/img/img_2230.png");
+                        TempActivity_.intent(mContext).extra("temp", bundle).start();
+                        break;
+                    }
+                    case 5: {
+                        bundle = new Bundle();
+                        bundle.putString("title", "采购");
+                        bundle.putString("img", "file:///android_asset/img/img_2229.png");
+                        TempActivity_.intent(mContext).extra("temp", bundle).start();
+                        break;
+                    }
+
                     default:
                         break;
                 }

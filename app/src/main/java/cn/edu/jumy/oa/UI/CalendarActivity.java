@@ -42,7 +42,7 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
     TextView weekTxt;
 
     @StringRes(R.string.message)
-    CharSequence mNotification;
+    String mNotification;
 
     Calendar now;
 
@@ -52,7 +52,6 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
         now = Calendar.getInstance();
         toolbar.setSubtitle(now.get(Calendar.YEAR) + "." + (now.get(Calendar.MONTH) + 1));
         setSupportActionBar(toolbar);
-        printLayout(contentLayout);
 
         monthView.setDPMode(DPMode.SINGLE);
         monthView.setDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1);
@@ -88,16 +87,9 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
                 ContentItemViewAbs cia = new ContentItemViewAbs(this, "会议", time, message);
                 contentLayout.addView(cia);
             }
-            printLayout(contentLayout);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void printLayout(View view) {
-        int[] location = new int[2];
-        view.getLocationOnScreen(location);
-        showDebugLoge(location[0] + "\n" + location[1]);
     }
 
     @Override
@@ -132,7 +124,6 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
                 ContentItemViewAbs cia = new ContentItemViewAbs(this, "会议", time, message);
                 contentLayout.addView(cia);
             }
-            printLayout(contentLayout);
             Toast.makeText(this, "" + date, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();

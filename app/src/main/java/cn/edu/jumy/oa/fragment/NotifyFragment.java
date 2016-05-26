@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Random;
 
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.UI.CalendarActivity_;
 import cn.edu.jumy.oa.bean.CardData;
 import cn.edu.jumy.oa.dragrecyclerview.utils.ACache;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
@@ -113,6 +114,7 @@ public class NotifyFragment extends BaseFragment {
             @Override
             public void onItemClick(@NonNull Card card, int position) {
                 Log.d("CARD_TYPE", "" + card.getTag());
+                CalendarActivity_.intent(getActivity()).start();
             }
 
             @Override
@@ -138,7 +140,7 @@ public class NotifyFragment extends BaseFragment {
         for (int i = 0; i < 10; i++) {
             String time = sdf.format(new Date());
             time = time + "在" + new Random().nextInt(1000) + "开会";
-            cards.add(getNotificationCard("通知", "会议", time));
+            cards.add(getNotificationCard("通知", "会议(点击查看详情)", time));
             cardDataList.add(new CardData("通知","会议",time));
         }
         mListView.getAdapter().addAll(cards);
@@ -159,11 +161,12 @@ public class NotifyFragment extends BaseFragment {
                 //                        .setBackgroundColor(getResources().getColor(R.color.colorMask))
                 .addAction(R.id.ok_button, new TextViewAction(mContext)
                         .setText("未读")
-                        .setTextColor(Color.BLACK)
+                        .setTextColor(Color.WHITE)
                         .setListener(new OnActionClickListener() {
                             @Override
                             public void onActionClicked(View view, Card card) {
                                 try {
+                                    showDebugLoge("点击");
                                     TextViewAction action = (TextViewAction) card.getProvider().getAction(R.id.ok_button);
                                     action.setText("已签收");
                                 } catch (Exception e) {
