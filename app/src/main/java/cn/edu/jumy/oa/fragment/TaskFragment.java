@@ -1,5 +1,6 @@
 package cn.edu.jumy.oa.fragment;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.fsck.k9.activity.Accounts;
 import com.tencent.qcloud.tlslibrary.activity.BaseFragment;
 
 import org.androidannotations.annotations.res.DrawableRes;
@@ -22,12 +24,16 @@ import java.util.List;
 
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.ApprovalActivity_;
+import cn.edu.jumy.oa.UI.AuditActivity_;
 import cn.edu.jumy.oa.UI.CalendarActivity_;
+import cn.edu.jumy.oa.UI.MeetingSendActivity_;
 import cn.edu.jumy.oa.UI.MyFileActivity_;
 import cn.edu.jumy.oa.UI.ReceiveFileActivity_;
 import cn.edu.jumy.oa.UI.SendFileWebActivity_;
+import cn.edu.jumy.oa.UI.StudyOnlineActivity_;
 import cn.edu.jumy.oa.UI.TempActivity;
 import cn.edu.jumy.oa.UI.TempActivity_;
+import cn.edu.jumy.oa.UI.VerifyActivity_;
 import cn.edu.jumy.oa.dragrecyclerview.adapter.RecyclerAdapter;
 import cn.edu.jumy.oa.dragrecyclerview.common.DividerGridItemDecoration;
 import cn.edu.jumy.oa.dragrecyclerview.entity.Item;
@@ -88,8 +94,11 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                 results.add(new Item(3, "会议", R.drawable.approval));
                 results.add(new Item(4, "收文", R.drawable.receive_file));
                 results.add(new Item(5, "发文", R.drawable.send_file));
-                results.add(new Item(6, "公文阅读", R.drawable.read_file));
+                results.add(new Item(6, "文件柜", R.drawable.folder));
                 results.add(new Item(7, "在线学习", R.drawable.learn_online));
+                results.add(new Item(8,"会议发送",R.drawable.meet_send));
+                results.add(new Item(9,"会议审核",R.drawable.meet_approval));
+//                results.add(new Item(10,"文件柜",R.drawable.folder));
             }
         }
 //        results.remove(results.size() - 1);
@@ -136,31 +145,50 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                 Item item = results.get(vh.getLayoutPosition());
                 Toast.makeText(getActivity(), item.getId() + " " + item.getName(), Toast.LENGTH_SHORT).show();
                 switch (item.getId()) {
-                    case 0: {
+                    case 0: {//审批
                         ApprovalActivity_.intent(getActivity()).start();
                         break;
                     }
-                    case 1:{
+                    case 1:{//签到
                         bundle = new Bundle();
                         bundle.putString("title","签到");
                         bundle.putString("img","file:///android_asset/img/img_2225.png");
                         TempActivity_.intent(getActivity()).extra("temp",bundle).start();
                         break;
                     }
-                    case 3:{
+                    case 2:{//邮件
+                        startActivity(new Intent(getActivity(), Accounts.class));
+                        break;
+                    }
+                    case 3:{//会议
                         CalendarActivity_.intent(getActivity()).start();
                         break;
                     }
-                    case 4:{
-                        ReceiveFileActivity_.intent(getActivity()).start();
+                    case 4:{//收文
+                        MyFileActivity_.intent(getActivity()).start();
                         break;
                     }
-                    case 5:{
+                    case 5:{//发文
                         SendFileWebActivity_.intent(getActivity()).start();
                         break;
                     }
-                    case 6:{
-                        MyFileActivity_.intent(getActivity()).start();
+                    case 6:{//公文阅读
+                        bundle = new Bundle();
+                        bundle.putString("file","file");
+                        VerifyActivity_.intent(getActivity()).extra("file",bundle).start();
+                        break;
+                    }
+                    case 7:{//在线学习
+                        StudyOnlineActivity_.intent(getActivity()).start();
+                        break;
+                    }
+                    case 8:{//会议发送
+                        MeetingSendActivity_.intent(getActivity()).start();
+                        break;
+                    }
+                    case 9:{//会议审核
+                        AuditActivity_.intent(getActivity()).start();
+                        break;
                     }
                     default:
                         break;

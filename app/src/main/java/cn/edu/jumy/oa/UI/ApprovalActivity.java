@@ -70,10 +70,10 @@ public class ApprovalActivity extends BaseActivity implements MyItemTouchCallbac
     Toolbar mToolBar;
 
     @ViewById(R.id.approval_mine)
-    TextView mAppMine;
+    LinearLayout mAppMine;
 
     @ViewById(R.id.approval_wait)
-    TextView mAppWait;
+    LinearLayout mAppWait;
 
     @ViewById(R.id.approval_sick_leave_visible)
     LinearLayout mAppVisible;
@@ -118,13 +118,16 @@ public class ApprovalActivity extends BaseActivity implements MyItemTouchCallbac
         switch (view.getId()) {
             case R.id.approval_mine: {
                 showToast("我发起的");
+                FromMeActivity_.intent(this).start();
                 break;
             }
             case R.id.approval_wait: {
                 showToast("待我审批");
+                WaitingForApprovalActivity_.intent(this).start();
                 break;
             }
             case R.id.approval_sick_leave: {
+                showToast("销假");
                 break;
             }
             case R.id.approval_sick_leave_invisible: {

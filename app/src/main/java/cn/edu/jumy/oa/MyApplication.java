@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
+import com.fsck.k9.K9;
 import com.tencent.TIMManager;
 import com.tencent.TIMOfflinePushListener;
 import com.tencent.TIMOfflinePushNotification;
@@ -26,6 +27,7 @@ public class MyApplication extends MultiDexApplication {
         super.onCreate();
         AppManager.getInstance().init(this);
         Foreground.init(this);
+        K9.getInstance().onCreate(this);
         context = getApplicationContext();
         if(MsfSdkUtils.isMainProcess(this)) {
             TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {

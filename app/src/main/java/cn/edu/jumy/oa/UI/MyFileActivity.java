@@ -21,6 +21,8 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.Stack;
+
 import cn.edu.jumy.oa.R;
 
 /**
@@ -64,11 +66,12 @@ public class MyFileActivity extends BaseActivity{
     String nowUrl = "";
 
     WebViewClient client;
+    Stack<String> stack = new Stack<>();
 
     @AfterViews
     void start(){
         AppManager.getInstance().addActivity(this);
-        mToolbar.setTitle("我的文件");
+        mToolbar.setTitle("文件柜");
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(client = new WebViewClient(){
             @Override
@@ -77,6 +80,7 @@ public class MyFileActivity extends BaseActivity{
                 view.loadUrl(url);
                 preUrl = nowUrl;
                 nowUrl = url;
+                push(url);
                 showDebugLoge("preUrl="+preUrl+"\n"+"nowUrl="+nowUrl+"\n"+"baseUrl="+baseUrl);
                 return true;
             }
@@ -84,17 +88,33 @@ public class MyFileActivity extends BaseActivity{
         mWebView.loadUrl(baseUrl);
         preUrl = nowUrl;
         nowUrl = baseUrl;
+        push(baseUrl);
         mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDebugLoge("preUrl="+preUrl+"\n"+"nowUrl="+nowUrl+"\n"+"baseUrl="+baseUrl);
-                if (baseUrl.contains(mWebView.getUrl()) || nowUrl.isEmpty()) {
-                    onBackPressed();
-                } else {
-                    client.shouldOverrideUrlLoading(mWebView,preUrl);
-                }
+                back();
             }
         });
+    }
+
+    private void back() {
+        showDebugLoge("preUrl="+preUrl+"\n"+"nowUrl="+nowUrl+"\n"+"baseUrl="+baseUrl);
+        if (baseUrl.contains(mWebView.getUrl()) || nowUrl.isEmpty()) {
+            backToPreActivity();
+        } else {
+            stack.pop();
+            client.shouldOverrideUrlLoading(mWebView,stack.lastElement());
+        }
+    }
+    private void push(String url){
+        if (!stack.contains(url)){
+            stack.push(url);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        back();
     }
 }

@@ -35,10 +35,10 @@ public class HomeActivity extends BaseActivity {
     private static final String TAG = HomeActivity.class.getSimpleName();
     private LayoutInflater layoutInflater;
     private FragmentTabHost mTabHost;
-    private final Class fragmentArray[] = {ConversationFragment.class, NotifyFragment_.class, TaskFragment.class, ContactFragment.class, SettingFragment.class};
-    private int mTitleArray[] = {R.string.home_message_tab, R.string.home_notify_tab, R.string.home_work_tab, R.string.home_contact_tab, R.string.home_me_tab};
-    private int mImageViewArray[] = {R.drawable.tab_message, R.drawable.tab_notify, R.drawable.tab_work, R.drawable.tab_person, R.drawable.tab_settings};
-    private String mTextviewArray[] = {"message", "notify", "work", "contact", "setting"};
+    private final Class fragmentArray[] = {NotifyFragment_.class, TaskFragment.class, ConversationFragment.class, ContactFragment.class, SettingFragment.class};
+    private int mTitleArray[] = {R.string.home_notify_tab, R.string.home_work_tab, R.string.home_message_tab, R.string.home_contact_tab, R.string.home_me_tab};
+    private int mImageViewArray[] = {R.drawable.tab_notify, R.drawable.tab_work, R.drawable.tab_message, R.drawable.tab_person, R.drawable.tab_settings};
+    private String mTextviewArray[] = {"notify", "work","message",  "contact", "setting"};
     private ImageView msgUnread;
 
 
@@ -117,6 +117,19 @@ public class HomeActivity extends BaseActivity {
 
     }
 
+    private void logout2Exit(){
+        TlsBusiness.logout(UserInfo.getInstance().getId());
+        UserInfo.getInstance().setId(null);
+        MessageEvent.getInstance().clear();
+        FriendshipInfo.getInstance().clear();
+        GroupInfo.getInstance().clear();
+    }
+
+    @Override
+    protected void onDestroy() {
+        logout2Exit();
+        super.onDestroy();
+    }
 
     /**
      * 设置未读tab显示

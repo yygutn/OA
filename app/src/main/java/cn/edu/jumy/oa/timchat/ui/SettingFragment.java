@@ -17,14 +17,13 @@ import com.tencent.TIMUserProfile;
 import com.tencent.qcloud.presentation.business.LoginBusiness;
 import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.FriendInfoView;
-import cn.edu.jumy.oa.R;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cn.edu.jumy.oa.HomeActivity;
-import cn.edu.jumy.oa.UI.MyFileActivity;
+import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.MyFileActivity_;
 import cn.edu.jumy.oa.timchat.ui.customview.LineControllerView;
 import cn.edu.jumy.oa.timchat.ui.customview.ListPickerDialog;
@@ -128,12 +127,6 @@ public class SettingFragment extends Fragment implements FriendInfoView{
                 }
             });
             LineControllerView folder = (LineControllerView) view.findViewById(R.id.folder);
-            folder.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    MyFileActivity_.intent(getActivity()).start();
-                }
-            });
 
         }
         return view ;

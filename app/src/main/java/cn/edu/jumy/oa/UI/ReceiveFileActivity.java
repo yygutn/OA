@@ -1,5 +1,6 @@
 package cn.edu.jumy.oa.UI;
 
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -55,6 +56,8 @@ public class ReceiveFileActivity extends BaseActivity{
     String preUrl = "";
     String nowUrl = "";
 
+    Bundle bundle;
+
     WebViewClient client;
 
     @AfterViews
@@ -80,13 +83,18 @@ public class ReceiveFileActivity extends BaseActivity{
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDebugLoge("preUrl="+preUrl+"\n"+"nowUrl="+nowUrl+"\n"+"baseUrl="+baseUrl);
-                if (baseUrl.contains(mWebView.getUrl()) || nowUrl.isEmpty()) {
-                    onBackPressed();
-                } else {
-                    client.shouldOverrideUrlLoading(mWebView,preUrl);
-                }
+                back();
             }
         });
+
+    }
+
+    private void back() {
+        showDebugLoge("preUrl="+preUrl+"\n"+"nowUrl="+nowUrl+"\n"+"baseUrl="+baseUrl);
+        if (baseUrl.contains(mWebView.getUrl()) || nowUrl.isEmpty()) {
+            onBackPressed();
+        } else {
+            client.shouldOverrideUrlLoading(mWebView,preUrl);
+        }
     }
 }

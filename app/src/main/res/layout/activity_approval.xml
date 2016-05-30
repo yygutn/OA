@@ -27,6 +27,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/approval_wait"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="150dp"
@@ -39,14 +40,14 @@
                 android:src="@drawable/normal_1"/>
 
             <TextView
-                android:id="@+id/approval_wait"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="待我审批"
+                android:text="由我审批"
                 android:textColor="@color/white"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/approval_mine"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="150dp"
@@ -59,7 +60,6 @@
                 android:src="@drawable/normal_2"/>
 
             <TextView
-                android:id="@+id/approval_mine"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"

@@ -16,11 +16,7 @@
 
         <activity android:name=".timchat.ui.SplashActivity"
                   android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-            <action android:name="android.intent.action.MAIN"/>
 
-            <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <activity android:name=".HomeActivity"/>
@@ -109,6 +105,31 @@
         <activity
             android:name=".UI.TempActivity_"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.AuditActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.FromMeActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.MeetingSendActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.StudyOnlineActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.VerifyActivity_"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".UI.WaitingForApprovalActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+
 
     </application>
 

@@ -1,14 +1,6 @@
 
 package com.fsck.k9;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.SynchronousQueue;
-
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
@@ -33,19 +25,26 @@ import com.fsck.k9.controller.MessagingListener;
 import com.fsck.k9.mail.Address;
 import com.fsck.k9.mail.K9MailLib;
 import com.fsck.k9.mail.Message;
-import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
+import com.fsck.k9.mail.ssl.LocalKeyStore;
 import com.fsck.k9.mailstore.LocalStore;
 import com.fsck.k9.preferences.Storage;
 import com.fsck.k9.preferences.StorageEditor;
 import com.fsck.k9.provider.UnreadWidgetProvider;
-import com.fsck.k9.mail.ssl.LocalKeyStore;
 import com.fsck.k9.service.BootReceiver;
 import com.fsck.k9.service.MailService;
 import com.fsck.k9.service.ShutdownReceiver;
 import com.fsck.k9.service.StorageGoneReceiver;
 
-public class K9 extends Application {
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.SynchronousQueue;
+
+public class K9{
     /**
      * Components that are interested in knowing when the K9 instance is
      * available and ready (Android invokes Application.onCreate() after other
@@ -56,8 +55,7 @@ public class K9 extends Application {
         /**
          * Called when the Application instance is available and ready.
          *
-         * @param application
-         *            The application instance. Never <code>null</code>.
+         * @param application The application instance. Never <code>null</code>.
          * @throws Exception
          */
         void initializeComponent(Application application);
@@ -66,11 +64,19 @@ public class K9 extends Application {
     public static Application app = null;
     public static File tempDirectory;
     public static final String LOG_TAG = "k9";
+    private static K9 instance;
+
+    public static K9 getInstance() {
+        if (instance == null){
+            instance = new K9();
+        }
+        return instance;
+    }
 
     /**
      * Name of the {@link SharedPreferences} file used to store the last known version of the
      * accounts' databases.
-     *
+     * <p/>
      * <p>
      * See {@link UpgradeDatabases} for a detailed explanation of the database upgrade process.
      * </p>
@@ -96,7 +102,7 @@ public class K9 extends Application {
      * This will be {@code true} once the initialization is complete and {@link #notifyObservers()}
      * was called.
      * Afterwards calls to {@link #registerApplicationAware(com.fsck.k9.K9.ApplicationAware)} will
-     * immediately call {@link com.fsck.k9.K9.ApplicationAware#initializeComponent(K9)} for the
+     * immediately call {@link com.fsck.k9.K9.ApplicationAware#(0.0initializeComponent)(K9)} for the
      * supplied argument.
      */
     private static boolean sInitialized = false;
@@ -146,7 +152,7 @@ public class K9 extends Application {
     /**
      * Can create messages containing stack traces that can be forwarded
      * to the development team.
-     *
+     * <p/>
      * Feature is enabled when DEBUG == true
      */
     public static final String ERROR_FOLDER_NAME = "K9mail-errors";
@@ -191,7 +197,7 @@ public class K9 extends Application {
     }
 
     private static LockScreenNotificationVisibility sLockScreenNotificationVisibility =
-        LockScreenNotificationVisibility.MESSAGE_COUNT;
+            LockScreenNotificationVisibility.MESSAGE_COUNT;
 
     public enum LockScreenNotificationVisibility {
         EVERYTHING,
@@ -359,19 +365,19 @@ public class K9 extends Application {
              */
             MailService.actionReset(context, wakeLockId);
         }
-        Class<?>[] classes = { MessageCompose.class, BootReceiver.class, MailService.class };
+        Class<?>[] classes = {MessageCompose.class, BootReceiver.class, MailService.class};
 
         for (Class<?> clazz : classes) {
 
             boolean alreadyEnabled = pm.getComponentEnabledSetting(new ComponentName(context, clazz)) ==
-                                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
 
             if (enabled != alreadyEnabled) {
                 pm.setComponentEnabledSetting(
-                    new ComponentName(context, clazz),
-                    enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP);
+                        new ComponentName(context, clazz),
+                        enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
+                                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP);
             }
         }
 
@@ -417,13 +423,13 @@ public class K9 extends Application {
 
         try {
             final Handler storageGoneHandler = queue.take();
-            registerReceiver(receiver, filter, null, storageGoneHandler);
+            app.registerReceiver(receiver, filter, null, storageGoneHandler);
             Log.i(K9.LOG_TAG, "Registered: unmount receiver");
         } catch (InterruptedException e) {
             Log.e(K9.LOG_TAG, "Unable to register unmount receiver", e);
         }
 
-        registerReceiver(new ShutdownReceiver(), new IntentFilter(Intent.ACTION_SHUTDOWN));
+        app.registerReceiver(new ShutdownReceiver(), new IntentFilter(Intent.ACTION_SHUTDOWN));
         Log.i(K9.LOG_TAG, "Registered: shutdown receiver");
     }
 
@@ -495,48 +501,48 @@ public class K9 extends Application {
         fontSizes.save(editor);
     }
 
-    @Override
-    public void onCreate() {
+    public void onCreate(Application application) {
         if (K9.DEVELOPER_MODE) {
             StrictMode.enableDefaults();
         }
 
         PRNGFixes.apply();
 
-        super.onCreate();
-        app = this;
+        app = application;
 
         K9MailLib.setDebugStatus(new K9MailLib.DebugStatus() {
-            @Override public boolean enabled() {
+            @Override
+            public boolean enabled() {
                 return DEBUG;
             }
 
-            @Override public boolean debugSensitive() {
+            @Override
+            public boolean debugSensitive() {
                 return DEBUG_SENSITIVE;
             }
         });
 
         checkCachedDatabaseVersion();
 
-        Preferences prefs = Preferences.getPreferences(this);
+        Preferences prefs = Preferences.getPreferences(app);
         loadPrefs(prefs);
 
         /*
          * We have to give MimeMessage a temp directory because File.createTempFile(String, String)
          * doesn't work in Android and MimeMessage does not have access to a Context.
          */
-        BinaryTempFileBody.setTempDirectory(getCacheDir());
+        BinaryTempFileBody.setTempDirectory(app.getCacheDir());
 
-        LocalKeyStore.setKeyStoreLocation(getDir("KeyStore", MODE_PRIVATE).toString());
+        LocalKeyStore.setKeyStoreLocation(app.getDir("KeyStore", app.MODE_PRIVATE).toString());
 
         /*
          * Enable background sync of messages
          */
 
-        setServicesEnabled(this);
+        setServicesEnabled(app);
         registerReceivers();
 
-        MessagingController.getInstance(this).addListener(new MessagingListener() {
+        MessagingController.getInstance(app).addListener(new MessagingListener() {
             private void broadcastIntent(String action, Account account, String folder, Message message) {
                 Uri uri = Uri.parse("email://messages/" + account.getAccountNumber() + "/" + Uri.encode(folder) + "/" + Uri.encode(message.getUid()));
                 Intent intent = new Intent(action, uri);
@@ -549,18 +555,18 @@ public class K9 extends Application {
                 intent.putExtra(K9.Intents.EmailReceived.EXTRA_BCC, Address.toString(message.getRecipients(Message.RecipientType.BCC)));
                 intent.putExtra(K9.Intents.EmailReceived.EXTRA_SUBJECT, message.getSubject());
                 intent.putExtra(K9.Intents.EmailReceived.EXTRA_FROM_SELF, account.isAnIdentity(message.getFrom()));
-                K9.this.sendBroadcast(intent);
+                K9.app.sendBroadcast(intent);
                 if (K9.DEBUG)
                     Log.d(K9.LOG_TAG, "Broadcasted: action=" + action
-                          + " account=" + account.getDescription()
-                          + " folder=" + folder
-                          + " message uid=" + message.getUid()
-                         );
+                            + " account=" + account.getDescription()
+                            + " folder=" + folder
+                            + " message uid=" + message.getUid()
+                    );
             }
 
             private void updateUnreadWidget() {
                 try {
-                    UnreadWidgetProvider.updateUnreadCount(K9.this);
+                    UnreadWidgetProvider.updateUnreadCount(K9.app);
                 } catch (Exception e) {
                     if (K9.DEBUG) {
                         Log.e(LOG_TAG, "Error while updating unread widget(s)", e);
@@ -588,7 +594,7 @@ public class K9 extends Application {
 
             @Override
             public void folderStatusChanged(Account account, String folderName,
-                    int unreadMessageCount) {
+                                            int unreadMessageCount) {
 
                 updateUnreadWidget();
 
@@ -596,7 +602,7 @@ public class K9 extends Application {
                 Intent intent = new Intent(K9.Intents.EmailReceived.ACTION_REFRESH_OBSERVER, null);
                 intent.putExtra(K9.Intents.EmailReceived.EXTRA_ACCOUNT, account.getDescription());
                 intent.putExtra(K9.Intents.EmailReceived.EXTRA_FOLDER, folderName);
-                K9.this.sendBroadcast(intent);
+                K9.app.sendBroadcast(intent);
 
             }
 
@@ -608,7 +614,7 @@ public class K9 extends Application {
     /**
      * Loads the last known database version of the accounts' databases from a
      * {@code SharedPreference}.
-     *
+     * <p/>
      * <p>
      * If the stored version matches {@link LocalStore#DB_VERSION} we know that the databases are
      * up to date.<br>
@@ -621,7 +627,7 @@ public class K9 extends Application {
      * @see #areDatabasesUpToDate()
      */
     public void checkCachedDatabaseVersion() {
-        sDatabaseVersionCache = getSharedPreferences(DATABASE_VERSION_CACHE, MODE_PRIVATE);
+        sDatabaseVersionCache = app.getSharedPreferences(DATABASE_VERSION_CACHE, app.MODE_PRIVATE);
 
         int cachedVersion = sDatabaseVersionCache.getInt(KEY_LAST_ACCOUNT_DATABASE_VERSION, 0);
 
@@ -632,7 +638,7 @@ public class K9 extends Application {
 
     /**
      * Load preferences into our statics.
-     *
+     * <p/>
      * If you're adding a preference here, odds are you'll need to add it to
      * {@link com.fsck.k9.preferences.GlobalSettings}, too.
      *
@@ -706,7 +712,7 @@ public class K9 extends Application {
         }
 
         String lockScreenNotificationVisibility = storage.getString("lockScreenNotificationVisibility", null);
-        if(lockScreenNotificationVisibility != null) {
+        if (lockScreenNotificationVisibility != null) {
             sLockScreenNotificationVisibility = LockScreenNotificationVisibility.valueOf(lockScreenNotificationVisibility);
         }
 
@@ -768,7 +774,7 @@ public class K9 extends Application {
                     Log.v(K9.LOG_TAG, "Initializing observer: " + aware);
                 }
                 try {
-                    aware.initializeComponent(this);
+                    aware.initializeComponent(app);
                 } catch (Exception e) {
                     Log.w(K9.LOG_TAG, "Failure when notifying " + aware, e);
                 }
@@ -782,8 +788,7 @@ public class K9 extends Application {
     /**
      * Register a component to be notified when the {@link K9} instance is ready.
      *
-     * @param component
-     *            Never <code>null</code>.
+     * @param component Never <code>null</code>.
      */
     public static void registerApplicationAware(final ApplicationAware component) {
         synchronized (observers) {
@@ -805,7 +810,7 @@ public class K9 extends Application {
 
     /**
      * Possible values for the different theme settings.
-     *
+     * <p/>
      * <p><strong>Important:</strong>
      * Do not change the order of the items! The ordinal value (position) is used when saving the
      * settings.</p>
@@ -962,7 +967,7 @@ public class K9 extends Application {
 
         Integer now = (time.hour * 60) + time.minute;
         Integer quietStarts = startHour * 60 + startMinute;
-        Integer quietEnds =  endHour * 60 + endMinute;
+        Integer quietEnds = endHour * 60 + endMinute;
 
         // If start and end times are the same, we're never quiet
         if (quietStarts.equals(quietEnds)) {
@@ -989,7 +994,6 @@ public class K9 extends Application {
 
         return false;
     }
-
 
 
     public static boolean startIntegratedInbox() {
@@ -1036,13 +1040,14 @@ public class K9 extends Application {
         return mShowCorrespondentNames;
     }
 
-     public static boolean messageListSenderAboveSubject() {
-         return mMessageListSenderAboveSubject;
-     }
+    public static boolean messageListSenderAboveSubject() {
+        return mMessageListSenderAboveSubject;
+    }
 
     public static void setMessageListSenderAboveSubject(boolean sender) {
-         mMessageListSenderAboveSubject = sender;
+        mMessageListSenderAboveSubject = sender;
     }
+
     public static void setShowCorrespondentNames(boolean showCorrespondentNames) {
         mShowCorrespondentNames = showCorrespondentNames;
     }
@@ -1190,6 +1195,7 @@ public class K9 extends Application {
     public static boolean wrapFolderNames() {
         return mWrapFolderNames;
     }
+
     public static void setWrapFolderNames(final boolean state) {
         mWrapFolderNames = state;
     }
@@ -1197,6 +1203,7 @@ public class K9 extends Application {
     public static boolean hideUserAgent() {
         return mHideUserAgent;
     }
+
     public static void setHideUserAgent(final boolean state) {
         mHideUserAgent = state;
     }
@@ -1204,6 +1211,7 @@ public class K9 extends Application {
     public static boolean hideTimeZone() {
         return mHideTimeZone;
     }
+
     public static void setHideTimeZone(final boolean state) {
         mHideTimeZone = state;
     }
@@ -1317,14 +1325,14 @@ public class K9 extends Application {
 
     /**
      * Check if we already know whether all databases are using the current database schema.
-     *
+     * <p/>
      * <p>
      * This method is only used for optimizations. If it returns {@code true} we can be certain that
      * getting a {@link LocalStore} instance won't trigger a schema upgrade.
      * </p>
      *
      * @return {@code true}, if we know that all databases are using the current database schema.
-     *         {@code false}, otherwise.
+     * {@code false}, otherwise.
      */
     public static synchronized boolean areDatabasesUpToDate() {
         return sDatabasesUpToDate;
@@ -1333,10 +1341,8 @@ public class K9 extends Application {
     /**
      * Remember that all account databases are using the most recent database schema.
      *
-     * @param save
-     *         Whether or not to write the current database version to the
-     *         {@code SharedPreferences} {@link #DATABASE_VERSION_CACHE}.
-     *
+     * @param save Whether or not to write the current database version to the
+     *             {@code SharedPreferences} {@link #DATABASE_VERSION_CACHE}.
      * @see #areDatabasesUpToDate()
      */
     public static synchronized void setDatabasesUpToDate(boolean save) {

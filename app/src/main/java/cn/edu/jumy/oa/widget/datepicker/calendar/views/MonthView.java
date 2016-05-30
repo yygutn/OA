@@ -54,7 +54,7 @@ public class MonthView extends View {
 
 	private final Map<String, List<Region>> regionSelected = new HashMap<>();
 
-	private DPCManager mCManager = DPCManager.getInstance();
+	public DPCManager mCManager = DPCManager.getInstance();
 	private DPTManager mTManager = DPTManager.getInstance();
 
 	protected Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG

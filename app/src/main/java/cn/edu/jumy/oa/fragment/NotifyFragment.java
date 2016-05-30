@@ -25,6 +25,7 @@ import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.res.ColorRes;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,7 +78,6 @@ public class NotifyFragment extends BaseFragment {
     public boolean isCache = false;
 
 
-
     @AfterViews
     void start() {
         mContext = getActivity();
@@ -123,8 +123,9 @@ public class NotifyFragment extends BaseFragment {
             }
         });
     }
-    public void updateUI(List<Card> items){
-        if (items != null && items.size() > 0){
+
+    public void updateUI(List<Card> items) {
+        if (items != null && items.size() > 0) {
             showDebugLoge("from local cache");
             mListView.getAdapter().addAll(items);
         } else {
@@ -139,36 +140,40 @@ public class NotifyFragment extends BaseFragment {
         cardDataList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             String time = sdf.format(new Date());
-            time = time + "在" + new Random().nextInt(1000) + "开会";
+            time = time + "在" + new Random().nextInt(1000) + "开会"+"\n";
+            time +=  "承办单位:省办公厅"+"\n";
+            time +=  new Random().nextBoolean()?"会议名称:关于召开省委城市工作会议的通知":"会议名称:召开传达中央文件精神会议";
             cards.add(getNotificationCard("通知", "会议(点击查看详情)", time));
-            cardDataList.add(new CardData("通知","会议",time));
+            cardDataList.add(new CardData("通知", "会议", time));
         }
         mListView.getAdapter().addAll(cards);
     }
 
     public Card getNotificationCard(String title, String subtitle, String message) {
+        boolean flag = new Random().nextBoolean();
         final CardProvider provider = new Card.Builder(mContext)
                 .setTag("WELCOME_CARD")
                 .setDismissible()
                 .withProvider(new CardProvider())
                 .setLayout(R.layout.item_card_notification)
                 .setTitle(title)
-                .setTitleColor(Color.BLACK)
+                .setTitleColor(flag?Color.WHITE:Color.BLACK)
                 .setDescription(message)
-                .setDescriptionColor(Color.BLACK)
+                .setDescriptionColor(flag?Color.WHITE:Color.BLACK)
                 .setSubtitle(subtitle)
-                .setSubtitleColor(Color.BLACK)
-                //                        .setBackgroundColor(getResources().getColor(R.color.colorMask))
+                .setSubtitleColor(flag?Color.WHITE:Color.BLACK)
+                .setBackgroundColor(flag?getResources().getColor(R.color.pressed):Color.WHITE)
                 .addAction(R.id.ok_button, new TextViewAction(mContext)
-                        .setText("未读")
-                        .setTextColor(Color.WHITE)
+                        .setText(flag?"未读":"已读")
+                        .setTextColor(flag?Color.WHITE:Color.WHITE)
                         .setListener(new OnActionClickListener() {
                             @Override
                             public void onActionClicked(View view, Card card) {
                                 try {
                                     showDebugLoge("点击");
                                     TextViewAction action = (TextViewAction) card.getProvider().getAction(R.id.ok_button);
-                                    action.setText("已签收");
+                                    action.setText("已读");
+                                    action.setTextColor(Color.BLACK);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -177,14 +182,15 @@ public class NotifyFragment extends BaseFragment {
 
         return provider.endConfig().build();
     }
-
+    @ColorRes(R.color.colorPrimary)
+    int blue;
 
     void getCardDataList() {
         cardDataList = (ArrayList<CardData>) ACache.get(getActivity()).getAsObject("notify_items");
-        if (cardDataList != null){
+        if (cardDataList != null) {
             cards.clear();
-            for (CardData item : cardDataList){
-                cards.add(getNotificationCard(item.getTitle(),item.getSubTitle(),item.getMessage()));
+            for (CardData item : cardDataList) {
+                cards.add(getNotificationCard(item.getTitle(), item.getSubTitle(), item.getMessage()));
             }
             isCache = true;
         }
