@@ -119,6 +119,8 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
             }
         });
 
+        // TODO: 16/6/1 添加滚动监听，实现上啦加载和下拉刷新
+
         mSwipeLayout.setOnRefreshListener(this);
         // 设置下拉圆圈上的颜色，蓝色、绿色、橙色、红色
         mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,

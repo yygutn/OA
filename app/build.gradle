@@ -88,4 +88,6 @@ dependencies {
     compile (name:'k9mail-library-debug',ext:'aar')
     compile (name:'openpgp-api-debug',ext:'aar')
     compile (name:'HoloColorPicker-debug',ext:'aar')
+
+    compile 'com.zhy:base-adapter:2.0.0'
 }
