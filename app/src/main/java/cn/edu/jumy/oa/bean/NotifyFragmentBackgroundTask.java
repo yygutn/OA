@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.jumy.oa.HomeActivity;
+import cn.edu.jumy.oa.UI.MeetingCardActivity;
+import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 
 /**
  * Created by Jumy on 16/5/25 15:34.
@@ -46,12 +48,12 @@ public class NotifyFragmentBackgroundTask {
 
     private ArrayList<CardData> items;
     @RootContext
-    HomeActivity fragment;
+    MeetingCardActivity fragment;
 
     @Background
     public void initData() {
         /////////初始化数据，如果缓存中有就使用缓存中的
-//        items = (ArrayList<CardData>) ACache.get(fragment.getActivity()).getAsObject("notify_items");
+        items = (ArrayList<CardData>) ACache.get(fragment.mContext).getAsObject("notify_items");
         List<Card> cards = new ArrayList<>();
         if (items != null){
             for (CardData item : items){

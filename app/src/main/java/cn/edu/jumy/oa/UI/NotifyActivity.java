@@ -78,7 +78,6 @@ public class NotifyActivity extends BaseActivity{
 
     @AfterViews
     void start(){
-        AppManager.addActivities(this);
         mContext = this;
 
         mToolBar.setNavigationOnClickListener(new View.OnClickListener() {

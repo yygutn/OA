@@ -70,7 +70,6 @@ public class MyFileActivity extends BaseActivity{
 
     @AfterViews
     void start(){
-        AppManager.getInstance().addActivity(this);
         mToolbar.setTitle("文件柜");
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(client = new WebViewClient(){

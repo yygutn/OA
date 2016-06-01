@@ -21,6 +21,7 @@ import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.ApprovalActivity_;
 import cn.edu.jumy.oa.UI.AuditActivity_;
 import cn.edu.jumy.oa.UI.CalendarActivity_;
+import cn.edu.jumy.oa.UI.MeetingCardActivity_;
 import cn.edu.jumy.oa.UI.MeetingSendActivity_;
 import cn.edu.jumy.oa.UI.MyFileActivity_;
 import cn.edu.jumy.oa.UI.SendFileWebActivity_;
@@ -80,17 +81,20 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
         else {
             showDebugLoge("from new data");
             for (int i = 0; i < 1; i++) {
-                results.add(new Item(0, "审批", R.drawable.shenpi));
-//                results.add(new Item(i * 7 + 1, "公告", R.drawable.takeout_ic_category_fruit));
-                results.add(new Item(1, "签到", R.drawable.location));
-                results.add(new Item(2, "邮件", R.drawable.mail));
-                results.add(new Item(3, "会议", R.drawable.approval));
                 results.add(new Item(4, "收文", R.drawable.receive_file));
                 results.add(new Item(5, "发文", R.drawable.send_file));
-                results.add(new Item(6, "文件柜", R.drawable.folder));
-                results.add(new Item(7, "在线学习", R.drawable.learn_online));
+                results.add(new Item(3, "会议", R.drawable.approval));
                 results.add(new Item(8,"会议发送",R.drawable.meet_send));
                 results.add(new Item(9,"会议审核",R.drawable.meet_approval));
+                //TODO: add 内部办公
+                results.add(new Item(0, "审批", R.drawable.shenpi));
+                results.add(new Item(6, "文件柜", R.drawable.folder));
+                results.add(new Item(10,"日程管理",R.drawable.approval));
+                // TODO: 16/6/1 add 公告
+//                results.add(new Item(i * 7 + 1, "公告", R.drawable.takeout_ic_category_fruit));
+                results.add(new Item(7, "在线学习", R.drawable.learn_online));
+                results.add(new Item(1, "签到", R.drawable.location));
+                results.add(new Item(2, "邮件", R.drawable.mail));
 //                results.add(new Item(10,"文件柜",R.drawable.folder));
             }
         }
@@ -154,7 +158,8 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                         break;
                     }
                     case 3:{//会议
-                        CalendarActivity_.intent(getActivity()).start();
+                        // TODO: 16/6/1 修改为纯卡片展示，显示所有会议卡片，按照时间排序
+                        MeetingCardActivity_.intent(getActivity()).start();
                         break;
                     }
                     case 4:{//收文
@@ -181,6 +186,18 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                     }
                     case 9:{//会议审核
                         AuditActivity_.intent(getActivity()).start();
+                        break;
+                    }
+                    case 10:{//日程管理
+                        CalendarActivity_.intent(getActivity()).start();
+                        break;
+                    }
+                    case 11:{//公告
+
+                        break;
+                    }
+                    case 12:{//内部办公
+
                         break;
                     }
                     default:

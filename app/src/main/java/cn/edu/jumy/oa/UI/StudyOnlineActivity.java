@@ -65,7 +65,6 @@ public class StudyOnlineActivity extends BaseActivity{
     Stack<String> stack = new Stack<>();
     @AfterViews
     void start(){
-        AppManager.getInstance().addActivity(this);
         mToolbar.setTitle("在线学习");
         getWebSettings();
         mWebView.loadUrl(baseUrl);

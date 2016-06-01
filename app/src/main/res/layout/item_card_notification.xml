@@ -17,22 +17,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/headline_16dp"/>
+            <include layout="@layout/headline_16dp_2"/>
 
             <include layout="@layout/supporting_text_24dp"/>
 
             <include layout="@layout/divider"/>
 
-            <TextView
-                android:id="@+id/ok_button"
-                style="@style/Material_Action"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:drawablePadding="@dimen/big_padding"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:background="@drawable/shape_no_read_notify"
-                tools:text="Action 1"/>
+            <!--<TextView-->
+                <!--android:id="@+id/ok_button"-->
+                <!--style="@style/Material_Action"-->
+                <!--android:layout_marginLeft="8dp"-->
+                <!--android:layout_marginRight="8dp"-->
+                <!--android:drawablePadding="@dimen/big_padding"-->
+                <!--android:gravity="center"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:background="@drawable/shape_no_read_notify"-->
+                <!--tools:text="Action 1"/>-->
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

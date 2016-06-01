@@ -1,6 +1,7 @@
 package com.tencent.qcloud.tlslibrary.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,12 +21,18 @@ import com.tencent.qcloud.tlslibrary.BuildConfig;
 public class BaseActivity extends AppCompatActivity {
 
     private boolean DEBUG = true;
+    public Context mContext;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //设置为强制竖屏，不使用横屏显示
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        addToStack();
+    }
+
+    protected void addToStack() {
+        AppManager.getInstance().addActivity(this);
     }
 
     /**

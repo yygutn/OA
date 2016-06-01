@@ -61,7 +61,6 @@ public class AuditActivity extends BaseActivity{
     Stack<String> stack = new Stack<>();
     @AfterViews
     void start(){
-        AppManager.getInstance().addActivity(this);
         mToolbar.setTitle("会议审核");
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(client = new WebViewClient(){

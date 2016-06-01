@@ -63,7 +63,6 @@ public class WaitingForApprovalActivity extends BaseActivity{
 
     @AfterViews
     void start(){
-        AppManager.getInstance().addActivity(this);
         mToolbar.setTitle("待我审批");
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(client = new WebViewClient(){

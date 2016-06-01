@@ -60,7 +60,6 @@ public class TempActivity extends BaseActivity {
 
     @AfterViews
     void start(){
-        AppManager.getInstance().addActivity(this);
         Bundle bundle = getIntent().getBundleExtra("temp");
         if (bundle != null){
             mToolBar.setTitle(bundle.getString("title",""));

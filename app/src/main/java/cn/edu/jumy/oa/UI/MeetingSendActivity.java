@@ -61,7 +61,6 @@ public class MeetingSendActivity extends BaseActivity{
 
     @AfterViews
     void start(){
-        AppManager.getInstance().addActivity(this);
         mToolbar.setTitle("会议发送");
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(client = new WebViewClient(){

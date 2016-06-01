@@ -1,56 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cn.edu.jumy.oa" >
+    package="cn.edu.jumy.oa">
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".MyApplication"
-        android:theme="@style/AppTheme.NoActionBar" >
+        android:theme="@style/AppTheme.NoActionBar">
 
         <meta-data
             android:name="com.tencent.rdm.uuid"
-            android:value="ff184778-1bdb-481a-b701-11cccdc3b3d3"/>
+            android:value="ff184778-1bdb-481a-b701-11cccdc3b3d3" />
 
-        <activity android:name=".timchat.ui.SplashActivity"
-                  android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".timchat.ui.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
 
-        <activity android:name=".HomeActivity"/>
+        <activity android:name=".HomeActivity" />
         <activity
             android:name=".timchat.ui.ChatActivity"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".timchat.ui.SearchFriendActivity"/>
-        <activity android:name=".timchat.ui.AddFriendActivity"/>
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".timchat.ui.SearchFriendActivity" />
+        <activity android:name=".timchat.ui.AddFriendActivity" />
         <activity
             android:name=".timchat.ui.ProfileActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name=".timchat.ui.ManageFriendGroupActivity"/>
-        <activity android:name=".timchat.ui.VideoActivity"/>
-        <activity android:name=".timchat.ui.CreateGroupActivity"/>
+            android:launchMode="singleTask" />
+        <activity android:name=".timchat.ui.ManageFriendGroupActivity" />
+        <activity android:name=".timchat.ui.VideoActivity" />
+        <activity android:name=".timchat.ui.CreateGroupActivity" />
         <activity
             android:name=".timchat.ui.GroupProfileActivity"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask" />
 
         <!-- 消息收发service -->
         <service
             android:name="com.tencent.qalsdk.service.QalService"
             android:exported="false"
-            android:process=":QALSERVICE"/>
+            android:process=":QALSERVICE" />
         <service
             android:name="com.tencent.qalsdk.service.QalAssistService"
             android:exported="false"
-            android:process=":QALSERVICE"/>
+            android:process=":QALSERVICE" />
         <!-- 离线消息广播接收器 -->
         <receiver
             android:name="com.tencent.qalsdk.QALBroadcastReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.tencent.qalsdk.broadcast.qal"/>
+                <action android:name="com.tencent.qalsdk.broadcast.qal" />
             </intent-filter>
         </receiver>
         <!-- 系统消息广播接收器 -->
@@ -58,50 +59,54 @@
             android:name="com.tencent.qalsdk.core.NetConnInfoCenter"
             android:process=":QALSERVICE">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.TIME_SET"/>
+                <action android:name="android.intent.action.TIME_SET" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
 
-        <activity android:name=".timchat.ui.ImageViewActivity"/>
-        <activity android:name=".timchat.ui.EditActivity"/>
-        <activity android:name=".timchat.ui.SearchGroupActivity"/>
-        <activity android:name=".timchat.ui.ApplyGroupActivity"/>
-        <activity android:name=".timchat.ui.GroupManageMessageActivity"/>
-        <activity android:name=".timchat.ui.FriendshipManageMessageActivity"/>
-        <activity android:name=".timchat.ui.GroupListActivity"/>
-        <activity android:name=".timchat.ui.ChooseFriendActivity"/>
-        <activity android:name=".timchat.ui.GroupMemberActivity"/>
+        <activity android:name=".timchat.ui.ImageViewActivity" />
+        <activity android:name=".timchat.ui.EditActivity" />
+        <activity android:name=".timchat.ui.SearchGroupActivity" />
+        <activity android:name=".timchat.ui.ApplyGroupActivity" />
+        <activity android:name=".timchat.ui.GroupManageMessageActivity" />
+        <activity android:name=".timchat.ui.FriendshipManageMessageActivity" />
+        <activity android:name=".timchat.ui.GroupListActivity" />
+        <activity android:name=".timchat.ui.ChooseFriendActivity" />
+        <activity android:name=".timchat.ui.GroupMemberActivity" />
         <activity
             android:name=".timchat.ui.customview.DialogActivity"
-            android:theme="@android:style/Theme.Dialog"/>
-        <activity android:name=".timchat.ui.GroupMemberProfileActivity"/>
+            android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".timchat.ui.GroupMemberProfileActivity" />
         <activity android:name=".timchat.ui.FriendshipHandleActivity"></activity>
         <activity android:name=".timchat.ui.AboutActivity"></activity>
 
 
-
-
-        <activity android:name=".UI.ApprovalActivity_"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".UI.NotifyActivity_"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".UI.CalendarActivity_"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".UI.SendFileWebActivity_"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".UI.MyFileActivity_"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".UI.ReceiveFileActivity_"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".UI.ApprovalActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.NotifyActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.CalendarActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.SendFileWebActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.MyFileActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.ReceiveFileActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.TempActivity_"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -121,13 +126,16 @@
             android:name=".UI.VerifyActivity_"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".UI.WaitingForApprovalActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.MeetingCardActivity_"
             android:theme="@style/AppTheme.NoActionBar" />
 
 

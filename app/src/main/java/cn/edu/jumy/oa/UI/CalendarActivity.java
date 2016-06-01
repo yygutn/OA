@@ -64,7 +64,6 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
 
     @AfterViews
     void start() {
-        AppManager.getInstance().addActivity(this);
         now = Calendar.getInstance();
         toolbar.setSubtitle(now.get(Calendar.YEAR) + "." + (now.get(Calendar.MONTH) + 1));
         setSupportActionBar(toolbar);

@@ -110,7 +110,8 @@ public class NotifyFragment extends BaseFragment {
             @Override
             public void onItemClick(@NonNull Card card, int position) {
                 Log.d("CARD_TYPE", "" + card.getTag());
-                CalendarActivity_.intent(getActivity()).start();
+                // TODO: 16/6/1 修改为跳转到详情报名页面
+//                CalendarActivity_.intent(getActivity()).start();
             }
 
             @Override
@@ -152,29 +153,29 @@ public class NotifyFragment extends BaseFragment {
                 .setDismissible()
                 .withProvider(new CardProvider())
                 .setLayout(R.layout.item_card_notification)
-                .setTitle(title)
-                .setTitleColor(flag?Color.WHITE:Color.BLACK)
+//                .setTitle(title)
+//                .setTitleColor(flag?Color.WHITE:Color.BLACK)
                 .setDescription(message)
-                .setDescriptionColor(flag?Color.WHITE:Color.BLACK)
+                .setDescriptionColor(Color.WHITE)
                 .setSubtitle(subtitle)
-                .setSubtitleColor(flag?Color.WHITE:Color.BLACK)
-                .setBackgroundColor(flag?getResources().getColor(R.color.pressed):Color.WHITE)
-                .addAction(R.id.ok_button, new TextViewAction(mContext)
-                        .setText(flag?"未读":"已读")
-                        .setTextColor(flag?Color.WHITE:Color.WHITE)
-                        .setListener(new OnActionClickListener() {
-                            @Override
-                            public void onActionClicked(View view, Card card) {
-                                try {
-                                    showDebugLoge("点击");
-                                    TextViewAction action = (TextViewAction) card.getProvider().getAction(R.id.ok_button);
-                                    action.setText("已读");
-                                    action.setTextColor(Color.BLACK);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }));
+                .setSubtitleColor(Color.WHITE)
+                .setBackgroundColor(getResources().getColor(R.color.pressed));
+//                .addAction(R.id.ok_button, new TextViewAction(mContext)
+//                        .setText("未读")
+//                        .setTextColor(flag?Color.WHITE:Color.WHITE)
+//                        .setListener(new OnActionClickListener() {
+//                            @Override
+//                            public void onActionClicked(View view, Card card) {
+//                                try {
+//                                    showDebugLoge("点击");
+//                                    TextViewAction action = (TextViewAction) card.getProvider().getAction(R.id.ok_button);
+//                                    action.setText("已读");
+//                                    action.setTextColor(Color.BLACK);
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        }));
 
         return provider.endConfig().build();
     }

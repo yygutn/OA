@@ -304,4 +304,37 @@ public class CardGenerater{
                 .endConfig()
                 .build());
     }
+    public static Card getNotificationCard(Context mContext,String title, String subtitle, String message) {
+        boolean flag = new Random().nextBoolean();
+        final CardProvider provider = new Card.Builder(mContext)
+                .setTag("WELCOME_CARD")
+                .setDismissible()
+                .withProvider(new CardProvider())
+                .setLayout(R.layout.item_card_notification)
+//                .setTitle(title)
+//                .setTitleColor(flag?Color.WHITE:Color.BLACK)
+                .setDescription(message)
+                .setDescriptionColor(Color.WHITE)
+                .setSubtitle(subtitle)
+                .setSubtitleColor(Color.WHITE)
+                .setBackgroundColor(mContext.getResources().getColor(R.color.pressed));
+//                .addAction(R.id.ok_button, new TextViewAction(mContext)
+//                        .setText("未读")
+//                        .setTextColor(flag?Color.WHITE:Color.WHITE)
+//                        .setListener(new OnActionClickListener() {
+//                            @Override
+//                            public void onActionClicked(View view, Card card) {
+//                                try {
+//                                    showDebugLoge("点击");
+//                                    TextViewAction action = (TextViewAction) card.getProvider().getAction(R.id.ok_button);
+//                                    action.setText("已读");
+//                                    action.setTextColor(Color.BLACK);
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        }));
+
+        return provider.endConfig().build();
+    }
 }

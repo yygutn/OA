@@ -62,7 +62,6 @@ public class ReceiveFileActivity extends BaseActivity{
 
     @AfterViews
     void start(){
-        AppManager.getInstance().addActivity(this);
         mToolbar.setTitle("收文");
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(client = new WebViewClient(){

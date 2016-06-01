@@ -61,7 +61,6 @@ public class FromMeActivity extends BaseActivity{
     Stack<String> stack = new Stack<>();
     @AfterViews
     void start(){
-        AppManager.getInstance().addActivity(this);
         mToolbar.setTitle("由我发起");
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(client = new WebViewClient(){

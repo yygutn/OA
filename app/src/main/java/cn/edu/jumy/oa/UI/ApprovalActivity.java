@@ -83,7 +83,6 @@ public class ApprovalActivity extends BaseActivity implements MyItemTouchCallbac
 
     @AfterViews
     void start() {
-        AppManager.getInstance().addActivity(this);
         mContext = this;
         ////////////////////////////////////////////////////////
         /////////初始化数据，如果缓存中有就使用缓存中的

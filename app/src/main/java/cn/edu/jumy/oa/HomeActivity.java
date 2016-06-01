@@ -56,7 +56,6 @@ public class HomeActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-        AppManager.getInstance().addSingleActivity(this);
     }
 
     private void initView() {
