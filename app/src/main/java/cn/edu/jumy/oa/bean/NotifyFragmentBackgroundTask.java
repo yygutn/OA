@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.jumy.oa.HomeActivity;
-import cn.edu.jumy.oa.dragrecyclerview.utils.ACache;
-import cn.edu.jumy.oa.fragment.NotifyFragment;
 
 /**
  * Created by Jumy on 16/5/25 15:34.

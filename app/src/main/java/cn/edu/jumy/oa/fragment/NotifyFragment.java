@@ -3,7 +3,6 @@ package cn.edu.jumy.oa.fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,13 +16,10 @@ import com.dexafree.materialList.listeners.OnDismissCallback;
 import com.dexafree.materialList.listeners.RecyclerItemClickListener;
 import com.dexafree.materialList.view.MaterialListView;
 import com.squareup.picasso.Picasso;
-import com.tencent.qcloud.tlslibrary.BuildConfig;
 import com.tencent.qcloud.tlslibrary.activity.BaseFragment;
 
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.ColorRes;
 
@@ -36,7 +32,7 @@ import java.util.Random;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.CalendarActivity_;
 import cn.edu.jumy.oa.bean.CardData;
-import cn.edu.jumy.oa.dragrecyclerview.utils.ACache;
+import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 /**

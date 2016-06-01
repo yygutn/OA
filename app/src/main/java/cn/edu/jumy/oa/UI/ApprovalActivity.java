@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tencent.qcloud.tlslibrary.activity.AppManager;
@@ -23,13 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.dragrecyclerview.adapter.RecyclerAdapter;
-import cn.edu.jumy.oa.dragrecyclerview.common.DividerGridItemDecoration;
-import cn.edu.jumy.oa.dragrecyclerview.entity.Item;
-import cn.edu.jumy.oa.dragrecyclerview.helper.MyItemTouchCallback;
-import cn.edu.jumy.oa.dragrecyclerview.helper.OnRecyclerItemClickListener;
-import cn.edu.jumy.oa.dragrecyclerview.utils.ACache;
-import cn.edu.jumy.oa.dragrecyclerview.utils.VibratorUtil;
+import cn.edu.jumy.oa.widget.dragrecyclerview.adapter.RecyclerAdapter;
+import cn.edu.jumy.oa.widget.dragrecyclerview.common.DividerGridItemDecoration;
+import cn.edu.jumy.oa.widget.dragrecyclerview.entity.Item;
+import cn.edu.jumy.oa.widget.dragrecyclerview.helper.MyItemTouchCallback;
+import cn.edu.jumy.oa.widget.dragrecyclerview.helper.OnRecyclerItemClickListener;
+import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
+import cn.edu.jumy.oa.widget.dragrecyclerview.utils.VibratorUtil;
 
 /**
  * Created by Jumy on 16/5/23 09:38.

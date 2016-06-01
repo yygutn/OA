@@ -1,10 +1,8 @@
 package cn.edu.jumy.oa.fragment;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -16,9 +14,6 @@ import android.widget.Toast;
 import com.fsck.k9.activity.Accounts;
 import com.tencent.qcloud.tlslibrary.activity.BaseFragment;
 
-import org.androidannotations.annotations.res.DrawableRes;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,19 +23,17 @@ import cn.edu.jumy.oa.UI.AuditActivity_;
 import cn.edu.jumy.oa.UI.CalendarActivity_;
 import cn.edu.jumy.oa.UI.MeetingSendActivity_;
 import cn.edu.jumy.oa.UI.MyFileActivity_;
-import cn.edu.jumy.oa.UI.ReceiveFileActivity_;
 import cn.edu.jumy.oa.UI.SendFileWebActivity_;
 import cn.edu.jumy.oa.UI.StudyOnlineActivity_;
-import cn.edu.jumy.oa.UI.TempActivity;
 import cn.edu.jumy.oa.UI.TempActivity_;
 import cn.edu.jumy.oa.UI.VerifyActivity_;
-import cn.edu.jumy.oa.dragrecyclerview.adapter.RecyclerAdapter;
-import cn.edu.jumy.oa.dragrecyclerview.common.DividerGridItemDecoration;
-import cn.edu.jumy.oa.dragrecyclerview.entity.Item;
-import cn.edu.jumy.oa.dragrecyclerview.helper.MyItemTouchCallback;
-import cn.edu.jumy.oa.dragrecyclerview.helper.OnRecyclerItemClickListener;
-import cn.edu.jumy.oa.dragrecyclerview.utils.ACache;
-import cn.edu.jumy.oa.dragrecyclerview.utils.VibratorUtil;
+import cn.edu.jumy.oa.widget.dragrecyclerview.adapter.RecyclerAdapter;
+import cn.edu.jumy.oa.widget.dragrecyclerview.common.DividerGridItemDecoration;
+import cn.edu.jumy.oa.widget.dragrecyclerview.entity.Item;
+import cn.edu.jumy.oa.widget.dragrecyclerview.helper.MyItemTouchCallback;
+import cn.edu.jumy.oa.widget.dragrecyclerview.helper.OnRecyclerItemClickListener;
+import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
+import cn.edu.jumy.oa.widget.dragrecyclerview.utils.VibratorUtil;
 
 /**
  * Created by Jumy on 16/5/19 12:07.

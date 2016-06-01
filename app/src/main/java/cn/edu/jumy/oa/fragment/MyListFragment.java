@@ -11,11 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.dragrecyclerview.entity.Item;
-import cn.edu.jumy.oa.dragrecyclerview.adapter.RecyclerAdapter;
-import cn.edu.jumy.oa.dragrecyclerview.helper.MyItemTouchCallback;
-import cn.edu.jumy.oa.dragrecyclerview.helper.OnRecyclerItemClickListener;
-import cn.edu.jumy.oa.dragrecyclerview.utils.VibratorUtil;
+import cn.edu.jumy.oa.widget.dragrecyclerview.entity.Item;
+import cn.edu.jumy.oa.widget.dragrecyclerview.adapter.RecyclerAdapter;
+import cn.edu.jumy.oa.widget.dragrecyclerview.helper.MyItemTouchCallback;
+import cn.edu.jumy.oa.widget.dragrecyclerview.helper.OnRecyclerItemClickListener;
+import cn.edu.jumy.oa.widget.dragrecyclerview.utils.VibratorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
