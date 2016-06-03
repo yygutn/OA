@@ -1,12 +1,20 @@
 package cn.edu.jumy.oa.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.support.annotation.ColorInt;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 
 import com.zhy.base.adapter.ViewHolder;
 import com.zhy.base.adapter.recyclerview.CommonAdapter;
 
 import java.util.List;
+
+import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.bean.CardData;
 
 /**
  * Created by Jumy on 16/6/1 17:48.
@@ -36,18 +44,21 @@ import java.util.List;
  * #                                                   #
  * *****************************************************
  */
-public class MeetingCardAdpter extends CommonAdapter{
-    public MeetingCardAdpter(Context context, int layoutId, List datas) {
+public class MeetingCardAdapter extends CommonAdapter<CardData>{
+    public MeetingCardAdapter(Context context, int layoutId, List datas) {
         super(context, layoutId, datas);
     }
 
     @Override
-    public void convert(ViewHolder holder, Object o) {
-
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+    public void convert(ViewHolder holder, CardData cardData) {
+        holder.setText(R.id.subtitle,cardData.getSubTitle());
+        holder.setText(R.id.supportingText,cardData.getMessage());
+        try {
+            holder.setTextColor(R.id.subtitle, Color.WHITE);
+            holder.setTextColor(R.id.supportingText, Color.WHITE);
+            ((CardView)holder.getView(R.id.cardView)).setCardBackgroundColor(ContextCompat.getColor(mContext,R.color.pressed));
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

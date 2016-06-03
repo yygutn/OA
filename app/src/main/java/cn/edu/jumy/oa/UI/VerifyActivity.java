@@ -31,7 +31,9 @@ package cn.edu.jumy.oa.UI;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -72,9 +74,8 @@ public class VerifyActivity extends AppCompatActivity{
     @AfterViews
     void start(){
         mContext = this;
-        Picasso.with(mContext)
-                .load(R.drawable.fingerprint)
-                .into(imageView);
+        Drawable drawable = ContextCompat.getDrawable(mContext,R.drawable.fingerprint);
+        imageView.setImageDrawable(drawable);
         Bundle bundle = getIntent().getBundleExtra("file");
         if (bundle != null){
             file = bundle.getString("file","");
@@ -96,11 +97,6 @@ public class VerifyActivity extends AppCompatActivity{
         Picasso.with(mContext)
                 .load(R.drawable.fingerprint_pass)
                 .into(imageView);
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         if (!TextUtils.isEmpty(file)&&file.contains("file")){
             ReceiveFileActivity_.intent(mContext).start();
         }else {

@@ -1,69 +1,54 @@
 package cn.edu.jumy.oa.UI;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.tencent.qcloud.tlslibrary.activity.AppManager;
 import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.api.view.HasViews;
+import org.androidannotations.api.view.OnViewChangedListener;
 
 import java.util.Stack;
 
 import cn.edu.jumy.oa.R;
 
 /**
- * Created by Jumy on 16/5/27 22:02.
+ * Created by Jumy on 16/6/2 11:42.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
- * *****************************************************
- * #                       _oo0oo_                     #
- * #                      o8888888o                    #
- * #                      88" . "88                    #
- * #                      (| -_- |)                    #
- * #                      0\  =  /0                    #
- * #                    ___/`---'\___                  #
- * #                  .' \\|     |# '.                 #
- * #                 / \\|||  :  |||# \                #
- * #                / _||||| -:- |||||- \              #
- * #               |   | \\\  -  #/ |   |              #
- * #               | \_|  ''\---/''  |_/ |             #
- * #               \  .-\__  '-'  ___/-. /             #
- * #             ___'. .'  /--.--\  `. .'___           #
- * #          ."" '<  `.___\_<|>_/___.' >' "".         #
- * #         | | :  `- \`.;`\ _ /`;.`/ - ` : | |       #
- * #         \  \ `_.   \_ __\ /__ _/   .-` /  /       #
- * #     =====`-.____`.___ \_____/___.-`___.-'=====    #
- * #                       `=---='                     #
- * #     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   #
- * #                                                   #
- * #                佛祖保佑         永无BUG
- * #                                                   #
- * *****************************************************
  */
-@EActivity(R.layout.activity_webview)
-public class WaitingForApprovalActivity extends BaseActivity{
-    @ViewById(R.id.webView)
+public class BaseWebActivity extends BaseActivity{
     WebView mWebView;
-
-    @ViewById(R.id.toolbar)
     Toolbar mToolbar;
-
-    String baseUrl = "file:///android_asset/h5/h5_approve.html";
+    String baseUrl = "file:///android_asset/h5/h5_doc.html";
     String nowUrl = "";
     String preUrl = "";
-
     Stack<String> stack = new Stack<>();
 
     WebViewClient client;
 
-    @AfterViews
-    void start(){
-        mToolbar.setTitle("待我审批");
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_webview);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mWebView = (WebView) findViewById(R.id.webView);
+        setBaseUrl();
+        initViews();
+    }
+
+    protected void setBaseUrl() {
+
+    }
+
+    protected void initViews() {
+        mToolbar.setTitle("已发送公文");
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(client = new WebViewClient(){
             @Override
@@ -89,6 +74,7 @@ public class WaitingForApprovalActivity extends BaseActivity{
             }
         });
     }
+
     private void back() {
         showDebugLoge("preUrl="+preUrl+"\n"+"nowUrl="+nowUrl+"\n"+"baseUrl="+baseUrl);
         if (baseUrl.contains(stack.lastElement()) || nowUrl.isEmpty()) {
@@ -107,4 +93,6 @@ public class WaitingForApprovalActivity extends BaseActivity{
     public void onBackPressed() {
         back();
     }
+
+
 }

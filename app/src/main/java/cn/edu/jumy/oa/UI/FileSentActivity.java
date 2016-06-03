@@ -6,7 +6,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.tencent.qcloud.tlslibrary.activity.AppManager;
 import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
 
 import org.androidannotations.annotations.AfterViews;
@@ -18,42 +17,18 @@ import java.util.Stack;
 import cn.edu.jumy.oa.R;
 
 /**
- * Created by Jumy on 16/5/27 22:02.
+ * Created by Jumy on 16/6/2 10:57.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
- * *****************************************************
- * #                       _oo0oo_                     #
- * #                      o8888888o                    #
- * #                      88" . "88                    #
- * #                      (| -_- |)                    #
- * #                      0\  =  /0                    #
- * #                    ___/`---'\___                  #
- * #                  .' \\|     |# '.                 #
- * #                 / \\|||  :  |||# \                #
- * #                / _||||| -:- |||||- \              #
- * #               |   | \\\  -  #/ |   |              #
- * #               | \_|  ''\---/''  |_/ |             #
- * #               \  .-\__  '-'  ___/-. /             #
- * #             ___'. .'  /--.--\  `. .'___           #
- * #          ."" '<  `.___\_<|>_/___.' >' "".         #
- * #         | | :  `- \`.;`\ _ /`;.`/ - ` : | |       #
- * #         \  \ `_.   \_ __\ /__ _/   .-` /  /       #
- * #     =====`-.____`.___ \_____/___.-`___.-'=====    #
- * #                       `=---='                     #
- * #     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   #
- * #                                                   #
- * #                佛祖保佑         永无BUG
- * #                                                   #
- * *****************************************************
  */
 @EActivity(R.layout.activity_webview)
-public class WaitingForApprovalActivity extends BaseActivity{
+public class FileSentActivity extends BaseActivity{
     @ViewById(R.id.webView)
     WebView mWebView;
 
     @ViewById(R.id.toolbar)
     Toolbar mToolbar;
 
-    String baseUrl = "file:///android_asset/h5/h5_approve.html";
+    String baseUrl = "file:///android_asset/h5/h5_doc.html";
     String nowUrl = "";
     String preUrl = "";
 
@@ -63,7 +38,7 @@ public class WaitingForApprovalActivity extends BaseActivity{
 
     @AfterViews
     void start(){
-        mToolbar.setTitle("待我审批");
+        mToolbar.setTitle("已发送公文");
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(client = new WebViewClient(){
             @Override

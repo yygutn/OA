@@ -50,4 +50,7 @@ public class BaseFragment extends Fragment {
             Log.w("jumy",message.toString());
         }
     }
+    public void showToast(CharSequence message){
+        Toast.makeText(getActivity(),message.toString(),Toast.LENGTH_SHORT).show();
+    }
 }

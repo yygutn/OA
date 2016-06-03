@@ -54,7 +54,8 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
         }
         final Conversation data = getItem(position);
         viewHolder.tvName.setText(data.getName());
-        viewHolder.avatar.setImageResource(data.getAvatar());
+        data.setAvatarByUrl(viewHolder.avatar);
+//        viewHolder.avatar.setImageResource(data.getAvatar());
         viewHolder.lastMessage.setText(data.getLastMessageSummary());
         viewHolder.time.setText(TimeUtil.getTimeStr(data.getLastMessageTime()));
         long unRead = data.getUnreadNum();
@@ -64,9 +65,9 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
             viewHolder.unread.setVisibility(View.VISIBLE);
             String unReadStr = String.valueOf(unRead);
             if (unRead < 10){
-                viewHolder.unread.setBackground(getContext().getResources().getDrawable(R.drawable.point1));
+                viewHolder.unread.setBackgroundResource(R.drawable.point1);
             }else{
-                viewHolder.unread.setBackground(getContext().getResources().getDrawable(R.drawable.point2));
+                viewHolder.unread.setBackgroundResource(R.drawable.point2);
                 if (unRead > 99){
                     unReadStr = getContext().getResources().getString(R.string.time_more);
                 }

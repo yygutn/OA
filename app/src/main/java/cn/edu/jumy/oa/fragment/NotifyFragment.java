@@ -31,6 +31,7 @@ import java.util.Random;
 
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.CalendarActivity_;
+import cn.edu.jumy.oa.UI.SignUpActivity_;
 import cn.edu.jumy.oa.bean.CardData;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
@@ -111,7 +112,7 @@ public class NotifyFragment extends BaseFragment {
             public void onItemClick(@NonNull Card card, int position) {
                 Log.d("CARD_TYPE", "" + card.getTag());
                 // TODO: 16/6/1 修改为跳转到详情报名页面
-//                CalendarActivity_.intent(getActivity()).start();
+                SignUpActivity_.intent(getActivity()).start();
             }
 
             @Override

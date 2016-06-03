@@ -62,7 +62,7 @@ project.ext{
     libRetrofitConverterGson = "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
     libRetrofitAdapterRxJava = "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}"
     libOkHttpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:3.0.0-RC1"
-    libOkHttpUtils = "com.zhy:okhttputils:2.4.1"
+    libOkHttpUtils = "com.zhy:okhttputils:2.6.1"
 
     libDagger = "com.google.dagger:dagger:${daggerVersion}"
     libDaggerCompiler = "com.google.dagger:dagger-compiler:${daggerVersion}"

@@ -21,6 +21,9 @@
 -keep class tencent.**{*;}
 -dontwarn tencent.**
 
+-keep class qalsdk.**{*;}
+-dontwarn qalsdk.**
+
 -optimizationpasses 5
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
@@ -38,6 +41,20 @@
 -keep public class * extends android.app.backup.BackupAgentHelper
 -keep public class * extends android.preference.Preference
 -keep public class com.android.vending.licensing.ILicensingService
+
+#okhttputils
+-dontwarn com.zhy.http.**
+-keep class com.zhy.http.**{*;}
+
+
+#okhttp
+-dontwarn okhttp3.**
+-keep class okhttp3.**{*;}
+
+
+#okio
+-dontwarn okio.**
+-keep class okio.**{*;}
 
 -keepclasseswithmembernames class * {
     native <methods>;

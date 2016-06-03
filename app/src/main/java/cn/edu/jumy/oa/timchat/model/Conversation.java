@@ -2,7 +2,13 @@ package cn.edu.jumy.oa.timchat.model;
 
 import android.content.Context;
 
+import com.squareup.picasso.Picasso;
 import com.tencent.TIMConversationType;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import cn.edu.jumy.oa.timchat.ui.customview.CircleImageView;
+import okhttp3.Call;
 
 /**
  * 会话数据
@@ -41,6 +47,29 @@ public abstract class Conversation implements Comparable {
      */
     abstract public int getAvatar();
 
+    /**
+     * 设置聊天对象的头像
+     */
+    public void setAvatarByUrl(final CircleImageView avatar){
+        OkHttpUtils.get()
+                .url("http://192.168.1.16/ssm/upload.do")
+                .addParams("","")
+                .addParams("","")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        avatar.setImageResource(getAvatar());
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Picasso.with(avatar.getContext())
+                                .load(response)
+                                .into(avatar);
+                    }
+                });
+    }
 
     /**
      * 跳转到聊天界面或会话详情

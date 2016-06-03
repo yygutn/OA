@@ -2,11 +2,20 @@ package cn.edu.jumy.oa.timchat.model;
 
 import android.content.Context;
 
+import com.squareup.picasso.Picasso;
 import com.tencent.TIMConversation;
 import com.tencent.TIMConversationType;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+import com.zhy.http.okhttp.request.OkHttpRequest;
+
 import cn.edu.jumy.oa.R;
 
 import cn.edu.jumy.oa.timchat.ui.ChatActivity;
+import cn.edu.jumy.oa.timchat.ui.customview.CircleImageView;
+import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 /**
  * 好友或群聊的会话
@@ -39,7 +48,10 @@ public class NomalConversation extends Conversation {
         this.lastMessage = lastMessage;
     }
 
-
+    /**
+     * TODO:设置用户头像，在这里，在这里～
+     * @return 0
+     */
     @Override
     public int getAvatar() {
         switch (type){

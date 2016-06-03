@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:navigationIcon="@drawable/ic_arrow_back_white"
-        app:title="会议日程"
+        app:title="日程管理"
         app:titleTextColor="@color/white"
         app:subtitle="2016.5"
         app:subtitleTextColor="@color/white">
