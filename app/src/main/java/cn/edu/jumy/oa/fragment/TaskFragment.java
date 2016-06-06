@@ -25,6 +25,7 @@ import cn.edu.jumy.oa.UI.FileSentActivity_;
 import cn.edu.jumy.oa.UI.MeetingCardActivity_;
 import cn.edu.jumy.oa.UI.MeetingSendActivity_;
 import cn.edu.jumy.oa.UI.MyFileActivity_;
+import cn.edu.jumy.oa.UI.ReceiveFileActivity_;
 import cn.edu.jumy.oa.UI.SendFileWebActivity_;
 import cn.edu.jumy.oa.UI.StudyOnlineActivity_;
 import cn.edu.jumy.oa.UI.TempActivity_;
@@ -95,7 +96,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
             results.add(new Item(7, "在线学习", R.drawable.task_learn_online));
             results.add(new Item(13, "已发送公文", R.drawable.task_file_send));
             results.add(new Item(1, "签到", R.drawable.task_location));
-            results.add(new Item(2, "邮件", R.drawable.task_mail));
+            results.add(new Item(2, "加密邮件", R.drawable.task_mail));
         }
     }
 
@@ -158,15 +159,15 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                         MeetingCardActivity_.intent(getActivity()).start();
                         break;
                     }
-                    case 4: {//收文
-                        MyFileActivity_.intent(getActivity()).start();
+                    case 4: {//收文 公文阅读
+                        ReceiveFileActivity_.intent(getActivity()).start();
                         break;
                     }
-                    case 5: {//发文
+                    case 5: {//发文 公文发布
                         SendFileWebActivity_.intent(getActivity()).start();
                         break;
                     }
-                    case 6: {//公文阅读
+                    case 6: {//文件柜
                         bundle = new Bundle();
                         bundle.putString("file", "file");
                         VerifyActivity_.intent(getActivity()).extra("file", bundle).start();

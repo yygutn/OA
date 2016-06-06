@@ -48,40 +48,8 @@ public class CardData extends RealmObject implements Serializable{
     private String subTitle;
     private String message;
     private Boolean isRead;
+    private int TAG;
 
-    public static Card buildCard(Context context, final CardData cardData){
-        final CardProvider provider = new Card.Builder(context)
-                .setTag("WELCOME_CARD")
-                .setDismissible()
-                .withProvider(new CardProvider())
-                .setLayout(R.layout.item_card_notification)
-                .setTitle(cardData.getTitle())
-                .setTitleColor(Color.BLACK)
-                .setDescription(cardData.getMessage())
-                .setDescriptionColor(Color.BLACK)
-                .setSubtitle(cardData.getSubTitle())
-                .setSubtitleColor(Color.BLACK)
-                //                        .setBackgroundColor(getResources().getColor(R.color.colorMask))
-                .addAction(R.id.ok_button, new TextViewAction(context)
-                        .setText(cardData.isRead?"已签收":"未读")
-                        .setTextColor(Color.BLACK)
-                        .setListener(new OnActionClickListener() {
-                            @Override
-                            public void onActionClicked(View view, Card card) {
-                                if (cardData.isRead){
-                                    return;
-                                }
-                                try {
-                                    TextViewAction action = (TextViewAction) card.getProvider().getAction(R.id.ok_button);
-                                    action.setText("已签收");
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }));
-
-        return provider.endConfig().build();
-    }
     public static ContentItemViewAbs buildItemView(Context context, final CardData cardData){
         return new ContentItemViewAbs(context,cardData.getTitle(),cardData.getSubTitle(),cardData.getMessage());
     }
@@ -93,6 +61,21 @@ public class CardData extends RealmObject implements Serializable{
         this.title = title;
         this.subTitle = subTitle;
         this.message = message;
+    }
+
+    public CardData(String title, String subTitle, String message, int TAG) {
+        this.title = title;
+        this.subTitle = subTitle;
+        this.message = message;
+        this.TAG = TAG;
+    }
+
+    public int getTAG() {
+        return TAG;
+    }
+
+    public void setTAG(int TAG) {
+        this.TAG = TAG;
     }
 
     public String getTitle() {

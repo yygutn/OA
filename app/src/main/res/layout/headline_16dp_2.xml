@@ -8,10 +8,11 @@
     <TextView
         android:visibility="gone"
         android:id="@+id/title"
-        style="@style/Material_Card_Title"
+        style="@style/Material_Card_Title_notify"
+        android:textSize="18sp"
         tools:text="Title"/>
 
     <TextView android:id="@+id/subtitle"
-        style="@style/Material_Card_Title"
+        style="@style/Material_Card_Title_notify"
         tools:text="Subtitle"/>
 </LinearLayout>

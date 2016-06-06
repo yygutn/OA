@@ -98,7 +98,7 @@ public class VerifyActivity extends AppCompatActivity{
                 .load(R.drawable.fingerprint_pass)
                 .into(imageView);
         if (!TextUtils.isEmpty(file)&&file.contains("file")){
-            ReceiveFileActivity_.intent(mContext).start();
+            MyFileActivity_.intent(mContext).start();
         }else {
             startActivity(new Intent(mContext, SplashActivity.class));
         }

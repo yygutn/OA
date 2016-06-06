@@ -61,7 +61,7 @@ public class SendFileWebActivity extends BaseActivity {
 
     @AfterViews
     void start(){
-        mToolbar.setTitle("发文");
+        mToolbar.setTitle("公文发布");
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(client = new WebViewClient(){
             @Override

@@ -7,8 +7,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.dexafree.materialList.card.Card;
 import com.dexafree.materialList.card.CardProvider;
@@ -19,10 +17,13 @@ import com.dexafree.materialList.view.MaterialListView;
 import com.squareup.picasso.RequestCreator;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.adapter.StringAdapter;
 
 /**
  * Created by Jumy on 16/5/24 15:03.
@@ -213,21 +214,7 @@ public class CardGenerater{
                 }
             }
             case 5: {
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1);
-                adapter.add("Hello");
-                adapter.add("World");
-                adapter.add("!");
-
-                return new Card.Builder(mContext)
-                        .setTag("LIST_CARD")
-                        .setDismissible()
-                        .withProvider(new ListCardProvider())
-                        .setLayout(R.layout.material_list_card_layout)
-                        .setTitle("List Cards")
-                        .setDescription("Take a list")
-                        .setAdapter(adapter)
-                        .endConfig()
-                        .build();
+                return generateListCard(mContext,null,"List Cards");
             }
             default: {
                 final CardProvider provider = new Card.Builder(mContext)
@@ -269,9 +256,29 @@ public class CardGenerater{
         }
     }
 
+    @NonNull
+    public static Card generateListCard(Context mContext, List<String> contents,String title) {
 
+        if (contents == null){
+            contents = new ArrayList<>();
+            contents.add("Hello");
+            contents.add("World");
+            contents.add("!");
+        }
+        StringAdapter stringAdapter = new StringAdapter(mContext,android.R.layout.simple_list_item_1,contents);
 
-
+        return new Card.Builder(mContext)
+                .setTag("LIST_CARD")
+                .setDismissible()
+                .withProvider(new ListCardProvider())
+                .setLayout(R.layout.material_list_card_layout)
+                .setTitle(title)
+                .setTitleColor(Color.WHITE)
+                .setBackgroundColor(mContext.getResources().getColor(R.color.pressed))
+                .setAdapter(stringAdapter)
+                .endConfig()
+                .build();
+    }
 
 
     public static Card generateNewCard(Context mContext) {

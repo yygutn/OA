@@ -57,7 +57,7 @@ public class NotifyFragmentBackgroundTask {
         List<Card> cards = new ArrayList<>();
         if (items != null){
             for (CardData item : items){
-//                cards.add(fragment.getNotificationCard(item.getTitle(),item.getSubTitle(),item.getMessage()));
+//                cards.add(fragment.getCard(item.getTitle(),item.getSubTitle(),item.getMessage()));
             }
 //            fragment.isCache = true;
         }
