@@ -2,13 +2,16 @@ package com.tencent.qcloud.tlslibrary.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.tencent.qcloud.tlslibrary.BuildConfig;
+import com.tencent.qcloud.tlslibrary.R;
 
 /**
  * Created by Jumy on 16/5/25 15:48.
@@ -52,5 +55,11 @@ public class BaseFragment extends Fragment {
     }
     public void showToast(CharSequence message){
         Toast.makeText(getActivity(),message.toString(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        StatusBarCompat.compat(getActivity(),getResources().getColor(R.color.pressed));
     }
 }

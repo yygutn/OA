@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-
+apply plugin: 'android-apt'
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
@@ -23,7 +23,13 @@ android {
         }
     }
 }
-
+apt {
+    arguments {
+//        androidManifestFile variant.outputs[0].processResources.manifestFile
+        logLevel 'TRACE'
+        logAppenderConsole 'true'
+    }
+}
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
@@ -31,4 +37,8 @@ dependencies {
     compile project(':sdk')
     //noinspection GradleCompatible
     compile 'com.android.support:support-v4:23.2.1'
+    compile rootProject.ext.libAA
+    //
+    compile rootProject.ext.libAA_Api
+    //
 }

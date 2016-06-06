@@ -73,9 +73,9 @@ dependencies {
     //
     compile rootProject.ext.libMvpView
     //
-    compile rootProject.ext.libAA
+//    compile rootProject.ext.libAA
     //
-    compile rootProject.ext.libAA_Api
+//    compile rootProject.ext.libAA_Api
     //
     compile rootProject.ext.libSupportRecyclerview
     //

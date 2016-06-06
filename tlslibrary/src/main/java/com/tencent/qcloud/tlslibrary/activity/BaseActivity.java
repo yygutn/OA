@@ -12,12 +12,17 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.tencent.qcloud.tlslibrary.BuildConfig;
+import com.tencent.qcloud.tlslibrary.R;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
 
 
 /**
  * User: Jumy (yygutn@gmail.com)
  * Date: 16/5/17  下午2:57
  */
+@EActivity
 public class BaseActivity extends AppCompatActivity {
 
     private boolean DEBUG = true;
@@ -30,7 +35,10 @@ public class BaseActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         addToStack();
     }
-
+    @AfterViews
+    public void initStatusBarColor(){
+        StatusBarCompat.compat(this,getResources().getColor(R.color.pressed));
+    }
     protected void addToStack() {
         AppManager.getInstance().addActivity(this);
     }

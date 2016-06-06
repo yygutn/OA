@@ -78,18 +78,18 @@ public class SettingFragment extends Fragment implements FriendInfoView{
                 }
             });
             nickName = (LineControllerView) view.findViewById(R.id.nickName);
-            nickName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EditActivity.navToEdit(SettingFragment.this, getResources().getString(R.string.setting_nick_name_change), name.getText().toString(), REQ_CHANGE_NICK, new EditActivity.EditInterface() {
-                        @Override
-                        public void onEdit(String text, TIMCallBack callBack) {
-                            FriendshipManagerPresenter.setMyNick(text, callBack);
-                        }
-                    },20);
-
-                }
-            });
+//            nickName.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    EditActivity.navToEdit(SettingFragment.this, getResources().getString(R.string.setting_nick_name_change), name.getText().toString(), REQ_CHANGE_NICK, new EditActivity.EditInterface() {
+//                        @Override
+//                        public void onEdit(String text, TIMCallBack callBack) {
+//                            FriendshipManagerPresenter.setMyNick(text, callBack);
+//                        }
+//                    },20);
+//
+//                }
+//            });
             allowTypeContent = new HashMap<>();
             allowTypeContent.put(getString(R.string.friend_allow_all), TIMFriendAllowType.TIM_FRIEND_ALLOW_ANY);
             allowTypeContent.put(getString(R.string.friend_need_confirm), TIMFriendAllowType.TIM_FRIEND_NEED_CONFIRM);
