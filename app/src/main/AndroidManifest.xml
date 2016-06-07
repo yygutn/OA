@@ -145,7 +145,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".UI.SignUpActivity_"
             android:theme="@style/AppTheme.NoActionBar"/>
-
+        <activity android:name="com.github.mmin18.layoutcast.ResetActivity" />
 
     </application>
 

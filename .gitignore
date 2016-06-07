@@ -15,17 +15,3 @@ timapp/src/main/java/
 timapp/src/main/res/drawable-mdpi/
 timapp/src/main/res/drawable-xxxhdpi/
 timapp/src/main/res/mipmap-mdpi/
-#buck
-*/BUCK
-.okbuck
-buck-out
-.buckconfig
-.buckd/
-.okbuck/
-app/BUCK
-buck-out/
-k9mail/BUCK
-presentation/BUCK
-sdk/BUCK
-timapp/BUCK
-tlslibrary/BUCK

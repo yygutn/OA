@@ -15,6 +15,9 @@ android {
             storeFile file('/Volumes/software/Users/Jumy/Desktop/OA/OA.jks')
             storePassword 'yygutn'
         }
+        debug {
+
+        }
     }
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -36,7 +39,6 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix ".debug"
             buildConfigField "boolean", "LOG_DEBUG", "true"
             debuggable true
         }
@@ -85,4 +87,6 @@ dependencies {
     compile 'com.zhy:base-adapter:2.0.0'
     compile 'homhomlin.lib:ptrrv-library:1.3.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
+
+    compile 'com.github.mmin18.layoutcast:library:1.+@aar'
 }
