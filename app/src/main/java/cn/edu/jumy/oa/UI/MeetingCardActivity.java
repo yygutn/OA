@@ -30,7 +30,7 @@ import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
 import cn.edu.jumy.oa.bean.Card;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
-import cn.edu.jumy.oa.widget.utils.CardGenerater;
+import cn.edu.jumy.oa.widget.utils.CardGenerator;
 
 
 /**
@@ -160,7 +160,7 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
             array.put(0, sdf.format(new Date()));
             array.put(1, "省办公厅");
             array.put(2, sdf.format(new Date()));
-            String message = CardGenerater.generateNotifyString(0, array);
+            String message = CardGenerator.generateNotifyString(0, array);
             cardDataList.add(new Card(title, message, 0));
         }
         MeetingCardAdapter adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification, cardDataList);

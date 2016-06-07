@@ -45,65 +45,17 @@ import cn.edu.jumy.oa.R;
  * #                                                   #
  * *****************************************************
  */
-@EActivity(R.layout.activity_webview)
-public class FromMeActivity extends BaseActivity{
-    @ViewById(R.id.webView)
-    WebView mWebView;
+@EActivity
+public class FromMeActivity extends BaseWebActivity{
 
-    @ViewById(R.id.toolbar)
-    Toolbar mToolbar;
-
-    String baseUrl = "file:///android_asset/h5/h5_request.html";
-    String preUrl = "";
-    String nowUrl = "";
-
-    WebViewClient client;
-    Stack<String> stack = new Stack<>();
-    @AfterViews
-    void start(){
-        mToolbar.setTitle("由我发起");
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.setWebViewClient(client = new WebViewClient(){
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                showDebugLoge("333:"+url);
-                view.loadUrl(url);
-                preUrl = nowUrl;
-                nowUrl = url;
-                push(url);
-                showDebugLoge("preUrl="+preUrl+"\n"+"nowUrl="+nowUrl+"\n"+"baseUrl="+baseUrl);
-                return true;
-            }
-        });
-        mWebView.loadUrl(baseUrl);
-        preUrl = nowUrl;
-        nowUrl = baseUrl;
-        push(baseUrl);
-        mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                back();
-            }
-        });
-    }
-    private void back() {
-        showDebugLoge("preUrl="+preUrl+"\n"+"nowUrl="+nowUrl+"\n"+"baseUrl="+baseUrl);
-        if (baseUrl.contains(mWebView.getUrl()) || nowUrl.isEmpty()) {
-            backToPreActivity();
-        } else {
-            stack.pop();
-            client.shouldOverrideUrlLoading(mWebView,stack.lastElement());
-        }
+    @Override
+    protected void setBaseUrl() {
+        baseUrl = "file:///android_asset/h5/h5_request.html";
     }
 
     @Override
-    public void onBackPressed() {
-        back();
-    }
-    private void push(String url){
-        if (!stack.contains(url)){
-            stack.push(url);
-        }
+    protected void initViews() {
+        super.initViews();
+        mToolbar.setTitle("由我发起");
     }
 }

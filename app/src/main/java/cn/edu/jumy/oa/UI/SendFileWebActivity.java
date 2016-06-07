@@ -44,50 +44,17 @@ import cn.edu.jumy.oa.R;
  * #                                                   #
  * *****************************************************
  */
-@EActivity(R.layout.activity_webview)
-public class SendFileWebActivity extends BaseActivity {
+@EActivity
+public class SendFileWebActivity extends BaseWebActivity {
 
-    @ViewById(R.id.webView)
-    WebView mWebView;
+    @Override
+    protected void setBaseUrl() {
+        super.baseUrl = "file:///android_asset/h5/h5_docInput.html";
+    }
 
-    @ViewById(R.id.toolbar)
-    Toolbar mToolbar;
-
-    String baseUrl = "file:///android_asset/h5/h5_docInput.html";
-    String preUrl = "";
-    String nowUrl = "";
-
-    WebViewClient client;
-
-    @AfterViews
-    void start(){
-        mToolbar.setTitle("公文发布");
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.setWebViewClient(client = new WebViewClient(){
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                showDebugLoge("333:"+url);
-                view.loadUrl(url);
-                preUrl = nowUrl;
-                nowUrl = url;
-                showDebugLoge("preUrl="+preUrl+"\n"+"nowUrl="+nowUrl+"\n"+"baseUrl="+baseUrl);
-                return true;
-            }
-        });
-        mWebView.loadUrl(baseUrl);
-        preUrl = nowUrl;
-        nowUrl = baseUrl;
-        mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDebugLoge("preUrl="+preUrl+"\n"+"nowUrl="+nowUrl+"\n"+"baseUrl="+baseUrl);
-                if (baseUrl.contains(mWebView.getUrl()) || nowUrl.isEmpty()) {
-                    onBackPressed();
-                } else {
-                    client.shouldOverrideUrlLoading(mWebView,preUrl);
-                }
-            }
-        });
+    @Override
+    protected void initViews() {
+        super.initViews();
+        super.mToolbar.setTitle("公文发布");
     }
 }

@@ -30,7 +30,7 @@ import cn.edu.jumy.oa.UI.SignUpActivity_;
 import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
 import cn.edu.jumy.oa.bean.Card;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
-import cn.edu.jumy.oa.widget.utils.CardGenerater;
+import cn.edu.jumy.oa.widget.utils.CardGenerator;
 
 /**
  * Created by Jumy on 16/5/19 12:07.
@@ -67,7 +67,7 @@ public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.O
     PullToRefreshRecyclerView mListView;
 
     ImageView mEmptyImageView;
-    private List<Card> cardDataList = new ArrayList<>();
+    private List<Card> cardList = new ArrayList<>();
     public boolean isCache = false;
 
     Handler handler = new Handler();
@@ -122,37 +122,37 @@ public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.O
     private void fillArray() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         SparseArray<String> array;
-        cardDataList = new ArrayList<>();
+        cardList = new ArrayList<>();
         String title = "";
         for (int i = 0; i < 10; i++) {
             array = new SparseArray<String>();
             int tag = i%3;
             switch (tag){
                 case 0:{
-                    title = "召开传达中央文件精神会议";
+                    title = "(会议)召开传达中央文件精神会议";
                     array.put(0,sdf.format(new Date()));
                     array.put(1,"省办公厅");
                     array.put(2,sdf.format(new Date()));
                     break;
                 }
                 case 1:{
-                    title = "省人大常委会公告(第25号)";
+                    title = "(公告)省人大常委会公告(第25号)";
                     array.put(0,sdf.format(new Date()));
                     array.put(1,"浙江省人民代表大会常务委员会");
                     break;
                 }
                 case 2:{
-                    title = "浙江省人民政府关于建立江山仙霞岭省级自然保护区的批复";
+                    title = "(公告)浙江省人民政府关于建立江山仙霞岭省级自然保护区的批复";
                     array.put(0,sdf.format(new Date()));
                     array.put(1,"浙江省人民政府");
                     array.put(2,"浙政函〔2016〕63号");
                     break;
                 }
             }
-            String message = CardGenerater.generateNotifyString(tag, array);
-            cardDataList.add(new Card(title, message,tag));
+            String message = CardGenerator.generateNotifyString(tag, array);
+            cardList.add(new Card(title, message,tag));
         }
-        MeetingCardAdapter adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification, cardDataList);
+        MeetingCardAdapter adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification, cardList);
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
     }
@@ -160,7 +160,7 @@ public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.O
     @Override
     public void onDestroy() {
         //存入缓存
-        ACache.get(getActivity()).put("notify_items", (ArrayList<Card>) cardDataList);
+        ACache.get(getActivity()).put("notify_items", (ArrayList<Card>) cardList);
         super.onDestroy();
     }
 

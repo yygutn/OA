@@ -3,6 +3,7 @@ package cn.edu.jumy.oa.UI;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -22,7 +23,7 @@ import cn.edu.jumy.oa.R;
  * Created by Jumy on 16/6/2 11:42.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-public class BaseWebActivity extends BaseActivity{
+public abstract class BaseWebActivity extends BaseActivity {
     WebView mWebView;
     Toolbar mToolbar;
     String baseUrl = "file:///android_asset/h5/h5_doc.html";
@@ -43,22 +44,21 @@ public class BaseWebActivity extends BaseActivity{
         initViews();
     }
 
-    protected void setBaseUrl() {
+    protected abstract void setBaseUrl();
 
-    }
 
     protected void initViews() {
         mToolbar.setTitle("已发送公文");
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.setWebViewClient(client = new WebViewClient(){
+        mWebView.setWebViewClient(client = new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                showDebugLoge("333:"+url);
+                showDebugLoge("333:" + url);
                 view.loadUrl(url);
                 preUrl = nowUrl;
                 nowUrl = url;
                 push(url);
-                showDebugLoge("preUrl="+preUrl+"\n"+"nowUrl="+nowUrl+"\n"+"baseUrl="+baseUrl);
+                showDebugLoge("preUrl=" + preUrl + "\n" + "nowUrl=" + nowUrl + "\n" + "baseUrl=" + baseUrl);
                 return true;
             }
         });
@@ -73,22 +73,25 @@ public class BaseWebActivity extends BaseActivity{
                 back();
             }
         });
+        showDebugLoge("url_title: "+mWebView.getTitle().toString());
     }
 
-    private void back() {
-        showDebugLoge("preUrl="+preUrl+"\n"+"nowUrl="+nowUrl+"\n"+"baseUrl="+baseUrl);
+    protected void back() {
+        showDebugLoge("preUrl=" + preUrl + "\n" + "nowUrl=" + nowUrl + "\n" + "baseUrl=" + baseUrl);
         if (baseUrl.contains(stack.lastElement()) || nowUrl.isEmpty()) {
             backToPreActivity();
         } else {
             preUrl = stack.pop();
-            client.shouldOverrideUrlLoading(mWebView,stack.lastElement());
+            client.shouldOverrideUrlLoading(mWebView, stack.lastElement());
         }
     }
-    private void push(String url){
-        if (!stack.contains(url)){
+
+    protected void push(String url) {
+        if (!stack.contains(url)) {
             stack.push(url);
         }
     }
+
     @Override
     public void onBackPressed() {
         back();

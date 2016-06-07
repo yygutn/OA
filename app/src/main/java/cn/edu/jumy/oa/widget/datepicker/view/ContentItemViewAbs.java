@@ -8,10 +8,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.dexafree.materialList.card.CardLayout;
-
-import org.androidannotations.annotations.EViewGroup;
-
 import cn.edu.jumy.oa.R;
 
 public class ContentItemViewAbs extends LinearLayout {
