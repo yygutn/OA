@@ -49,8 +49,8 @@ dependencies {
 }
 
 android {
-    compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
 
     defaultConfig {
 //        applicationId "com.fsck.k9"
@@ -82,7 +82,7 @@ android {
 
         debug {
 //            applicationIdSuffix ".debug"
-            testCoverageEnabled rootProject.testCoverage
+            testCoverageEnabled project.hasProperty('testCoverage')
 
             buildConfigField "boolean", "DEVELOPER_MODE", "true"
         }
