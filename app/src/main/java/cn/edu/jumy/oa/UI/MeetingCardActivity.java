@@ -157,9 +157,6 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
         for (int i = 0; i < 10; i++) {
             array = new SparseArray<String>();
             title = "召开传达中央文件精神会议";
-            array.put(0, sdf.format(new Date()));
-            array.put(1, "省办公厅");
-            array.put(2, sdf.format(new Date()));
             String message = CardGenerator.generateNotifyString(0, array);
             cardDataList.add(new Card(title, message, 0));
         }

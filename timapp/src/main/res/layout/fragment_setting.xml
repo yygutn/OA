@@ -64,13 +64,13 @@
         android:layout_height="1px"
         android:background="@color/line" />
 
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
-        android:id="@+id/nickName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:name="@string/setting_nick_name_change"
-        app:canNav="true"/>
+    <!--<cn.edu.jumy.oa.timchat.ui.customview.LineControllerView-->
+        <!--android:id="@+id/nickName"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--app:name="@string/setting_nick_name_change"-->
+        <!--app:canNav="true"/>-->
 
     
     <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView

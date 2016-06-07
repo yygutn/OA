@@ -49,7 +49,7 @@ public class ReceiveFileActivity extends BaseWebActivity{
 
     @Override
     protected void setBaseUrl() {
-        super.baseUrl = "file:///android_asset/h5/h5_docReceive.html";
+        super.baseUrl = "file:///android_asset/h5/h5_ddd.html";
     }
 
     @Override

@@ -24,6 +24,8 @@ import cn.edu.jumy.oa.UI.CalendarActivity_;
 import cn.edu.jumy.oa.UI.FileSentActivity_;
 import cn.edu.jumy.oa.UI.MeetingCardActivity_;
 import cn.edu.jumy.oa.UI.MeetingSendActivity_;
+import cn.edu.jumy.oa.UI.MeetingSentActivity;
+import cn.edu.jumy.oa.UI.MeetingSentActivity_;
 import cn.edu.jumy.oa.UI.MyFileActivity_;
 import cn.edu.jumy.oa.UI.ReceiveFileActivity_;
 import cn.edu.jumy.oa.UI.SendFileWebActivity_;
@@ -95,6 +97,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
             results.add(new Item(12, "公告", R.drawable.task_notice));
             results.add(new Item(7, "在线学习", R.drawable.task_learn_online));
             results.add(new Item(13, "已发送公文", R.drawable.task_file_send));
+            results.add(new Item(14,"已发送会议",R.drawable.task_file_send));
             results.add(new Item(1, "签到", R.drawable.task_location));
             results.add(new Item(2, "加密邮件", R.drawable.task_mail));
         }
@@ -199,6 +202,10 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                     }
                     case 13:{//已发送公文
                         FileSentActivity_.intent(getActivity()).start();
+                        break;
+                    }
+                    case 14:{
+                        MeetingSentActivity_.intent(getActivity()).start();
                         break;
                     }
                     default:

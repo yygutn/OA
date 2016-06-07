@@ -48,8 +48,17 @@ import cn.edu.jumy.oa.R;
  * #                                                   #
  * *****************************************************
  */
-@EActivity
-public class StudyOnlineActivity extends BaseWebActivity{
+@EActivity(R.layout.activity_webview)
+public class StudyOnlineActivity extends BaseActivity{
+    @ViewById(R.id.webView)
+    WebView mWebView;
+
+    @ViewById(R.id.toolbar)
+    Toolbar mToolbar;
+
+    String baseUrl = "file:///android_asset/h5/h5_study.html";
+    String preUrl = "";
+    String nowUrl = "";
 
     WebViewClient client;
     WebChromeClient webChromeClient;
@@ -69,10 +78,6 @@ public class StudyOnlineActivity extends BaseWebActivity{
                 back();
             }
         });
-    }
-
-    @Override
-    protected void initViews() {
     }
 
     private void getWebSettings() {
@@ -109,6 +114,32 @@ public class StudyOnlineActivity extends BaseWebActivity{
         });
     }
 
+    private void back() {
+        showDebugLoge("preUrl="+preUrl+"\n"+"nowUrl="+nowUrl+"\n"+"baseUrl="+baseUrl);
+        if (baseUrl.contains(stack.lastElement()) || nowUrl.isEmpty()) {
+            backToPreActivity();
+        } else {
+            preUrl = stack.pop();
+            client.shouldOverrideUrlLoading(mWebView,stack.lastElement());
+        }
+    }
+
+    private void push(String url){
+        if (!stack.contains(url)){
+            stack.push(url);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        back();
+    }
+
+    public void hideCustomView() {
+        webChromeClient.onHideCustomView();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -135,10 +166,5 @@ public class StudyOnlineActivity extends BaseWebActivity{
         mWebView.setWebViewClient(null);
         mWebView.destroy();
         mWebView = null;
-    }
-
-    @Override
-    protected void setBaseUrl() {
-        baseUrl = "file:///android_asset/h5/h5_study.html";
     }
 }

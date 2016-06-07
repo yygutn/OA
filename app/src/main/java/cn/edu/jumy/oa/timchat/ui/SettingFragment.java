@@ -37,7 +37,7 @@ public class SettingFragment extends Fragment implements FriendInfoView{
     private View view;
     private FriendshipManagerPresenter friendshipManagerPresenter;
     private TextView id,name;
-    private LineControllerView nickName, friendConfirm;
+    private LineControllerView friendConfirm;
     private final int REQ_CHANGE_NICK = 1000;
     private Map<String, TIMFriendAllowType> allowTypeContent;
 
@@ -77,7 +77,7 @@ public class SettingFragment extends Fragment implements FriendInfoView{
                     });
                 }
             });
-            nickName = (LineControllerView) view.findViewById(R.id.nickName);
+//            nickName = (LineControllerView) view.findViewById(R.id.nickName);
 //            nickName.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -127,6 +127,7 @@ public class SettingFragment extends Fragment implements FriendInfoView{
                 }
             });
             LineControllerView folder = (LineControllerView) view.findViewById(R.id.folder);
+            folder.setCanNav(false);
 
         }
         return view ;
@@ -149,7 +150,6 @@ public class SettingFragment extends Fragment implements FriendInfoView{
     private void setNickName(String name){
         if (name == null) return;
         this.name.setText(name);
-        nickName.setContent(name);
     }
 
 

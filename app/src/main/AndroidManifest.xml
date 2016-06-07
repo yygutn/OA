@@ -141,7 +141,7 @@
             android:name=".UI.FileSentActivity_"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.BaseWebActivity"
+            android:name=".UI.MeetingSentActivity_"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".UI.SignUpActivity_"
             android:theme="@style/AppTheme.NoActionBar"/>
