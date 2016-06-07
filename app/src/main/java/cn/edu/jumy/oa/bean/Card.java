@@ -1,17 +1,9 @@
 package cn.edu.jumy.oa.bean;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.view.View;
-
-import com.dexafree.materialList.card.Card;
-import com.dexafree.materialList.card.CardProvider;
-import com.dexafree.materialList.card.OnActionClickListener;
-import com.dexafree.materialList.card.action.TextViewAction;
 
 import java.io.Serializable;
 
-import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.widget.datepicker.view.ContentItemViewAbs;
 import io.realm.RealmObject;
 
@@ -43,29 +35,17 @@ import io.realm.RealmObject;
  * #                                                   #
  * *****************************************************
  */
-public class CardData extends RealmObject implements Serializable{
+public class Card extends RealmObject implements Serializable{
     private String title;
-    private String subTitle;
     private String message;
     private Boolean isRead;
     private int TAG;
 
-    public static ContentItemViewAbs buildItemView(Context context, final CardData cardData){
-        return new ContentItemViewAbs(context,cardData.getTitle(),cardData.getSubTitle(),cardData.getMessage());
+    public Card() {
     }
 
-    public CardData() {
-    }
-
-    public CardData(String title, String subTitle, String message) {
-        this.title = title;
-        this.subTitle = subTitle;
-        this.message = message;
-    }
-
-    public CardData(String title, String subTitle, String message, int TAG) {
-        this.title = title;
-        this.subTitle = subTitle;
+    public Card(String subTitle, String message, int TAG) {
+        this.title = subTitle;
         this.message = message;
         this.TAG = TAG;
     }
@@ -84,14 +64,6 @@ public class CardData extends RealmObject implements Serializable{
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getSubTitle() {
-        return subTitle;
-    }
-
-    public void setSubTitle(String subTitle) {
-        this.subTitle = subTitle;
     }
 
     public String getMessage() {

@@ -1,7 +1,5 @@
 package cn.edu.jumy.oa.bean;
 
-import com.dexafree.materialList.card.Card;
-
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
@@ -10,7 +8,6 @@ import org.androidannotations.annotations.UiThread;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.edu.jumy.oa.HomeActivity;
 import cn.edu.jumy.oa.UI.MeetingCardActivity;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 
@@ -46,18 +43,18 @@ import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 public class NotifyFragmentBackgroundTask {
 
 
-    private ArrayList<CardData> items;
+    private ArrayList<Card> items;
     @RootContext
     MeetingCardActivity fragment;
 
     @Background
     public void initData() {
         /////////初始化数据，如果缓存中有就使用缓存中的
-        items = (ArrayList<CardData>) ACache.get(fragment.mContext).getAsObject("notify_items");
+        items = (ArrayList<Card>) ACache.get(fragment.mContext).getAsObject("notify_items");
         List<Card> cards = new ArrayList<>();
         if (items != null){
-            for (CardData item : items){
-//                cards.add(fragment.getCard(item.getTitle(),item.getSubTitle(),item.getMessage()));
+            for (Card item : items){
+//                cards.add(fragment.getCard(item.getTitle(),item.getTitle(),item.getMessage()));
             }
 //            fragment.isCache = true;
         }
@@ -65,6 +62,6 @@ public class NotifyFragmentBackgroundTask {
     }
 
     @UiThread
-    public void updateUI(ArrayList<CardData> items) {
+    public void updateUI(ArrayList<Card> items) {
     }
 }

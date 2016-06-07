@@ -3,10 +3,8 @@ package cn.edu.jumy.oa.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 
 import com.zhy.base.adapter.ViewHolder;
 import com.zhy.base.adapter.recyclerview.CommonAdapter;
@@ -14,7 +12,7 @@ import com.zhy.base.adapter.recyclerview.CommonAdapter;
 import java.util.List;
 
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.bean.CardData;
+import cn.edu.jumy.oa.bean.Card;
 
 /**
  * Created by Jumy on 16/6/1 17:48.
@@ -44,14 +42,14 @@ import cn.edu.jumy.oa.bean.CardData;
  * #                                                   #
  * *****************************************************
  */
-public class MeetingCardAdapter extends CommonAdapter<CardData>{
+public class MeetingCardAdapter extends CommonAdapter<Card>{
     public MeetingCardAdapter(Context context, int layoutId, List datas) {
         super(context, layoutId, datas);
     }
 
     @Override
-    public void convert(ViewHolder holder, CardData cardData) {
-        holder.setText(R.id.subtitle,cardData.getSubTitle());
+    public void convert(ViewHolder holder, Card cardData) {
+        holder.setText(R.id.subtitle,cardData.getTitle());
         holder.setText(R.id.supportingText,cardData.getMessage());
         try {
             holder.setTextColor(R.id.subtitle, Color.WHITE);

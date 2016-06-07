@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.tencent.qcloud.tlslibrary.activity.AppManager;
 import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
 
 import org.androidannotations.annotations.AfterViews;

@@ -10,21 +10,26 @@
         android:layout_height="wrap_content"
         app:titleText="通告"/>
 
-    <FrameLayout
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+
+        <!--<com.dexafree.materialList.view.MaterialListView-->
+            <!--android:id="@+id/notify_listView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/imageView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
+    <!--</FrameLayout>-->
+
+    <com.lhh.ptrrv.library.PullToRefreshRecyclerView
+        android:id="@+id/notify_listView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-        <com.dexafree.materialList.view.MaterialListView
-            android:id="@+id/notify_listView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </FrameLayout>
+        android:layout_height="match_parent"/>
 
 
 </LinearLayout>

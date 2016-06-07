@@ -1,23 +1,17 @@
 package cn.edu.jumy.oa.UI;
 
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.dexafree.materialList.card.Card;
-import com.dexafree.materialList.listeners.OnDismissCallback;
-import com.dexafree.materialList.listeners.RecyclerItemClickListener;
-import com.dexafree.materialList.view.MaterialListView;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.squareup.picasso.Picasso;
 import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
@@ -31,14 +25,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
-import cn.edu.jumy.oa.bean.CardData;
-import cn.edu.jumy.oa.widget.LoadMoreView;
+import cn.edu.jumy.oa.bean.Card;
+import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 import cn.edu.jumy.oa.widget.utils.CardGenerater;
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 
 /**
@@ -56,8 +48,7 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
 
     ImageView mEmptyImageView;
 
-    private List<Card> cards = new ArrayList<>();
-    private List<CardData> cardDataList = new ArrayList<>();
+    private List<Card> cardDataList = new ArrayList<>();
 
     Handler handler = new Handler();
 
@@ -160,14 +151,17 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
 
     private void fillArray() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SparseArray<String> array;
         cardDataList = new ArrayList<>();
+        String title = "";
         for (int i = 0; i < 10; i++) {
-            String time = sdf.format(new Date());
-            time = time + "在" + new Random().nextInt(1000) + "开会" + "\n";
-            time += "承办单位:省办公厅" + "\n";
-            time += new Random().nextBoolean() ? "会议名称:关于召开省委城市工作会议的通知" : "会议名称:召开传达中央文件精神会议";
-            cards.add(CardGenerater.getNotificationCard(mContext, "通知", "会议(点击查看详情)", time));
-            cardDataList.add(new CardData("通知", "会议(点击查看详情)", time));
+            array = new SparseArray<String>();
+            title = "召开传达中央文件精神会议";
+            array.put(0, sdf.format(new Date()));
+            array.put(1, "省办公厅");
+            array.put(2, sdf.format(new Date()));
+            String message = CardGenerater.generateNotifyString(0, array);
+            cardDataList.add(new Card(title, message, 0));
         }
         MeetingCardAdapter adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification, cardDataList);
         mListView.setAdapter(adapter);
@@ -182,5 +176,12 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
     @Override
     public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        //存入缓存
+        ACache.get(mContext).put("meeting_items", (ArrayList<Card>) cardDataList);
+        super.onDestroy();
     }
 }

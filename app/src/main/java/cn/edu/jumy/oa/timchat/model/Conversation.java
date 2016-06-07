@@ -52,9 +52,7 @@ public abstract class Conversation implements Comparable {
      */
     public void setAvatarByUrl(final CircleImageView avatar){
         OkHttpUtils.get()
-                .url("http://192.168.1.16/ssm/upload.do")
-                .addParams("","")
-                .addParams("","")
+                .url("http://192.168.1.163:8081/ssm/dowloadimage.do?userid=1")
                 .build()
                 .execute(new StringCallback() {
                     @Override

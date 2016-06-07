@@ -10,3 +10,8 @@
 /captures
 /gradlew.bat
 /gradlew
+/OneSDK/
+timapp/src/main/java/
+timapp/src/main/res/drawable-mdpi/
+timapp/src/main/res/drawable-xxxhdpi/
+timapp/src/main/res/mipmap-mdpi/

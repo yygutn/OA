@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -343,5 +344,56 @@ public class CardGenerater{
 //                        }));
 
         return provider.endConfig().build();
+    }
+
+    public static Card getCard(Context context,int tag, String subtitle, String message) {
+        switch (tag) {
+            case 0: {
+                subtitle = "(会议)" + subtitle;
+                break;
+            }
+            case 1: {
+                subtitle = "(公告)" + subtitle;
+                break;
+            }
+            case 2: {
+                subtitle = "(公文)" + subtitle;
+                break;
+            }
+            default:break;
+
+        }
+        final CardProvider provider = new Card.Builder(context)
+                .setTag(tag)
+//                .setDismissible()//添加之后，滑动删除
+                .withProvider(new CardProvider())
+                .setLayout(R.layout.item_card_notification)
+                .setDescription(message)
+                .setDescriptionColor(Color.WHITE)
+                .setSubtitle(subtitle)
+                .setSubtitleColor(Color.WHITE)
+                .setBackgroundColor(context.getResources().getColor(R.color.pressed));
+        return provider.endConfig().build();
+    }
+
+    public static String generateNotifyString(int tag, SparseArray<String> list) {
+        String message = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String time = sdf.format(new Date());
+        if (tag == 0) {
+            message += "发文时间: " + list.get(0, time) + "\n";
+            message += "承办单位: " + list.get(1, "省办公厅") + "\n";
+            message += "会议时间: " + list.get(2, time) + "\n";
+            message += "会议地点: " + list.get(3, "省办公厅11楼" + 110 + new Random().nextInt(9)) + "\n";
+//            message += "会议名称: " + list.get(4, new Random().nextBoolean() ? "关于召开省委城市工作会议的通知" : "召开传达中央文件精神会议") + "\n";
+        } else if (tag == 1) {
+            message += "发文时间: " + list.get(0, time) + "\n";
+            message += "发文单位: " + list.get(1, "浙江省人民代表大会常务委员会") + "\n";
+        } else if (tag == 2) {
+            message += "发文时间: " + list.get(0, time) + "\n";
+            message += "发文单位: " + list.get(1, "浙江省人民政府") + "\n";
+            message += "文件文号: " + list.get(2, "浙政函〔2016〕63号") + "\n";
+        }
+        return message;
     }
 }

@@ -73,22 +73,21 @@ dependencies {
     //
     compile rootProject.ext.libMvpView
     //
-//    compile rootProject.ext.libAA
+    //    compile rootProject.ext.libAA
     //
-//    compile rootProject.ext.libAA_Api
+    //    compile rootProject.ext.libAA_Api
     //
     compile rootProject.ext.libSupportRecyclerview
     //
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:cardview-v7:23.2.1'
-    compile 'com.github.dexafree:materiallist:3.2.1'
-    compile 'jp.wasabeef:recyclerview-animators:2.0.0'
+//        compile 'com.github.dexafree:materiallist:3.2.1'
+    //    compile 'jp.wasabeef:recyclerview-animators:2.0.0'
     compile project(':k9mail')
-
-    compile (name:'k9mail-library-debug',ext:'aar')
-    compile (name:'openpgp-api-debug',ext:'aar')
-    compile (name:'HoloColorPicker-debug',ext:'aar')
-
+    compile(name: 'k9mail-library-debug', ext: 'aar')
+    compile(name: 'openpgp-api-debug', ext: 'aar')
+    compile(name: 'HoloColorPicker-debug', ext: 'aar')
     compile 'com.zhy:base-adapter:2.0.0'
     compile 'homhomlin.lib:ptrrv-library:1.3.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

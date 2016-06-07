@@ -1,38 +1,36 @@
 package cn.edu.jumy.oa.fragment;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.util.Log;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.dexafree.materialList.card.Card;
-import com.dexafree.materialList.card.CardProvider;
-import com.dexafree.materialList.listeners.OnDismissCallback;
-import com.dexafree.materialList.listeners.RecyclerItemClickListener;
-import com.dexafree.materialList.view.MaterialListView;
+import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.squareup.picasso.Picasso;
 import com.tencent.qcloud.tlslibrary.activity.BaseFragment;
+import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.res.ColorRes;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.SignUpActivity_;
-import cn.edu.jumy.oa.bean.CardData;
+import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
+import cn.edu.jumy.oa.bean.Card;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 import cn.edu.jumy.oa.widget.utils.CardGenerater;
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 /**
  * Created by Jumy on 16/5/19 12:07.
@@ -63,152 +61,149 @@ import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
  * *****************************************************
  */
 @EFragment(R.layout.fragment_notify)
-public class NotifyFragment extends BaseFragment {
+public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, PullToRefreshRecyclerView.PagingableListener, OnItemClickListener {
     private Context mContext;
     @ViewById(R.id.notify_listView)
-    MaterialListView mListView;
+    PullToRefreshRecyclerView mListView;
 
-    private List<Card> cards = new ArrayList<>();
-    private List<CardData> cardDataList = new ArrayList<>();
+    ImageView mEmptyImageView;
+    private List<Card> cardDataList = new ArrayList<>();
     public boolean isCache = false;
 
+    Handler handler = new Handler();
 
+    int lastVisiblePosition = 0;
     @AfterViews
     void start() {
         mContext = getActivity();
 
-        // Bind the MaterialListView to a variable
-        mListView.setItemAnimator(new SlideInLeftAnimator());
-        mListView.getItemAnimator().setAddDuration(300);
-        mListView.getItemAnimator().setRemoveDuration(300);
+        mListView.setLoadmoreString("加载中...");
 
-        final ImageView emptyView = (ImageView) getActivity().findViewById(R.id.imageView);
-        emptyView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        mListView.setEmptyView(emptyView);
+        mEmptyImageView = (ImageView) View.inflate(mContext, R.layout.item_empty_view, null);
         Picasso.with(mContext)
                 .load("https://www.skyverge.com/wp-content/uploads/2012/05/github-logo.png")
-                .resize(100, 100)
+                .resize(200, 200)
                 .centerInside()
-                .into(emptyView);
+                .into(mEmptyImageView);
+        mListView.setEmptyView(mEmptyImageView);
 
-        // Fill the array withProvider mock content
-        fillArray();
-//        getCardDataList();
+        mListView.setSwipeEnable(true);
 
-        // Set the dismiss listener
-        //cn:滑动删除监听
-        mListView.setOnDismissCallback(new OnDismissCallback() {
+        mListView.setLayoutManager(new LinearLayoutManager(mContext));
+
+        mListView.setOnRefreshListener(this);
+        mListView.setPagingableListener(this);
+
+        //这句话是为了，第一次进入页面的时候显示加载进度条
+        mListView.setProgressViewOffset(false, 0, (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
+                        .getDisplayMetrics()));
+        mListView.getRecyclerView().addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onDismiss(@NonNull Card card, int position) {
-                // Show a toast
-                Toast.makeText(mContext, "You have dismissed a " + card.getTag(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // Add the ItemTouchListener
-        mListView.addOnItemTouchListener(new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(@NonNull Card card, int position) {
-                Log.d("CARD_TYPE", "" + card.getTag());
-                // TODO: 16/6/1 修改为跳转到详情报名页面
-                switch ((int) card.getTag()) {
-                    case 0: {//meeting
-                        SignUpActivity_.intent(getActivity()).start();
-                        break;
-                    }
-                    case 1: {//notice
-                        break;
-                    }
-                    case 2: {//document
-                        break;
-                    }
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisiblePosition + 1 == mListView.getRecyclerView().getAdapter().getItemCount()) {
+                    mListView.onFinishLoading(true, false);
                 }
             }
 
             @Override
-            public void onItemLongClick(@NonNull Card card, int position) {
-                Log.d("LONG_CLICK", "" + card.getTag());
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastVisiblePosition = ((LinearLayoutManager) mListView.getLayoutManager()).findLastVisibleItemPosition();
             }
         });
-    }
 
-    public void updateUI(List<Card> items) {
-        if (items != null && items.size() > 0) {
-            showDebugLoge("from local cache");
-            mListView.getAdapter().addAll(items);
-        } else {
-            showDebugLoge("from new data");
-            fillArray();
-        }
+        // Fill the array withProvider mock content
+        fillArray();
     }
 
 
     private void fillArray() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SparseArray<String> array;
         cardDataList = new ArrayList<>();
+        String title = "";
         for (int i = 0; i < 10; i++) {
-            String message = generateNotifyString(0,new SparseArray<String>());
-            cards.add(getCard(0, "会议(点击查看详情)", message));
-            cardDataList.add(new CardData("通知", "会议", message));
-        }
-        mListView.getAdapter().addAll(cards);
-    }
-
-    private String generateNotifyString(int tag, SparseArray<String> list) {
-        String message = "";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        String time = sdf.format(new Date());
-        if (tag == 0) {
-            message += "发文时间: " + list.get(0, time) + "\n";
-            message += "承办单位: " + list.get(1, "省办公厅") + "\n";
-            message += "会议时间: " + list.get(2, time) + "\n";
-            message += "会议地点: " + list.get(3, "省办公厅11楼" + 110 + new Random().nextInt(9)) + "\n";
-//            message += "会议名称: " + list.get(4, new Random().nextBoolean() ? "关于召开省委城市工作会议的通知" : "召开传达中央文件精神会议") + "\n";
-        } else if (tag == 1) {
-
-        } else if (tag == 2) {
-
-        }
-        return message;
-    }
-
-    public Card getCard(int tag, String subtitle, String message) {
-        boolean flag = new Random().nextBoolean();
-        subtitle = (new Random().nextBoolean() ? "关于召开省委城市工作会议的通知" : "召开传达中央文件精神会议");
-        subtitle = "(会议)"+subtitle;
-        final CardProvider provider = new Card.Builder(mContext)
-                .setTag(tag)
-//                .setDismissible()//添加之后，滑动删除
-                .withProvider(new CardProvider())
-                .setLayout(R.layout.item_card_notification)
-                .setDescription(message)
-                .setDescriptionColor(Color.WHITE)
-                .setSubtitle(subtitle)
-                .setSubtitleColor(Color.WHITE)
-                .setBackgroundColor(getResources().getColor(R.color.pressed));
-        return provider.endConfig().build();
-    }
-
-    @ColorRes(R.color.colorPrimary)
-    int blue;
-
-    private void getCardDataList() {
-        cardDataList = (ArrayList<CardData>) ACache.get(getActivity()).getAsObject("notify_items");
-        if (cardDataList != null) {
-            cards.clear();
-            for (CardData item : cardDataList) {
-                cards.add(getCard(item.getTAG(), item.getSubTitle(), item.getMessage()));
+            array = new SparseArray<String>();
+            int tag = i%3;
+            switch (tag){
+                case 0:{
+                    title = "召开传达中央文件精神会议";
+                    array.put(0,sdf.format(new Date()));
+                    array.put(1,"省办公厅");
+                    array.put(2,sdf.format(new Date()));
+                    break;
+                }
+                case 1:{
+                    title = "省人大常委会公告(第25号)";
+                    array.put(0,sdf.format(new Date()));
+                    array.put(1,"浙江省人民代表大会常务委员会");
+                    break;
+                }
+                case 2:{
+                    title = "浙江省人民政府关于建立江山仙霞岭省级自然保护区的批复";
+                    array.put(0,sdf.format(new Date()));
+                    array.put(1,"浙江省人民政府");
+                    array.put(2,"浙政函〔2016〕63号");
+                    break;
+                }
             }
-            isCache = true;
+            String message = CardGenerater.generateNotifyString(tag, array);
+            cardDataList.add(new Card(title, message,tag));
         }
-        updateUI(cards);
+        MeetingCardAdapter adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification, cardDataList);
+        mListView.setAdapter(adapter);
+        adapter.setOnItemClickListener(this);
     }
 
     @Override
     public void onDestroy() {
         //存入缓存
-        ACache.get(getActivity()).put("notify_items", (ArrayList<CardData>) cardDataList);
+        ACache.get(getActivity()).put("notify_items", (ArrayList<Card>) cardDataList);
         super.onDestroy();
     }
 
+    @Override
+    public void onRefresh() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mListView.setOnRefreshComplete();
+            }
+        }, 2500);
+    }
+
+    @Override
+    public void onLoadMoreItems() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //coding something before finish loading
+                mListView.setOnLoadMoreComplete();
+            }
+        }, 2500);
+    }
+
+    @Override
+    public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+        Card card = (Card) o;
+        switch ((int) card.getTAG()) {
+            case 0: {//meeting
+                SignUpActivity_.intent(getActivity()).start();
+                break;
+            }
+            case 1: {//notice
+                break;
+            }
+            case 2: {//document
+                break;
+            }
+        }
+    }
+
+    @Override
+    public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
+        return false;
+    }
 }
