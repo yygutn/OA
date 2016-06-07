@@ -37,7 +37,7 @@ public class BaseActivity extends AppCompatActivity {
     }
     @AfterViews
     public void initStatusBarColor(){
-        StatusBarCompat.compat(this,getResources().getColor(R.color.pressed));
+        StatusBarCompat.compat(this,getResources().getColor(R.color.colorAccent));
     }
     protected void addToStack() {
         AppManager.getInstance().addActivity(this);

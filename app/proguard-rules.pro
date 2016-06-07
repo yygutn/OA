@@ -28,6 +28,8 @@
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
 -dontpreverify
+-keepattributes InnerClasses
+-dontoptimize
 -dontwarn org.htmlcleaner.HtmlCleanerForAnt
 -dontwarn org.htmlcleaner.JDomSerializer
 -verbose

@@ -1,11 +1,9 @@
 package cn.edu.jumy.oa;
 
-import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
 import com.fsck.k9.K9;
-import com.github.mmin18.layoutcast.LayoutCast;
 import com.tencent.TIMManager;
 import com.tencent.TIMOfflinePushListener;
 import com.tencent.TIMOfflinePushNotification;
@@ -54,7 +52,6 @@ public class MyApplication extends MultiDexApplication {
                 .build();
 
         OkHttpUtils.initClient(okHttpClient);
-        LayoutCast.init(this);
     }
 
     public static Context getContext() {
