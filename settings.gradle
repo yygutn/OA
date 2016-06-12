@@ -1,3 +1,4 @@
 include ':app', ':JumyFramework'
 include ':timapp', ':sdk', ':tlslibrary', ':presentation'
 include ':k9mail'
+include ':PushSDK'
