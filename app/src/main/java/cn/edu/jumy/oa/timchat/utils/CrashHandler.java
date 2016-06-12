@@ -2,7 +2,7 @@ package cn.edu.jumy.oa.timchat.utils;
 
 import android.content.Context;
 
-import com.tencent.qcloud.tlslibrary.activity.AppManager;
+
 
 
 /**

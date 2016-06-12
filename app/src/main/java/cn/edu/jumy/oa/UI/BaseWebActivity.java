@@ -8,7 +8,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+import cn.edu.jumy.jumyframework.BaseActivity;
 
 import java.util.Stack;
 

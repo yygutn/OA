@@ -8,7 +8,7 @@ import android.widget.ListView;
 
 import com.tencent.TIMGroupCacheInfo;
 import com.tencent.qcloud.presentation.event.GroupEvent;
-import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+import cn.edu.jumy.jumyframework.BaseActivity;
 
 import cn.edu.jumy.oa.R;
 

@@ -20,9 +20,10 @@ import com.tencent.qcloud.presentation.event.GroupEvent;
 import com.tencent.qcloud.presentation.event.MessageEvent;
 import com.tencent.qcloud.presentation.presenter.SplashPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.SplashView;
+
+import cn.edu.jumy.jumyframework.StatusBarCompat;
 import cn.edu.jumy.oa.R;
 import com.tencent.qcloud.tlslibrary.activity.HostLoginActivity;
-import com.tencent.qcloud.tlslibrary.activity.StatusBarCompat;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 

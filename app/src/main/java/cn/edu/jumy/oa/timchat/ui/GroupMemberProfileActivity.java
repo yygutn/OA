@@ -13,7 +13,7 @@ import com.tencent.TIMGroupManager;
 import com.tencent.TIMGroupMemberResult;
 import com.tencent.TIMGroupMemberRoleType;
 import com.tencent.TIMValueCallBack;
-import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+import cn.edu.jumy.jumyframework.BaseActivity;
 
 import cn.edu.jumy.oa.R;
 

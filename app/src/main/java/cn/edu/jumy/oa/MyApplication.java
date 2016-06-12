@@ -8,12 +8,12 @@ import com.tencent.TIMManager;
 import com.tencent.TIMOfflinePushListener;
 import com.tencent.TIMOfflinePushNotification;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
-import com.tencent.qcloud.tlslibrary.activity.AppManager;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.https.HttpsUtils;
 
 import java.util.concurrent.TimeUnit;
 
+import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.oa.timchat.utils.CrashHandler;
 import cn.edu.jumy.oa.timchat.utils.Foreground;
 import okhttp3.OkHttpClient;

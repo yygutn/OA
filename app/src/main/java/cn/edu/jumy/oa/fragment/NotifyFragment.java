@@ -13,7 +13,7 @@ import android.widget.ImageView;
 
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.squareup.picasso.Picasso;
-import com.tencent.qcloud.tlslibrary.activity.BaseFragment;
+import cn.edu.jumy.jumyframework.BaseFragment;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 
 import org.androidannotations.annotations.AfterViews;

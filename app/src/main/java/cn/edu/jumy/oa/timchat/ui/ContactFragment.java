@@ -14,7 +14,7 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.tencent.qcloud.tlslibrary.activity.BaseFragment;
+import cn.edu.jumy.jumyframework.BaseFragment;
 
 import cn.edu.jumy.oa.R;
 

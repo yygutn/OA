@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.tencent.TIMUserProfile;
 import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.FriendInfoView;
-import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+import cn.edu.jumy.jumyframework.BaseActivity;
 
 import cn.edu.jumy.oa.R;
 

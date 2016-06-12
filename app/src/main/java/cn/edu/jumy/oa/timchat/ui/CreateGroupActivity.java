@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.presentation.presenter.GroupManagerPresenter;
-import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+import cn.edu.jumy.jumyframework.BaseActivity;
 
 import cn.edu.jumy.oa.R;
 

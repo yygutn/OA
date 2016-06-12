@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
-import com.tencent.qcloud.tlslibrary.activity.AppManager;
-import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
+import cn.edu.jumy.jumyframework.BaseActivity;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;

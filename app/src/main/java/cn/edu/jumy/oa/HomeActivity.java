@@ -13,10 +13,9 @@ import android.widget.TextView;
 import com.tencent.TIMManager;
 import com.tencent.TIMUserStatusListener;
 import com.tencent.qcloud.presentation.event.MessageEvent;
-import com.tencent.qcloud.tlslibrary.activity.AppManager;
-import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
 import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 
+import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.fragment.NotifyFragment_;
 import cn.edu.jumy.oa.fragment.TaskFragment;
 import cn.edu.jumy.oa.timchat.model.FriendshipInfo;

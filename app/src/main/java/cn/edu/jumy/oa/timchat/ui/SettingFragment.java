@@ -16,7 +16,7 @@ import com.tencent.TIMUserProfile;
 import com.tencent.qcloud.presentation.business.LoginBusiness;
 import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.FriendInfoView;
-import com.tencent.qcloud.tlslibrary.activity.BaseFragment;
+import cn.edu.jumy.jumyframework.BaseFragment;
 
 import java.util.HashMap;
 import java.util.List;

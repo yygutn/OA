@@ -10,7 +10,7 @@ import com.tencent.TIMFriendFutureItem;
 import com.tencent.TIMFutureFriendType;
 import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.FriendshipMessageView;
-import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+import cn.edu.jumy.jumyframework.BaseActivity;
 
 import cn.edu.jumy.oa.R;
 

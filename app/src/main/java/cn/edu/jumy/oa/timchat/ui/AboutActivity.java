@@ -9,8 +9,8 @@ import android.view.View;
 import com.tencent.TIMLogLevel;
 import com.tencent.TIMManager;
 import com.tencent.qalsdk.QALSDKManager;
-import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
 
+import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.R;
 
 import cn.edu.jumy.oa.timchat.ui.customview.LineControllerView;

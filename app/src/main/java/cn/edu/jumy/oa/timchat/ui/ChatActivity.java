@@ -20,8 +20,8 @@ import com.tencent.TIMConversationType;
 import com.tencent.TIMMessage;
 import com.tencent.qcloud.presentation.presenter.ChatPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.ChatView;
-import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
 
+import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.R;
 
 import java.io.File;

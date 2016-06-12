@@ -23,7 +23,6 @@ import com.tencent.qcloud.presentation.presenter.GroupManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.ConversationView;
 import com.tencent.qcloud.presentation.viewfeatures.FriendshipMessageView;
 import com.tencent.qcloud.presentation.viewfeatures.GroupManageMessageView;
-import com.tencent.qcloud.tlslibrary.activity.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +30,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import cn.edu.jumy.jumyframework.BaseFragment;
 import cn.edu.jumy.oa.HomeActivity;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.timchat.adapters.ConversationAdapter;

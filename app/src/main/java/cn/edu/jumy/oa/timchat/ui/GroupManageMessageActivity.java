@@ -6,7 +6,7 @@ import android.widget.ListView;
 import com.tencent.TIMGroupPendencyItem;
 import com.tencent.qcloud.presentation.presenter.GroupManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.GroupManageMessageView;
-import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+import cn.edu.jumy.jumyframework.BaseActivity;
 
 import cn.edu.jumy.oa.R;
 

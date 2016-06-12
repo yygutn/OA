@@ -14,7 +14,7 @@ import android.widget.ImageView;
 
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.squareup.picasso.Picasso;
-import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+import cn.edu.jumy.jumyframework.BaseActivity;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 
 import org.androidannotations.annotations.AfterViews;
