@@ -10,13 +10,15 @@ import android.view.View;
 import com.tencent.TIMLogLevel;
 import com.tencent.TIMManager;
 import com.tencent.qalsdk.QALSDKManager;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import cn.edu.jumy.oa.timchat.ui.customview.LineControllerView;
 import cn.edu.jumy.oa.timchat.ui.customview.ListPickerDialog;
 import tencent.tls.platform.TLSHelper;
 
-public class AboutActivity extends FragmentActivity {
+public class AboutActivity extends BaseActivity {
 
 
     @Override

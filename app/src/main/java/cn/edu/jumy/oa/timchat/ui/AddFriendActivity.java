@@ -11,6 +11,8 @@ import android.widget.Toast;
 import com.tencent.TIMFriendStatus;
 import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.FriendshipManageView;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import cn.edu.jumy.oa.timchat.model.FriendshipInfo;
@@ -20,7 +22,7 @@ import cn.edu.jumy.oa.timchat.ui.customview.ListPickerDialog;
 /**
  * 申请添加好友界面
  */
-public class AddFriendActivity extends FragmentActivity implements View.OnClickListener, FriendshipManageView {
+public class AddFriendActivity extends BaseActivity implements View.OnClickListener, FriendshipManageView {
 
 
     private TextView tvName, btnAdd;

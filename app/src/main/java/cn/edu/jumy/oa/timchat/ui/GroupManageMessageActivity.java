@@ -7,6 +7,8 @@ import android.widget.ListView;
 import com.tencent.TIMGroupPendencyItem;
 import com.tencent.qcloud.presentation.presenter.GroupManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.GroupManageMessageView;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.List;
 import cn.edu.jumy.oa.timchat.adapters.GroupManageMessageAdapter;
 import cn.edu.jumy.oa.timchat.model.GroupFuture;
 
-public class GroupManageMessageActivity extends Activity implements GroupManageMessageView {
+public class GroupManageMessageActivity extends BaseActivity implements GroupManageMessageView {
 
     private final String TAG = "GroupManageMessageActivity";
     private GroupManagerPresenter presenter;

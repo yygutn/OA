@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.tencent.TIMUserProfile;
 import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.FriendInfoView;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ import cn.edu.jumy.oa.timchat.model.ProfileSummary;
 /**
  * 查找添加新朋友
  */
-public class SearchFriendActivity extends Activity implements FriendInfoView, AdapterView.OnItemClickListener, View.OnKeyListener {
+public class SearchFriendActivity extends BaseActivity implements FriendInfoView, AdapterView.OnItemClickListener, View.OnKeyListener {
 
     private final static String TAG = "SearchFriendActivity";
 

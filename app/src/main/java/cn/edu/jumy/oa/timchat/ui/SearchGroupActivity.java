@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.tencent.TIMGroupDetailInfo;
 import com.tencent.qcloud.presentation.presenter.GroupManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.GroupInfoView;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ import cn.edu.jumy.oa.timchat.adapters.ProfileSummaryAdapter;
 import cn.edu.jumy.oa.timchat.model.GroupProfile;
 import cn.edu.jumy.oa.timchat.model.ProfileSummary;
 
-public class SearchGroupActivity extends Activity implements GroupInfoView, View.OnKeyListener{
+public class SearchGroupActivity extends BaseActivity implements GroupInfoView, View.OnKeyListener{
 
     private final String TAG = "SearchGroupActivity";
 

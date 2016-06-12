@@ -16,7 +16,7 @@ import com.tencent.qcloud.tlslibrary.service.Constants;
 import com.tencent.qcloud.tlslibrary.service.PhonePwdLoginService;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 
-public class ImgCodeActivity extends Activity implements View.OnClickListener{
+public class ImgCodeActivity extends BaseActivity implements View.OnClickListener{
 
     private final static String TAG = "ImgCodeActivity";
     private static ImageView imgcodeView;

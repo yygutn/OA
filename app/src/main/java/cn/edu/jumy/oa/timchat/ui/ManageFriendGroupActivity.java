@@ -20,6 +20,8 @@ import com.tencent.TIMFriendResult;
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.presentation.event.FriendshipEvent;
 import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ import cn.edu.jumy.oa.timchat.ui.customview.NotifyDialog;
 /**
  * 好友分组管理
  */
-public class ManageFriendGroupActivity extends FragmentActivity implements View.OnClickListener {
+public class ManageFriendGroupActivity extends BaseActivity implements View.OnClickListener {
 
     private final String TAG = ManageFriendGroupActivity.class.getSimpleName();
 

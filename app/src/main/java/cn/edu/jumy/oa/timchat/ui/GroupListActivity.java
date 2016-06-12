@@ -9,6 +9,8 @@ import android.widget.ListView;
 
 import com.tencent.TIMGroupCacheInfo;
 import com.tencent.qcloud.presentation.event.GroupEvent;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import java.util.Iterator;
@@ -22,7 +24,7 @@ import cn.edu.jumy.oa.timchat.model.GroupProfile;
 import cn.edu.jumy.oa.timchat.model.ProfileSummary;
 import cn.edu.jumy.oa.timchat.ui.customview.TemplateTitle;
 
-public class GroupListActivity extends Activity implements Observer {
+public class GroupListActivity extends BaseActivity implements Observer {
 
     private ProfileSummaryAdapter adapter;
     private ListView listView;

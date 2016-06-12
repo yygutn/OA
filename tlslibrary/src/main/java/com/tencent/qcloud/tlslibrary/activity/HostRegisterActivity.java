@@ -14,7 +14,7 @@ import com.tencent.qcloud.tlslibrary.service.Constants;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 
 
-public class HostRegisterActivity extends Activity {
+public class HostRegisterActivity extends BaseActivity {
 
     private TLSService tlsService;
     private SmsContentObserver smsContentObserver = null;

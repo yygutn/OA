@@ -15,6 +15,8 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.tencent.qcloud.tlslibrary.activity.BaseFragment;
+
 import cn.edu.jumy.oa.R;
 
 import java.util.List;
@@ -29,7 +31,7 @@ import cn.edu.jumy.oa.timchat.ui.customview.TemplateTitle;
 /**
  * 联系人界面
  */
-public class ContactFragment extends Fragment implements  View.OnClickListener {
+public class ContactFragment extends BaseFragment implements  View.OnClickListener {
 
     private View view;
     private ExpandGroupListAdapter mGroupListAdapter;

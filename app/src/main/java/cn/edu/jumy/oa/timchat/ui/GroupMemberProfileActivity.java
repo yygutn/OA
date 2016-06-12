@@ -14,6 +14,8 @@ import com.tencent.TIMGroupManager;
 import com.tencent.TIMGroupMemberResult;
 import com.tencent.TIMGroupMemberRoleType;
 import com.tencent.TIMValueCallBack;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import java.util.Collections;
@@ -26,7 +28,7 @@ import cn.edu.jumy.oa.timchat.ui.customview.LineControllerView;
 import cn.edu.jumy.oa.timchat.ui.customview.ListPickerDialog;
 import cn.edu.jumy.oa.timchat.ui.customview.TemplateTitle;
 
-public class GroupMemberProfileActivity extends FragmentActivity {
+public class GroupMemberProfileActivity extends BaseActivity {
 
     private String userIdentify, groupIdentify, userCard,groupType;
     private TIMGroupMemberRoleType currentUserRole;

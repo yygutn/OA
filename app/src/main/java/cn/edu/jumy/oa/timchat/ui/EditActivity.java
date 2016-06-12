@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.tencent.TIMCallBack;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import cn.edu.jumy.oa.timchat.ui.customview.TemplateTitle;
@@ -17,7 +19,7 @@ import cn.edu.jumy.oa.timchat.ui.customview.TemplateTitle;
 /**
  * 修改文本页面
  */
-public class EditActivity extends Activity implements TIMCallBack{
+public class EditActivity extends BaseActivity implements TIMCallBack{
 
 
     private static EditInterface editAction;

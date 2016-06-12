@@ -22,6 +22,7 @@ import com.tencent.qcloud.presentation.presenter.SplashPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.SplashView;
 import cn.edu.jumy.oa.R;
 import com.tencent.qcloud.tlslibrary.activity.HostLoginActivity;
+import com.tencent.qcloud.tlslibrary.activity.StatusBarCompat;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 
@@ -47,7 +48,7 @@ public class SplashActivity extends FragmentActivity implements SplashView,TIMCa
         }else{
             init();
         }
-
+        StatusBarCompat.compat(this,getResources().getColor(R.color.pressed));
     }
 
 

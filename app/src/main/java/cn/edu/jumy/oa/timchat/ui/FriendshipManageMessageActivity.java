@@ -11,6 +11,8 @@ import com.tencent.TIMFriendFutureItem;
 import com.tencent.TIMFutureFriendType;
 import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.FriendshipMessageView;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import java.util.List;
 import cn.edu.jumy.oa.timchat.adapters.FriendManageMessageAdapter;
 import cn.edu.jumy.oa.timchat.model.FriendFuture;
 
-public class FriendshipManageMessageActivity extends Activity implements FriendshipMessageView {
+public class FriendshipManageMessageActivity extends BaseActivity implements FriendshipMessageView {
 
 
     private final String TAG = FriendshipManageMessageActivity.class.getSimpleName();

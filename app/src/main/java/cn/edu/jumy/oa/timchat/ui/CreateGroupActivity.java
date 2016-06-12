@@ -10,12 +10,14 @@ import android.widget.Toast;
 
 import com.tencent.TIMValueCallBack;
 import com.tencent.qcloud.presentation.presenter.GroupManagerPresenter;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 /**
  * 创建群页面
  */
-public class CreateGroupActivity extends Activity {
+public class CreateGroupActivity extends BaseActivity {
     TextView mAddMembers;
     EditText mInputView;
     String type;

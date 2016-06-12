@@ -13,7 +13,7 @@ import com.tencent.qcloud.tlslibrary.helper.SmsContentObserver;
 import com.tencent.qcloud.tlslibrary.service.Constants;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 
-public class PhonePwdRegisterActivity extends Activity {
+public class PhonePwdRegisterActivity extends BaseActivity {
 
     private final static String TAG = "PhonePwdRegisterActivity";
 

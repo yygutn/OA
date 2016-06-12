@@ -9,9 +9,11 @@ import android.widget.Toast;
 
 import com.tencent.TIMCallBack;
 import com.tencent.qcloud.presentation.presenter.GroupManagerPresenter;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
-public class ApplyGroupActivity extends Activity implements TIMCallBack {
+public class ApplyGroupActivity extends BaseActivity implements TIMCallBack {
 
     private final String TAG = "ApplyGroupActivity";
 

@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ import cn.edu.jumy.oa.timchat.model.FriendProfile;
 import cn.edu.jumy.oa.timchat.model.FriendshipInfo;
 import cn.edu.jumy.oa.timchat.ui.customview.TemplateTitle;
 
-public class ChooseFriendActivity extends Activity {
+public class ChooseFriendActivity extends BaseActivity {
 
 
     private ExpandGroupListAdapter mGroupListAdapter;

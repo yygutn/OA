@@ -14,7 +14,7 @@ import com.tencent.qcloud.tlslibrary.service.TLSService;
 
 import tencent.tls.platform.TLSUserInfo;
 
-public class IndependentLoginActivity extends Activity {
+public class IndependentLoginActivity extends BaseActivity {
 
     private final static String TAG = "IndependentLoginActivity";
 

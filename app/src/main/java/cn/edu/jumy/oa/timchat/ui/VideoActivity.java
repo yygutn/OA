@@ -9,11 +9,13 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import java.io.IOException;
 
-public class VideoActivity extends Activity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener {
+public class VideoActivity extends BaseActivity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener {
 
 
     private SurfaceView videoSurface;

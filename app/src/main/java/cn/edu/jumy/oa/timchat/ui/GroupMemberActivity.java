@@ -10,6 +10,8 @@ import android.widget.ListView;
 import com.tencent.TIMGroupManager;
 import com.tencent.TIMGroupMemberInfo;
 import com.tencent.TIMValueCallBack;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import cn.edu.jumy.oa.timchat.adapters.ProfileSummaryAdapter;
 import cn.edu.jumy.oa.timchat.model.GroupMemberProfile;
 import cn.edu.jumy.oa.timchat.model.ProfileSummary;
 
-public class GroupMemberActivity extends Activity implements TIMValueCallBack<List<TIMGroupMemberInfo>> {
+public class GroupMemberActivity extends BaseActivity implements TIMValueCallBack<List<TIMGroupMemberInfo>> {
 
     ProfileSummaryAdapter adapter;
     List<ProfileSummary> list = new ArrayList<>();

@@ -21,6 +21,8 @@ import com.tencent.TIMConversationType;
 import com.tencent.TIMMessage;
 import com.tencent.qcloud.presentation.presenter.ChatPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.ChatView;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import java.io.File;
@@ -43,7 +45,7 @@ import cn.edu.jumy.oa.timchat.ui.customview.VoiceSendingView;
 import cn.edu.jumy.oa.timchat.utils.FileUtil;
 import cn.edu.jumy.oa.timchat.utils.RecorderUtil;
 
-public class ChatActivity extends FragmentActivity implements ChatView {
+public class ChatActivity extends BaseActivity implements ChatView {
 
     private static final String TAG = "ChatActivity";
 

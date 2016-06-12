@@ -19,7 +19,7 @@ import tencent.tls.platform.TLSErrInfo;
 import tencent.tls.platform.TLSSmsLoginListener;
 import tencent.tls.platform.TLSUserInfo;
 
-public class HostLoginActivity extends Activity {
+public class HostLoginActivity extends BaseActivity {
 
     private final static String TAG = "HostLoginActivity";
 

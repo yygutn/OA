@@ -13,7 +13,7 @@ import com.tencent.qcloud.tlslibrary.helper.SmsContentObserver;
 import com.tencent.qcloud.tlslibrary.service.Constants;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 
-public class ResetPhonePwdActivity extends Activity {
+public class ResetPhonePwdActivity extends BaseActivity {
 
     private final static String TAG = "ResetPhonePwdActivity";
 

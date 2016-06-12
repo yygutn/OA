@@ -25,7 +25,7 @@ import tencent.tls.platform.TLSPwdRegListener;
 import tencent.tls.platform.TLSPwdResetListener;
 import tencent.tls.platform.TLSUserInfo;
 
-public class PhonePwdLoginActivity extends Activity {
+public class PhonePwdLoginActivity extends BaseActivity {
 
     public final static String TAG = "PhonePwdLoginActivity";
 

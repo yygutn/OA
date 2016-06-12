@@ -16,6 +16,8 @@ import com.tencent.TIMFriendStatus;
 import com.tencent.qcloud.presentation.event.FriendshipEvent;
 import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.FriendshipManageView;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import cn.edu.jumy.oa.timchat.model.FriendProfile;
@@ -23,7 +25,7 @@ import cn.edu.jumy.oa.timchat.model.FriendshipInfo;
 import cn.edu.jumy.oa.timchat.ui.customview.LineControllerView;
 import cn.edu.jumy.oa.timchat.ui.customview.ListPickerDialog;
 
-public class ProfileActivity extends FragmentActivity implements FriendshipManageView,  View.OnClickListener {
+public class ProfileActivity extends BaseActivity implements FriendshipManageView,  View.OnClickListener {
 
 
     private static final String TAG = ProfileActivity.class.getSimpleName();

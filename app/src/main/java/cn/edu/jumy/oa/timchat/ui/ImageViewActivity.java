@@ -11,13 +11,15 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import java.io.IOException;
 
 import cn.edu.jumy.oa.timchat.utils.FileUtil;
 
-public class ImageViewActivity extends Activity {
+public class ImageViewActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

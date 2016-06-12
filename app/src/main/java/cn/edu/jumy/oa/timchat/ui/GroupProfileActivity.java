@@ -19,6 +19,8 @@ import com.tencent.TIMGroupMemberRoleType;
 import com.tencent.qcloud.presentation.presenter.GroupInfoPresenter;
 import com.tencent.qcloud.presentation.presenter.GroupManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.GroupInfoView;
+import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
+
 import cn.edu.jumy.oa.R;
 
 import java.util.Collections;
@@ -31,7 +33,7 @@ import cn.edu.jumy.oa.timchat.model.UserInfo;
 import cn.edu.jumy.oa.timchat.ui.customview.LineControllerView;
 import cn.edu.jumy.oa.timchat.ui.customview.ListPickerDialog;
 
-public class GroupProfileActivity extends FragmentActivity implements GroupInfoView, View.OnClickListener {
+public class GroupProfileActivity extends BaseActivity implements GroupInfoView, View.OnClickListener {
 
     private final String TAG = "GroupProfileActivity";
 

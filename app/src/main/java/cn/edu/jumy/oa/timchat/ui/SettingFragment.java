@@ -17,6 +17,7 @@ import com.tencent.TIMUserProfile;
 import com.tencent.qcloud.presentation.business.LoginBusiness;
 import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.FriendInfoView;
+import com.tencent.qcloud.tlslibrary.activity.BaseFragment;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +32,7 @@ import cn.edu.jumy.oa.timchat.ui.customview.ListPickerDialog;
 /**
  * 设置页面
  */
-public class SettingFragment extends Fragment implements FriendInfoView{
+public class SettingFragment extends BaseFragment implements FriendInfoView{
 
     private static final String TAG = SettingFragment.class.getSimpleName();
     private View view;
@@ -122,8 +123,8 @@ public class SettingFragment extends Fragment implements FriendInfoView{
             about.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), AboutActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(getActivity(), AboutActivity.class);
+//                    startActivity(intent);
                 }
             });
             LineControllerView folder = (LineControllerView) view.findViewById(R.id.folder);

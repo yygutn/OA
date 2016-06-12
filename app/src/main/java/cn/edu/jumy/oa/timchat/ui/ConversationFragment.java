@@ -24,6 +24,7 @@ import com.tencent.qcloud.presentation.presenter.GroupManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.ConversationView;
 import com.tencent.qcloud.presentation.viewfeatures.FriendshipMessageView;
 import com.tencent.qcloud.presentation.viewfeatures.GroupManageMessageView;
+import com.tencent.qcloud.tlslibrary.activity.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +45,7 @@ import cn.edu.jumy.oa.timchat.utils.PushUtil;
 /**
  * 会话列表界面
  */
-public class ConversationFragment extends Fragment implements ConversationView,FriendshipMessageView,GroupManageMessageView {
+public class ConversationFragment extends BaseFragment implements ConversationView,FriendshipMessageView,GroupManageMessageView {
 
     private final String TAG = "ConversationFragment";
 

@@ -10,7 +10,7 @@ import com.tencent.qcloud.tlslibrary.helper.MResource;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 
 
-public class IndependentRegisterActivity extends Activity {
+public class IndependentRegisterActivity extends BaseActivity {
 
     public final static String TAG = "IndependentRegisterActivity";
     private TLSService tlsService;
