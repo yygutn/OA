@@ -4,7 +4,6 @@ package cn.edu.jumy.oa.timchat.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,6 @@ import java.util.Map;
 
 import cn.edu.jumy.oa.HomeActivity;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.UI.MyFileActivity_;
 import cn.edu.jumy.oa.timchat.ui.customview.LineControllerView;
 import cn.edu.jumy.oa.timchat.ui.customview.ListPickerDialog;
 

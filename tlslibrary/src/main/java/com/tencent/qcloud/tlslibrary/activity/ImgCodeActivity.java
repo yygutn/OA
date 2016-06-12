@@ -1,6 +1,5 @@
 package com.tencent.qcloud.tlslibrary.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,6 +14,8 @@ import com.tencent.qcloud.tlslibrary.service.AccountLoginService;
 import com.tencent.qcloud.tlslibrary.service.Constants;
 import com.tencent.qcloud.tlslibrary.service.PhonePwdLoginService;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
+
+import cn.edu.jumy.jumyframework.BaseActivity;
 
 public class ImgCodeActivity extends BaseActivity implements View.OnClickListener{
 

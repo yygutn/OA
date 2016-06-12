@@ -1,17 +1,11 @@
-package com.tencent.qcloud.tlslibrary.activity;
+package cn.edu.jumy.jumyframework;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
-import com.tencent.qcloud.tlslibrary.BuildConfig;
-import com.tencent.qcloud.tlslibrary.R;
 
 /**
  * Created by Jumy on 16/5/25 15:48.
@@ -44,12 +38,12 @@ import com.tencent.qcloud.tlslibrary.R;
 public class BaseFragment extends Fragment {
     private boolean DEBUG = true;
     public void showDebugLoge(CharSequence message){
-        if (BuildConfig.LOG_DEBUG || DEBUG){
+        if (BuildConfig.DEBUG || DEBUG){
             Log.e("jumy",message.toString());
         }
     }
     public void showDebugLogw(CharSequence message){
-        if (BuildConfig.LOG_DEBUG || DEBUG){
+        if (BuildConfig.DEBUG || DEBUG){
             Log.w("jumy",message.toString());
         }
     }

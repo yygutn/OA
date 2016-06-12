@@ -1,21 +1,9 @@
 package cn.edu.jumy.oa.UI;
 
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-
 import com.tencent.qcloud.tlslibrary.activity.AppManager;
 import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
 
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
-
-import java.util.Stack;
-
-import cn.edu.jumy.oa.R;
 
 /**
  * Created by Jumy on 16/5/27 22:02.

@@ -1,4 +1,4 @@
-package com.tencent.qcloud.tlslibrary.activity;
+package cn.edu.jumy.jumyframework;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

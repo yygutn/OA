@@ -1,17 +1,15 @@
 package com.tencent.qcloud.tlslibrary.activity;
 
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.tencent.qcloud.tlslibrary.helper.MResource;
 import com.tencent.qcloud.tlslibrary.helper.SmsContentObserver;
-import com.tencent.qcloud.tlslibrary.service.Constants;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
+
+import cn.edu.jumy.jumyframework.BaseActivity;
 
 public class ResetPhonePwdActivity extends BaseActivity {
 

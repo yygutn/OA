@@ -1,4 +1,4 @@
-package com.tencent.qcloud.tlslibrary.activity;
+package cn.edu.jumy.jumyframework;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,8 +11,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.tencent.qcloud.tlslibrary.BuildConfig;
-import com.tencent.qcloud.tlslibrary.R;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;

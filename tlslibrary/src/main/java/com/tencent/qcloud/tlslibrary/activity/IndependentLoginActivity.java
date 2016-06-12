@@ -1,6 +1,5 @@
 package com.tencent.qcloud.tlslibrary.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +11,7 @@ import com.tencent.qcloud.tlslibrary.helper.MResource;
 import com.tencent.qcloud.tlslibrary.service.Constants;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 
+import cn.edu.jumy.jumyframework.BaseActivity;
 import tencent.tls.platform.TLSUserInfo;
 
 public class IndependentLoginActivity extends BaseActivity {

@@ -1,14 +1,10 @@
-package com.tencent.qcloud.tlslibrary.activity;
+package cn.edu.jumy.jumyframework;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.util.Log;
 
-import com.tencent.qcloud.tlslibrary.BuildConfig;
 
-import java.lang.ref.WeakReference;
-import java.util.EmptyStackException;
 import java.util.Stack;
 
 /**

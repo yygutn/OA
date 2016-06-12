@@ -1,6 +1,5 @@
 package cn.edu.jumy.oa.UI;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -13,9 +12,6 @@ import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.res.DrawableRes;
-
-import java.io.File;
 
 import cn.edu.jumy.oa.R;
 

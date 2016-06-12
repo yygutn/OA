@@ -1,6 +1,5 @@
 package cn.edu.jumy.oa.timchat.ui;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;

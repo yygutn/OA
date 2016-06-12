@@ -1,6 +1,5 @@
 package com.tencent.qcloud.tlslibrary.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +19,7 @@ import com.tencent.qcloud.tlslibrary.service.TLSService;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.edu.jumy.jumyframework.BaseActivity;
 import tencent.tls.platform.TLSErrInfo;
 import tencent.tls.platform.TLSPwdRegListener;
 import tencent.tls.platform.TLSPwdResetListener;

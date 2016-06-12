@@ -3,17 +3,12 @@ package cn.edu.jumy.oa.UI;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.tencent.qcloud.tlslibrary.activity.BaseActivity;
-
-import org.androidannotations.annotations.ViewById;
-import org.androidannotations.api.view.HasViews;
-import org.androidannotations.api.view.OnViewChangedListener;
 
 import java.util.Stack;
 
@@ -73,7 +68,6 @@ public abstract class BaseWebActivity extends BaseActivity {
                 back();
             }
         });
-        showDebugLoge("url_title: "+mWebView.getTitle().toString());
     }
 
     protected void back() {

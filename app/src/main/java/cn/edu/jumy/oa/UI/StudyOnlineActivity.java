@@ -2,7 +2,6 @@ package cn.edu.jumy.oa.UI;
 
 import android.content.pm.ActivityInfo;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;

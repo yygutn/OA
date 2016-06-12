@@ -15,6 +15,7 @@ import com.tencent.qcloud.tlslibrary.helper.Util;
 import com.tencent.qcloud.tlslibrary.service.Constants;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 
+import cn.edu.jumy.jumyframework.BaseActivity;
 import tencent.tls.platform.TLSErrInfo;
 import tencent.tls.platform.TLSSmsLoginListener;
 import tencent.tls.platform.TLSUserInfo;

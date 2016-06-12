@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'android-apt'
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
@@ -29,23 +28,7 @@ android {
         incremental true
     }
 }
-apt {
-    arguments {
-//        androidManifestFile variant.outputs[0].processResources.manifestFile
-        logLevel 'TRACE'
-        logAppenderConsole 'true'
-    }
-}
-def AAVersion = '4.0.0'
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:22+'
     compile project(':sdk')
-    //noinspection GradleCompatible
-    compile 'com.android.support:support-v4:23.2.1'
-    compile "org.androidannotations:androidannotations:$AAVersion"
-    //
-    compile "org.androidannotations:androidannotations-api:$AAVersion"
-    //
 }

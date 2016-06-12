@@ -1,6 +1,5 @@
 package com.tencent.qcloud.tlslibrary.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,6 +7,8 @@ import android.widget.EditText;
 
 import com.tencent.qcloud.tlslibrary.helper.MResource;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
+
+import cn.edu.jumy.jumyframework.BaseActivity;
 
 
 public class IndependentRegisterActivity extends BaseActivity {

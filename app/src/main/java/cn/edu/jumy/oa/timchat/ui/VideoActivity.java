@@ -1,6 +1,5 @@
 package cn.edu.jumy.oa.timchat.ui;
 
-import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.MotionEvent;
