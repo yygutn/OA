@@ -51,22 +51,26 @@ public abstract class Conversation implements Comparable {
      * 设置聊天对象的头像
      */
     public void setAvatarByUrl(final CircleImageView avatar){
-        OkHttpUtils.get()
-                .url("http://192.168.1.163:8081/ssm/dowloadimage.do?userid=1")
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        avatar.setImageResource(getAvatar());
-                    }
+        if (true) {
+            avatar.setImageResource(getAvatar());
+        } else {
+            OkHttpUtils.get()
+                    .url("http://192.168.1.163:8081/ssm/dowloadimage.do?userid=1")
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                            avatar.setImageResource(getAvatar());
+                        }
 
-                    @Override
-                    public void onResponse(String response, int id) {
-                        Picasso.with(avatar.getContext())
-                                .load(response)
-                                .into(avatar);
-                    }
-                });
+                        @Override
+                        public void onResponse(String response, int id) {
+                            Picasso.with(avatar.getContext())
+                                    .load(response)
+                                    .into(avatar);
+                        }
+                    });
+        }
     }
 
     /**
