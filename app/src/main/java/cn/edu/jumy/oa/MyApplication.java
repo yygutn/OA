@@ -2,20 +2,28 @@ package cn.edu.jumy.oa;
 
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
+import android.util.Log;
 
 import com.fsck.k9.K9;
 import com.tencent.TIMManager;
 import com.tencent.TIMOfflinePushListener;
 import com.tencent.TIMOfflinePushNotification;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
+import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UmengNotificationClickHandler;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.https.HttpsUtils;
 
+import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
 import cn.edu.jumy.jumyframework.AppManager;
+import cn.edu.jumy.oa.bean.NotificationClickHandler;
 import cn.edu.jumy.oa.timchat.utils.CrashHandler;
 import cn.edu.jumy.oa.timchat.utils.Foreground;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import okhttp3.OkHttpClient;
 
 
@@ -24,8 +32,10 @@ import okhttp3.OkHttpClient;
  */
 public class MyApplication extends MultiDexApplication {
 
-    private static Context context;
+    private static final String TAG = "Application";
 
+    private static Context context;
+    public static final String API_URL = "";
     @Override
     public void onCreate() {
         super.onCreate();
@@ -46,12 +56,26 @@ public class MyApplication extends MultiDexApplication {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
                 //                .addInterceptor(new LoggerInterceptor("TAG"))
-                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
-                .readTimeout(10000L, TimeUnit.MILLISECONDS)
+                .connectTimeout(3000L, TimeUnit.MILLISECONDS)
+                .readTimeout(3000L, TimeUnit.MILLISECONDS)
                 //其他配置
                 .build();
 
         OkHttpUtils.initClient(okHttpClient);
+        PushAgent.getInstance(context).enable(new IUmengRegisterCallback() {
+            @Override
+            public void onRegistered(String registrationId) {
+                Log.e(TAG, "onRegistered: "+registrationId);
+            }
+        });
+        PushAgent.getInstance(context).setNotificationClickHandler(new NotificationClickHandler());
+
+        byte[] key = new byte[64];
+        new SecureRandom().nextBytes(key);
+        RealmConfiguration config = new RealmConfiguration.Builder(context)
+                .encryptionKey(key)
+                .build();
+        Realm.setDefaultConfiguration(config);
     }
 
     public static Context getContext() {

@@ -23,33 +23,41 @@ import com.tencent.qcloud.presentation.viewfeatures.SplashView;
 
 import cn.edu.jumy.jumyframework.StatusBarCompat;
 import cn.edu.jumy.oa.R;
+
 import com.tencent.qcloud.tlslibrary.activity.HostLoginActivity;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 
 import cn.edu.jumy.oa.HomeActivity;
+import cn.edu.jumy.oa.bean.User;
 import cn.edu.jumy.oa.timchat.model.UserInfo;
 import cn.edu.jumy.oa.timchat.ui.customview.NotifyDialog;
 import cn.edu.jumy.oa.timchat.utils.PushUtil;
+import io.realm.Realm;
+import io.realm.RealmAsyncTask;
+import io.realm.RealmResults;
 
-public class SplashActivity extends FragmentActivity implements SplashView,TIMCallBack{
+public class SplashActivity extends FragmentActivity implements SplashView, TIMCallBack {
 
     SplashPresenter presenter;
     private int LOGIN_RESULT_CODE = 100;
     private final int REQUEST_PHONE_PERMISSIONS = 0;
     private static final String TAG = SplashActivity.class.getSimpleName();
 
+    private Realm realm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_PHONE_STATE)!= PackageManager.PERMISSION_GRANTED){
+        realm = Realm.getDefaultInstance();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_PHONE_PERMISSIONS);
-        }else{
+        } else {
             init();
         }
-        StatusBarCompat.compat(this,getResources().getColor(R.color.pressed));
+        StatusBarCompat.compat(this, getResources().getColor(R.color.pressed));
     }
 
 
@@ -78,7 +86,7 @@ public class SplashActivity extends FragmentActivity implements SplashView,TIMCa
      */
     @Override
     public boolean isUserLogin() {
-        return UserInfo.getInstance().getId()!= null && (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()));
+        return UserInfo.getInstance().getId() != null && (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()));
     }
 
     /**
@@ -99,7 +107,7 @@ public class SplashActivity extends FragmentActivity implements SplashView,TIMCa
                 });
                 break;
             default:
-                Toast.makeText(this,getString(R.string.login_error),Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.login_error), Toast.LENGTH_SHORT).show();
                 navToLogin();
                 break;
         }
@@ -124,11 +132,11 @@ public class SplashActivity extends FragmentActivity implements SplashView,TIMCa
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (LOGIN_RESULT_CODE == requestCode) {
-            if (resultCode == RESULT_CANCELED){
+            if (resultCode == RESULT_CANCELED) {
                 finish();
                 return;
             }
-            if (0 == TLSService.getInstance().getLastErrno()){
+            if (0 == TLSService.getInstance().getLastErrno()) {
                 String id = TLSService.getInstance().getLastUserIdentifier();
                 UserInfo.getInstance().setId(id);
                 UserInfo.getInstance().setUserSig(TLSService.getInstance().getUserSig(id));
@@ -145,7 +153,7 @@ public class SplashActivity extends FragmentActivity implements SplashView,TIMCa
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     init();
                 } else {
-                    Toast.makeText(this, getString(R.string.need_permission),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.need_permission), Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 break;
@@ -155,15 +163,35 @@ public class SplashActivity extends FragmentActivity implements SplashView,TIMCa
     }
 
 
-    private void init(){
+    private void init() {
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-        InitBusiness.start(getApplicationContext(),pref.getInt("loglvl", TIMLogLevel.DEBUG.ordinal()));
+        InitBusiness.start(getApplicationContext(), pref.getInt("loglvl", TIMLogLevel.DEBUG.ordinal()));
         TlsBusiness.init(getApplicationContext());
-        String id =  TLSService.getInstance().getLastUserIdentifier();
+        final String id = TLSService.getInstance().getLastUserIdentifier();
         UserInfo.getInstance().setId(id);
-        UserInfo.getInstance().setUserSig(TLSService.getInstance().getUserSig(id));
+        final String userSig = TLSService.getInstance().getUserSig(id);
+        UserInfo.getInstance().setUserSig(userSig);
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                User user = realm.where(User.class).findFirst();
+                if (user == null){
+                    user = realm.createObject(User.class);
+                }
+                user.setId(id);
+                user.setUserSig(userSig);
+            }
+        });
         presenter = new SplashPresenter(this);
         presenter.start();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (realm != null) {
+            realm.close();
+        }
+    }
 }

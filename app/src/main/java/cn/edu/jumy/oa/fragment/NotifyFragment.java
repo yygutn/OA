@@ -132,7 +132,7 @@ public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.O
                     break;
                 }
                 case 1:{
-                    title = "(公告)省人大常委会公告(第25号)";
+                    title = "(公文)省人大常委会公告(第25号)";
                     break;
                 }
                 case 2:{

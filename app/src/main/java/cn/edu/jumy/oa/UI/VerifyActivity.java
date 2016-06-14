@@ -74,8 +74,9 @@ public class VerifyActivity extends AppCompatActivity{
     @AfterViews
     void start(){
         mContext = this;
-        Drawable drawable = ContextCompat.getDrawable(mContext,R.drawable.fingerprint);
-        imageView.setImageDrawable(drawable);
+        Picasso.with(mContext)
+                .load(R.drawable.fingerprint)
+                .into(imageView);
         Bundle bundle = getIntent().getBundleExtra("file");
         if (bundle != null){
             file = bundle.getString("file","");

@@ -42,4 +42,13 @@ dependencies {
     //
     compile "org.androidannotations:androidannotations-api:$AAVersion"
     //
+    compile rootProject.ext.libRetrofit
+    //
+//    androidTestCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.12'
+
+    //ADD THESE LINES:
+    androidTestCompile 'com.android.support.test:runner:0.2'
+    androidTestCompile 'com.android.support.test:rules:0.2'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.1'
 }

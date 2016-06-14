@@ -33,13 +33,21 @@ import cn.edu.jumy.oa.timchat.ui.customview.DialogActivity;
 public class HomeActivity extends BaseActivity {
     private static final String TAG = HomeActivity.class.getSimpleName();
     private LayoutInflater layoutInflater;
-    private FragmentTabHost mTabHost;
+    public FragmentTabHost mTabHost;
     private final Class fragmentArray[] = {NotifyFragment_.class, TaskFragment.class, ConversationFragment.class, ContactFragment.class, SettingFragment.class};
     private int mTitleArray[] = {R.string.home_notify_tab, R.string.home_work_tab, R.string.home_message_tab, R.string.home_contact_tab, R.string.home_me_tab};
     private int mImageViewArray[] = {R.drawable.tab_notify, R.drawable.tab_work, R.drawable.tab_message, R.drawable.tab_person, R.drawable.tab_settings};
-    private String mTextviewArray[] = {"notify", "work","message",  "contact", "setting"};
+    public String mTextViewArray[] = {"notify", "work","message",  "contact", "setting"};
     private ImageView msgUnread;
 
+    private static HomeActivity instance;
+
+    public static HomeActivity getInstance() {
+        if (instance == null){
+            instance = new HomeActivity();
+        }
+        return instance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +72,7 @@ public class HomeActivity extends BaseActivity {
         int fragmentCount = fragmentArray.length;
         for (int i = 0; i < fragmentCount; ++i) {
             //为每一个Tab按钮设置图标、文字和内容
-            TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTextviewArray[i]).setIndicator(getTabItemView(i));
+            TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTextViewArray[i]).setIndicator(getTabItemView(i));
             //将Tab按钮添加进Tab选项卡中
             mTabHost.addTab(tabSpec, fragmentArray[i], null);
             mTabHost.getTabWidget().setDividerDrawable(null);
@@ -73,6 +81,7 @@ public class HomeActivity extends BaseActivity {
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
+                Log.e(TAG, "onTabChanged: "+tabId );
                 int fragmentCount = fragmentArray.length;
                 for (int i = 0; i < fragmentCount; i++) {
                     ((TextView) mTabHost.getTabWidget().getChildTabViewAt(i).findViewById(R.id.title)).
@@ -125,7 +134,7 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        logout2Exit();
+//        logout2Exit();
         super.onDestroy();
     }
 
