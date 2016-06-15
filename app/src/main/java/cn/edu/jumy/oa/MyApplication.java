@@ -11,11 +11,9 @@ import com.tencent.TIMOfflinePushNotification;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
-import com.umeng.message.UmengNotificationClickHandler;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.https.HttpsUtils;
 
-import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
 import cn.edu.jumy.jumyframework.AppManager;
@@ -52,16 +50,8 @@ public class MyApplication extends MultiDexApplication {
             });
         }
         CrashHandler.getInstance().init(context);
-        HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);//可访问所有Https网站
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
-                //                .addInterceptor(new LoggerInterceptor("TAG"))
-                .connectTimeout(3000L, TimeUnit.MILLISECONDS)
-                .readTimeout(3000L, TimeUnit.MILLISECONDS)
-                //其他配置
-                .build();
-
-        OkHttpUtils.initClient(okHttpClient);
+        initOkHttpUtils();
+        //Umeng Push init start
         PushAgent.getInstance(context).enable(new IUmengRegisterCallback() {
             @Override
             public void onRegistered(String registrationId) {
@@ -69,13 +59,22 @@ public class MyApplication extends MultiDexApplication {
             }
         });
         PushAgent.getInstance(context).setNotificationClickHandler(new NotificationClickHandler());
-
-        byte[] key = new byte[64];
-        new SecureRandom().nextBytes(key);
-        RealmConfiguration config = new RealmConfiguration.Builder(context)
-                .encryptionKey(key)
-                .build();
+        //Umeng Push init end
+        RealmConfiguration config = new RealmConfiguration.Builder(context).build();
         Realm.setDefaultConfiguration(config);
+    }
+
+    private void initOkHttpUtils() {
+        HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);//可访问所有Https网站
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
+                //                .addInterceptor(new LoggerInterceptor("TAG"))
+                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
+                .readTimeout(10000L, TimeUnit.MILLISECONDS)
+                //其他配置
+                .build();
+
+        OkHttpUtils.initClient(okHttpClient);
     }
 
     public static Context getContext() {

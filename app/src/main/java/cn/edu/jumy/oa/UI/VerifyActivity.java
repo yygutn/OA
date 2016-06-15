@@ -40,6 +40,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hyphenate.chatuidemo.ui.LoginActivity;
+import com.hyphenate.chatuidemo.ui.SplashActivity;
 import com.squareup.picasso.Picasso;
 import com.tencent.qcloud.tlslibrary.activity.HostLoginActivity;
 
@@ -50,7 +52,6 @@ import org.androidannotations.annotations.LongClick;
 import org.androidannotations.annotations.ViewById;
 
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.timchat.ui.SplashActivity;
 
 /**
  * 校验指纹
@@ -88,7 +89,7 @@ public class VerifyActivity extends AppCompatActivity{
 
     @Click(R.id.login_other)
     void click(){
-        Intent intent = new Intent(getApplicationContext(), HostLoginActivity.class);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivityForResult(intent, LOGIN_RESULT_CODE);
         finish();
     }
