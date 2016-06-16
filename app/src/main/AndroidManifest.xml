@@ -10,90 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
-        <meta-data
-            android:name="com.tencent.rdm.uuid"
-            android:value="ff184778-1bdb-481a-b701-11cccdc3b3d3" />
-
-        <activity
-            android:name=".timchat.ui.SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-
-        <activity android:name=".HomeActivity" />
-        <activity
-            android:name=".timchat.ui.ChatActivity"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".timchat.ui.SearchFriendActivity" />
-        <activity android:name=".timchat.ui.AddFriendActivity" />
-        <activity
-            android:name=".timchat.ui.ProfileActivity"
-            android:launchMode="singleTask" />
-        <activity android:name=".timchat.ui.ManageFriendGroupActivity" />
-        <activity android:name=".timchat.ui.VideoActivity" />
-        <activity android:name=".timchat.ui.CreateGroupActivity" />
-        <activity
-            android:name=".timchat.ui.GroupProfileActivity"
-            android:launchMode="singleTask" />
-
-        <!-- 消息收发service -->
-        <service
-            android:name="com.tencent.qalsdk.service.QalService"
-            android:exported="false"
-            android:process=":QALSERVICE" />
-        <service
-            android:name="com.tencent.qalsdk.service.QalAssistService"
-            android:exported="false"
-            android:process=":QALSERVICE" />
-        <!-- 离线消息广播接收器 -->
-        <receiver
-            android:name="com.tencent.qalsdk.QALBroadcastReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.tencent.qalsdk.broadcast.qal" />
-            </intent-filter>
-        </receiver>
-        <!-- 系统消息广播接收器 -->
-        <receiver
-            android:name="com.tencent.qalsdk.core.NetConnInfoCenter"
-            android:process=":QALSERVICE">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.TIME_SET" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-            </intent-filter>
-        </receiver>
-
-        <activity android:name=".timchat.ui.ImageViewActivity" />
-        <activity android:name=".timchat.ui.EditActivity" />
-        <activity android:name=".timchat.ui.SearchGroupActivity" />
-        <activity android:name=".timchat.ui.ApplyGroupActivity" />
-        <activity android:name=".timchat.ui.GroupManageMessageActivity" />
-        <activity android:name=".timchat.ui.FriendshipManageMessageActivity" />
-        <activity android:name=".timchat.ui.GroupListActivity" />
-        <activity android:name=".timchat.ui.ChooseFriendActivity" />
-        <activity android:name=".timchat.ui.GroupMemberActivity" />
-        <activity
-            android:name=".timchat.ui.customview.DialogActivity"
-            android:theme="@android:style/Theme.Dialog" />
-        <activity android:name=".timchat.ui.GroupMemberProfileActivity" />
-        <activity android:name=".timchat.ui.FriendshipHandleActivity"></activity>
-        <activity android:name=".timchat.ui.AboutActivity"></activity>
 
 
         <activity
             android:name=".UI.ApprovalActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".UI.NotifyActivity_"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.CalendarActivity_"
@@ -325,7 +245,7 @@
             android:name="com.hyphenate.chatuidemo.ui.VoiceCallActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/nornal_style"></activity>
+            android:theme="@style/normal_style"></activity>
         <!-- 视频通话 -->
         <activity
             android:name="com.hyphenate.chatuidemo.ui.VideoCallActivity"
@@ -399,44 +319,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"></activity>
 
-        <!--红包相关Activity start-->
-        <!--发红包-->
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPRedPacketActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan|stateVisible" />
-        <!--红包详情-->
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" />
-        <!--红包记录-->
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPRecordActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" />
-        <!--WebView相关-->
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPWebViewActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-        <!--零钱-->
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPChangeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-        <!--绑定银行卡-->
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPBankCardActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
-        <!--红包相关Activity end-->
 
 
         <!-- 开机自启动服务 -->
@@ -450,28 +332,28 @@
         </receiver>
 
         <!-- gcm start -->
-        <receiver
-            android:name="com.hyphenate.chat.EMGCMBroadcastReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.hyphenate.chatuidemo" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver-->
+            <!--android:name="com.hyphenate.chat.EMGCMBroadcastReceiver"-->
+            <!--android:exported="true"-->
+            <!--android:permission="com.google.android.c2dm.permission.SEND">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+                <!--<category android:name="com.hyphenate.chatuidemo" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
-        <service
-            android:name="com.hyphenate.chat.EMGCMListenerService"
-            android:exported="false"></service>
+        <!--<service-->
+            <!--android:name="com.hyphenate.chat.EMGCMListenerService"-->
+            <!--android:exported="false"></service>-->
 
-        <receiver
-            android:name="com.hyphenate.chatuidemo.receiver.GCMPushBroadCast"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.hyphenate.sdk.push" />
-                <category android:name="com.hyphenate.chatuidemo" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver-->
+            <!--android:name="com.hyphenate.chatuidemo.receiver.GCMPushBroadCast"-->
+            <!--android:exported="false">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.hyphenate.sdk.push" />-->
+                <!--<category android:name="com.hyphenate.chatuidemo" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
         <!-- gcm end -->
 
         <!-- mi push -->
@@ -541,7 +423,7 @@
         <!-- 设置环信应用的appkey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
-            android:value="easemob-demo#chatdemoui" />
+            android:value="ym-sx#oa" />
         <!-- 声明sdk所需的service -->
         <service
             android:name="com.hyphenate.chat.EMChatService"
@@ -564,16 +446,12 @@
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" />
-        <!--&lt;!&ndash; umeng appkey，可忽略 &ndash;&gt;-->
-        <!--<meta-data-->
-            <!--android:name="UMENG_APPKEY"-->
-            <!--android:value="56aefe07e0f55a250d001a7c"></meta-data>-->
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="hyphenate" />
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="3ecea51f560650b1ed8a4b99808f52e8" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="hyphenate" />
 
     </application>
 

@@ -5,10 +5,7 @@ import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.fsck.k9.K9;
-import com.tencent.TIMManager;
-import com.tencent.TIMOfflinePushListener;
-import com.tencent.TIMOfflinePushNotification;
-import com.tencent.qalsdk.sdk.MsfSdkUtils;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -17,9 +14,8 @@ import com.zhy.http.okhttp.https.HttpsUtils;
 import java.util.concurrent.TimeUnit;
 
 import cn.edu.jumy.jumyframework.AppManager;
+import cn.edu.jumy.jumyframework.CrashHandler;
 import cn.edu.jumy.oa.bean.NotificationClickHandler;
-import cn.edu.jumy.oa.timchat.utils.CrashHandler;
-import cn.edu.jumy.oa.timchat.utils.Foreground;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import okhttp3.OkHttpClient;
@@ -38,17 +34,8 @@ public class MyApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         AppManager.getInstance().init(this);
-        Foreground.init(this);
         K9.getInstance().onCreate(this);
         context = getApplicationContext();
-        if(MsfSdkUtils.isMainProcess(this)) {
-            TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
-                @Override
-                public void handleNotification(TIMOfflinePushNotification notification) {
-                    notification.doNotify(getApplicationContext(), R.drawable.ic_launcher);
-                }
-            });
-        }
         CrashHandler.getInstance().init(context);
         initOkHttpUtils();
         //Umeng Push init start
@@ -62,6 +49,9 @@ public class MyApplication extends MultiDexApplication {
         //Umeng Push init end
         RealmConfiguration config = new RealmConfiguration.Builder(context).build();
         Realm.setDefaultConfiguration(config);
+        //HX
+        DemoApplication.getInstance().init(this);
+        //end
     }
 
     private void initOkHttpUtils() {

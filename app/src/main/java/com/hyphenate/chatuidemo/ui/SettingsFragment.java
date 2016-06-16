@@ -39,6 +39,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 /**
  * 设置界面
  * 
@@ -354,8 +356,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 					public void run() {
 						pd.dismiss();
 						// 重新显示登陆页面
-						((MainActivity) getActivity()).finish();
 						startActivity(new Intent(getActivity(), LoginActivity.class));
+						AppManager.getInstance().finishCurActivity();
 						
 					}
 				});

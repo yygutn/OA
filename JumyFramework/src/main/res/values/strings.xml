@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">JumyFramework</string>
+    <!-- home activity tab-->
+    <string name="home_conversation_tab">会话</string>
+    <string name="home_setting_tab">设置</string>
+    <string name="home_contact_tab">联系人</string>
+    <string name="home_message_tab">消息</string>
+    <string name="home_notify_tab">通告</string>
+    <string name="home_work_tab">政务</string>
+    <string name="home_me_tab">我的</string>
 </resources>

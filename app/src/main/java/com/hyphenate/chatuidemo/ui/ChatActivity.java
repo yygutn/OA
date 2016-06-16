@@ -9,13 +9,14 @@ import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.util.EasyUtils;
 
 /**
- * 聊天页面，需要fragment的使用{@link #EaseChatFragment}
+ * 聊天页面，需要fragment的使用{@link EaseChatFragment}
+ * 定制聊天输入框，比如：阅后即焚 参考 {@link com.hyphenate.easeui.widget.EaseChatInputMenu}
  *
  */
 public class ChatActivity extends BaseActivity{
     public static ChatActivity activityInstance;
     private EaseChatFragment chatFragment;
-    String toChatUsername;
+    public String toChatUsername;
 
     @Override
     protected void onCreate(Bundle arg0) {

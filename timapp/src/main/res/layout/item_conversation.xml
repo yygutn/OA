@@ -5,7 +5,7 @@
     android:paddingBottom="8dp"
     android:paddingTop="8dp"
     android:paddingLeft="10dp">
-    <cn.edu.jumy.oa.timchat.ui.customview.CircleImageView
+    <CircleImageView
         android:id="@id/avatar"
         android:layout_width="45dp"
         android:layout_height="45dp" />

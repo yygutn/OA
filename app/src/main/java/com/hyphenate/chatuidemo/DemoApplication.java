@@ -15,10 +15,13 @@ package com.hyphenate.chatuidemo;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
+/**
+ * {@link com.hyphenate.easeui.widget.EaseChatExtendMenu}
+ */
 
-public class DemoApplication extends Application {
+public class DemoApplication{
 
 	public static Context applicationContext;
 	private static DemoApplication instance;
@@ -30,11 +33,8 @@ public class DemoApplication extends Application {
 	 */
 	public static String currentUserNick = "";
 
-	@Override
-	public void onCreate() {
-		MultiDex.install(this);
-		super.onCreate();
-        applicationContext = this;
+	public void init(MultiDexApplication application) {
+        applicationContext = application;
         instance = this;
         
         //init demo helper
@@ -42,12 +42,14 @@ public class DemoApplication extends Application {
 	}
 
 	public static DemoApplication getInstance() {
+		if (instance == null){
+			instance = new DemoApplication();
+		}
 		return instance;
 	}
 
-	@Override
-	protected void attachBaseContext(Context base) {
-		super.attachBaseContext(base);
-		MultiDex.install(this);
+	public static Context getApplicationContext(){
+		return applicationContext;
 	}
+
 }

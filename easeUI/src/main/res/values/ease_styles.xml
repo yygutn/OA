@@ -1,8 +1,11 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-    <style name="AppTheme" parent="android:Theme.Light" />
-
+    <!--<style name="AppTheme" parent="AppTheme">-->
+        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+        <!--<item name="colorPrimary">@color/pressed</item>-->
+        <!--<item name="colorPrimaryDark">@color/pressed</item>-->
+        <!--<item name="colorAccent">@color/pressed</item>-->
+    <!--</style>-->
 
     <style name="chat_content_date_style">
         <item name="android:minHeight">50dp</item>
@@ -63,19 +66,19 @@
         <item name="android:windowExitAnimation">@anim/head_out</item>
     </style>
 
-    <style name="Anim_style" parent="android:Theme.NoTitleBar.Fullscreen">
+    <style name="Anim_style" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/AnimFade</item>
     </style>
 
-    <style name="Anim_style2" parent="android:Theme.NoTitleBar">
+    <style name="Anim_style2" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/AnimFade</item>
     </style>
 
-    <style name="horizontal_slide" parent="android:Theme.NoTitleBar">
+    <style name="horizontal_slide" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/AnimFade2</item>
     </style>
     
-    <style name="nornal_style" parent="android:Theme.NoTitleBar"></style>
+    <style name="normal_style" parent="AppTheme"></style>
 
     <!--
     <style name="horizontal_slide2" parent="android:style/Theme.Holo.Light.NoActionBar">

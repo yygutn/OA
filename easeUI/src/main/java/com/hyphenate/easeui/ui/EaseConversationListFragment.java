@@ -49,7 +49,16 @@ public class EaseConversationListFragment extends EaseBaseFragment{
     protected FrameLayout errorItemContainer;
 
     protected boolean isConflict;
-    
+
+    public static EaseConversationListFragment instance = null;
+
+    public static EaseConversationListFragment getInstance() {
+        if (instance == null){
+            instance = new EaseConversationListFragment();
+        }
+        return instance;
+    }
+
     protected EMConversationListener convListener = new EMConversationListener(){
 
 		@Override
@@ -69,6 +78,7 @@ public class EaseConversationListFragment extends EaseBaseFragment{
         if(savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
             return;
         super.onActivityCreated(savedInstanceState);
+        instance = this;
     }
 
     @Override
@@ -204,7 +214,7 @@ public class EaseConversationListFragment extends EaseBaseFragment{
     /**
      * 获取会话列表
      * 
-     * @param context
+     * @param
      * @return
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         +    */
     protected List<EMConversation> loadConversationList(){
@@ -243,7 +253,7 @@ public class EaseConversationListFragment extends EaseBaseFragment{
     /**
      * 根据最后一条消息的时间排序
      * 
-     * @param usernames
+     * @param conversationList
      */
     private void sortConversationByLastChatTime(List<Pair<Long, EMConversation>> conversationList) {
         Collections.sort(conversationList, new Comparator<Pair<Long, EMConversation>>() {

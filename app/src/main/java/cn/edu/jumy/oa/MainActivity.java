@@ -1,33 +1,58 @@
 package cn.edu.jumy.oa;
 
+import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTabHost;
+import android.os.PowerManager;
+import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.hyphenate.EMCallBack;
+import com.hyphenate.EMContactListener;
+import com.hyphenate.EMMessageListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chatuidemo.Constant;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.db.InviteMessgeDao;
+import com.hyphenate.chatuidemo.db.UserDao;
+import com.hyphenate.chatuidemo.domain.InviteMessage;
+import com.hyphenate.chatuidemo.runtimepermissions.PermissionsManager;
+import com.hyphenate.chatuidemo.runtimepermissions.PermissionsResultAction;
+import com.hyphenate.chatuidemo.ui.ChatActivity;
 import com.hyphenate.chatuidemo.ui.ContactListFragment;
 import com.hyphenate.chatuidemo.ui.ConversationListFragment;
-import com.tencent.TIMManager;
-import com.tencent.TIMUserStatusListener;
-import com.tencent.qcloud.presentation.event.MessageEvent;
-import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
+import com.hyphenate.chatuidemo.ui.GroupsActivity;
+import com.hyphenate.chatuidemo.ui.LoginActivity;
+import com.hyphenate.chatuidemo.ui.SettingsFragment;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.util.EMLog;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
+
+import java.util.List;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.fragment.NotifyFragment_;
 import cn.edu.jumy.oa.fragment.TaskFragment;
-import cn.edu.jumy.oa.timchat.model.FriendshipInfo;
-import cn.edu.jumy.oa.timchat.model.GroupInfo;
-import cn.edu.jumy.oa.timchat.model.UserInfo;
-import cn.edu.jumy.oa.timchat.ui.ContactFragment;
-import cn.edu.jumy.oa.timchat.ui.ConversationFragment;
-import cn.edu.jumy.oa.timchat.ui.SettingFragment;
-import cn.edu.jumy.oa.timchat.ui.SplashActivity;
-import cn.edu.jumy.oa.timchat.ui.customview.DialogActivity;
+import cn.edu.jumy.oa.widget.FragmentTabHost;
 
 /**
  * Tab页主界面
@@ -36,11 +61,10 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private LayoutInflater layoutInflater;
     public FragmentTabHost mTabHost;
-    private final Class fragmentArray[] = {NotifyFragment_.class, TaskFragment.class, ConversationListFragment.class, ContactListFragment.class, SettingFragment.class};
+    private final Class fragmentArray[] = {NotifyFragment_.class, TaskFragment.class, ConversationListFragment.class, ContactListFragment.class, SettingsFragment.class};
     private int mTitleArray[] = {R.string.home_notify_tab, R.string.home_work_tab, R.string.home_message_tab, R.string.home_contact_tab, R.string.home_me_tab};
     private int mImageViewArray[] = {R.drawable.tab_notify, R.drawable.tab_work, R.drawable.tab_message, R.drawable.tab_person, R.drawable.tab_settings};
     public String mTextViewArray[] = {"notify", "work","message",  "contact", "setting"};
-    private ImageView msgUnread;
 
     private static MainActivity instance;
 
@@ -50,21 +74,84 @@ public class MainActivity extends BaseActivity {
         }
         return instance;
     }
-
+    // 未读消息textview
+    private TextView unreadLabel;
+    // 未读通讯录textview
+    private TextView unreadAddressLable;
+    // 账号在别处登录
+    public boolean isConflict = false;
+    // 账号被移除
+    private boolean isCurrentAccountRemoved = false;
+    /**
+     * 检查当前用户是否被删除
+     */
+    public boolean getCurrentAccountRemoved() {
+        return isCurrentAccountRemoved;
+    }
+    private android.app.AlertDialog.Builder conflictBuilder;
+    private android.app.AlertDialog.Builder accountRemovedBuilder;
+    private boolean isConflictDialogShow;
+    private boolean isAccountRemovedDialogShow;
+    private BroadcastReceiver internalDebugReceiver;
+    private BroadcastReceiver broadcastReceiver;
+    private LocalBroadcastManager broadcastManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        initView();
-        //互踢下线逻辑
-        TIMManager.getInstance().setUserStatusListener(new TIMUserStatusListener() {
-            @Override
-            public void onForceOffline() {
-                Log.d(TAG, "receive force offline message");
-                Intent intent = new Intent(MainActivity.this, DialogActivity.class);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            String packageName = getPackageName();
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                Intent intent = new Intent();
+                intent.setAction(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                //intent.setAction(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                intent.setData(Uri.parse("package:" + packageName));
                 startActivity(intent);
             }
-        });
+        }
+
+        if (savedInstanceState != null && savedInstanceState.getBoolean(Constant.ACCOUNT_REMOVED, false)) {
+            // 防止被移除后，没点确定按钮然后按了home键，长期在后台又进app导致的crash
+            // 三个fragment里加的判断同理
+            DemoHelper.getInstance().logout(false,null);
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+            return;
+        } else if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
+            // 防止被T后，没点确定按钮然后按了home键，长期在后台又进app导致的crash
+            // 三个fragment里加的判断同理
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+            return;
+        }
+        setContentView(R.layout.activity_home);
+        try {
+            //6.0运行时权限处理，target api设成23时，demo这里做的比较简单，直接请求所有需要的运行时权限
+            requestPermissions();
+            initView();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //umeng api
+        MobclickAgent.updateOnlineConfig(this);
+        UmengUpdateAgent.setUpdateOnlyWifi(false);
+        UmengUpdateAgent.update(this);
+
+        if (getIntent().getBooleanExtra(Constant.ACCOUNT_CONFLICT, false) && !isConflictDialogShow) {
+            showConflictDialog();
+        } else if (getIntent().getBooleanExtra(Constant.ACCOUNT_REMOVED, false) && !isAccountRemovedDialogShow) {
+            showAccountRemovedDialog();
+        }
+
+        inviteMessgeDao = new InviteMessgeDao(this);
+        userDao = new UserDao(this);
+
+        //注册local广播接收者，用于接收demohelper中发出的群组联系人的变动通知
+        registerBroadcastReceiver();
+
+
+        EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
     }
 
     private void initView() {
@@ -80,19 +167,20 @@ public class MainActivity extends BaseActivity {
             mTabHost.getTabWidget().setDividerDrawable(null);
 
         }
-        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String tabId) {
-                Log.e(TAG, "onTabChanged: "+tabId );
-                int fragmentCount = fragmentArray.length;
-                for (int i = 0; i < fragmentCount; i++) {
-                    ((TextView) mTabHost.getTabWidget().getChildTabViewAt(i).findViewById(R.id.title)).
-                            setTextColor(getResources().getColor(R.color.normal));
-                }
-                ((TextView) mTabHost.getTabWidget().getChildTabViewAt(mTabHost.getCurrentTab()).findViewById(R.id.title)).
-                        setTextColor(getResources().getColor(R.color.pressed));
-            }
-        });
+//        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+//            @Override
+//            public void onTabChanged(String tabId) {
+//                Log.e(TAG, "onTabChanged: "+tabId );
+//                int fragmentCount = fragmentArray.length;
+//                for (int i = 0; i < fragmentCount; i++) {
+//                    ((TextView) mTabHost.getTabWidget().getChildTabViewAt(i).findViewById(R.id.title)).
+//                            setTextColor(getResources().getColor(R.color.normal));
+//                }
+//                ((TextView) mTabHost.getTabWidget().getChildTabViewAt(mTabHost.getCurrentTab()).findViewById(R.id.title)).
+//                        setTextColor(getResources().getColor(R.color.pressed));
+//            }
+//        });
+        mTabHost.onTabChanged(mTextViewArray[0]);
     }
 
     private View getTabItemView(int index) {
@@ -101,51 +189,423 @@ public class MainActivity extends BaseActivity {
         icon.setImageResource(mImageViewArray[index]);
         TextView title = (TextView) view.findViewById(R.id.title);
         title.setText(mTitleArray[index]);
-        if (index == 0) {
-            msgUnread = (ImageView) view.findViewById(R.id.tabUnread);
-            title.setTextColor(getResources().getColor(R.color.pressed));
+        if (index == 2) {
+            unreadLabel = (TextView) view.findViewById(R.id.tabUnread);
+//            title.setTextColor(getResources().getColor(R.color.pressed));
+        }
+        if (index == 3){
+            unreadAddressLable = (TextView) view.findViewById(R.id.tabUnread);
+//            title.setTextColor(getResources().getColor(R.color.pressed));
         }
         return view;
     }
 
+    @TargetApi(23)
+    private void requestPermissions() {
+        PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
+            @Override
+            public void onGranted() {
+//				Toast.makeText(MainActivity.this, "All permissions have been granted", Toast.LENGTH_SHORT).show();
+            }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+            @Override
+            public void onDenied(String permission) {
+//                Toast.makeText(MainActivity.this, "Permission " + permission + " has been denied", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    public void logout() {
-        TlsBusiness.logout(UserInfo.getInstance().getId());
-        UserInfo.getInstance().setId(null);
-        MessageEvent.getInstance().clear();
-        FriendshipInfo.getInstance().clear();
-        GroupInfo.getInstance().clear();
-        Intent intent = new Intent(MainActivity.this, SplashActivity.class);
-        finish();
-        startActivity(intent);
 
+
+    EMMessageListener messageListener = new EMMessageListener() {
+
+        @Override
+        public void onMessageReceived(List<EMMessage> messages) {
+            // 提示新消息
+            for (EMMessage message : messages) {
+                DemoHelper.getInstance().getNotifier().onNewMsg(message);
+            }
+            refreshUIWithMessage();
+        }
+
+        @Override
+        public void onCmdMessageReceived(List<EMMessage> messages) {
+            for (EMMessage message : messages) {
+                EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
+                final String action = cmdMsgBody.action();//获取自定义action
+//				if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION) && message.getChatType() == EMMessage.ChatType.GroupChat) {
+//					RedPacketUtil.receiveRedPacketAckMessage(message);
+//				}
+            }
+            refreshUIWithMessage();
+        }
+
+        @Override
+        public void onMessageReadAckReceived(List<EMMessage> messages) {
+        }
+
+        @Override
+        public void onMessageDeliveryAckReceived(List<EMMessage> message) {
+        }
+
+        @Override
+        public void onMessageChanged(EMMessage message, Object change) {}
+    };
+
+    private void refreshUIWithMessage() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                // 刷新bottom bar消息未读数
+                updateUnreadLabel();
+                if (mTabHost.getCurrentTab() == 2) {
+                    // 当前页面如果为聊天历史页面，刷新此页面
+                    if (mTabHost.mTabs.get(2) != null) {
+                        ((ConversationListFragment)mTabHost.mTabs.get(2).fragment).refresh();
+                    }
+                }
+            }
+        });
     }
 
-    private void logout2Exit(){
-        TlsBusiness.logout(UserInfo.getInstance().getId());
-        UserInfo.getInstance().setId(null);
-        MessageEvent.getInstance().clear();
-        FriendshipInfo.getInstance().clear();
-        GroupInfo.getInstance().clear();
+    private void registerBroadcastReceiver() {
+        broadcastManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constant.ACTION_CONTACT_CHANAGED);
+        intentFilter.addAction(Constant.ACTION_GROUP_CHANAGED);
+//		intentFilter.addAction(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION);
+        broadcastReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                updateUnreadLabel();
+                updateUnreadAddressLable();
+                switch (mTabHost.getCurrentTab()) {
+                    case 2:
+                        // 当前页面如果为聊天历史页面，刷新此页面
+                        if (mTabHost.mTabs.get(2) != null) {
+                            ((ConversationListFragment)mTabHost.mTabs.get(2).fragment).refresh();
+                        }
+                        break;
+                    case 3:
+                        if (mTabHost.mTabs.get(3) != null) {
+                            ((ContactListFragment)mTabHost.mTabs.get(3).fragment).refresh();
+                        }
+                        break;
+                }
+                String action = intent.getAction();
+                if(action.equals(Constant.ACTION_GROUP_CHANAGED)){
+                    if (EaseCommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
+                        GroupsActivity.instance.onResume();
+                    }
+                }
+//				if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
+//					if (conversationListFragment != null){
+//						conversationListFragment.refresh();
+//					}
+//				}
+            }
+        };
+        broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    public class MyContactListener implements EMContactListener {
+        @Override
+        public void onContactAdded(String username) {}
+        @Override
+        public void onContactDeleted(final String username) {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    if (ChatActivity.activityInstance != null && ChatActivity.activityInstance.toChatUsername != null &&
+                            username.equals(ChatActivity.activityInstance.toChatUsername)) {
+                        String st10 = getResources().getString(com.hyphenate.chatuidemo.R.string.have_you_removed);
+                        Toast.makeText(MainActivity.this, ChatActivity.activityInstance.getToChatUsername() + st10, Toast.LENGTH_LONG)
+                                .show();
+                        ChatActivity.activityInstance.finish();
+                    }
+                }
+            });
+        }
+        @Override
+        public void onContactInvited(String username, String reason) {}
+        @Override
+        public void onContactAgreed(String username) {}
+        @Override
+        public void onContactRefused(String username) {}
+    }
+
+    private void unregisterBroadcastReceiver(){
+        broadcastManager.unregisterReceiver(broadcastReceiver);
     }
 
     @Override
     protected void onDestroy() {
-//        logout2Exit();
         super.onDestroy();
+
+        if (conflictBuilder != null) {
+            conflictBuilder.create().dismiss();
+            conflictBuilder = null;
+        }
+        unregisterBroadcastReceiver();
+
+        try {
+            unregisterReceiver(internalDebugReceiver);
+        } catch (Exception e) {
+        }
+
     }
 
     /**
-     * 设置未读tab显示
+     * 刷新未读消息数
      */
-    public void setMsgUnread(boolean noUnread) {
-        msgUnread.setVisibility(noUnread ? View.GONE : View.VISIBLE);
+    public void updateUnreadLabel() {
+        int count = getUnreadMsgCountTotal();
+        if (count > 0) {
+            unreadLabel.setText(String.valueOf(count));
+            unreadLabel.setVisibility(View.VISIBLE);
+        } else {
+            unreadLabel.setVisibility(View.INVISIBLE);
+        }
     }
 
+    /**
+     * 刷新申请与通知消息数
+     */
+    public void updateUnreadAddressLable() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                int count = getUnreadAddressCountTotal();
+                if (count > 0) {
+//					unreadAddressLable.setText(String.valueOf(count));
+                    unreadAddressLable.setVisibility(View.VISIBLE);
+                } else {
+                    unreadAddressLable.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+    }
+
+    /**
+     * 获取未读申请与通知消息
+     *
+     * @return
+     */
+    public int getUnreadAddressCountTotal() {
+        int unreadAddressCountTotal = 0;
+        unreadAddressCountTotal = inviteMessgeDao.getUnreadMessagesCount();
+        return unreadAddressCountTotal;
+    }
+
+    /**
+     * 获取未读消息数
+     *
+     * @return
+     */
+    public int getUnreadMsgCountTotal() {
+        int unreadMsgCountTotal = 0;
+        int chatroomUnreadMsgCount = 0;
+        unreadMsgCountTotal = EMClient.getInstance().chatManager().getUnreadMsgsCount();
+        for(EMConversation conversation:EMClient.getInstance().chatManager().getAllConversations().values()){
+            if(conversation.getType() == EMConversation.EMConversationType.ChatRoom)
+                chatroomUnreadMsgCount=chatroomUnreadMsgCount+conversation.getUnreadMsgCount();
+        }
+        return unreadMsgCountTotal-chatroomUnreadMsgCount;
+    }
+
+    private InviteMessgeDao inviteMessgeDao;
+    private UserDao userDao;
+
+
+
+
+    /**
+     * 保存提示新消息
+     *
+     * @param msg
+     */
+    private void notifyNewIviteMessage(InviteMessage msg) {
+        saveInviteMsg(msg);
+        // 提示有新消息
+        DemoHelper.getInstance().getNotifier().viberateAndPlayTone(null);
+
+        // 刷新bottom bar消息未读数
+        updateUnreadAddressLable();
+        // 刷新好友页面ui
+        if (mTabHost.getCurrentTab() == 3)
+            ((ContactListFragment)mTabHost.mTabs.get(3).fragment).refresh();
+    }
+
+    /**
+     * 保存邀请等msg
+     *
+     * @param msg
+     */
+    private void saveInviteMsg(InviteMessage msg) {
+        // 保存msg
+        inviteMessgeDao.saveMessage(msg);
+        //保存未读数，这里没有精确计算
+        inviteMessgeDao.saveUnreadMessageCount(1);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (!isConflict && !isCurrentAccountRemoved) {
+            updateUnreadLabel();
+            updateUnreadAddressLable();
+        }
+
+        // unregister this event listener when this activity enters the
+        // background
+        DemoHelper sdkHelper = DemoHelper.getInstance();
+        sdkHelper.pushActivity(this);
+
+        EMClient.getInstance().chatManager().addMessageListener(messageListener);
+    }
+
+    @Override
+    protected void onStop() {
+        EMClient.getInstance().chatManager().removeMessageListener(messageListener);
+        DemoHelper sdkHelper = DemoHelper.getInstance();
+        sdkHelper.popActivity(this);
+
+        super.onStop();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("isConflict", isConflict);
+        outState.putBoolean(Constant.ACCOUNT_REMOVED, isCurrentAccountRemoved);
+        super.onSaveInstanceState(outState);
+    }
+
+    /**
+     * 显示帐号在别处登录dialog
+     */
+    private void showConflictDialog() {
+        isConflictDialogShow = true;
+        DemoHelper.getInstance().logout(false,null);
+        String st = getResources().getString(com.hyphenate.chatuidemo.R.string.Logoff_notification);
+        if (!MainActivity.this.isFinishing()) {
+            // clear up global variables
+            try {
+                if (conflictBuilder == null)
+                    conflictBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+                conflictBuilder.setTitle(st);
+                conflictBuilder.setMessage(com.hyphenate.chatuidemo.R.string.connect_conflict);
+                conflictBuilder.setPositiveButton(com.hyphenate.chatuidemo.R.string.ok, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        conflictBuilder = null;
+                        finish();
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                });
+                conflictBuilder.setCancelable(false);
+                conflictBuilder.create().show();
+                isConflict = true;
+            } catch (Exception e) {
+                EMLog.e(TAG, "---------color conflictBuilder error" + e.getMessage());
+            }
+
+        }
+
+    }
+
+    /**
+     * 帐号被移除的dialog
+     */
+    private void showAccountRemovedDialog() {
+        isAccountRemovedDialogShow = true;
+        DemoHelper.getInstance().logout(false,null);
+        String st5 = getResources().getString(com.hyphenate.chatuidemo.R.string.Remove_the_notification);
+        if (!MainActivity.this.isFinishing()) {
+            // clear up global variables
+            try {
+                if (accountRemovedBuilder == null)
+                    accountRemovedBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+                accountRemovedBuilder.setTitle(st5);
+                accountRemovedBuilder.setMessage(com.hyphenate.chatuidemo.R.string.em_user_remove);
+                accountRemovedBuilder.setPositiveButton(com.hyphenate.chatuidemo.R.string.ok, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        accountRemovedBuilder = null;
+                        finish();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    }
+                });
+                accountRemovedBuilder.setCancelable(false);
+                accountRemovedBuilder.create().show();
+                isCurrentAccountRemoved = true;
+            } catch (Exception e) {
+                EMLog.e(TAG, "---------color userRemovedBuilder error" + e.getMessage());
+            }
+
+        }
+
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getBooleanExtra(Constant.ACCOUNT_CONFLICT, false) && !isConflictDialogShow) {
+            showConflictDialog();
+        } else if (intent.getBooleanExtra(Constant.ACCOUNT_REMOVED, false) && !isAccountRemovedDialogShow) {
+            showAccountRemovedDialog();
+        }
+    }
+
+    /**
+     * 内部测试代码，开发者请忽略
+     */
+    private void registerInternalDebugReceiver() {
+        internalDebugReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                DemoHelper.getInstance().logout(false,new EMCallBack() {
+
+                    @Override
+                    public void onSuccess() {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                // 重新显示登陆页面
+                                finish();
+                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {}
+
+                    @Override
+                    public void onError(int code, String message) {}
+                });
+            }
+        };
+        IntentFilter filter = new IntentFilter(getPackageName() + ".em_internal_debug");
+        registerReceiver(internalDebugReceiver, filter);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        //getMenuInflater().inflate(R.menu.context_tab_contact, menu);
+    }
+
+    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                                     @NonNull int[] grantResults) {
+        PermissionsManager.getInstance().notifyPermissionsChange(permissions, grantResults);
+    }
 
 }

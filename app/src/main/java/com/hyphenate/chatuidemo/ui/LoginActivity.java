@@ -13,15 +13,6 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-//import com.easemob.redpacketsdk.RPCallback;
-//import com.easemob.redpacketsdk.RedPacket;
-import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.DemoApplication;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.db.DemoDBManager;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -32,9 +23,21 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.DemoApplication;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.db.DemoDBManager;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
+
+import cn.edu.jumy.jumyframework.AppManager;
+import cn.edu.jumy.oa.*;
 
 /**
  * 登陆页面
@@ -57,36 +60,41 @@ public class LoginActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 
 		// 如果登录成功过，直接进入主页面
-		if (DemoHelper.getInstance().isLoggedIn()) {
-			autoLogin = true;
-			startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//		if (DemoHelper.getInstance().isLoggedIn()) {
+//			autoLogin = true;
+//			startActivity(new Intent(LoginActivity.this, cn.edu.jumy.oa.MainActivity.class));
+//
+//			return;
+//		}
+		DemoHelper.getInstance().logout(false,null);
+		try {
+			setContentView(R.layout.em_activity_login);
 
-			return;
-		}
-		setContentView(R.layout.em_activity_login);
+			usernameEditText = (EditText) findViewById(R.id.username);
+			passwordEditText = (EditText) findViewById(R.id.password);
 
-		usernameEditText = (EditText) findViewById(R.id.username);
-		passwordEditText = (EditText) findViewById(R.id.password);
+			// 如果用户名改变，清空密码
+			usernameEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    passwordEditText.setText(null);
+                }
 
-		// 如果用户名改变，清空密码
-		usernameEditText.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				passwordEditText.setText(null);
-			}
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
-			}
+                @Override
+                public void afterTextChanged(Editable s) {
 
-			@Override
-			public void afterTextChanged(Editable s) {
-
-			}
-		});
-		if (DemoHelper.getInstance().getCurrentUsernName() != null) {
-			usernameEditText.setText(DemoHelper.getInstance().getCurrentUsernName());
+                }
+            });
+			if (DemoHelper.getInstance().getCurrentUsernName() != null) {
+                usernameEditText.setText(DemoHelper.getInstance().getCurrentUsernName());
+            }
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -173,10 +181,10 @@ public class LoginActivity extends BaseActivity {
 //				});
 				// 进入主页面
 				Intent intent = new Intent(LoginActivity.this,
-						MainActivity.class);
+						cn.edu.jumy.oa.MainActivity.class);
 				startActivity(intent);
 
-				finish();
+				AppManager.getInstance().finishCurActivity();
 			}
 
 			@Override

@@ -83,7 +83,7 @@ public class EaseChatMessageList extends RelativeLayout{
         showAvatar = ta.getBoolean(R.styleable.EaseChatMessageList_msgListShowUserAvatar, true);
         myBubbleBg = ta.getDrawable(R.styleable.EaseChatMessageList_msgListMyBubbleBackground);
         otherBuddleBg = ta.getDrawable(R.styleable.EaseChatMessageList_msgListMyBubbleBackground);
-        showUserNick = ta.getBoolean(R.styleable.EaseChatMessageList_msgListShowUserNick, false);
+        showUserNick = ta.getBoolean(R.styleable.EaseChatMessageList_msgListShowUserNick, true);
         ta.recycle();
     }
     

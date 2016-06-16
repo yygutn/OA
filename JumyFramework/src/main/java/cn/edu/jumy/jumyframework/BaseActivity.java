@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 
@@ -35,7 +34,7 @@ public class BaseActivity extends AppCompatActivity {
     }
     @AfterViews
     public void initStatusBarColor(){
-        StatusBarCompat.compat(this,getResources().getColor(R.color.colorAccent));
+        StatusBarCompat.compat(this,getResources().getColor(R.color.pressed));
     }
     protected void addToStack() {
         AppManager.getInstance().addActivity(this);

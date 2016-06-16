@@ -120,7 +120,7 @@ public class EaseChatInputMenu extends LinearLayout {
     /**
      * 设置自定义的主菜单栏，该控件需要继承自EaseChatPrimaryMenuBase，
      * 以及回调你想要回调出去的事件给设置的EaseEmojiconMenuListener
-     * @param customEmojiconMenu
+     * @param customPrimaryMenu
      */
     public void setCustomPrimaryMenu(EaseChatPrimaryMenuBase customPrimaryMenu){
         this.chatPrimaryMenu = customPrimaryMenu;
@@ -159,7 +159,7 @@ public class EaseChatInputMenu extends LinearLayout {
     /**
      * 注册扩展菜单的item
      * 
-     * @param name
+     * @param nameRes
      *            item名字
      * @param drawableRes
      *            item背景

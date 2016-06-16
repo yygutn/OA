@@ -5,7 +5,7 @@
     android:minHeight="50dp"
     android:gravity="center_vertical">
 
-    <cn.edu.jumy.oa.timchat.ui.customview.CircleImageView
+    <CircleImageView
         android:id="@+id/avatar"
         android:layout_width="35dp"
         android:layout_height="35dp"

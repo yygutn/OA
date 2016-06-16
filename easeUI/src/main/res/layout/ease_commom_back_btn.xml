@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="45dip"
     android:layout_height="match_parent"
-    android:background="@drawable/ease_common_tab_bg"
     android:clickable="true"
     android:onClick="back" >
 
@@ -12,6 +11,6 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="11dp"
         android:scaleType="centerInside"
-        android:src="@drawable/ease_mm_title_back" />
+        android:src="@drawable/ic_arrow_back_white" />
 
 </LinearLayout>

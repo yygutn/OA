@@ -6,7 +6,7 @@
     android:padding="5dp"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context="cn.edu.jumy.oa.timchat.ui.customview.DialogActivity">
+    tools:context="DialogActivity">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

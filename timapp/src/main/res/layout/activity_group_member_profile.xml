@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@color/background"
     tools:context="com.tencent.qcloud.timchat.ui.GroupMemberProfileActivity">
-    <cn.edu.jumy.oa.timchat.ui.customview.TemplateTitle
+    <TemplateTitle
         android:id="@+id/GroupMemTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal">
-        <cn.edu.jumy.oa.timchat.ui.customview.CircleImageView
+        <CircleImageView
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginLeft="20dp"
@@ -44,19 +44,19 @@
         android:layout_marginBottom="20dp"
         android:background="@color/line" />
 
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/manager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:name="@string/group_member_manage"
         app:isSwitch="true" />
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/setQuiet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:name="@string/group_member_quiet"
         app:canNav="true"/>
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/groupCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

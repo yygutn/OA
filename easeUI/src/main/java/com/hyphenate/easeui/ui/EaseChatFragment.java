@@ -58,6 +58,8 @@ import com.hyphenate.util.PathUtil;
 import java.io.File;
 import java.util.List;
 
+import cn.edu.jumy.jumyframework.BaseActivity;
+
 /**
  * 可以直接new出来使用的聊天对话页面fragment，
  * 使用时需调用setArguments方法传入chatType(会话类型)和userId(用户或群id)
@@ -407,7 +409,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 if (locationAddress != null && !locationAddress.equals("")) {
                     sendLocationMessage(latitude, longitude, locationAddress);
                 } else {
-                    Toast.makeText(getActivity(), R.string.unable_to_get_loaction, 0).show();
+                    Toast.makeText(getActivity(), R.string.unable_to_get_loaction, Toast.LENGTH_SHORT).show();
                 }
                 
             }
@@ -459,7 +461,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     public void onBackPressed() {
         if (inputMenu.onBackPressed()) {
-            getActivity().finish();
+            ((BaseActivity)getActivity()).backToPreActivity();
             if (chatType == EaseConstant.CHATTYPE_CHATROOM) {
             	EMClient.getInstance().chatroomManager().leaveChatRoom(toChatUsername);
             }
@@ -822,12 +824,12 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         }
         File file = new File(filePath);
         if (file == null || !file.exists()) {
-            Toast.makeText(getActivity(), R.string.File_does_not_exist, 0).show();
+            Toast.makeText(getActivity(), R.string.File_does_not_exist, Toast.LENGTH_SHORT).show();
             return;
         }
         //大于10M不让发送
         if (file.length() > 10 * 1024 * 1024) {
-            Toast.makeText(getActivity(), R.string.The_file_is_not_greater_than_10_m, 0).show();
+            Toast.makeText(getActivity(), R.string.The_file_is_not_greater_than_10_m, Toast.LENGTH_SHORT).show();
             return;
         }
         sendFileMessage(filePath);
@@ -838,7 +840,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
      */
     protected void selectPicFromCamera() {
         if (!EaseCommonUtils.isExitsSdcard()) {
-            Toast.makeText(getActivity(), R.string.sd_card_does_not_exist, 0).show();
+            Toast.makeText(getActivity(), R.string.sd_card_does_not_exist, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -895,7 +897,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         if (chatType == EaseConstant.CHATTYPE_GROUP) {
             EMGroup group = EMClient.getInstance().groupManager().getGroup(toChatUsername);
             if (group == null) {
-                Toast.makeText(getActivity(), R.string.gorup_not_found, 0).show();
+                Toast.makeText(getActivity(), R.string.gorup_not_found, Toast.LENGTH_SHORT).show();
                 return;
             }
             if(chatFragmentHelper != null){
@@ -971,7 +973,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
                 public void run() {
                     if (toChatUsername.equals(groupId)) {
-                        Toast.makeText(getActivity(), R.string.you_are_group, 1).show();
+                        Toast.makeText(getActivity(), R.string.you_are_group, Toast.LENGTH_SHORT).show();
                         getActivity().finish();
                     }
                 }
@@ -984,7 +986,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             getActivity().runOnUiThread(new Runnable() {
                 public void run() {
                     if (toChatUsername.equals(groupId)) {
-                        Toast.makeText(getActivity(), R.string.the_current_group, 1).show();
+                        Toast.makeText(getActivity(), R.string.the_current_group, Toast.LENGTH_SHORT).show();
                         getActivity().finish();
                     }
                 }

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.tencent.qcloud.timchat.ui.GroupListActivity">
-    <cn.edu.jumy.oa.timchat.ui.customview.TemplateTitle
+    <TemplateTitle
         android:id="@+id/groupListTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

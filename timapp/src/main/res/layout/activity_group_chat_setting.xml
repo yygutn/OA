@@ -6,36 +6,36 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.tencent.qcloud.timchat.ui.GroupProfileActivity">
-    <cn.edu.jumy.oa.timchat.ui.customview.TemplateTitle
+    <TemplateTitle
         android:id="@+id/chat_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         app:titleText="@string/chat_setting_title"
         app:canBack="true" />
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/member"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:canNav="true"
         app:name="@string/chat_setting_group_member"/>
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/idText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:name="@string/chat_setting_group_id"/>
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/nameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:name="@string/chat_setting_group_name" />
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/groupIntro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:name="@string/chat_setting_group_introduce" />
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/addOpt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

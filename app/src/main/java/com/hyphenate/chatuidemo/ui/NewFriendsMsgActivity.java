@@ -23,6 +23,9 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.adapter.NewFriendsMsgAdapter;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.chatuidemo.domain.InviteMessage;
+import com.hyphenate.easeui.widget.EaseTitleBar;
+
+import cn.edu.jumy.jumyframework.StatusBarCompat;
 
 /**
  * 申请与通知
@@ -31,24 +34,34 @@ import com.hyphenate.chatuidemo.domain.InviteMessage;
 public class NewFriendsMsgActivity extends BaseActivity {
 	private ListView listView;
 
+	EaseTitleBar titleBar;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.em_activity_new_friends_msg);
 
-		listView = (ListView) findViewById(R.id.list);
-		InviteMessgeDao dao = new InviteMessgeDao(this);
-		List<InviteMessage> msgs = dao.getMessagesList();
-		//设置adapter
-		NewFriendsMsgAdapter adapter = new NewFriendsMsgAdapter(this, 1, msgs); 
-		listView.setAdapter(adapter);
-		dao.saveUnreadMessageCount(0);
-		
+		StatusBarCompat.compat(this,getResources().getColor(R.color.pressed));
+		try {
+			listView = (ListView) findViewById(R.id.list);
+			InviteMessgeDao dao = new InviteMessgeDao(this);
+			List<InviteMessage> msgs = dao.getMessagesList();
+			//设置adapter
+			NewFriendsMsgAdapter adapter = new NewFriendsMsgAdapter(this, 1, msgs);
+			listView.setAdapter(adapter);
+			dao.saveUnreadMessageCount(0);
+			titleBar = (EaseTitleBar)findViewById(R.id.title_bar);
+			titleBar.setLeftImageResource(R.drawable.ic_arrow_back_white);
+			titleBar.setLeftLayoutClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    backToPreActivity();
+                }
+            });
+			titleBar.setRightLayoutVisibility(View.VISIBLE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-
-	public void back(View view) {
-		finish();
-	}
-	
 	
 }

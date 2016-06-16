@@ -25,7 +25,7 @@ public class DemoDBManager {
     private DbOpenHelper dbHelper;
     
     private DemoDBManager(){
-        dbHelper = DbOpenHelper.getInstance(DemoApplication.getInstance().getApplicationContext());
+        dbHelper = DbOpenHelper.getInstance(DemoApplication.getApplicationContext());
     }
     
     public static synchronized DemoDBManager getInstance(){

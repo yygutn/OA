@@ -26,6 +26,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 /**
  * 注册页
  * 
@@ -87,7 +89,7 @@ public class RegisterActivity extends BaseActivity {
 								// 保存用户名
 								DemoHelper.getInstance().setCurrentUserName(username);
 								Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registered_successfully), 0).show();
-								finish();
+								AppManager.getInstance().finishCurActivity();
 							}
 						});
 					} catch (final HyphenateException e) {
@@ -117,7 +119,7 @@ public class RegisterActivity extends BaseActivity {
 	}
 
 	public void back(View view) {
-		finish();
+		AppManager.getInstance().finishCurActivity();
 	}
 
 }

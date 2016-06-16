@@ -6,30 +6,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.tencent.qcloud.timchat.ui.AboutActivity">
-    <cn.edu.jumy.oa.timchat.ui.customview.TemplateTitle
+    <TemplateTitle
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:canBack="true"
         app:titleText="@string/about_title" />
 
 
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/imsdk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:name="@string/about_imsdk" />
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/qalsdk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:name="@string/about_qalsdk" />
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/tlssdk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:name="@string/about_tlssdk" />
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/logLevel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

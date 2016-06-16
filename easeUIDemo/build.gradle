@@ -6,8 +6,7 @@ android {
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 22
-        multiDexEnabled true
+        targetSdkVersion 23
     }
 
     buildTypes {
@@ -22,7 +21,6 @@ dependencies {
     //红包
 //    compile project(':redpacketlibrary')
     compile project(':easeUI')
-    compile files('libs/android-support-multidex.jar')
     compile files('libs/bolts-tasks-1.4.0.jar')
     compile files('libs/parse-android-1.13.0.jar')
     compile files('libs/umeng-analytics-v5.2.4.jar')

@@ -31,9 +31,7 @@ package cn.edu.jumy.oa.UI;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -43,14 +41,16 @@ import android.widget.TextView;
 import com.hyphenate.chatuidemo.ui.LoginActivity;
 import com.hyphenate.chatuidemo.ui.SplashActivity;
 import com.squareup.picasso.Picasso;
-import com.tencent.qcloud.tlslibrary.activity.HostLoginActivity;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.LongClick;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.res.ColorRes;
 
+import cn.edu.jumy.jumyframework.AppManager;
+import cn.edu.jumy.jumyframework.StatusBarCompat;
 import cn.edu.jumy.oa.R;
 
 /**
@@ -71,9 +71,13 @@ public class VerifyActivity extends AppCompatActivity{
 
     String file = "";
 
+    @ColorRes(R.color.pressed)
+    int pressed;
 
     @AfterViews
     void start(){
+        StatusBarCompat.compat(this,pressed);
+        AppManager.getInstance().init(getApplicationContext());
         mContext = this;
         Picasso.with(mContext)
                 .load(R.drawable.fingerprint)

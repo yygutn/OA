@@ -24,7 +24,9 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.hyphenate.easeui.controller.EaseUI;
 
-public class EaseBaseActivity extends FragmentActivity {
+import cn.edu.jumy.jumyframework.BaseActivity;
+
+public class EaseBaseActivity extends BaseActivity {
 
     protected InputMethodManager inputMethodManager;
 
@@ -69,6 +71,6 @@ public class EaseBaseActivity extends FragmentActivity {
      * @param view
      */
     public void back(View view) {
-        finish();
+        backToPreActivity();
     }
 }

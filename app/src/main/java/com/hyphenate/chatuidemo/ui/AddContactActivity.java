@@ -21,6 +21,7 @@ import com.hyphenate.easeui.widget.EaseAlertDialog;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -31,6 +32,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import cn.edu.jumy.jumyframework.StatusBarCompat;
 
 public class AddContactActivity extends BaseActivity{
 	private EditText editText;
@@ -45,19 +48,24 @@ public class AddContactActivity extends BaseActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.em_activity_add_contact);
-		mTextView = (TextView) findViewById(R.id.add_list_friends);
-		
-		editText = (EditText) findViewById(R.id.edit_note);
-		String strAdd = getResources().getString(R.string.add_friend);
-		mTextView.setText(strAdd);
-		String strUserName = getResources().getString(R.string.user_name);
-		editText.setHint(strUserName);
-		searchedUserLayout = (LinearLayout) findViewById(R.id.ll_user);
-		nameText = (TextView) findViewById(R.id.name);
-		searchBtn = (Button) findViewById(R.id.search);
-		avatar = (ImageView) findViewById(R.id.avatar);
-		inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		try {
+			setContentView(R.layout.em_activity_add_contact);
+			StatusBarCompat.compat(this,getResources().getColor(R.color.pressed));
+			mTextView = (TextView) findViewById(R.id.add_list_friends);
+
+			editText = (EditText) findViewById(R.id.edit_note);
+			String strAdd = getResources().getString(R.string.add_friend);
+			mTextView.setText(strAdd);
+			String strUserName = getResources().getString(R.string.user_name);
+			editText.setHint(strUserName);
+			searchedUserLayout = (LinearLayout) findViewById(R.id.ll_user);
+			nameText = (TextView) findViewById(R.id.name);
+			searchBtn = (Button) findViewById(R.id.search);
+			avatar = (ImageView) findViewById(R.id.avatar);
+			inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		} catch (Resources.NotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -139,6 +147,6 @@ public class AddContactActivity extends BaseActivity{
 	}
 	
 	public void back(View v) {
-		finish();
+		backToPreActivity();
 	}
 }

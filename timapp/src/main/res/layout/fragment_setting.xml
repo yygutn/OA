@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/background">
 
-    <cn.edu.jumy.oa.timchat.ui.customview.TemplateTitle
+    <TemplateTitle
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:titleText="@string/home_setting_tab" />
@@ -20,7 +20,7 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal">
-        <cn.edu.jumy.oa.timchat.ui.customview.CircleImageView
+        <CircleImageView
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginLeft="20dp"
@@ -51,7 +51,7 @@
         android:layout_height="1px"
         android:background="@color/line" />
 
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:layout_marginTop="20dp"
         android:id="@+id/folder"
         android:layout_width="match_parent"
@@ -64,7 +64,7 @@
         android:layout_height="1px"
         android:background="@color/line" />
 
-    <!--<cn.edu.jumy.oa.timchat.ui.customview.LineControllerView-->
+    <!--<LineControllerView-->
         <!--android:id="@+id/nickName"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->
@@ -73,14 +73,14 @@
         <!--app:canNav="true"/>-->
 
     
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/friendConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:name="@string/setting_friend_confirm"
         app:content="@string/setting_friend_need_confirm"
         app:canNav="true"/>
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context="com.tencent.qcloud.timchat.ui.ProfileActivity">
 
-    <cn.edu.jumy.oa.timchat.ui.customview.TemplateTitle
+    <TemplateTitle
         android:id="@+id/profile_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <cn.edu.jumy.oa.timchat.ui.customview.CircleImageView
+        <CircleImageView
             android:id="@+id/avatar"
             android:layout_width="115dp"
             android:layout_height="115dp"
@@ -38,19 +38,19 @@
             android:textColor="@color/text_gray1"
             android:textSize="16sp" />
     </LinearLayout>
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:name="@string/profile_id"/>
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/remark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:canNav="true"
         app:name="@string/profile_remark"/>
-    <cn.edu.jumy.oa.timchat.ui.customview.LineControllerView
+    <LineControllerView
         android:id="@+id/group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

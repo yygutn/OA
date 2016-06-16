@@ -5,8 +5,8 @@ import android.content.Context;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
 
-import cn.edu.jumy.jumyframework.AppManager;
-import cn.edu.jumy.oa.HomeActivity;
+import cn.edu.jumy.oa.MainActivity;
+
 
 /**
  * Created by Jumy on 16/6/14 16:14.
@@ -20,7 +20,7 @@ public class NotificationClickHandler extends UmengNotificationClickHandler{
 
     @Override
     public void launchApp(Context context, UMessage uMessage) {
-        HomeActivity.getInstance().mTabHost.onTabChanged(HomeActivity.getInstance().mTextViewArray[0]);
+        MainActivity.getInstance().mTabHost.onTabChanged(MainActivity.getInstance().mTextViewArray[0]);
         super.launchApp(context, uMessage);
     }
 }

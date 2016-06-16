@@ -5,11 +5,10 @@
     android:background="@color/common_bg"
     android:orientation="vertical" xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.hyphenate.easeui.widget.EaseTitleBar
+    <cn.edu.jumy.oa.widget.customview.TemplateTitle
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:titleBarTitle="@string/set"
-        />
+        app:titleText="个人中心"/>
 
     <ScrollView
         android:layout_width="match_parent"
