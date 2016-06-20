@@ -28,13 +28,11 @@ import com.hyphenate.util.NetUtils;
 public class ConversationListFragment extends EaseConversationListFragment{
 
     private TextView errorText;
+    private View errorView;
 
     @Override
     protected void initView() {
         super.initView();
-        View errorView = (LinearLayout) View.inflate(getActivity(),R.layout.em_chat_neterror_item, null);
-        errorItemContainer.addView(errorView);
-        errorText = (TextView) errorView.findViewById(R.id.tv_connect_errormsg);
     }
     
     @Override
@@ -95,10 +93,14 @@ public class ConversationListFragment extends EaseConversationListFragment{
         });
         super.setUpView();
     }
-
     @Override
     protected void onConnectionDisconnected() {
         super.onConnectionDisconnected();
+        if (errorView == null) {
+            errorView = (LinearLayout) View.inflate(getActivity(), R.layout.em_chat_neterror_item, null);
+            errorItemContainer.addView(errorView);
+            errorText = (TextView) errorView.findViewById(R.id.tv_connect_errormsg);
+        }
         if (NetUtils.hasNetwork(getActivity())){
          errorText.setText(R.string.can_not_connect_chat_server_connection);
         } else {

@@ -1,5 +1,6 @@
 package cn.edu.jumy.jumyframework;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -36,6 +37,7 @@ import android.widget.Toast;
  * *****************************************************
  */
 public class BaseFragment extends Fragment {
+    protected Context mContext;
     private boolean DEBUG = true;
     public void showDebugLoge(CharSequence message){
         if (BuildConfig.DEBUG || DEBUG){

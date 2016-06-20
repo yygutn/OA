@@ -1,9 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:orientation="vertical">
 
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleBarBackground="@color/pressed"
+        app:titleBarTitle="个人中心" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="20dp"
+        android:background="@color/line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <cn.edu.jumy.oa.widget.customview.CircleImageView
+            android:id="@+id/setting_avatar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_person_normal" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/setting_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/text_gray1"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <cn.edu.jumy.oa.widget.customview.LineControllerView
+        android:layout_marginTop="30dp"
+        android:id="@+id/setting_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:name="所属单位: 省办公厅/信息中心"/>
+
+    <cn.edu.jumy.oa.widget.customview.LineControllerView
+        android:id="@+id/setting_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:name="设置中心"
+        app:canNav="true"/>
+
+
+    <TextView
+        android:id="@+id/setting_logout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textSize="18sp"
+        android:background="@drawable/shape_logout"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="退出登录"/>
 
 
 </LinearLayout>

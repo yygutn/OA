@@ -12,9 +12,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.ContextMenu;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,6 +28,7 @@ import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.Constant;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.chatuidemo.db.UserDao;
@@ -41,8 +40,8 @@ import com.hyphenate.chatuidemo.ui.ContactListFragment;
 import com.hyphenate.chatuidemo.ui.ConversationListFragment;
 import com.hyphenate.chatuidemo.ui.GroupsActivity;
 import com.hyphenate.chatuidemo.ui.LoginActivity;
-import com.hyphenate.chatuidemo.ui.SettingsFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.util.EMLog;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -50,6 +49,8 @@ import com.umeng.update.UmengUpdateAgent;
 import java.util.List;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
+import cn.edu.jumy.oa.bean.User;
+import cn.edu.jumy.oa.fragment.MineFragment_;
 import cn.edu.jumy.oa.fragment.NotifyFragment_;
 import cn.edu.jumy.oa.fragment.TaskFragment;
 import cn.edu.jumy.oa.widget.FragmentTabHost;
@@ -61,7 +62,7 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private LayoutInflater layoutInflater;
     public FragmentTabHost mTabHost;
-    private final Class fragmentArray[] = {NotifyFragment_.class, TaskFragment.class, ConversationListFragment.class, ContactListFragment.class, SettingsFragment.class};
+    private final Class fragmentArray[] = {NotifyFragment_.class, TaskFragment.class, ConversationListFragment.class, ContactListFragment.class, MineFragment_.class};
     private int mTitleArray[] = {R.string.home_notify_tab, R.string.home_work_tab, R.string.home_message_tab, R.string.home_contact_tab, R.string.home_me_tab};
     private int mImageViewArray[] = {R.drawable.tab_notify, R.drawable.tab_work, R.drawable.tab_message, R.drawable.tab_person, R.drawable.tab_settings};
     public String mTextViewArray[] = {"notify", "work","message",  "contact", "setting"};
@@ -125,6 +126,10 @@ public class MainActivity extends BaseActivity {
             return;
         }
         setContentView(R.layout.activity_home);
+
+        saveUserInfo();
+
+
         try {
             //6.0运行时权限处理，target api设成23时，demo这里做的比较简单，直接请求所有需要的运行时权限
             requestPermissions();
@@ -152,6 +157,14 @@ public class MainActivity extends BaseActivity {
 
 
         EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
+    }
+
+    /**
+     * 保存用户信息到数据库
+     */
+    private void saveUserInfo() {
+        DemoApplication.currentUserName = EMClient.getInstance().getCurrentUser();
+        User.saveUserInfo(null,EaseUserUtils.getUserInfo(DemoApplication.currentUserName));
     }
 
     private void initView() {

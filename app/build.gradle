@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
-apply plugin: 'realm-android'
+//apply plugin: 'realm-android'
 repositories {
     jcenter()
     flatDir {
@@ -56,13 +56,14 @@ android {
         incremental true
     }
     useLibrary 'org.apache.http.legacy'
-//    splits {
-//        abi {
-//            enable true
-//            reset()
-//            include 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'mips', 'x86', 'x86_64'
-//        }
-//    }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'mips', 'x86', 'x86_64'
+            universalApk true
+        }
+    }
 }
 
 apt {

@@ -10,7 +10,9 @@ import android.view.inputmethod.InputMethodManager;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
-public abstract class EaseBaseFragment extends Fragment{
+import cn.edu.jumy.jumyframework.BaseFragment;
+
+public abstract class EaseBaseFragment extends BaseFragment{
     protected EaseTitleBar titleBar;
     protected InputMethodManager inputMethodManager;
 

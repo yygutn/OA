@@ -31,9 +31,11 @@
 
     <TextView
         android:id="@+id/tabUnread"
-        android:layout_width="6dp"
-        android:layout_height="6dp"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
         android:gravity="center"
+        android:textSize="6sp"
+        android:textColor="@color/white"
         android:background="@drawable/point1"
         android:visibility="gone"
         android:layout_toRightOf="@id/tabIndicator"/>

@@ -45,6 +45,7 @@ public class UserProfileManager {
 		ParseManager.getInstance().onInit(context);
 		syncContactInfosListeners = new ArrayList<DataSyncListener>();
 		sdkInited = true;
+		appContext = context.getApplicationContext();
 		return true;
 	}
 

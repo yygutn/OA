@@ -5,7 +5,6 @@ import android.content.Context;
 import java.io.Serializable;
 
 import cn.edu.jumy.oa.widget.datepicker.view.ContentItemViewAbs;
-import io.realm.RealmObject;
 
 /**
  * Created by Jumy on 16/5/25 15:04.
@@ -35,7 +34,7 @@ import io.realm.RealmObject;
  * #                                                   #
  * *****************************************************
  */
-public class Card extends RealmObject implements Serializable{
+public class Card implements Serializable{
     private String title;
     private String message;
     private Boolean isRead;

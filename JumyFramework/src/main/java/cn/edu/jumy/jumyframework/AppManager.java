@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
-
 import java.util.Stack;
 
 /**
@@ -104,6 +103,7 @@ public class AppManager {
      * 结束指定的Activity
      */
     public void finishActivity(Activity activity) {
+        showDebugLog("Finishing " + activity.getClass().getSimpleName());
         showDebugLog("Before finish, the Stack size is :" + AppManager.getStackSize());
         if (activity != null) {
             finishActivity(activity.getClass());
@@ -118,6 +118,12 @@ public class AppManager {
      */
     public void finishActivity(Class<?> cls) {
         try {
+//            for (Iterator iterator = mActivityStack.iterator();iterator.hasNext();){
+//                Activity activity = (Activity) iterator.next();
+//                if (activity.getClass().getSimpleName().equals(cls.getSimpleName())){
+//                    removeActivity(activity);
+//                }
+//            }
             for (Activity activity : mActivityStack) {
                 if (activity.getClass().equals(cls)) {
                     removeActivity(activity);
@@ -153,8 +159,7 @@ public class AppManager {
     }
 
     private void showDebugLog(CharSequence message) {
-        Log.w("Jumy",BuildConfig.DEBUG+"");
-        if (BuildConfig.DEBUG) {
+        if (BaseActivity.DEBUG) {
             Log.w("AppManager", message.toString());
         }
     }

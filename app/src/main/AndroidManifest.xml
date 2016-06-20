@@ -11,37 +11,6 @@
         android:theme="@style/AppTheme.NoActionBar">
 
 
-
-        <activity
-            android:name=".UI.ApprovalActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".UI.CalendarActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".UI.SendFileWebActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".UI.MyFileActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".UI.ReceiveFileActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".UI.TempActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".UI.AuditActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".UI.FromMeActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".UI.MeetingSendActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".UI.StudyOnlineActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.VerifyActivity_"
             android:theme="@style/AppTheme.NoActionBar">
@@ -51,23 +20,60 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".UI.WaitingForApprovalActivity_"
+            android:name=".UI.ApprovalActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.CalendarActivity_"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.MeetingCardActivity_"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".UI.FileSentActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".UI.MeetingSentActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".UI.SignUpActivity_"
+        <activity android:name=".UI.SettingActivity_"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".UI.web.SendFileWebActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.web.MyFileActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.web.ReceiveFileActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.web.TempActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.web.AuditActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.web.FromMeActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.web.MeetingSendActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.web.StudyOnlineActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.web.WaitingForApprovalActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.web.FileSentActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.web.MeetingSentActivity_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UI.web.SignUpActivity_"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity android:name=".UI.TaskItem.DocumentCabinetActivity_"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".UI.TaskItem.DocumentDetailsActivity_"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
 
 
@@ -128,13 +134,6 @@
         <activity
             android:name="com.hyphenate.chatuidemo.ui.ChatActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustResize"></activity>
-        <!-- 聊天页面 -->
-        <activity
-            android:name="com.hyphenate.applib.ui.ChatActivity"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustResize"></activity>

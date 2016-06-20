@@ -18,17 +18,16 @@ import java.util.List;
 import cn.edu.jumy.jumyframework.BaseFragment;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.ApprovalActivity_;
-import cn.edu.jumy.oa.UI.AuditActivity_;
 import cn.edu.jumy.oa.UI.CalendarActivity_;
-import cn.edu.jumy.oa.UI.FileSentActivity_;
 import cn.edu.jumy.oa.UI.MeetingCardActivity_;
-import cn.edu.jumy.oa.UI.MeetingSendActivity_;
-import cn.edu.jumy.oa.UI.MeetingSentActivity_;
-import cn.edu.jumy.oa.UI.ReceiveFileActivity_;
-import cn.edu.jumy.oa.UI.SendFileWebActivity_;
-import cn.edu.jumy.oa.UI.StudyOnlineActivity_;
-import cn.edu.jumy.oa.UI.TempActivity_;
 import cn.edu.jumy.oa.UI.VerifyActivity_;
+import cn.edu.jumy.oa.UI.web.AuditActivity_;
+import cn.edu.jumy.oa.UI.web.FileSentActivity_;
+import cn.edu.jumy.oa.UI.web.MeetingSendActivity_;
+import cn.edu.jumy.oa.UI.web.MeetingSentActivity_;
+import cn.edu.jumy.oa.UI.web.ReceiveFileActivity_;
+import cn.edu.jumy.oa.UI.web.SendFileWebActivity_;
+import cn.edu.jumy.oa.UI.web.StudyOnlineActivity_;
 import cn.edu.jumy.oa.widget.dragrecyclerview.adapter.RecyclerAdapter;
 import cn.edu.jumy.oa.widget.dragrecyclerview.common.DividerGridItemDecoration;
 import cn.edu.jumy.oa.widget.dragrecyclerview.entity.Item;
@@ -86,7 +85,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
             results.add(new Item(8, "会议发送", R.drawable.task_meet_send));
             results.add(new Item(9, "会议审核", R.drawable.task_meet_approval));
             //add 内部办公
-            results.add(new Item(11, "内部办公", R.drawable.task_internal_office));
+//            results.add(new Item(11, "内部办公", R.drawable.task_internal_office));
             results.add(new Item(0, "审批", R.drawable.task_shenpi));
             results.add(new Item(6, "文件柜", R.drawable.task_folder));
             results.add(new Item(10, "日程管理", R.drawable.task_schedule_management));
@@ -95,7 +94,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
             results.add(new Item(7, "在线学习", R.drawable.task_learn_online));
             results.add(new Item(13, "已发送公文", R.drawable.task_file_send));
             results.add(new Item(14,"已发送会议",R.drawable.task_meet_sent));
-            results.add(new Item(1, "签到", R.drawable.task_location));
+//            results.add(new Item(1, "签到", R.drawable.task_location));
             results.add(new Item(2, "加密邮件", R.drawable.task_mail));
         }
     }
@@ -144,10 +143,10 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                         break;
                     }
                     case 1: {//签到
-                        bundle = new Bundle();
-                        bundle.putString("title", "签到");
-                        bundle.putString("img", "file:///android_asset/img/img_2225.png");
-                        TempActivity_.intent(getActivity()).extra("temp", bundle).start();
+//                        bundle = new Bundle();
+//                        bundle.putString("title", "签到");
+//                        bundle.putString("img", "file:///android_asset/img/img_2225.png");
+//                        TempActivity_.intent(getActivity()).extra("temp", bundle).start();
                         break;
                     }
                     case 2: {//邮件

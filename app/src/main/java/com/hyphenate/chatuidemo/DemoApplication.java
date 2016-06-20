@@ -19,6 +19,7 @@ import android.support.multidex.MultiDexApplication;
 
 /**
  * {@link com.hyphenate.easeui.widget.EaseChatExtendMenu}
+ * {@link com.hyphenate.easeui.widget.chatrow.EaseChatRow}
  */
 
 public class DemoApplication{
@@ -29,9 +30,10 @@ public class DemoApplication{
 	public final String PREF_USERNAME = "username";
 	
 	/**
-	 * 当前用户nickname,为了苹果推送不是userid而是昵称
+	 * 当前用户nickname,为了苹果推送,不是userid而是昵称
 	 */
 	public static String currentUserNick = "";
+	public static String currentUserName = "";
 
 	public void init(MultiDexApplication application) {
         applicationContext = application;

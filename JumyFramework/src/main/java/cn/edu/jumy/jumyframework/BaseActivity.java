@@ -22,7 +22,7 @@ import org.androidannotations.annotations.EActivity;
 @EActivity
 public class BaseActivity extends AppCompatActivity {
 
-    private boolean DEBUG = true;
+    public static boolean DEBUG = true;
     public Context mContext;
 
     @Override

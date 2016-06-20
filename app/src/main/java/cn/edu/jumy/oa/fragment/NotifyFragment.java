@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.UI.SignUpActivity_;
+import cn.edu.jumy.oa.UI.web.SignUpActivity_;
 import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
 import cn.edu.jumy.oa.bean.Card;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;

@@ -10,9 +10,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-
-import cn.edu.jumy.jumyframework.BaseActivity;
-
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
@@ -21,7 +18,11 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.UI.web.FromMeActivity_;
+import cn.edu.jumy.oa.UI.web.TempActivity_;
+import cn.edu.jumy.oa.UI.web.WaitingForApprovalActivity_;
 import cn.edu.jumy.oa.widget.dragrecyclerview.adapter.RecyclerAdapter;
 import cn.edu.jumy.oa.widget.dragrecyclerview.common.DividerGridItemDecoration;
 import cn.edu.jumy.oa.widget.dragrecyclerview.entity.Item;

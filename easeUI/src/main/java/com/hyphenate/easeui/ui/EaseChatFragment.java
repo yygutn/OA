@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -58,6 +59,7 @@ import com.hyphenate.util.PathUtil;
 import java.io.File;
 import java.util.List;
 
+import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
 
 /**
@@ -214,13 +216,12 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             onConversationInit();
             onMessageListInit();
         }
-
         // 设置标题栏点击事件
         titleBar.setLeftLayoutClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                getActivity().finish();
+                ((BaseActivity)getActivity()).backToPreActivity();
             }
         });
         titleBar.setRightLayoutClickListener(new OnClickListener() {

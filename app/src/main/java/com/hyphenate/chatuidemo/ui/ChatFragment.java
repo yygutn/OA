@@ -1,10 +1,5 @@
 package com.hyphenate.chatuidemo.ui;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.List;
-import java.util.Map;
-
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
@@ -23,14 +18,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
-//import com.easemob.redpacketui.RedPacketConstant;
-//import com.easemob.redpacketui.utils.RedPacketUtil;
-//import com.easemob.redpacketui.widget.ChatRowRedPacket;
-//import com.easemob.redpacketui.widget.ChatRowRedPacketAck;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.Constant;
@@ -46,8 +36,17 @@ import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.hyphenate.exceptions.HyphenateException;
-import com.hyphenate.util.EasyUtils;
 import com.hyphenate.util.PathUtil;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.List;
+import java.util.Map;
+
+//import com.easemob.redpacketui.RedPacketConstant;
+//import com.easemob.redpacketui.utils.RedPacketUtil;
+//import com.easemob.redpacketui.widget.ChatRowRedPacket;
+//import com.easemob.redpacketui.widget.ChatRowRedPacketAck;
 
 public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHelper{
 
@@ -102,11 +101,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 
             @Override
             public void onClick(View v) {
-                if (EasyUtils.isSingleActivity(getActivity())) {
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);
-                }
-                getActivity().finish();
+                ((cn.edu.jumy.jumyframework.BaseActivity)getActivity()).backToPreActivity();
             }
         });
         ((EaseEmojiconMenu)inputMenu.getEmojiconMenu()).addEmojiconGroup(EmojiconExampleGroupData.getData());

@@ -16,8 +16,6 @@ import java.util.concurrent.TimeUnit;
 import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.CrashHandler;
 import cn.edu.jumy.oa.bean.NotificationClickHandler;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import okhttp3.OkHttpClient;
 
 
@@ -30,6 +28,7 @@ public class MyApplication extends MultiDexApplication {
 
     private static Context context;
     public static final String API_URL = "";
+    public static String DEVICE_ID = "";
     @Override
     public void onCreate() {
         super.onCreate();
@@ -41,14 +40,13 @@ public class MyApplication extends MultiDexApplication {
         //Umeng Push init start
         PushAgent.getInstance(context).enable(new IUmengRegisterCallback() {
             @Override
-            public void onRegistered(String registrationId) {
-                Log.e(TAG, "onRegistered: "+registrationId);
+            public void onRegistered(String DeviceId) {
+                DEVICE_ID = DeviceId;
+                Log.e(TAG, "onRegistered: "+DeviceId);
             }
         });
         PushAgent.getInstance(context).setNotificationClickHandler(new NotificationClickHandler());
         //Umeng Push init end
-        RealmConfiguration config = new RealmConfiguration.Builder(context).build();
-        Realm.setDefaultConfiguration(config);
         //HX
         DemoApplication.getInstance().init(this);
         //end

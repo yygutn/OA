@@ -71,14 +71,14 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	 */
 	private TextView textview1, textview2;
 
-	private LinearLayout blacklistContainer;
+//	private LinearLayout blacklistContainer;
 	
-	private LinearLayout userProfileContainer;
+//	private LinearLayout userProfileContainer;
 	
 	/**
 	 * 退出按钮
 	 */
-	private Button logoutBtn;
+//	private Button logoutBtn;
 
 	private RelativeLayout rl_switch_chatroom_leave;
 	
@@ -89,11 +89,11 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	/**
 	 * 诊断
 	 */
-	private LinearLayout llDiagnose;
+//	private LinearLayout llDiagnose;
 	/**
 	 * iOS离线推送昵称
 	 */
-	private LinearLayout pushNick;
+//	private LinearLayout pushNick;
 	
     private EaseSwitchButton notifiSwitch;
     private EaseSwitchButton soundSwitch;
@@ -133,37 +133,37 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		switch_delete_msg_when_exit_group = (EaseSwitchButton) getView().findViewById(R.id.switch_delete_msg_when_exit_group);
 		switch_auto_accept_group_invitation = (EaseSwitchButton) getView().findViewById(R.id.switch_auto_accept_group_invitation);
 		switch_adaptive_video_encode = (EaseSwitchButton) getView().findViewById(R.id.switch_adaptive_video_encode);
-		LinearLayout llChange = (LinearLayout) getView().findViewById(R.id.ll_change);
-		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
-		if(!TextUtils.isEmpty(EMClient.getInstance().getCurrentUser())){
-			logoutBtn.setText(getString(R.string.button_logout) + "(" + EMClient.getInstance().getCurrentUser() + ")");
-		}
+//		LinearLayout llChange = (LinearLayout) getView().findViewById(R.id.ll_change);
+//		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
+//		if(!TextUtils.isEmpty(EMClient.getInstance().getCurrentUser())){
+//			logoutBtn.setText(getString(R.string.button_logout) + "(" + EMClient.getInstance().getCurrentUser() + ")");
+//		}
 
 		textview1 = (TextView) getView().findViewById(R.id.textview1);
 		textview2 = (TextView) getView().findViewById(R.id.textview2);
 		
-		blacklistContainer = (LinearLayout) getView().findViewById(R.id.ll_black_list);
-		userProfileContainer = (LinearLayout) getView().findViewById(R.id.ll_user_profile);
-		llDiagnose=(LinearLayout) getView().findViewById(R.id.ll_diagnose);
-		pushNick=(LinearLayout) getView().findViewById(R.id.ll_set_push_nick);
+//		blacklistContainer = (LinearLayout) getView().findViewById(R.id.ll_black_list);
+//		userProfileContainer = (LinearLayout) getView().findViewById(R.id.ll_user_profile);
+//		llDiagnose=(LinearLayout) getView().findViewById(R.id.ll_diagnose);
+//		pushNick=(LinearLayout) getView().findViewById(R.id.ll_set_push_nick);
 		
 		settingsModel = DemoHelper.getInstance().getModel();
 		chatOptions = EMClient.getInstance().getOptions();
 		
-		blacklistContainer.setOnClickListener(this);
-		userProfileContainer.setOnClickListener(this);
+//		blacklistContainer.setOnClickListener(this);
+//		userProfileContainer.setOnClickListener(this);
 		rl_switch_notification.setOnClickListener(this);
 		rl_switch_sound.setOnClickListener(this);
 		rl_switch_vibrate.setOnClickListener(this);
 		rl_switch_speaker.setOnClickListener(this);
-		logoutBtn.setOnClickListener(this);
-		llDiagnose.setOnClickListener(this);
-		pushNick.setOnClickListener(this);
+//		logoutBtn.setOnClickListener(this);
+//		llDiagnose.setOnClickListener(this);
+//		pushNick.setOnClickListener(this);
 		rl_switch_chatroom_leave.setOnClickListener(this);
 		rl_switch_delete_msg_when_exit_group.setOnClickListener(this);
 		rl_switch_auto_accept_group_invitation.setOnClickListener(this);
 		rl_switch_adaptive_video_encode.setOnClickListener(this);
-		llChange.setOnClickListener(this);
+//		llChange.setOnClickListener(this);
 		// 震动和声音总开关，来消息时，是否允许此开关打开
 		// the vibrate and sound notification are allowed or not?
 		if (settingsModel.getSettingMsgNotification()) {
@@ -229,9 +229,10 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		int i = v.getId();
-		if (i == R.id.ll_change) {//				RedPacketUtil.startChangeActivity(getActivity());
-
-		} else if (i == R.id.rl_switch_notification) {
+//		if (i == R.id.ll_change) {//				RedPacketUtil.startChangeActivity(getActivity());
+//
+//		} else
+        if (i == R.id.rl_switch_notification) {
 			if (notifiSwitch.isSwitchOpen()) {
 				notifiSwitch.closeSwitch();
 				rl_switch_sound.setVisibility(View.GONE);
@@ -321,24 +322,28 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(true);
 			}
 
-		} else if (i == R.id.btn_logout) {
-			logout();
-
-		} else if (i == R.id.ll_black_list) {
-			startActivity(new Intent(getActivity(), BlacklistActivity.class));
-
-		} else if (i == R.id.ll_diagnose) {
-			startActivity(new Intent(getActivity(), DiagnoseActivity.class));
-
-		} else if (i == R.id.ll_set_push_nick) {
-			startActivity(new Intent(getActivity(), OfflinePushNickActivity.class));
-
-		} else if (i == R.id.ll_user_profile) {
-			startActivity(new Intent(getActivity(), UserProfileActivity.class).putExtra("setting", true)
-					.putExtra("username", EMClient.getInstance().getCurrentUser()));
-
-		} else {
 		}
+//		else if (i == R.id.btn_logout) {
+//			logout();
+//
+//		}
+//		else if (i == R.id.ll_black_list) {
+//			startActivity(new Intent(getActivity(), BlacklistActivity.class));
+//
+//		}
+//        else if (i == R.id.ll_diagnose) {
+//			startActivity(new Intent(getActivity(), DiagnoseActivity.class));
+//
+//		} else if (i == R.id.ll_set_push_nick) {
+//			startActivity(new Intent(getActivity(), OfflinePushNickActivity.class));
+//
+//		}
+//        else if (i == R.id.ll_user_profile) {
+//			startActivity(new Intent(getActivity(), UserProfileActivity.class).putExtra("setting", true)
+//					.putExtra("username", EMClient.getInstance().getCurrentUser()));
+//
+//		} else {
+//		}
 		
 	}
 

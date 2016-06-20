@@ -52,6 +52,7 @@ import org.androidannotations.annotations.res.ColorRes;
 import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.StatusBarCompat;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.UI.web.MyFileActivity_;
 
 /**
  * 校验指纹
@@ -77,7 +78,6 @@ public class VerifyActivity extends AppCompatActivity{
     @AfterViews
     void start(){
         StatusBarCompat.compat(this,pressed);
-        AppManager.getInstance().init(getApplicationContext());
         mContext = this;
         Picasso.with(mContext)
                 .load(R.drawable.fingerprint)
