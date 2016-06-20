@@ -98,6 +98,7 @@ public class DocumentCabinetActivity extends BaseActivity implements OnItemClick
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         showDebugLogw("点击"+position);
+        DocumentDetailsActivity_.intent(mContext).start();
     }
 
     @Override

@@ -31,6 +31,7 @@ public class BaseActivity extends AppCompatActivity {
         //设置为强制竖屏，不使用横屏显示
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         addToStack();
+        mContext = this;
     }
     @AfterViews
     public void initStatusBarColor(){

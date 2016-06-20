@@ -19,6 +19,7 @@
             app:titleTextColor="@color/white" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/document_details_level"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right|center_vertical"
@@ -29,6 +30,7 @@
             android:textStyle="bold" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/document_details_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -39,6 +41,7 @@
             android:textStyle="bold" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/document_details_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right|center_vertical"
@@ -47,14 +50,16 @@
             android:textColor="@color/black" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/document_details_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left|center_vertical"
-            android:padding="15dp"
+            android:paddingLeft="15dp"
             android:text="123字[2016]321号"
             android:textColor="@color/black" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/document_details_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -63,14 +68,16 @@
             android:textColor="@color/black" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/document_details_content_head"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left|center_vertical"
-            android:padding="15dp"
+            android:paddingLeft="15dp"
             android:text="杭州市人大常委:"
             android:textColor="@color/black" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/document_details_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"
@@ -78,6 +85,7 @@
             android:textColor="@color/black" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/document_details_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right|center_vertical"
@@ -86,6 +94,7 @@
             android:textColor="@color/black" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/document_details_other"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left|center_vertical"
@@ -95,6 +104,7 @@
 
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/document_details_download"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
