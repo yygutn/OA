@@ -189,7 +189,7 @@ public class PermissionsManager {
   /**
    * This method will request all the permissions declared in your application manifest
    * for the specified {@link PermissionsResultAction}. The purpose of this method is to enable
-   * all permissions to be requested at one shot. The PermissionsResultAction is used to notify
+   * all permissions to be requested at one shot. The PermissionsResultAction is used to document
    * you of the user allowing or denying each permission. The Activity and PermissionsResultAction
    * parameters are both annotated Nullable, but this method will not work if the Activity
    * is null. It is only annotated Nullable as a courtesy to prevent crashes in the case
@@ -198,7 +198,7 @@ public class PermissionsManager {
    * if you provide a null PermissionsResultAction.
    *
    * @param activity the Activity necessary to request and check permissions.
-   * @param action   the PermissionsResultAction used to notify you of permissions being accepted.
+   * @param action   the PermissionsResultAction used to document you of permissions being accepted.
    */
   @SuppressWarnings("unused")
   public synchronized void requestAllManifestPermissionsIfNecessary(final @Nullable Activity activity,
@@ -222,7 +222,7 @@ public class PermissionsManager {
    *
    * @param activity    the activity necessary to request the permissions.
    * @param permissions the list of permissions to request for the {@link PermissionsResultAction}.
-   * @param action      the PermissionsResultAction to notify when the permissions are granted or denied.
+   * @param action      the PermissionsResultAction to document when the permissions are granted or denied.
    */
   @SuppressWarnings("unused")
   public synchronized void requestPermissionsIfNecessaryForResult(@Nullable Activity activity,
@@ -258,7 +258,7 @@ public class PermissionsManager {
    *
    * @param fragment    the fragment necessary to request the permissions.
    * @param permissions the list of permissions to request for the {@link PermissionsResultAction}.
-   * @param action      the PermissionsResultAction to notify when the permissions are granted or denied.
+   * @param action      the PermissionsResultAction to document when the permissions are granted or denied.
    */
   @SuppressWarnings("unused")
   public synchronized void requestPermissionsIfNecessaryForResult(@NonNull Fragment fragment,
@@ -290,7 +290,7 @@ public class PermissionsManager {
    * Activity callback onRequestPermissionsResult() with the variables passed to that method. If
    * you are passing a Fragment to make the permissions request, then you should call this in
    * the {@link Fragment#onRequestPermissionsResult(int, String[], int[])} method.
-   * It will notify all the pending PermissionsResultAction objects currently
+   * It will document all the pending PermissionsResultAction objects currently
    * in the queue, and will remove the permissions request from the list of pending requests.
    *
    * @param permissions the permissions that have changed.

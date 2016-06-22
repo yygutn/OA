@@ -162,7 +162,7 @@ public class ImageCache {
 				protected void entryRemoved(boolean evicted, String key,
 						BitmapDrawable oldValue, BitmapDrawable newValue) {
 					if (RecyclingBitmapDrawable.class.isInstance(oldValue)) {
-						// The removed entry is a recycling drawable, so notify
+						// The removed entry is a recycling drawable, so document
 						// it
 						// that it has been removed from the memory cache
 						((RecyclingBitmapDrawable) oldValue).setIsCached(false);
@@ -211,7 +211,7 @@ public class ImageCache {
 		// Add to memory cache
 		if (mMemoryCache != null) {
 			if (RecyclingBitmapDrawable.class.isInstance(value)) {
-				// The removed entry is a recycling drawable, so notify it
+				// The removed entry is a recycling drawable, so document it
 				// that it has been added into the memory cache
 				((RecyclingBitmapDrawable) value).setIsCached(true);
 			}

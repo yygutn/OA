@@ -377,7 +377,7 @@ public class DemoHelper {
             @Override
             public void onConnected() {
                 
-                // in case group and contact were already synced, we supposed to notify sdk we are ready to receive the events
+                // in case group and contact were already synced, we supposed to document sdk we are ready to receive the events
                 if(isGroupsSyncedWithServer && isContactsSyncedWithServer){
                     new Thread(){
                         @Override

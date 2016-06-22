@@ -9,6 +9,9 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 
 import com.fsck.k9.activity.Accounts;
 
@@ -20,6 +23,7 @@ import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.ApprovalActivity_;
 import cn.edu.jumy.oa.UI.CalendarActivity_;
 import cn.edu.jumy.oa.UI.MeetingCardActivity_;
+import cn.edu.jumy.oa.UI.TaskItem.DocumentReadActivity_;
 import cn.edu.jumy.oa.UI.VerifyActivity_;
 import cn.edu.jumy.oa.UI.web.AuditActivity_;
 import cn.edu.jumy.oa.UI.web.FileSentActivity_;
@@ -71,9 +75,10 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = getActivity();
         ////////////////////////////////////////////////////////
         /////////初始化数据，如果缓存中有就使用缓存中的
-        ArrayList<Item> items = (ArrayList<Item>) ACache.get(getActivity()).getAsObject("task_items");
+        ArrayList<Item> items = (ArrayList<Item>) ACache.get(mContext).getAsObject("task_items");
         if (items != null && items.size() > 0 && false) {
             showDebugLoge("from local cache");
             results.addAll(items);
@@ -103,7 +108,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return LayoutInflater.from(getActivity()).inflate(R.layout.fragment_task, null);
+        return LayoutInflater.from(mContext).inflate(R.layout.fragment_task, null);
     }
 
     private RecyclerView recyclerView;
@@ -117,8 +122,8 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.recView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
-        recyclerView.addItemDecoration(new DividerGridItemDecoration(getActivity()));
+        recyclerView.setLayoutManager(new GridLayoutManager(mContext, 4));
+        recyclerView.addItemDecoration(new DividerGridItemDecoration(mContext));
 
         itemTouchHelper = new ItemTouchHelper(new MyItemTouchCallback(adapter).setOnDragListener(this));
         itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -128,7 +133,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
             public void onLongClick(RecyclerView.ViewHolder vh) {
                 if (vh.getLayoutPosition() != results.size() - 1) {
                     itemTouchHelper.startDrag(vh);
-                    VibratorUtil.Vibrate(getActivity(), 70);   //震动70ms
+                    VibratorUtil.Vibrate(mContext, 70);   //震动70ms
                 }
             }
 
@@ -139,53 +144,54 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
 //                showToast(item.getId() + " " + item.getName());
                 switch (item.getId()) {
                     case 0: {//审批
-                        ApprovalActivity_.intent(getActivity()).start();
+                        ApprovalActivity_.intent(mContext).start();
                         break;
                     }
                     case 1: {//签到
 //                        bundle = new Bundle();
 //                        bundle.putString("title", "签到");
 //                        bundle.putString("img", "file:///android_asset/img/img_2225.png");
-//                        TempActivity_.intent(getActivity()).extra("temp", bundle).start();
+//                        TempActivity_.intent(mContext).extra("temp", bundle).start();
                         break;
                     }
                     case 2: {//邮件
-                        startActivity(new Intent(getActivity(), Accounts.class));
+                        startActivity(new Intent(mContext, Accounts.class));
                         break;
                     }
                     case 3: {//会议
                         // TODO: 16/6/1 修改为纯卡片展示，显示所有会议卡片，按照时间排序
-                        MeetingCardActivity_.intent(getActivity()).start();
+                        MeetingCardActivity_.intent(mContext).start();
                         break;
                     }
                     case 4: {//收文 公文阅读
-                        ReceiveFileActivity_.intent(getActivity()).start();
+//                        ReceiveFileActivity_.intent(mContext).start();
+                        DocumentReadActivity_.intent(mContext).start();
                         break;
                     }
                     case 5: {//发文 公文发布
-                        SendFileWebActivity_.intent(getActivity()).start();
+                        SendFileWebActivity_.intent(mContext).start();
                         break;
                     }
                     case 6: {//文件柜
                         bundle = new Bundle();
                         bundle.putString("file", "file");
-                        VerifyActivity_.intent(getActivity()).extra("file", bundle).start();
+                        VerifyActivity_.intent(mContext).extra("file", bundle).start();
                         break;
                     }
                     case 7: {//在线学习
-                        StudyOnlineActivity_.intent(getActivity()).start();
+                        StudyOnlineActivity_.intent(mContext).start();
                         break;
                     }
                     case 8: {//会议发送
-                        MeetingSendActivity_.intent(getActivity()).start();
+                        MeetingSendActivity_.intent(mContext).start();
                         break;
                     }
                     case 9: {//会议审核
-                        AuditActivity_.intent(getActivity()).start();
+                        AuditActivity_.intent(mContext).start();
                         break;
                     }
                     case 10: {//日程管理
-                        CalendarActivity_.intent(getActivity()).start();
+                        CalendarActivity_.intent(mContext).start();
                         break;
                     }
                     case 11: {//内部办公
@@ -197,11 +203,11 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                         break;
                     }
                     case 13:{//已发送公文
-                        FileSentActivity_.intent(getActivity()).start();
+                        FileSentActivity_.intent(mContext).start();
                         break;
                     }
                     case 14:{
-                        MeetingSentActivity_.intent(getActivity()).start();
+                        MeetingSentActivity_.intent(mContext).start();
                         break;
                     }
                     default:
@@ -214,6 +220,6 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
     @Override
     public void onFinishDrag() {
         //存入缓存
-        ACache.get(getActivity()).put("task_items", (ArrayList<Item>) results);
+        ACache.get(mContext).put("task_items", (ArrayList<Item>) results);
     }
 }

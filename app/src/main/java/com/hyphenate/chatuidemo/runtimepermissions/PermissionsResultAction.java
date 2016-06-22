@@ -30,7 +30,7 @@ import java.util.Set;
  * creating an anonymous instance of it and passing that instance to the
  * requestPermissionsIfNecessaryForResult method. The result will be sent back to you as
  * either onGranted (all permissions have been granted), or onDenied (a required permission
- * has been denied). Ideally you put your functionality in the onGranted method and notify
+ * has been denied). Ideally you put your functionality in the onGranted method and document
  * the user what won't work in the onDenied method.
  */
 public abstract class PermissionsResultAction {

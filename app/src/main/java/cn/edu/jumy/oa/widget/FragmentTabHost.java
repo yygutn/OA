@@ -310,7 +310,7 @@ public class FragmentTabHost extends TabHost
             }
             if (mLastTab != null) {
                 if (mLastTab.fragment != null) {
-                    ft.detach(mLastTab.fragment);
+                    ft.hide(mLastTab.fragment);
                 }
             }
             if (newTab != null) {
@@ -319,7 +319,7 @@ public class FragmentTabHost extends TabHost
                             newTab.clss.getName(), newTab.args);
                     ft.add(mContainerId, newTab.fragment, newTab.tag);
                 } else {
-                    ft.attach(newTab.fragment);
+                    ft.show(newTab.fragment);
                 }
             }
 

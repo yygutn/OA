@@ -8,12 +8,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/JumyTheme">
 
 
         <activity
             android:name=".UI.VerifyActivity_"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/JumyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,58 +22,60 @@
         </activity>
 
         <activity android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/JumyTheme"/>
         <activity
             android:name=".UI.ApprovalActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.CalendarActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.MeetingCardActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JumyTheme" />
         <activity android:name=".UI.SettingActivity_"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/JumyTheme"/>
         <activity
             android:name=".UI.web.SendFileWebActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.MyFileActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.ReceiveFileActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.TempActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.AuditActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.FromMeActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.MeetingSendActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.StudyOnlineActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.WaitingForApprovalActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.FileSentActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.MeetingSentActivity_"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/JumyTheme" />
         <activity android:name=".UI.web.SignUpActivity_"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/JumyTheme"/>
 
         <activity android:name=".UI.TaskItem.DocumentCabinetActivity_"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/JumyTheme"/>
         <activity android:name=".UI.TaskItem.DocumentDetailsActivity_"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/JumyTheme"/>
+        <activity android:name=".UI.TaskItem.DocumentReadActivity_"
+            android:theme="@style/JumyTheme" />
 
 
 

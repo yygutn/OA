@@ -8,4 +8,9 @@
     <string name="home_notify_tab">通告</string>
     <string name="home_work_tab">政务</string>
     <string name="home_me_tab">我的</string>
+
+    <!--Document Activity Tab-->
+    <string name="document_unread">未签收</string>
+    <string name="document_read">已签收</string>
+    <string name="document_all">全部</string>
 </resources>

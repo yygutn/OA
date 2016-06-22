@@ -48,6 +48,7 @@ import com.umeng.update.UmengUpdateAgent;
 
 import java.util.List;
 
+import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.bean.User;
 import cn.edu.jumy.oa.fragment.MineFragment_;
@@ -99,6 +100,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppManager.getInstance().finishAllBesideTop();
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String packageName = getPackageName();
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);

@@ -52,6 +52,7 @@ import org.androidannotations.annotations.res.ColorRes;
 import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.StatusBarCompat;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.UI.TaskItem.DocumentCabinetActivity_;
 import cn.edu.jumy.oa.UI.web.MyFileActivity_;
 
 /**
@@ -104,7 +105,7 @@ public class VerifyActivity extends AppCompatActivity{
                 .load(R.drawable.fingerprint_pass)
                 .into(imageView);
         if (!TextUtils.isEmpty(file)&&file.contains("file")){
-            MyFileActivity_.intent(mContext).start();
+            DocumentCabinetActivity_.intent(mContext).start();
         }else {
             startActivity(new Intent(mContext, SplashActivity.class));
         }

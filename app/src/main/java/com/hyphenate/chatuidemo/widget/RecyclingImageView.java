@@ -75,7 +75,7 @@ public class RecyclingImageView extends ImageView {
      */
     private static void notifyDrawable(Drawable drawable, final boolean isDisplayed) {
         if (drawable instanceof RecyclingBitmapDrawable) {
-            // The drawable is a CountingBitmapDrawable, so notify it
+            // The drawable is a CountingBitmapDrawable, so document it
             ((RecyclingBitmapDrawable) drawable).setIsDisplayed(isDisplayed);
         } else if (drawable instanceof LayerDrawable) {
             // The drawable is a LayerDrawable, so recurse on each layer

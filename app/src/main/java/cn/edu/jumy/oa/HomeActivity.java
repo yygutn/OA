@@ -33,7 +33,7 @@
 //    private final Class fragmentArray[] = {NotifyFragment_.class, TaskFragment.class, ConversationFragment.class, ContactFragment.class, SettingFragment.class};
 //    private int mTitleArray[] = {R.string.home_notify_tab, R.string.home_work_tab, R.string.home_message_tab, R.string.home_contact_tab, R.string.home_me_tab};
 //    private int mImageViewArray[] = {R.drawable.tab_notify, R.drawable.tab_work, R.drawable.tab_message, R.drawable.tab_person, R.drawable.tab_settings};
-//    public String mTextViewArray[] = {"notify", "work","message",  "contact", "setting"};
+//    public String mTextViewArray[] = {"document", "work","message",  "contact", "setting"};
 //    private ImageView msgUnread;
 //
 //    private static HomeActivity instance;

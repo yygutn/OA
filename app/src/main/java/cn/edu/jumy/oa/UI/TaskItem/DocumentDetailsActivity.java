@@ -2,6 +2,7 @@ package cn.edu.jumy.oa.UI.TaskItem;
 
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 
@@ -62,6 +63,9 @@ public class DocumentDetailsActivity extends BaseActivity{
     }
 
     private void setUpViews() {
+        if (TextUtils.isEmpty(mNode.getTitle())){
+            return;
+        }
         mDocumentDetailsLevel.setText(mNode.getLevel());
         mDocumentDetailsTitle.setText(mNode.getTitle());
         mDocumentDetailsUser.setText(mNode.getIssuer());

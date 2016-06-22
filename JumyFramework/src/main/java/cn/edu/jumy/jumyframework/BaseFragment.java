@@ -38,24 +38,27 @@ import android.widget.Toast;
  */
 public class BaseFragment extends Fragment {
     protected Context mContext;
-    private boolean DEBUG = true;
-    public void showDebugLoge(CharSequence message){
-        if (BuildConfig.DEBUG || DEBUG){
-            Log.e("jumy",message.toString());
+    private boolean DEBUG = BaseActivity.DEBUG;
+
+    public void showDebugLoge(CharSequence message) {
+        if (DEBUG) {
+            Log.e("jumy", message.toString());
         }
     }
-    public void showDebugLogw(CharSequence message){
-        if (BuildConfig.DEBUG || DEBUG){
-            Log.w("jumy",message.toString());
+
+    public void showDebugLogw(CharSequence message) {
+        if (DEBUG) {
+            Log.w("jumy", message.toString());
         }
     }
-    public void showToast(CharSequence message){
-        Toast.makeText(getActivity(),message.toString(),Toast.LENGTH_SHORT).show();
+
+    public void showToast(CharSequence message) {
+        Toast.makeText(getActivity(), message.toString(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        StatusBarCompat.compat(getActivity(),getResources().getColor(R.color.pressed));
+        StatusBarCompat.compat(getActivity(), getResources().getColor(R.color.pressed));
     }
 }

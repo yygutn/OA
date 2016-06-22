@@ -88,6 +88,22 @@ public class AppManager {
         activity.finish();
         activity = null;
     }
+    /**
+     * 结束除了当前Activity（堆栈中最后一个压入的）所有的Activity
+     */
+    public void finishAllBesideTop() {
+        Activity activity = mActivityStack.lastElement();
+        if (activity == null){
+            return;
+        }
+        String name = activity.getClass().getSimpleName();
+        for (Activity activities : mActivityStack){
+            if (!activities.getClass().getSimpleName().equals(name)){
+                finishActivity(activities);
+                mActivityStack.remove(activities);
+            }
+        }
+    }
 
     /**
      * 移除Activity

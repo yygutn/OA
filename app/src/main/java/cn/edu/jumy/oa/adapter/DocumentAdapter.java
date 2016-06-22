@@ -2,6 +2,8 @@ package cn.edu.jumy.oa.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
 
 import com.zhy.base.adapter.ViewHolder;
 import com.zhy.base.adapter.recyclerview.CommonAdapter;
@@ -9,6 +11,7 @@ import com.zhy.base.adapter.recyclerview.CommonAdapter;
 import java.util.List;
 
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.UI.TaskItem.DocumentDetailsActivity_;
 import cn.edu.jumy.oa.bean.Node;
 
 /**
@@ -21,9 +24,20 @@ public class DocumentAdapter extends CommonAdapter<Node> {
     }
 
     @Override
-    public void convert(ViewHolder holder, Node node) {
-        Toolbar toolbar = holder.getView(R.id.item_document);
-        toolbar.setTitle(node.getTitle());
-        toolbar.setSubtitle(node.getDispatchTime());
+    public void convert(ViewHolder holder, final Node node) {
+        try {
+            holder.setText(R.id.title,"省委城市工作委会");
+            holder.setText(R.id.subtitle,"2016-05-20");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setList(List<Node> list){
+        if (list == null){
+            super.mDatas.clear();
+            super.mDatas = list;
+            notifyDataSetChanged();
+        }
     }
 }
