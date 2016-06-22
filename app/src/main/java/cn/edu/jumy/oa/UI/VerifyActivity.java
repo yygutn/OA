@@ -82,6 +82,8 @@ public class VerifyActivity extends AppCompatActivity{
         mContext = this;
         Picasso.with(mContext)
                 .load(R.drawable.fingerprint)
+                .resize(1080,1920)
+                .centerInside()
                 .into(imageView);
         Bundle bundle = getIntent().getBundleExtra("file");
         if (bundle != null){
@@ -103,6 +105,8 @@ public class VerifyActivity extends AppCompatActivity{
     void longClick(){
         Picasso.with(mContext)
                 .load(R.drawable.fingerprint_pass)
+                .resize(1080,1920)
+                .centerInside()
                 .into(imageView);
         if (!TextUtils.isEmpty(file)&&file.contains("file")){
             DocumentCabinetActivity_.intent(mContext).start();
