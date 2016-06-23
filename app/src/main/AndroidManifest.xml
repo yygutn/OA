@@ -10,6 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/JumyTheme">
 
+        <service android:name=".server.UploadServer"/>
+
 
         <activity
             android:name=".UI.VerifyActivity_"
@@ -76,6 +78,8 @@
             android:theme="@style/JumyTheme"/>
         <activity android:name=".UI.TaskItem.DocumentReadActivity_"
             android:theme="@style/JumyTheme" />
+        <activity android:name=".UI.TaskItem.DocumentReleaseActivity_"
+            android:theme="@style/JumyTheme"/>
 
 
 

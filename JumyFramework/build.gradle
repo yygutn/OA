@@ -55,4 +55,5 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.1'
 
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
+    compile 'cn.qqtheme.framework:FilePicker:1.1.3'
 }
