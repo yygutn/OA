@@ -34,7 +34,7 @@ public class DocumentAdapter extends CommonAdapter<Node> {
     }
 
     public void setList(List<Node> list){
-        if (list == null){
+        if (list != null){
             super.mDatas.clear();
             super.mDatas = list;
             notifyDataSetChanged();

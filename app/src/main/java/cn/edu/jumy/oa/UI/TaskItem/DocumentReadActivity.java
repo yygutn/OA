@@ -1,5 +1,7 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -20,7 +22,10 @@ import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.PageScrollStateChanged;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.res.ColorRes;
+import org.androidannotations.annotations.res.DrawableRes;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.jumyframework.BaseFragment;
@@ -39,8 +44,6 @@ public class DocumentReadActivity extends BaseActivity {
     private static final String TAG = DocumentReadActivity.class.getSimpleName();
     private LayoutInflater layoutInflater;
     private final Class fragmentArray[] = {DocumentUnreadFragment_.class, DocumentReadFragment_.class, DocumentAllFragment_.class};
-    private int mTitleArray[] = {R.string.document_unread,R.string.document_read,R.string.document_all};
-    public String mTextViewArray[] = {"unread","read","all"};
 
     @ViewById(R.id.title_bar)
     protected Toolbar mToolBar;
@@ -83,13 +86,26 @@ public class DocumentReadActivity extends BaseActivity {
 //            indicatorViewPager.setCurrentItem(0, false);
 
             initSearchView();
+            mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    backToPreActivity();
+                }
+            });
+            setSupportActionBar(mToolBar);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    @PageScrollStateChanged(R.id.document_viewPager)
+    void onPageScrollStateChangedNoParam(){
+        if (mSearchView.isSearchOpen()){
+            mSearchView.closeSearch();
+        }
+    }
 
     private class MyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        private String[] tabNames = { "已签收", "未签收", "全部"};
+        private String[] tabNames = { "未签收", "已签收", "全部"};
         private LayoutInflater inflater;
 
         public MyAdapter(FragmentManager fragmentManager) {
@@ -142,32 +158,50 @@ public class DocumentReadActivity extends BaseActivity {
     }
 
     private void initSearchView() {
-        mSearchView.setVoiceSearch(false);
-        final DocumentFragment documentFragment = (DocumentFragment) adapter.getCurrentFragment();
-        mSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                documentFragment.onTextChanged(query);
-                return false;
-            }
+        try {
+            mSearchView.setVoiceSearch(false);
+            mSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    DocumentFragment documentFragment = (DocumentFragment) adapter.getCurrentFragment();
+                    showDebugLogw(documentFragment.getClass().getSimpleName());
+                    documentFragment.onTextChanged(query);
+                    return true;
+                }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        mSearchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
-            @Override
-            public void onSearchViewShown() {
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    return false;
+                }
+            });
+            mSearchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+                @Override
+                public void onSearchViewShown() {
 
-            }
+                }
 
-            @Override
-            public void onSearchViewClosed() {
-                documentFragment.onSearchCancel();
-            }
-        });
+                @Override
+                public void onSearchViewClosed() {
+                    DocumentFragment documentFragment = (DocumentFragment) adapter.getCurrentFragment();
+                    showDebugLogw(documentFragment.getClass().getSimpleName());
+                    documentFragment.onSearchCancel();
+                }
+            });
+            mSearchView.setBackgroundColor(pressed);
+            mSearchView.setTextColor(Color.WHITE);
+            mSearchView.setBackIcon(back);
+            mSearchView.setCloseIcon(clear);
+            mSearchView.setHintTextColor(Color.WHITE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+    @DrawableRes(R.drawable.ic_arrow_back_white)
+    Drawable back;
+    @DrawableRes(R.drawable.ic_clear_white)
+    Drawable clear;
+    @ColorRes(R.color.pressed)
+    int pressed;
 
     @Override
     public void onBackPressed() {

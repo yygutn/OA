@@ -5,14 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/pressed"
-        app:navigationIcon="@drawable/ic_arrow_back_white"
-        app:title="文件柜"
-        app:titleTextColor="@color/white"/>
+    <include layout="@layout/layout_search"/>
 
     <com.lhh.ptrrv.library.PullToRefreshRecyclerView
         android:id="@+id/recView"

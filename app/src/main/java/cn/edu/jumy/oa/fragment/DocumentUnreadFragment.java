@@ -29,7 +29,7 @@ import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
  * Created by Jumy on 16/6/22 10:17.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-@EFragment
+@EFragment(R.layout.fragment_document_all)
 public class DocumentUnreadFragment extends DocumentFragment{
     @Override
     protected void initList() {
@@ -42,6 +42,5 @@ public class DocumentUnreadFragment extends DocumentFragment{
         mList.add(new Node());
         mList.add(new Node());
         mList.add(new Node());
-        super.initList();
     }
 }

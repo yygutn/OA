@@ -1,29 +1,38 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.squareup.picasso.Picasso;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.res.ColorRes;
+import org.androidannotations.annotations.res.DrawableRes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.adapter.DocumentAdapter;
 import cn.edu.jumy.oa.bean.Node;
+import cn.edu.jumy.oa.fragment.DocumentFragment;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 
 /**
@@ -35,9 +44,11 @@ import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 public class DocumentCabinetActivity extends BaseActivity implements OnItemClickListener {
     @ViewById(R.id.title_bar)
     protected Toolbar mTitleBar;
+    @ViewById(R.id.search_view)
+    MaterialSearchView mSearchView;
     @ViewById(R.id.recView)
     protected PullToRefreshRecyclerView mListView;
-
+    protected DocumentAdapter adapter;
     ImageView mEmptyImageView;
 
     int lastVisiblePosition = 0;
@@ -48,6 +59,11 @@ public class DocumentCabinetActivity extends BaseActivity implements OnItemClick
 
     @AfterViews
     void start(){
+        mList.add(new Node());
+        mList.add(new Node());
+        mList.add(new Node());
+        mList.add(new Node());
+        mList.add(new Node());
         mList.add(new Node());
         try {
 //            LoadMoreView loadMoreView = new LoadMoreView(this, mListView.getRecyclerView());
@@ -74,6 +90,8 @@ public class DocumentCabinetActivity extends BaseActivity implements OnItemClick
 
             //set list data
             updateList();
+            initSearchView();
+            setSupportActionBar(mTitleBar);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -91,7 +109,7 @@ public class DocumentCabinetActivity extends BaseActivity implements OnItemClick
      * 更新卡片
      */
     private void updateList() {
-        DocumentAdapter adapter = new DocumentAdapter(mContext, R.layout.item_document_cabinet, mList);
+        adapter = new DocumentAdapter(mContext, R.layout.item_document_cabinet, new ArrayList<>(mList));
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
     }
@@ -111,5 +129,64 @@ public class DocumentCabinetActivity extends BaseActivity implements OnItemClick
     protected void onDestroy() {
         super.onDestroy();
         ACache.get(MyApplication.getContext()).put(DemoHelper.getInstance().getCurrentUsernName(), mList);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.document,menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        mSearchView.setMenuItem(item);
+        return true;
+    }
+    private void initSearchView() {
+        try {
+            mSearchView.setVoiceSearch(false);
+            mSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    onTextSubmit(query);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    return false;
+                }
+            });
+            mSearchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+                @Override
+                public void onSearchViewShown() {
+
+                }
+
+                @Override
+                public void onSearchViewClosed() {
+                    onSearchClose();
+                }
+            });
+            mSearchView.setBackgroundColor(pressed);
+            mSearchView.setTextColor(Color.WHITE);
+            mSearchView.setBackIcon(back);
+            mSearchView.setCloseIcon(clear);
+            mSearchView.setHintTextColor(Color.WHITE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @DrawableRes(R.drawable.ic_arrow_back_white)
+    Drawable back;
+    @DrawableRes(R.drawable.ic_clear_white)
+    Drawable clear;
+    @ColorRes(R.color.pressed)
+    int pressed;
+    private void onTextSubmit(String str){
+        if (str == null){
+            return;
+        }
+        List<Node> list = new ArrayList<>();
+        list.add(mList.get(0));
+        adapter.setList(list);
+    }
+    private void onSearchClose(){
+        adapter.setList(new ArrayList<>(mList));
     }
 }

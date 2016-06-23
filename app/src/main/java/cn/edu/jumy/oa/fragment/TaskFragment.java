@@ -24,6 +24,7 @@ import cn.edu.jumy.oa.UI.ApprovalActivity_;
 import cn.edu.jumy.oa.UI.CalendarActivity_;
 import cn.edu.jumy.oa.UI.MeetingCardActivity_;
 import cn.edu.jumy.oa.UI.TaskItem.DocumentReadActivity_;
+import cn.edu.jumy.oa.UI.TaskItem.DocumentReleaseActivity_;
 import cn.edu.jumy.oa.UI.VerifyActivity_;
 import cn.edu.jumy.oa.UI.web.AuditActivity_;
 import cn.edu.jumy.oa.UI.web.FileSentActivity_;
@@ -169,7 +170,8 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                         break;
                     }
                     case 5: {//发文 公文发布
-                        SendFileWebActivity_.intent(mContext).start();
+//                        SendFileWebActivity_.intent(mContext).start();
+                        DocumentReleaseActivity_.intent(mContext).start();
                         break;
                     }
                     case 6: {//文件柜

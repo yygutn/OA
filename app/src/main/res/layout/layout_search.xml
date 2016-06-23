@@ -16,6 +16,9 @@
 
     <com.miguelcatalan.materialsearchview.MaterialSearchView
         android:id="@+id/search_view"
+        app:searchBackground="@color/pressed"
+        android:textColor="@color/white"
+        app:searchBackIcon="@drawable/ic_arrow_back_white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

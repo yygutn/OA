@@ -37,6 +37,6 @@ public class DocumentAllFragment extends DocumentFragment{
         mList.add(new Node());
         mList.add(new Node());
         mList.add(new Node());
-        super.initList();
+        mList.add(new Node());
     }
 }

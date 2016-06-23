@@ -64,21 +64,21 @@ public class DocumentFragment extends BaseFragment implements OnItemClickListene
 
             //set list data
             initList();
+            updateListView();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     protected void initList() {
-        updateList();
     }
 
 
     /**
      * 更新卡片
      */
-    private void updateList() {
-        adapter = new DocumentAdapter(mContext, R.layout.item_document_cabinet, mList);
+    private void updateListView() {
+        adapter = new DocumentAdapter(mContext, R.layout.item_document_cabinet, new ArrayList<>(mList));
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
     }
@@ -105,10 +105,11 @@ public class DocumentFragment extends BaseFragment implements OnItemClickListene
             return;
         }
         List<Node> list = new ArrayList<>();
+        list.add(mList.get(0));
         // TODO: 16/6/22  根据搜索提供的字符串，处理&&筛选出所需的数据
         adapter.setList(list);
     };
     public void onSearchCancel(){
-        adapter.setList(mList);
+        adapter.setList(new ArrayList<>(mList));
     }
 }
