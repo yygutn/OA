@@ -93,12 +93,13 @@ public class ApprovalActivity extends BaseActivity implements MyItemTouchCallbac
             showDebugLoge("from local cache");
         } else {
             showDebugLoge("from new data");
-            results.add(new Item(0, "请假", R.drawable.ask_for_leave));
-            results.add(new Item(1, "报销", R.drawable.purchase));
-            results.add(new Item(2, "物品领用", R.drawable.recipients));
-            results.add(new Item(3, "通用审批", R.drawable.approval_normal));
-            results.add(new Item(4, "付款", R.drawable.payment));
-            results.add(new Item(5, "采购", R.drawable.write_off));
+            results = new ArrayList<>();
+//            results.add(new Item(0, "请假", R.drawable.ask_for_leave));
+//            results.add(new Item(1, "报销", R.drawable.purchase));
+//            results.add(new Item(2, "物品领用", R.drawable.recipients));
+//            results.add(new Item(3, "通用审批", R.drawable.approval_normal));
+//            results.add(new Item(4, "付款", R.drawable.payment));
+//            results.add(new Item(5, "采购", R.drawable.write_off));
         }
 //        results.remove(results.size() - 1);
 //        results.add(new Item(results.size(), "更多", R.drawable.takeout_ic_more));

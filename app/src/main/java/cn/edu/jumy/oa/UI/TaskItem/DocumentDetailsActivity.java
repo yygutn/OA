@@ -51,7 +51,7 @@ public class DocumentDetailsActivity extends BaseActivity{
     void start(){
         mNode = (Node) getIntent().getSerializableExtra("details");
         if (mNode == null){
-            backToPreActivity();
+            mNode = new Node();
         }
         mTitleBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

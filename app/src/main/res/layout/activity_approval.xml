@@ -71,7 +71,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/approval_sick_leave_visible"
         android:layout_width="match_parent"
         android:layout_height="30dp"

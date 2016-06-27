@@ -6,14 +6,14 @@ import cn.edu.jumy.oa.R;
 
 /**
  * Created by Jumy on 16/6/20 13:57.
- * @文件柜 文件列表和检索功能
+ * @会议审核 会议审核和检索功能
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EActivity(R.layout.activity_document_cabinet)
-public class DocumentCabinetActivity extends BaseSearchRefreshActivity{
+public class MeetingApprovalActivity extends BaseSearchRefreshActivity{
     @Override
     protected void setTile() {
-        mTitleBar.setTitle("文件柜");
+        mTitleBar.setTitle("会议审核");
     }
 
     @Override

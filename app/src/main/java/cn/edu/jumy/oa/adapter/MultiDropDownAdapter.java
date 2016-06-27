@@ -7,27 +7,31 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import cn.edu.jumy.oa.R;
 
 
-public class ListDropDownAdapter extends BaseAdapter {
+public class MultiDropDownAdapter extends BaseAdapter {
 
     private Context context;
     private List<String> list;
     private int checkItemPosition = 0;
 
+    private List<Integer> checkedList = new ArrayList<>();
+
     public void setCheckItem(int position) {
         checkItemPosition = position;
-        checkItemPosition = position;
+        if (!checkedList.contains(checkItemPosition)) {
+            checkedList.add(checkItemPosition);
+        } else {
+            checkedList.remove(Integer.valueOf(checkItemPosition));
+        }
         notifyDataSetChanged();
     }
 
-    public ListDropDownAdapter(Context context, List<String> list) {
+    public MultiDropDownAdapter(Context context, List<String> list) {
         this.context = context;
         this.list = list;
     }
@@ -38,8 +42,8 @@ public class ListDropDownAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getItem(int position) {
-        return list.get(position);
+    public Object getItem(int position) {
+        return null;
     }
 
     @Override
@@ -53,9 +57,8 @@ public class ListDropDownAdapter extends BaseAdapter {
         if (convertView != null) {
             viewHolder = (ViewHolder) convertView.getTag();
         } else {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_default_drop_down, null);
-            viewHolder = new ViewHolder();
-            viewHolder.mText = (TextView) convertView.findViewById(R.id.text);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_multi_drop_layout, null);
+            viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         }
         fillValue(position, viewHolder);
@@ -65,17 +68,31 @@ public class ListDropDownAdapter extends BaseAdapter {
     private void fillValue(int position, ViewHolder viewHolder) {
         viewHolder.mText.setText(list.get(position));
         if (checkItemPosition != -1) {
-            if (checkItemPosition == position) {
+            if (checkedList.contains(position)) {
                 viewHolder.mText.setTextColor(context.getResources().getColor(R.color.pressed));
-                viewHolder.mText.setBackgroundResource(R.color.check_bg);
+                viewHolder.mText.setBackgroundResource(R.drawable.check_bg);
             } else {
                 viewHolder.mText.setTextColor(context.getResources().getColor(R.color.drop_down_unselected));
-                viewHolder.mText.setBackgroundResource(R.color.white);
+                viewHolder.mText.setBackgroundResource(R.drawable.uncheck_bg);
             }
+        }
+    }
+
+    public String getNeedString() {
+        if (checkedList.size() == 0) {
+            return "请选择";
+        } else if ((checkedList.size() == 1)) {
+            return list.get(checkedList.get(0));
+        } else {
+            return list.get(checkedList.get(0)) + "等";
         }
     }
 
     static class ViewHolder {
         TextView mText;
+
+        ViewHolder(View view) {
+            mText = (TextView) view.findViewById(R.id.text);
+        }
     }
 }

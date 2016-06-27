@@ -25,6 +25,9 @@ import cn.edu.jumy.oa.UI.CalendarActivity_;
 import cn.edu.jumy.oa.UI.MeetingCardActivity_;
 import cn.edu.jumy.oa.UI.TaskItem.DocumentReadActivity_;
 import cn.edu.jumy.oa.UI.TaskItem.DocumentReleaseActivity_;
+import cn.edu.jumy.oa.UI.TaskItem.MeetingApprovalActivity_;
+import cn.edu.jumy.oa.UI.TaskItem.NotifyActivity_;
+import cn.edu.jumy.oa.UI.TaskItem.SendMeetingActivity_;
 import cn.edu.jumy.oa.UI.VerifyActivity_;
 import cn.edu.jumy.oa.UI.web.AuditActivity_;
 import cn.edu.jumy.oa.UI.web.FileSentActivity_;
@@ -185,11 +188,13 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                         break;
                     }
                     case 8: {//会议发送
-                        MeetingSendActivity_.intent(mContext).start();
+//                        MeetingSendActivity_.intent(mContext).start();
+                        SendMeetingActivity_.intent(mContext).start();
                         break;
                     }
                     case 9: {//会议审核
-                        AuditActivity_.intent(mContext).start();
+//                        AuditActivity_.intent(mContext).start();
+                        MeetingApprovalActivity_.intent(mContext).start();
                         break;
                     }
                     case 10: {//日程管理
@@ -201,7 +206,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                         break;
                     }
                     case 12: {//公告
-
+                        NotifyActivity_.intent(mContext).start();
                         break;
                     }
                     case 13:{//已发送公文

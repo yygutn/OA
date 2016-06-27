@@ -31,6 +31,7 @@ public class UploadServer extends IntentService {
     private static final String ACTION_UPLOAD_FILE = "UPLOAD_FILE";
     public static final String EXTRA_PATH = "EXTRA_PATH";
     public static final String EXTRA_NAME = "EXTRA_NAME";
+    public static final String UPLOAD_BR_RESULT = "cn.edu.jumy.UPLOAD_BR_RESULT";
 
     public static void startUpload(Context context, String path, String name,int type)
     {
@@ -86,13 +87,13 @@ public class UploadServer extends IntentService {
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(MyApplication.getContext());
                 Notification notification = builder
                         .setContentTitle("会议发送成功")
-                        .setContentText("会议文件/图片已成功上传")
+                        .setContentText("附件已成功上传")
                         .setWhen(System.currentTimeMillis())
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                         .build();
                 manager.notify(1, notification);
-                onDestroy();
+                stopSelf();
             }
         });
     }

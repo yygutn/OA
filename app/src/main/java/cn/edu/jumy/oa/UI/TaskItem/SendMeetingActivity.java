@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,35 +36,50 @@ import cn.edu.jumy.oa.widget.customview.UploadItem;
 import cn.edu.jumy.oa.widget.customview.UploadItem_;
 
 /**
- * Created by Jumy on 16/6/23 11:58.
+ * Created by Jumy on 16/6/27 14:47.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-@EActivity(R.layout.activity_document_release)
-public class DocumentReleaseActivity extends BaseActivity {
+@EActivity(R.layout.activity_meeting_send)
+public class SendMeetingActivity extends BaseActivity{
+    @ViewById(R.id.toolbar)
+    protected Toolbar mToolbar;
+    @ViewById(R.id.Undertaking_Unit)
+    protected AppCompatEditText mUndertakingUnit;
     @ViewById(R.id.dropDownMenu_1)
     protected DropDownMenu mDropDownMenu1;
     @ViewById(R.id.dropDownMenu_2)
     protected DropDownMenu mDropDownMenu2;
-    @ViewById(R.id.et_1)
-    protected AppCompatEditText mEt1;
-    @ViewById(R.id.et_2)
-    protected AppCompatEditText mEt2;
-    @ViewById(R.id.et_3)
-    protected AppCompatEditText mEt3;
-    @ViewById(R.id.toolbar)
-    Toolbar mToolbar;
-    @ViewById
-    TextView submit;
+    @ViewById(R.id.meetingNumber)
+    protected AppCompatEditText mMeetingNumber;
+    @ViewById(R.id.meeting_title)
+    protected AppCompatEditText mMeetingTitle;
+    @ViewById(R.id.meeting_name)
+    protected AppCompatEditText mMeetingName;
+    @ViewById(R.id.meeting_details)
+    protected AppCompatEditText mMeetingDetails;
+    @ViewById(R.id.meeting_time)
+    protected AppCompatEditText mMeetingTime;
+    @ViewById(R.id.meeting_people)
+    protected AppCompatEditText mMeetingPeople;
+    @ViewById(R.id.meeting_phone)
+    protected AppCompatEditText mMeetingPhone;
+    @ViewById(R.id.meeting_loc)
+    protected AppCompatEditText mMeetingLoc;
+    @ViewById(R.id.addUpload)
+    protected AppCompatTextView mAddUpload;
+    @ViewById(R.id.uploadView)
+    protected LinearLayout mUploadView;
+    @ViewById(R.id.submit)
+    protected TextView mSubmit;
 
     List<String> mFilePath = new ArrayList<>();
     @ViewById(R.id.uploadView)
     LinearLayout uploadView;
     int index = 0;
 
-    static DocumentReleaseActivity instance;
-    private Object str;
+    static SendMeetingActivity instance;
 
-    public static DocumentReleaseActivity getInstance() {
+    public static SendMeetingActivity getInstance() {
         return instance;
     }
 
@@ -76,6 +92,7 @@ public class DocumentReleaseActivity extends BaseActivity {
 
     private List<View> popupView1 = new ArrayList<>();
     private List<View> popupView2 = new ArrayList<>();
+
 
     BroadcastReceiver uploadBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -90,7 +107,7 @@ public class DocumentReleaseActivity extends BaseActivity {
     };
 
     @AfterViews
-    void start() {
+    void start(){
         instance = this;
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,10 +124,6 @@ public class DocumentReleaseActivity extends BaseActivity {
         IntentFilter filter = new IntentFilter();
         filter.addAction(UploadServer.UPLOAD_BR_RESULT);
         registerReceiver(uploadBroadcastReceiver,filter);
-
-
-        UploadItem item = UploadItem_.build(mContext,this);
-        uploadView.addView(item,index++);
     }
 
     @Click({R.id.submit,R.id.addUpload})
@@ -145,6 +158,10 @@ public class DocumentReleaseActivity extends BaseActivity {
                 .create();
         alertDialog.show();
         alertDialog.setCanceledOnTouchOutside(true);
+    }
+
+    private void getStr() {
+        // TODO: 16/6/27 获取所有输入框的字符串
     }
 
     private void initUnitView() {
@@ -215,9 +232,5 @@ public class DocumentReleaseActivity extends BaseActivity {
         } else {
             super.onBackPressed();
         }
-    }
-
-    private void getStr() {
-        // TODO: 16/6/27 获取输入框内文字
     }
 }

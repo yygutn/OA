@@ -5,15 +5,14 @@ import org.androidannotations.annotations.EActivity;
 import cn.edu.jumy.oa.R;
 
 /**
- * Created by Jumy on 16/6/20 13:57.
- * @文件柜 文件列表和检索功能
+ * Created by Jumy on 16/6/27 16:18.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EActivity(R.layout.activity_document_cabinet)
-public class DocumentCabinetActivity extends BaseSearchRefreshActivity{
+public class NotifyActivity extends BaseSearchRefreshActivity{
     @Override
     protected void setTile() {
-        mTitleBar.setTitle("文件柜");
+        mTitleBar.setTitle("公告");
     }
 
     @Override

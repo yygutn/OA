@@ -10,9 +10,11 @@
         android:id="@+id/title"
         style="@style/Material_Card_Title_notify"
         android:textSize="18sp"
+        android:textColor="@color/white"
         tools:text="Title"/>
 
     <TextView android:id="@+id/subtitle"
         style="@style/Material_Card_Title_notify"
+        android:textColor="@color/white"
         tools:text="Subtitle"/>
 </LinearLayout>

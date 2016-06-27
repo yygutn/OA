@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,10 +27,9 @@ import org.androidannotations.annotations.res.ColorRes;
 import org.androidannotations.annotations.res.DrawableRes;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
-import cn.edu.jumy.jumyframework.BaseFragment;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.fragment.DocumentAllFragment_;
-import cn.edu.jumy.oa.fragment.DocumentFragment;
+import cn.edu.jumy.oa.fragment.BaseSearchRefreshFragment;
 import cn.edu.jumy.oa.fragment.DocumentReadFragment_;
 import cn.edu.jumy.oa.fragment.DocumentUnreadFragment_;
 
@@ -63,13 +61,6 @@ public class DocumentReadActivity extends BaseActivity {
 
     @AfterViews
     void start(){
-        mToolBar.setTitle("公文阅读");
-        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                backToPreActivity();
-            }
-        });
         try {
             indicator = (Indicator) findViewById(R.id.document_indicator);
             float unSelectSize = 16;
@@ -86,16 +77,18 @@ public class DocumentReadActivity extends BaseActivity {
 //            indicatorViewPager.setCurrentItem(0, false);
 
             initSearchView();
-            mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    backToPreActivity();
-                }
-            });
             setSupportActionBar(mToolBar);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        mToolBar.setTitle("公文阅读");
+        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
     @PageScrollStateChanged(R.id.document_viewPager)
     void onPageScrollStateChangedNoParam(){
@@ -163,9 +156,9 @@ public class DocumentReadActivity extends BaseActivity {
             mSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    DocumentFragment documentFragment = (DocumentFragment) adapter.getCurrentFragment();
-                    showDebugLogw(documentFragment.getClass().getSimpleName());
-                    documentFragment.onTextChanged(query);
+                    BaseSearchRefreshFragment baseSearchRefreshFragment = (BaseSearchRefreshFragment) adapter.getCurrentFragment();
+                    showDebugLogw(baseSearchRefreshFragment.getClass().getSimpleName());
+                    baseSearchRefreshFragment.onTextChanged(query);
                     return true;
                 }
 
@@ -182,9 +175,9 @@ public class DocumentReadActivity extends BaseActivity {
 
                 @Override
                 public void onSearchViewClosed() {
-                    DocumentFragment documentFragment = (DocumentFragment) adapter.getCurrentFragment();
-                    showDebugLogw(documentFragment.getClass().getSimpleName());
-                    documentFragment.onSearchCancel();
+                    BaseSearchRefreshFragment baseSearchRefreshFragment = (BaseSearchRefreshFragment) adapter.getCurrentFragment();
+                    showDebugLogw(baseSearchRefreshFragment.getClass().getSimpleName());
+                    baseSearchRefreshFragment.onSearchCancel();
                 }
             });
             mSearchView.setBackgroundColor(pressed);
