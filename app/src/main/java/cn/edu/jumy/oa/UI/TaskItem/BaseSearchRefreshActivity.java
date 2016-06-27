@@ -122,6 +122,11 @@ public class BaseSearchRefreshActivity extends BaseActivity implements OnItemCli
         mList.add(new Node());
         mList.add(new Node());
         mList.add(new Node());
+        mList.add(new Node());
+        mList.add(new Node());
+        mList.add(new Node());
+        mList.add(new Node());
+        mList.add(new Node());
     }
 
     protected void setTile(){};
