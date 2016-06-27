@@ -31,7 +31,7 @@ import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EFragment(R.layout.fragment_document_all)
-public class DocumentFragment extends BaseFragment implements OnItemClickListener {
+public class BaseSearchRefreshFragment extends BaseFragment implements OnItemClickListener {
 
     @ViewById(R.id.listview)
     protected PullToRefreshRecyclerView mListView;
@@ -78,7 +78,7 @@ public class DocumentFragment extends BaseFragment implements OnItemClickListene
      * 更新卡片
      */
     private void updateListView() {
-        adapter = new DocumentAdapter(mContext, R.layout.item_document_cabinet, new ArrayList<>(mList));
+        adapter = new DocumentAdapter(mContext, R.layout.item_card_notification, new ArrayList<>(mList));
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
     }
