@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 public class EditActivity extends BaseActivity{
 	private EditText editText;
 
@@ -31,6 +33,6 @@ public class EditActivity extends BaseActivity{
 	
 	public void save(View view){
 		setResult(RESULT_OK,new Intent().putExtra("data", editText.getText().toString()));
-		finish();
+		AppManager.getInstance().finishActivity(instance);
 	}
 }

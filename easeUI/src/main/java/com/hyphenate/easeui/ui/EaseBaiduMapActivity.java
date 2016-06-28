@@ -159,7 +159,7 @@ public class EaseBaiduMapActivity extends EaseBaseActivity {
 					progressDialog.dismiss();
 				}
 				Log.d("map", "cancel retrieve location");
-				finish();
+				backToPreActivity();
 			}
 		});
 
@@ -261,7 +261,7 @@ public class EaseBaiduMapActivity extends EaseBaseActivity {
 	}
 
 	public void back(View v) {
-		finish();
+		super.back(v);
 	}
 
 	public void sendLocation(View view) {
@@ -270,7 +270,7 @@ public class EaseBaiduMapActivity extends EaseBaseActivity {
 		intent.putExtra("longitude", lastLocation.getLongitude());
 		intent.putExtra("address", lastLocation.getAddrStr());
 		this.setResult(RESULT_OK, intent);
-		finish();
+		backToPreActivity();
 		overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
 	}
 

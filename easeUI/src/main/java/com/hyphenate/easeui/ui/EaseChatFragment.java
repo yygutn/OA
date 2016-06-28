@@ -505,7 +505,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                         pd.dismiss();
                     }
                 });
-                getActivity().finish();
+                ((BaseActivity)getActivity()).backToPreActivity();
             }
         });
     }
@@ -518,7 +518,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
             public void onChatRoomDestroyed(String roomId, String roomName) {
                 if (roomId.equals(toChatUsername)) {
                     showChatroomToast(" room : " + roomId + " with room name : " + roomName + " was destroyed");
-                    getActivity().finish();
+                    ((BaseActivity)getActivity()).backToPreActivity();
                 }
             }
 
@@ -538,7 +538,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                     String curUser = EMClient.getInstance().getCurrentUser();
                     if (curUser.equals(participant)) {
                     	EMClient.getInstance().chatroomManager().leaveChatRoom(toChatUsername);
-                        getActivity().finish();
+                        ((BaseActivity)getActivity()).backToPreActivity();
                     }else{
                         showChatroomToast("member : " + participant + " was kicked from the room : " + roomId + " room name : " + roomName);
                     }
@@ -975,7 +975,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 public void run() {
                     if (toChatUsername.equals(groupId)) {
                         Toast.makeText(getActivity(), R.string.you_are_group, Toast.LENGTH_SHORT).show();
-                        getActivity().finish();
+                        ((BaseActivity)getActivity()).backToPreActivity();
                     }
                 }
             });
@@ -988,7 +988,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 public void run() {
                     if (toChatUsername.equals(groupId)) {
                         Toast.makeText(getActivity(), R.string.the_current_group, Toast.LENGTH_SHORT).show();
-                        getActivity().finish();
+                        ((BaseActivity)getActivity()).backToPreActivity();
                     }
                 }
             });

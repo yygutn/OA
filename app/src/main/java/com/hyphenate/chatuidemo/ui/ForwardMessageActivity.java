@@ -21,6 +21,8 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 public class ForwardMessageActivity extends PickContactNoCheckboxActivity {
 	private EaseUser selectUser;
 	private String forward_msg_id;
@@ -43,7 +45,7 @@ public class ForwardMessageActivity extends PickContactNoCheckboxActivity {
                         if (selectUser == null)
                             return;
                         try {
-                            ChatActivity.activityInstance.finish();
+                            ChatActivity.activityInstance.onBackPressed();
                         } catch (Exception e) {
                         }
                         Intent intent = new Intent(ForwardMessageActivity.this, ChatActivity.class);
@@ -51,7 +53,7 @@ public class ForwardMessageActivity extends PickContactNoCheckboxActivity {
                         intent.putExtra("userId", selectUser.getUsername());
                         intent.putExtra("forward_msg_id", forward_msg_id);
                         startActivity(intent);
-                        finish();
+                        AppManager.getInstance().finishActivity(instance);
                     }
                 }
             }, true).show();

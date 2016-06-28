@@ -58,7 +58,7 @@ public class DiagnoseActivity extends BaseActivity implements OnClickListener {
 	}
 
 	public void back(View view) {
-		finish();
+		super.back(view);
 	}
 
 	private String getVersionName() throws Exception {

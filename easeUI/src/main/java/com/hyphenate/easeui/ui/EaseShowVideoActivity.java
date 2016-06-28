@@ -22,6 +22,8 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 /**
  * 展示视频内容
  * 
@@ -54,7 +56,7 @@ public class EaseShowVideoActivity extends EaseBaseActivity{
 			intent.setDataAndType(Uri.fromFile(new File(localFilePath)),
 					"video/mp4");
 			startActivity(intent);
-			finish();
+			backToPreActivity();
 		} else if (!TextUtils.isEmpty(remotepath) && !remotepath.equals("null")) {
 			EMLog.d(TAG, "download remote video file");
 			Map<String, String> maps = new HashMap<String, String>();
@@ -89,7 +91,7 @@ public class EaseShowVideoActivity extends EaseBaseActivity{
 		intent.setDataAndType(Uri.fromFile(new File(localPath)),
 				"video/mp4");
 		startActivity(intent);
-		finish();
+		AppManager.getInstance().finishCurActivity();
 	}
 	
 	
@@ -153,7 +155,7 @@ public class EaseShowVideoActivity extends EaseBaseActivity{
 
 	@Override
 	public void onBackPressed() {
-		finish();
+		backToPreActivity();
 	}
  
 

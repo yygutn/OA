@@ -41,6 +41,9 @@ import com.hyphenate.util.DateUtils;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.TextFormater;
 
+import cn.edu.jumy.jumyframework.*;
+import cn.edu.jumy.jumyframework.BaseActivity;
+
 public class ImageGridFragment extends Fragment implements OnItemClickListener {
 
 	private static final String TAG = "ImageGridFragment";
@@ -185,7 +188,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 			}
 			Intent intent=getActivity().getIntent().putExtra("path", vEntty.filePath).putExtra("dur", vEntty.duration);
 			getActivity().setResult(Activity.RESULT_OK, intent);
-			getActivity().finish();
+			((BaseActivity)getActivity()).backToPreActivity();
 		}
 	}
 
@@ -390,8 +393,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
                 }
 				 
 				getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", filePath).putExtra("dur", duration));
-				getActivity().finish();
-				
+				((cn.edu.jumy.jumyframework.BaseActivity)getActivity()).backToPreActivity();
 			}
 		}
 		

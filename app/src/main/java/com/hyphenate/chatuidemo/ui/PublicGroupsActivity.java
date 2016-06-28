@@ -195,6 +195,6 @@ public class PublicGroupsActivity extends BaseActivity {
 	}
 	
 	public void back(View view){
-		finish();
+        super.back(view);
 	}
 }

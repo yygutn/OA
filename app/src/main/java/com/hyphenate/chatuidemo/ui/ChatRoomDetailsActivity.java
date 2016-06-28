@@ -48,6 +48,8 @@ import com.hyphenate.easeui.widget.EaseExpandGridView;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.NetUtils;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 public class ChatRoomDetailsActivity extends BaseActivity implements OnClickListener {
 	private static final String TAG = "ChatRoomDetailsActivity";
 	private static final int REQUEST_CODE_EXIT = 1;
@@ -250,9 +252,9 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 						public void run() {
 							progressDialog.dismiss();
 							setResult(RESULT_OK);
-							finish();
+							AppManager.getInstance().finishActivity(instance);
 							if(ChatActivity.activityInstance != null)
-							    ChatActivity.activityInstance.finish();
+							    ChatActivity.activityInstance.onBackPressed();
 						}
 					});
 				} catch (final Exception e) {
@@ -466,14 +468,13 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 
 	public void back(View view) {
-		setResult(RESULT_OK);
-		finish();
+		onBackPressed();
 	}
 
 	@Override
 	public void onBackPressed() {
 		setResult(RESULT_OK);
-		finish();
+		super.onBackPressed();
 	}
 
 	@Override

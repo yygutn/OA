@@ -147,8 +147,8 @@ public class GroupSimpleDetailActivity extends BaseActivity {
          tv_admin.setText(group.getOwner());
          tv_introduction.setText(group.getDescription());
      }
-	
+	@Override
 	public void back(View view){
-		finish();
+		super.back(view);
 	}
 }

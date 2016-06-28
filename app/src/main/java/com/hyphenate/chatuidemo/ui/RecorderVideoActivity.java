@@ -57,6 +57,8 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 public class RecorderVideoActivity extends BaseActivity implements
 		OnClickListener, SurfaceHolder.Callback, OnErrorListener,
 		OnInfoListener {
@@ -113,7 +115,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 	public void back(View view) {
 		releaseRecorder();
 		releaseCamera();
-		finish();
+		super.back(view);
 	}
 
 	@Override
@@ -155,7 +157,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 
 	private void handleSurfaceChanged() {
 		if (mCamera == null) {
-			finish();
+			backToPreActivity();
 			return;
 		}
 		boolean hasSupportRate = false;
@@ -270,7 +272,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 										if (file.exists())
 											file.delete();
 									}
-									finish();
+									AppManager.getInstance().finishActivity(instance);
 
 								}
 							}).setCancelable(false).show();
@@ -473,7 +475,7 @@ public class RecorderVideoActivity extends BaseActivity implements
     						msc.disconnect();
     						progressDialog.dismiss();
     						setResult(RESULT_OK, getIntent().putExtra("uri", uri));
-    						finish();
+							AppManager.getInstance().finishActivity(instance);
     					}
     
     					@Override
@@ -577,7 +579,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								finish();
+								AppManager.getInstance().finishActivity(instance);
 
 							}
 						}).setCancelable(false).show();
@@ -594,7 +596,7 @@ public class RecorderVideoActivity extends BaseActivity implements
                     @Override
                     public void onClick(DialogInterface dialog,
                             int which) {
-                        finish();
+                        backToPreActivity();
 
                     }
                 }).setCancelable(false).show();

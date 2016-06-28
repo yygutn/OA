@@ -41,6 +41,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 public class GroupPickContactsActivity extends BaseActivity {
 	private ListView listView;
 	/** 是否为一个新建的群组 */
@@ -114,7 +116,7 @@ public class GroupPickContactsActivity extends BaseActivity {
 	 */
 	public void save(View v) {
 		setResult(RESULT_OK, new Intent().putExtra("newmembers", getToBeAddMembers().toArray(new String[0])));
-		finish();
+		AppManager.getInstance().finishActivity(instance);
 	}
 
 	/**
@@ -200,7 +202,7 @@ public class GroupPickContactsActivity extends BaseActivity {
 	}
 
 	public void back(View view){
-		finish();
+		super.back(view);
 	}
 	
 }

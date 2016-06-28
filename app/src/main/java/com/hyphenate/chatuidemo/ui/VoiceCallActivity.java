@@ -41,6 +41,8 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.util.EMLog;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 /**
  * 语音通话页面
  * 
@@ -69,7 +71,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if(savedInstanceState != null){
-        	finish();
+            AppManager.getInstance().finishActivity(instance);
         	return;
         }
 		setContentView(R.layout.em_activity_voice_call);
@@ -237,7 +239,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                             Animation animation = new AlphaAnimation(1.0f, 0.0f);
                                             animation.setDuration(800);
                                             findViewById(R.id.root_layout).startAnimation(animation);
-                                            finish();
+                                            AppManager.getInstance().finishActivity(instance);
                                         }
                                     });
                                 }

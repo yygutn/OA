@@ -22,6 +22,8 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 public class ContextMenuActivity extends BaseActivity {
     public static final int RESULT_CODE_COPY = 1;
     public static final int RESULT_CODE_DELETE = 2;
@@ -66,21 +68,21 @@ public class ContextMenuActivity extends BaseActivity {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		finish();
+		AppManager.getInstance().finishActivity(instance);
 		return true;
 	}
 
 	public void copy(View view){
 		setResult(RESULT_CODE_COPY);
-		finish();
+		AppManager.getInstance().finishActivity(instance);
 	}
 	public void delete(View view){
 		setResult(RESULT_CODE_DELETE);
-		finish();
+		AppManager.getInstance().finishActivity(instance);
 	}
 	public void forward(View view){
 		setResult(RESULT_CODE_FORWARD);
-		finish();
+		AppManager.getInstance().finishActivity(instance);
 	}
 	
 }

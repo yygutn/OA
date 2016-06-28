@@ -102,7 +102,7 @@ public class EaseShowBigImageActivity extends EaseBaseActivity {
 		image.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				finish();
+				backToPreActivity();
 			}
 		});
 	}
@@ -193,6 +193,6 @@ public class EaseShowBigImageActivity extends EaseBaseActivity {
 	public void onBackPressed() {
 		if (isDownloaded)
 			setResult(RESULT_OK);
-		finish();
+		super.onBackPressed();
 	}
 }

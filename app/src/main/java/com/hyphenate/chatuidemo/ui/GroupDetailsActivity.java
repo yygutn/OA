@@ -52,6 +52,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 public class GroupDetailsActivity extends BaseActivity implements OnClickListener {
 	private static final String TAG = "GroupDetailsActivity";
 	private static final int REQUEST_CODE_ADD_USER = 0;
@@ -94,7 +96,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
         // we are not supposed to show the group if we don't find the group
         if(group == null){
-            finish();
+			AppManager.getInstance().finishActivity(instance);
             return;
         }
 
@@ -330,9 +332,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						public void run() {
 							progressDialog.dismiss();
 							setResult(RESULT_OK);
-							finish();
+							AppManager.getInstance().finishActivity(instance);
 							if(ChatActivity.activityInstance != null)
-							    ChatActivity.activityInstance.finish();
+							    ChatActivity.activityInstance.onBackPressed();
 						}
 					});
 				} catch (final Exception e) {
@@ -362,9 +364,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						public void run() {
 							progressDialog.dismiss();
 							setResult(RESULT_OK);
-							finish();
+							AppManager.getInstance().finishActivity(instance);
 							if(ChatActivity.activityInstance != null)
-							    ChatActivity.activityInstance.finish();
+							    ChatActivity.activityInstance.onBackPressed();
 						}
 					});
 				} catch (final Exception e) {
@@ -770,13 +772,13 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 	public void back(View view) {
 		setResult(RESULT_OK);
-		finish();
+		super.back(view);
 	}
 
 	@Override
 	public void onBackPressed() {
 		setResult(RESULT_OK);
-		finish();
+		super.onBackPressed();
 	}
 
 	@Override
@@ -843,13 +845,13 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 		@Override
 		public void onUserRemoved(String groupId, String groupName) {
-			finish();
+			AppManager.getInstance().finishActivity(instance);
 
 		}
 
 		@Override
 		public void onGroupDestroy(String groupId, String groupName) {
-			finish();
+			AppManager.getInstance().finishActivity(instance);
 
 		}
 

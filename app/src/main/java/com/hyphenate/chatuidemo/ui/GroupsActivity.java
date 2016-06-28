@@ -178,6 +178,6 @@ public class GroupsActivity extends BaseActivity {
 	 * @param view
 	 */
 	public void back(View view) {
-		finish();
+		super.back(view);
 	}
 }

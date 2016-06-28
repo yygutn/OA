@@ -61,7 +61,7 @@ public class PickAtUserActivity extends BaseActivity{
                 if(EMClient.getInstance().getCurrentUser().equals(user.getUsername()))
                     return;
                 setResult(RESULT_OK, new Intent().putExtra("username", user.getUsername()));
-                finish();
+                backToPreActivity();
             }
         });
     }

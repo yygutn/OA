@@ -70,7 +70,7 @@ public class OfflinePushNickActivity extends BaseActivity {
 									}
 								}
 							});
-							finish();
+							backToPreActivity();
 						}
 					}
 				}).start();

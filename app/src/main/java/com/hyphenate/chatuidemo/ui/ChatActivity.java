@@ -8,6 +8,8 @@ import com.hyphenate.chatuidemo.runtimepermissions.PermissionsManager;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.util.EasyUtils;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 /**
  * 聊天页面，需要fragment的使用{@link EaseChatFragment}
  * 定制聊天输入框，比如：阅后即焚 参考 {@link com.hyphenate.easeui.widget.EaseChatInputMenu}
@@ -46,7 +48,7 @@ public class ChatActivity extends BaseActivity{
         if (toChatUsername.equals(username))
             super.onNewIntent(intent);
         else {
-            finish();
+            AppManager.getInstance().finishActivity(this);
             startActivity(intent);
         }
 

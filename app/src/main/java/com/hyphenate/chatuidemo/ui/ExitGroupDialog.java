@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.hyphenate.chatuidemo.R;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 public class ExitGroupDialog extends BaseActivity{
     private TextView text;
     private Button exitBtn;
@@ -42,17 +44,17 @@ public class ExitGroupDialog extends BaseActivity{
     
     public void logout(View view){
     	setResult(RESULT_OK);
-        finish();
+        AppManager.getInstance().finishActivity(instance);
         
     }
     
     public void cancel(View view) {
-        finish();
+        AppManager.getInstance().finishActivity(instance);
     }
     
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        finish();
+        AppManager.getInstance().finishActivity(instance);
         return true;
     }
 }

@@ -43,7 +43,7 @@ public class EaseShowNormalFileActivity extends EaseBaseActivity {
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 FileUtils.openFile(file, EaseShowNormalFileActivity.this);
-                                finish();
+                                backToPreActivity();
                             }
                         });
                     }
@@ -65,7 +65,7 @@ public class EaseShowNormalFileActivity extends EaseBaseActivity {
                                     file.delete();
                                 String str4 = getResources().getString(R.string.Failed_to_download_file);
                                 Toast.makeText(EaseShowNormalFileActivity.this, str4+msg, Toast.LENGTH_SHORT).show();
-                                finish();
+                                backToPreActivity();
                             }
                         });
                     }

@@ -24,6 +24,8 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.widget.Toast;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 public class CallActivity extends BaseActivity {
     protected final int MSG_CALL_MAKE_VIDEO = 0;
     protected final int MSG_CALL_MAKE_VOICE = 1;
@@ -47,6 +49,7 @@ public class CallActivity extends BaseActivity {
     protected EMOppositeSurfaceView oppositeSurface;
     protected boolean isAnswered = false;
     protected int streamID = -1;
+
     
     /**
      * 0：音频，1：视频
@@ -78,7 +81,6 @@ public class CallActivity extends BaseActivity {
     public void onBackPressed() {
         handler.sendEmptyMessage(MSG_CALL_END);
         saveCallRecord();
-        finish();
         super.onBackPressed();
     }
     
@@ -140,7 +142,7 @@ public class CallActivity extends BaseActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                         saveCallRecord();
-                        finish();
+                        AppManager.getInstance().finishActivity(instance);
                         return;
                     }
                 }
@@ -153,7 +155,7 @@ public class CallActivity extends BaseActivity {
                 } catch (Exception e1) {
                     e1.printStackTrace();
                     saveCallRecord();
-                    finish();
+                    AppManager.getInstance().finishActivity(instance);
                 }
                 callingState = CallingState.REFUESD;
                 break;
@@ -164,7 +166,7 @@ public class CallActivity extends BaseActivity {
                     EMClient.getInstance().callManager().endCall();
                 } catch (Exception e) {
                     saveCallRecord();
-                    finish();
+                    AppManager.getInstance().finishActivity(instance);
                 }
                 
                 break;

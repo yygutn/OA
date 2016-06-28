@@ -49,6 +49,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 public class VideoCallActivity extends CallActivity implements OnClickListener {
 
     private boolean isMuteState;
@@ -117,7 +119,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(savedInstanceState != null){
-        	finish();
+            AppManager.getInstance().finishActivity(instance);
         	return;
         }
         setContentView(R.layout.em_activity_video_call);
@@ -349,7 +351,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                     Animation animation = new AlphaAnimation(1.0f, 0.0f);
                                     animation.setDuration(800);
                                     rootContainer.startAnimation(animation);
-                                    finish();
+                                    AppManager.getInstance().finishActivity(instance);
                                 }
 
                             }, 200);

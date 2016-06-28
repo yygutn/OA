@@ -61,6 +61,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 public class MainActivity extends BaseActivity {
 
 	protected static final String TAG = "MainActivity";
@@ -111,13 +113,13 @@ public class MainActivity extends BaseActivity {
 			// 防止被移除后，没点确定按钮然后按了home键，长期在后台又进app导致的crash
 			// 三个fragment里加的判断同理
 		    DemoHelper.getInstance().logout(false,null);
-			finish();
+			AppManager.getInstance().finishActivity(instance);
 			startActivity(new Intent(this, LoginActivity.class));
 			return;
 		} else if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
 			// 防止被T后，没点确定按钮然后按了home键，长期在后台又进app导致的crash
 			// 三个fragment里加的判断同理
-			finish();
+			AppManager.getInstance().finishActivity(instance);
 			startActivity(new Intent(this, LoginActivity.class));
 			return;
 		}
@@ -330,7 +332,7 @@ public class MainActivity extends BaseActivity {
 					    String st10 = getResources().getString(R.string.have_you_removed);
 					    Toast.makeText(MainActivity.this, ChatActivity.activityInstance.getToChatUsername() + st10, Toast.LENGTH_LONG)
 					    .show();
-					    ChatActivity.activityInstance.finish();
+					    ChatActivity.activityInstance.onBackPressed();
 					}
                 }
             });
@@ -529,7 +531,7 @@ public class MainActivity extends BaseActivity {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						conflictBuilder = null;
-						finish();
+						AppManager.getInstance().finishActivity(instance);
 						Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
@@ -566,7 +568,7 @@ public class MainActivity extends BaseActivity {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						accountRemovedBuilder = null;
-						finish();
+						AppManager.getInstance().finishActivity(instance);
 						startActivity(new Intent(MainActivity.this, LoginActivity.class));
 					}
 				});
@@ -606,7 +608,7 @@ public class MainActivity extends BaseActivity {
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 // 重新显示登陆页面
-                                finish();
+								AppManager.getInstance().finishActivity(instance);
                                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                                 
                             }

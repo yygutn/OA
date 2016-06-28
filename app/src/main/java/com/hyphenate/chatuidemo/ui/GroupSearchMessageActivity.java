@@ -31,6 +31,8 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.util.DateUtils;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 public class GroupSearchMessageActivity extends BaseActivity implements OnClickListener{
     private ImageButton clearSearch;
     private EditText query;
@@ -145,7 +147,7 @@ public class GroupSearchMessageActivity extends BaseActivity implements OnClickL
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.tv_cancel) {
-            finish();
+            backToPreActivity();
 
         } else if (i == R.id.tv_search) {
             hideSoftKeyboard();

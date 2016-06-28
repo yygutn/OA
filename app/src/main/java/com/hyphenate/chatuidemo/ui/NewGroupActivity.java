@@ -33,6 +33,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.edu.jumy.jumyframework.AppManager;
+
 public class NewGroupActivity extends BaseActivity {
 	private EditText groupNameEditText;
 	private ProgressDialog progressDialog;
@@ -113,7 +115,7 @@ public class NewGroupActivity extends BaseActivity {
 							public void run() {
 								progressDialog.dismiss();
 								setResult(RESULT_OK);
-								finish();
+								backToPreActivity();
 							}
 						});
 					} catch (final HyphenateException e) {
@@ -131,6 +133,6 @@ public class NewGroupActivity extends BaseActivity {
 	}
 
 	public void back(View view) {
-		finish();
+		super.back(view);
 	}
 }

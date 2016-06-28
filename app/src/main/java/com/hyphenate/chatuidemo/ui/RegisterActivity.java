@@ -119,7 +119,7 @@ public class RegisterActivity extends BaseActivity {
 	}
 
 	public void back(View view) {
-		AppManager.getInstance().finishCurActivity();
+		super.back(view);
 	}
 
 }

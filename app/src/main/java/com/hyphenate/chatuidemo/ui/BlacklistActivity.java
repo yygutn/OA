@@ -24,11 +24,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.edu.jumy.jumyframework.*;
+
 /**
  * 黑名单列表页面
  * 
  */
-public class BlacklistActivity extends Activity {
+public class BlacklistActivity extends cn.edu.jumy.jumyframework.BaseActivity {
 	private ListView listView;
 	private BlacklistAdapater adapter;
 
@@ -97,7 +99,7 @@ public class BlacklistActivity extends Activity {
                     runOnUiThread(new Runnable() {
                         public void run() {
                             pd.dismiss();
-                            Toast.makeText(getApplicationContext(), R.string.Removed_from_the_failure, 0).show();
+                            Toast.makeText(getApplicationContext(), R.string.Removed_from_the_failure, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -138,6 +140,6 @@ public class BlacklistActivity extends Activity {
 	 * @param view
 	 */
 	public void back(View view) {
-		finish();
+		super.onBackPressed();
 	}
 }
