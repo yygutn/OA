@@ -6,6 +6,9 @@ import android.util.Log;
 
 import com.fsck.k9.K9;
 import com.hyphenate.chatuidemo.DemoApplication;
+import com.orhanobut.logger.LogLevel;
+import com.orhanobut.logger.Logger;
+import com.squareup.leakcanary.LeakCanary;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -29,6 +32,7 @@ public class MyApplication extends MultiDexApplication {
     private static Context context;
     public static final String API_URL = "";
     public static String DEVICE_ID = "";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -42,7 +46,7 @@ public class MyApplication extends MultiDexApplication {
             @Override
             public void onRegistered(String DeviceId) {
                 DEVICE_ID = DeviceId;
-                Log.e(TAG, "onRegistered: "+DeviceId);
+                Log.e(TAG, "onRegistered: " + DeviceId);
             }
         });
         PushAgent.getInstance(context).setNotificationClickHandler(new NotificationClickHandler());
@@ -50,6 +54,13 @@ public class MyApplication extends MultiDexApplication {
         //HX
         DemoApplication.getInstance().init(this);
         //end
+        LeakCanary.install(this);
+        //
+        Logger
+                .init("Jumy")
+                .methodCount(3)
+                .logLevel(LogLevel.FULL)
+                .methodOffset(2);
     }
 
     private void initOkHttpUtils() {

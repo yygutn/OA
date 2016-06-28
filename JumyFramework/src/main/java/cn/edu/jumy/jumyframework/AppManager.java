@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.Stack;
 
 /**
@@ -11,6 +13,7 @@ import java.util.Stack;
  * Date: 16/5/16  下午5:37
  */
 public class AppManager {
+    private static final String TAG = AppManager.class.getSimpleName();
     private static Stack<Activity> mActivityStack;
     private static Activity mCurInstance = null;
     private static AppManager instance;
@@ -56,7 +59,8 @@ public class AppManager {
         }
         mCurInstance = activity;
         mActivityStack.push(mCurInstance);
-        Log.e("AppManager", "add " + activity.getLocalClassName() + "\n" + "current size is : " + mActivityStack.size());
+        Logger.t(TAG).w("add " + activity.getLocalClassName() + "\n" + "current size is : " + mActivityStack.size());
+        logStackInfo();
     }
 
     /**
@@ -69,7 +73,7 @@ public class AppManager {
         if (!mActivityStack.contains(activity)) {
             mActivityStack.push(activity);
             mCurInstance = activity;
-            Log.e("AppManager", "add " + activity.getLocalClassName() + "\n" + "current size is : " + mActivityStack.size());
+            Log.e("AppManager", "add Single" + activity.getLocalClassName() + "\n" + "current size is : " + mActivityStack.size());
         }
     }
 
@@ -87,7 +91,17 @@ public class AppManager {
         Activity activity = mActivityStack.pop();
         activity.finish();
         activity = null;
+        logStackInfo();
     }
+
+    private void logStackInfo() {
+        String message = "StackSize = " + mActivityStack.size() + "\n";
+        for(Activity ac : mActivityStack){
+            message += ac.getClass().getSimpleName() + "\n";
+        }
+        Logger.t(TAG).w(message);
+    }
+
     /**
      * 结束除了当前Activity（堆栈中最后一个压入的）所有的Activity
      */
@@ -176,7 +190,7 @@ public class AppManager {
 
     private void showDebugLog(CharSequence message) {
         if (BaseActivity.DEBUG) {
-            Log.w("AppManager", message.toString());
+            Logger.t(TAG).w(message.toString());
         }
     }
 }

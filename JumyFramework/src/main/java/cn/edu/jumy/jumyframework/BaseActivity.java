@@ -11,6 +11,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.orhanobut.logger.Logger;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 
@@ -24,6 +26,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public static boolean DEBUG = true;
     public Context mContext;
+    protected BaseActivity instance;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,6 +35,7 @@ public class BaseActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         addToStack();
         mContext = this;
+        instance = this;
     }
     @AfterViews
     public void initStatusBarColor(){
@@ -89,12 +93,12 @@ public class BaseActivity extends AppCompatActivity {
     }
     public void showDebugLoge(CharSequence message){
         if (DEBUG){
-            Log.e("jumy",message.toString());
+            Logger.e(message.toString());
         }
     }
     public void showDebugLogw(CharSequence message){
         if (DEBUG){
-            Log.w("jumy",message.toString());
+            Logger.w(message.toString());
         }
     }
 }
