@@ -15,7 +15,6 @@ package com.hyphenate.chatuidemo;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.multidex.MultiDexApplication;
 
 /**
  * {@link com.hyphenate.easeui.widget.EaseChatExtendMenu}
@@ -35,7 +34,7 @@ public class DemoApplication{
 	public static String currentUserNick = "";
 	public static String currentUserName = "";
 
-	public void init(MultiDexApplication application) {
+	public void init(Application application) {
         applicationContext = application;
         instance = this;
         

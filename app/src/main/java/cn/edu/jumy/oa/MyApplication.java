@@ -1,7 +1,7 @@
 package cn.edu.jumy.oa;
 
+import android.app.Application;
 import android.content.Context;
-import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.fsck.k9.K9;
@@ -27,7 +27,7 @@ import okhttp3.OkHttpClient;
 /**
  * 全局Application
  */
-public class MyApplication extends MultiDexApplication {
+public class MyApplication extends Application {
 
     private static final String TAG = "Application";
 
