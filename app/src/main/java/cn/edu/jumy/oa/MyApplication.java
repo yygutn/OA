@@ -14,6 +14,8 @@ import com.umeng.message.PushAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.https.HttpsUtils;
 
+import org.litepal.LitePalApplication;
+
 import java.util.concurrent.TimeUnit;
 
 import cn.edu.jumy.jumyframework.AppManager;
@@ -36,7 +38,7 @@ public class MyApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        AppManager.getInstance().init(this);
+        AppManager.getInstance().init();
         K9.getInstance().onCreate(this);
         context = getApplicationContext();
         CrashHandler.getInstance().init(context);
@@ -61,6 +63,7 @@ public class MyApplication extends MultiDexApplication {
                 .methodCount(3)
                 .logLevel(LogLevel.FULL)
                 .methodOffset(2);
+        LitePalApplication.initialize(this);
     }
 
     private void initOkHttpUtils() {
