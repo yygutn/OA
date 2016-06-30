@@ -2,12 +2,17 @@ package cn.edu.jumy.oa.bean;
 
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.hyphenate.chat.EMClient;
+import com.bluelinelabs.logansquare.annotation.JsonField;
+import com.bluelinelabs.logansquare.annotation.JsonIgnore;
+import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.hyphenate.easeui.domain.EaseUser;
 
+import org.litepal.crud.DataSupport;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.OaPreference;
@@ -17,13 +22,44 @@ import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
  * Created by Jumy on 16/6/14 15:24.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-public class User implements Serializable {
+@JsonObject
+public class User extends DataSupport implements Serializable {
+    @JsonField
     private String id = "";
+    @JsonField(name = "account")
     private String username = "";
+    /**
+     * 单位id
+     */
+    @JsonField(name = "oid")
     private String nickname = "";
+    @JsonIgnore
     private String avatar = "";//头像
+    /**
+     * 特殊
+     */
+    @JsonField(name = "code")
     private String device_token = "";//设备ID
-    private String level = "";//所属单位
+    /**
+     * 单位id
+     */
+    @JsonIgnore
+    private String oid = "";
+    /**
+     * 电话
+     */
+    @JsonField
+    private String phone;
+    /**
+     * 权限等级(0:普通人员   1:平台管理人员  2:单位管理员)
+     */
+    @JsonField
+    private Integer level;
+
+    // 额外属性
+
+    private String orderBy;
+    private List<Object> attachmentList = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -65,12 +101,36 @@ public class User implements Serializable {
         this.device_token = device_token;
     }
 
-    public String getLevel() {
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public static boolean isFlag() {
+        return flag;
+    }
+
+    public static void setFlag(boolean flag) {
+        User.flag = flag;
     }
 
     @Override
@@ -81,7 +141,7 @@ public class User implements Serializable {
                 ", nickname='" + nickname + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", device_token='" + device_token + '\'' +
-                ", level='" + level + '\'' +
+                ", oid='" + oid + '\'' +
                 '}';
     }
 
@@ -127,7 +187,7 @@ public class User implements Serializable {
             preference.set("avatar", mUser.getAvatar()==null?"": mUser.getAvatar());
             preference.set("device", MyApplication.DEVICE_ID);
             preference.set("nickname", mUser.getNickname()==null?"":mUser.getNickname());
-            preference.set("level", mUser.getLevel()==null?"":mUser.getLevel());
+            preference.set("oid", mUser.getOid()==null?"":mUser.getOid());
             preference.set("id", mUser.getId()==null?"":mUser.getId());
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,29 +1,83 @@
 package cn.edu.jumy.oa.bean;
 
+import com.bluelinelabs.logansquare.annotation.JsonField;
+import com.bluelinelabs.logansquare.annotation.JsonObject;
+
+import org.litepal.crud.DataSupport;
+
 import java.io.File;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Jumy on 16/6/20 15:23.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-public class Node implements Serializable{
+@JsonObject
+public class Node extends DataSupport implements Serializable {
     private int type;//类型 0-会议 1-公文 2－公告
-    private String ID;//主键
+    @JsonField
+    private String id;//主键
+    /**
+     * 创建人员
+     */
+    @JsonField(name = "cuid")
     private String dispatchUnit;//发文单位
+    @JsonField(name = "createTime")
     private String dispatchTime;//发文时间
+    @JsonField(name = "meetCompany")
     private String undertakingUnit;//承办单位
+    @JsonField(name = "meetTime")
     private String meetingTime;//会议时间
+    @JsonField(name = "addr")
     private String meetingLocation;//会议地点
+    @JsonField(name = "docNo")
     private String documentNumber;//文件文号
+    @JsonField(name = "name")
     private String title;//标题
-    private String subtitle;// 自标题
-    private File file;//附件
-    private String filePath;//附件服务器地址
-    private String level;// 等级 －特急/平急...等等
-    private String issuer;//签发人
-    private String contentHead;//内容-头
+    private String subtitle;// 子标题
+    private String contentHead;//内容-标题(接收单位？？？)
     private String content;//内容
+    /**
+     * 接收单位
+     */
+    @JsonField
+    private String department;
+    /**
+     * 接收人员
+     */
+    @JsonField
+    private String personnel;
+    /**
+     * 附件
+     */
+    @JsonField
+    private List<Attachment> attachmentList;
+    /**
+     * 联系人姓名
+     */
+    @JsonField
+    private String contactName;
+    /**
+     * 联系人电话
+     */
+    @JsonField
+    private String contactPhone;
+    /**
+     * 等级:(1.特急2.加急3.平急4.特提)
+     */
+    @JsonField
+    private String level;
+    /**
+     * 已签收人员
+     */
+    @JsonField(name = "signUid")
+    private String issuer;//签发人
+    /**
+     * 签收人数
+     */
+    @JsonField
+    private Integer signNum;
     private String other;// 其他
 
     public String getTitle() {
@@ -81,15 +135,6 @@ public class Node implements Serializable{
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
     }
-
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
-
     public int getType() {
         return type;
     }
@@ -99,11 +144,11 @@ public class Node implements Serializable{
     }
 
     public String getID() {
-        return ID;
+        return id;
     }
 
     public void setID(String ID) {
-        this.ID = ID;
+        this.id = ID;
     }
 
     public String getLevel() {
@@ -152,13 +197,5 @@ public class Node implements Serializable{
 
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
     }
 }
