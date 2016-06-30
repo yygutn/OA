@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">JumyFramework</string>
+    <string name="app_name">移动办公系统</string>
     <!-- home activity tab-->
     <string name="home_conversation_tab">会话</string>
     <string name="home_setting_tab">设置</string>
