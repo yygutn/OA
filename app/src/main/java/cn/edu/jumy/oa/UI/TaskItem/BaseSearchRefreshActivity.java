@@ -7,7 +7,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -142,7 +141,7 @@ public class BaseSearchRefreshActivity extends BaseActivity implements OnItemCli
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         showDebugLogw("点击"+position);
-        DocumentDetailsActivity_.intent(mContext).extra("details",mList.get(position)).start();
+        DetailsActivity_.intent(mContext).extra("details",mList.get(position)).start();
     }
 
     @Override

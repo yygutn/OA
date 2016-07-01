@@ -127,8 +127,8 @@ public class AppManager {
     public void finishActivity(Activity activity) {
         showDebugLog("Finishing " + activity.getClass().getSimpleName());
         showDebugLog("Before finish, the Stack size is :" + AppManager.getStackSize());
+        finishActivity(activity.getClass());
         if (activity != null) {
-            finishActivity(activity.getClass());
             activity.finish();
             activity = null;
         }

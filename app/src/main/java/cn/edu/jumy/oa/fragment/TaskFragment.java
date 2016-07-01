@@ -9,9 +9,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 
 import com.fsck.k9.activity.Accounts;
 
@@ -29,12 +26,9 @@ import cn.edu.jumy.oa.UI.TaskItem.MeetingApprovalActivity_;
 import cn.edu.jumy.oa.UI.TaskItem.NotifyActivity_;
 import cn.edu.jumy.oa.UI.TaskItem.SendMeetingActivity_;
 import cn.edu.jumy.oa.UI.VerifyActivity_;
-import cn.edu.jumy.oa.UI.web.AuditActivity_;
+import cn.edu.jumy.oa.UI.VideoPlayerActivity_;
 import cn.edu.jumy.oa.UI.web.FileSentActivity_;
-import cn.edu.jumy.oa.UI.web.MeetingSendActivity_;
 import cn.edu.jumy.oa.UI.web.MeetingSentActivity_;
-import cn.edu.jumy.oa.UI.web.ReceiveFileActivity_;
-import cn.edu.jumy.oa.UI.web.SendFileWebActivity_;
 import cn.edu.jumy.oa.UI.web.StudyOnlineActivity_;
 import cn.edu.jumy.oa.widget.dragrecyclerview.adapter.RecyclerAdapter;
 import cn.edu.jumy.oa.widget.dragrecyclerview.common.DividerGridItemDecoration;
@@ -185,6 +179,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                     }
                     case 7: {//在线学习
                         StudyOnlineActivity_.intent(mContext).start();
+//                        VideoPlayerActivity_.intent(mContext).start();
                         break;
                     }
                     case 8: {//会议发送

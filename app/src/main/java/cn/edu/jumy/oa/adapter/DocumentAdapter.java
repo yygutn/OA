@@ -1,10 +1,7 @@
 package cn.edu.jumy.oa.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.SparseArray;
-import android.view.View;
 
 import com.zhy.base.adapter.ViewHolder;
 import com.zhy.base.adapter.recyclerview.CommonAdapter;
@@ -12,7 +9,6 @@ import com.zhy.base.adapter.recyclerview.CommonAdapter;
 import java.util.List;
 
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.UI.TaskItem.DocumentDetailsActivity_;
 import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.utils.CardGenerator;
 

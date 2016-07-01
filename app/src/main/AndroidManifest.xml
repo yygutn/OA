@@ -73,7 +73,7 @@
             android:theme="@style/JumyTheme"/>
         <activity android:name=".UI.TaskItem.DocumentCabinetActivity_"
             android:theme="@style/JumyTheme"/>
-        <activity android:name=".UI.TaskItem.DocumentDetailsActivity_"
+        <activity android:name=".UI.TaskItem.DetailsActivity_"
             android:theme="@style/JumyTheme"/>
         <activity android:name=".UI.TaskItem.DocumentReadActivity_"
             android:theme="@style/JumyTheme" />
@@ -84,6 +84,12 @@
         <activity android:name=".UI.TaskItem.MeetingApprovalActivity_"
             android:theme="@style/JumyTheme"/>
         <activity android:name=".UI.TaskItem.NotifyActivity_"
+            android:theme="@style/JumyTheme"/>
+       <activity android:name=".UI.SignUpDetailsActivity_"
+            android:theme="@style/JumyTheme"/>
+       <activity android:name=".UI.VideoPlayerActivity_"
+            android:theme="@style/JumyTheme"/>
+        <activity android:name=".UI.TaskItem.StudyOnlineActivity_"
             android:theme="@style/JumyTheme"/>
 
 

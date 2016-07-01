@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.UI.TaskItem.DocumentDetailsActivity_;
+import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
 import cn.edu.jumy.oa.UI.web.SignUpActivity_;
 import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
 import cn.edu.jumy.oa.bean.Card;
@@ -186,11 +186,11 @@ public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.O
                 break;
             }
             case 1: {//notice
-                DocumentDetailsActivity_.intent(mContext).start();
+                DetailsActivity_.intent(mContext).start();
                 break;
             }
             case 2: {//document
-                DocumentDetailsActivity_.intent(mContext).start();
+                DetailsActivity_.intent(mContext).start();
                 break;
             }
         }

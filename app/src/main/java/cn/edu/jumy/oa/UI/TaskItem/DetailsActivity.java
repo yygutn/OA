@@ -20,19 +20,15 @@ import cn.edu.jumy.oa.bean.Node;
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EActivity(R.layout.activity_document_details)
-public class DocumentDetailsActivity extends BaseActivity{
+public class DetailsActivity extends BaseActivity{
     @ViewById(R.id.title_bar)
     protected Toolbar mTitleBar;
     @ViewById(R.id.document_details_level)
     protected AppCompatTextView mDocumentDetailsLevel;
     @ViewById(R.id.document_details_title)
     protected AppCompatTextView mDocumentDetailsTitle;
-    @ViewById(R.id.document_details_user)
-    protected AppCompatTextView mDocumentDetailsUser;
     @ViewById(R.id.document_details_number)
     protected AppCompatTextView mDocumentDetailsNumber;
-    @ViewById(R.id.document_details_subtitle)
-    protected AppCompatTextView mDocumentDetailsSubtitle;
     @ViewById(R.id.document_details_content_head)
     protected AppCompatTextView mDocumentDetailsContentHead;
     @ViewById(R.id.document_details_content)
@@ -41,9 +37,10 @@ public class DocumentDetailsActivity extends BaseActivity{
     protected AppCompatTextView mDocumentDetailsTime;
     @ViewById(R.id.document_details_other)
     protected AppCompatTextView mDocumentDetailsOther;
-
     @ViewById(R.id.document_details_download)
     protected AppCompatTextView mDocumentDetailsDownload;
+    @ViewById(R.id.document_details_sign_up)
+    protected AppCompatTextView mDocumentDetailsSignUp;
 
     protected Node mNode;
 
@@ -66,11 +63,24 @@ public class DocumentDetailsActivity extends BaseActivity{
         if (TextUtils.isEmpty(mNode.getTitle())){
             return;
         }
+        switch (mNode.getType()){
+            case 0:{
+                mTitleBar.setTitle("报名详情");
+                break;
+            }
+            case 1:{
+                mTitleBar.setTitle("公文详情");
+                break;
+            }
+            case 2:{
+                mTitleBar.setTitle("公告详情");
+                break;
+            }
+            default:break;
+        }
         mDocumentDetailsLevel.setText(mNode.getLevel());
         mDocumentDetailsTitle.setText(mNode.getTitle());
-        mDocumentDetailsUser.setText(mNode.getIssuer());
         mDocumentDetailsNumber.setText(mNode.getDocumentNumber());
-        mDocumentDetailsSubtitle.setText(mNode.getSubtitle());
         mDocumentDetailsContentHead.setText(mNode.getContentHead());
         mDocumentDetailsTime.setText(mNode.getDispatchTime());
         mDocumentDetailsOther.setText(mNode.getOther());

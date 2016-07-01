@@ -60,12 +60,7 @@ public class DocumentReleaseActivity extends BaseActivity {
     LinearLayout uploadView;
     int index = 0;
 
-    static DocumentReleaseActivity instance;
     private Object str;
-
-    public static DocumentReleaseActivity getInstance() {
-        return instance;
-    }
 
     private MultiDropDownAdapter mUnitAdapter;
     private ListDropDownAdapter mLevelAdapter;
@@ -91,7 +86,6 @@ public class DocumentReleaseActivity extends BaseActivity {
 
     @AfterViews
     void start() {
-        instance = this;
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -103,4 +103,9 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile project(':PushSDK')
     compile project(':easeUIDemo')
+
+    //内存泄漏检测
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    //节操播放器
+    compile 'fm.jiecao:jiecaovideoplayer:3.6.1'
 }

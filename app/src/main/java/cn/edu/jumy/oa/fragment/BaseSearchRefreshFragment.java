@@ -21,7 +21,7 @@ import java.util.List;
 import cn.edu.jumy.jumyframework.BaseFragment;
 import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.UI.TaskItem.DocumentDetailsActivity_;
+import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
 import cn.edu.jumy.oa.adapter.DocumentAdapter;
 import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
@@ -86,7 +86,7 @@ public class BaseSearchRefreshFragment extends BaseFragment implements OnItemCli
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         showDebugLogw("点击"+position);
-        DocumentDetailsActivity_.intent(mContext).extra("details",mList.get(position)).start();
+        DetailsActivity_.intent(mContext).extra("details",mList.get(position)).start();
     }
 
     @Override

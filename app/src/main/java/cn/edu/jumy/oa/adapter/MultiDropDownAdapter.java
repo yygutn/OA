@@ -30,6 +30,12 @@ public class MultiDropDownAdapter extends BaseAdapter {
         }
         notifyDataSetChanged();
     }
+    public void setSingleCheckItem(int position) {
+        checkItemPosition = position;
+        checkedList.clear();
+        checkedList.add(checkItemPosition);
+        notifyDataSetChanged();
+    }
 
     public MultiDropDownAdapter(Context context, List<String> list) {
         this.context = context;

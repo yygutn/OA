@@ -20,10 +20,7 @@
         <item name="colorPrimary">@color/pressed</item>
         <item name="colorPrimaryDark">@color/pressed</item>
         <item name="colorAccent">@color/pressed</item>
-        <item name="android:activityOpenEnterAnimation">@android:anim/slide_in_left</item>
-        <item name="android:activityOpenExitAnimation">@android:anim/slide_out_right</item>
-        <item name="android:activityCloseEnterAnimation">@anim/push_right_in</item>
-        <item name="android:activityCloseExitAnimation">@anim/push_left_out</item>
+        <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
     </style>
 
     <style name="Material_Headline_notify">
@@ -109,10 +106,12 @@
 
 
     <style name="ActivityAnimation" parent="@android:style/Animation.Activity">
-        <item name="android:activityOpenEnterAnimation">@android:anim/slide_in_left</item>
-        <item name="android:activityOpenExitAnimation">@android:anim/slide_out_right</item>
-        <item name="android:activityCloseEnterAnimation">@anim/push_right_in</item>
-        <item name="android:activityCloseExitAnimation">@anim/push_left_out</item>
+        <!--open Animation-->
+        <item name="android:activityOpenEnterAnimation">@anim/slide_left_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_left_out</item>
+        <!--close Animation-->
+        <item name="android:activityCloseEnterAnimation">@anim/slide_right_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_right_out</item>
     </style>
 
     <style name="Animation.CustomPopup" parent="@android:style/Animation">

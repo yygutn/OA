@@ -5,7 +5,6 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 import org.litepal.crud.DataSupport;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
@@ -15,29 +14,58 @@ import java.util.List;
  */
 @JsonObject
 public class Node extends DataSupport implements Serializable {
-    private int type;//类型 0-会议 1-公文 2－公告
+    /**
+     * 类型 0-会议 1-公文 2－公告
+     */
+    @JsonField
+    private int type;
     @JsonField
     private String id;//主键
     /**
      * 创建人员
+     * --发文单位
      */
     @JsonField(name = "cuid")
-    private String dispatchUnit;//发文单位
+    private String dispatchUnit;
+    /**
+     * 发文时间
+     */
     @JsonField(name = "createTime")
-    private String dispatchTime;//发文时间
+    private String dispatchTime;
+    /**
+     * 承办单位
+     */
     @JsonField(name = "meetCompany")
-    private String undertakingUnit;//承办单位
+    private String undertakingUnit;
+    /**
+     * 会议时间
+     */
     @JsonField(name = "meetTime")
-    private String meetingTime;//会议时间
+    private String meetingTime;
+    /**
+     * 会议地点
+     */
     @JsonField(name = "addr")
-    private String meetingLocation;//会议地点
+    private String meetingLocation;
+    /**
+     * 文件文号
+     */
     @JsonField(name = "docNo")
-    private String documentNumber;//文件文号
+    private String documentNumber;
+    /**
+     * 标题
+     */
     @JsonField(name = "name")
-    private String title;//标题
-    private String subtitle;// 子标题
-    private String contentHead;//内容-标题(接收单位？？？)
-    private String content;//内容
+    private String title;
+    /**
+     * 内容-标题(eg:经XX研究决定:)
+     */
+    private String contentHead;
+    /**
+     * 内容--正文摘要
+     */
+    @JsonField(name = "docSummary")
+    private String content;
     /**
      * 接收单位
      */
@@ -79,6 +107,7 @@ public class Node extends DataSupport implements Serializable {
     @JsonField
     private Integer signNum;
     private String other;// 其他
+
 
     public String getTitle() {
         return title;
@@ -135,6 +164,7 @@ public class Node extends DataSupport implements Serializable {
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
     }
+
     public int getType() {
         return type;
     }
@@ -191,11 +221,59 @@ public class Node extends DataSupport implements Serializable {
         this.other = other;
     }
 
-    public String getSubtitle() {
-        return subtitle;
+    public String getId() {
+        return id;
     }
 
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getPersonnel() {
+        return personnel;
+    }
+
+    public void setPersonnel(String personnel) {
+        this.personnel = personnel;
+    }
+
+    public List<Attachment> getAttachmentList() {
+        return attachmentList;
+    }
+
+    public void setAttachmentList(List<Attachment> attachmentList) {
+        this.attachmentList = attachmentList;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
+
+    public Integer getSignNum() {
+        return signNum;
+    }
+
+    public void setSignNum(Integer signNum) {
+        this.signNum = signNum;
     }
 }

@@ -72,6 +72,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         backToPreActivity();
     }
 
@@ -100,5 +101,12 @@ public class BaseActivity extends AppCompatActivity {
         if (DEBUG){
             Logger.w(message.toString());
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        instance = null;
+        mContext = null;
     }
 }
