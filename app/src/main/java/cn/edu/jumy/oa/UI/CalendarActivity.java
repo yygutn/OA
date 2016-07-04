@@ -1,20 +1,27 @@
 package cn.edu.jumy.oa.UI;
 
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDialog;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import cn.edu.jumy.jumyframework.BaseActivity;
-
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
 
@@ -25,14 +32,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import cn.edu.jumy.jumyframework.BaseActivity;
+import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.widget.datepicker.calendar.bizs.decors.DPDecor;
 import cn.edu.jumy.oa.widget.datepicker.calendar.cons.DPMode;
+import cn.edu.jumy.oa.widget.datepicker.calendar.utils.MeasureUtil;
 import cn.edu.jumy.oa.widget.datepicker.calendar.views.MonthView;
 import cn.edu.jumy.oa.widget.datepicker.calendar.views.WeekView;
 import cn.edu.jumy.oa.widget.datepicker.view.ContentItemViewAbs;
 
 @EActivity(R.layout.activity_calendar)
+@OptionsMenu(R.menu.add)
 public class CalendarActivity extends BaseActivity implements MonthView.OnDateChangeListener, MonthView.OnDatePickedListener {
 
     @ViewById(R.id.month_calendar)
@@ -97,6 +108,39 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
                 onBackPressed();
             }
         });
+    }
+
+    @OptionsItem(R.id.action_add_alarm)
+    void add_alarm(){
+        showToast("添加日程提醒");
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                // fixme : 16/7/4 选择日期，添加提醒事项
+                addAlarm(year,monthOfYear+1,dayOfMonth);
+            }
+        },2016,7,3);
+        datePickerDialog.show();
+    }
+
+    private void addAlarm(final int year, final int monthOfYear, final int dayOfMonth){
+        // TODO: 16/7/4
+        final AppCompatEditText edit = new AppCompatEditText(this);
+        int margin = MeasureUtil.dp2px(MyApplication.getContext(),15);
+        edit.setPadding(margin,margin,margin,margin);
+        AlertDialog alertDialog = new AlertDialog.Builder(mContext).
+                setTitle(year+"/"+monthOfYear+"/"+dayOfMonth)
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String str = edit.getText().toString();
+                        showToast(str);
+                    }
+                }).setNegativeButton("取消", null)
+                .setView(edit)
+                .create();
+        alertDialog.show();
+        alertDialog.setCanceledOnTouchOutside(true);
     }
 
     private void initMeettingList() {

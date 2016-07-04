@@ -1,8 +1,10 @@
-package cn.edu.jumy.oa.server;
+package cn.edu.jumy.oa.BroadCastReceiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import cn.edu.jumy.oa.server.UploadServer;
 
 /**
  * Created by Jumy on 16/6/23 17:58.

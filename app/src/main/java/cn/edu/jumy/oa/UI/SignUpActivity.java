@@ -28,7 +28,7 @@ import cn.edu.jumy.oa.widget.customview.NoScrollGridView;
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EActivity(R.layout.activity_sign_up_details)
-public class SignUpDetailsActivity extends BaseActivity {
+public class SignUpActivity extends BaseActivity {
     @ViewById(R.id.title_bar)
     protected Toolbar mTitleBar;
     @ViewById(R.id.sign_up_name)

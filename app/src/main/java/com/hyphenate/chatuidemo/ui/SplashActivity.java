@@ -74,14 +74,14 @@ public class SplashActivity extends BaseActivity {
                         }
                         //进入主页面
                         startActivity(new Intent(SplashActivity.this, cn.edu.jumy.oa.MainActivity.class));
-						AppManager.getInstance().finishCurActivity();
+						AppManager.getInstance().finishAllActivity();
                     }else {
                         try {
                             Thread.sleep(sleepTime);
                         } catch (InterruptedException e) {
                         }
                         startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-						AppManager.getInstance().finishCurActivity();
+						AppManager.getInstance().finishAllActivity();
                     }
                 }
             }).start();

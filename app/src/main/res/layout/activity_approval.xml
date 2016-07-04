@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="待我审批"
+                android:text="由我发起"
                 android:textColor="@color/white"/>
         </LinearLayout>
 

@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit;
 
 import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.CrashHandler;
-import cn.edu.jumy.oa.bean.NotificationClickHandler;
 import okhttp3.OkHttpClient;
 
 

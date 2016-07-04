@@ -65,7 +65,7 @@ public class DetailsActivity extends BaseActivity{
         }
         switch (mNode.getType()){
             case 0:{
-                mTitleBar.setTitle("报名详情");
+                mTitleBar.setTitle("会议详情");
                 break;
             }
             case 1:{

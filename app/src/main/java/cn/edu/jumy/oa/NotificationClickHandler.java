@@ -1,4 +1,4 @@
-package cn.edu.jumy.oa.bean;
+package cn.edu.jumy.oa;
 
 import android.content.Context;
 
