@@ -10,6 +10,8 @@ import android.widget.TextView;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import cn.edu.jumy.oa.widget.customview.NoScrollGridView;
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EActivity(R.layout.activity_sign_up_details)
+@OptionsMenu(R.menu.sign_up_details)
 public class SignUpActivity extends BaseActivity {
     @ViewById(R.id.title_bar)
     protected Toolbar mTitleBar;
@@ -95,6 +98,10 @@ public class SignUpActivity extends BaseActivity {
 
         mDropDownMenu.setDropDownMenu(Arrays.asList(headers), popupView1, null);
 
+    }
+    @OptionsItem(R.id.action_details)
+    void skipToDetails(){
+        // TODO: 16/7/4 跳转到详情
     }
 
     /**
