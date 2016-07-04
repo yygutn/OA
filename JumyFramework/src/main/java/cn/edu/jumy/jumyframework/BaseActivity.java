@@ -16,6 +16,8 @@ import com.orhanobut.logger.Logger;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 
+import java.lang.ref.WeakReference;
+
 
 /**
  * User: Jumy (yygutn@gmail.com)
@@ -26,7 +28,11 @@ public class BaseActivity extends AppCompatActivity {
 
     public static boolean DEBUG = true;
     public Context mContext;
-    protected BaseActivity instance;
+    private WeakReference<BaseActivity> instance;
+
+    protected BaseActivity getInstance() {
+        return instance.get();
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,7 +41,7 @@ public class BaseActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         addToStack();
         mContext = this;
-        instance = this;
+        instance = new WeakReference<BaseActivity>(this);
     }
     @AfterViews
     public void initStatusBarColor(){
@@ -106,7 +112,22 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        instance = null;
-        mContext = null;
+        if (instance != null){
+            instance = null;
+        }
+        if (mContext != null){
+            mContext = null;
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        if (instance != null){
+            instance = null;
+        }
+        if (mContext != null){
+            mContext = null;
+        }
     }
 }

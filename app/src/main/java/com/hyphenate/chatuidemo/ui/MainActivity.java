@@ -113,13 +113,13 @@ public class MainActivity extends BaseActivity {
 			// 防止被移除后，没点确定按钮然后按了home键，长期在后台又进app导致的crash
 			// 三个fragment里加的判断同理
 		    DemoHelper.getInstance().logout(false,null);
-			AppManager.getInstance().finishActivity(instance);
+			AppManager.getInstance().finishActivity(getInstance());
 			startActivity(new Intent(this, LoginActivity.class));
 			return;
 		} else if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
 			// 防止被T后，没点确定按钮然后按了home键，长期在后台又进app导致的crash
 			// 三个fragment里加的判断同理
-			AppManager.getInstance().finishActivity(instance);
+			AppManager.getInstance().finishActivity(getInstance());
 			startActivity(new Intent(this, LoginActivity.class));
 			return;
 		}
@@ -531,7 +531,7 @@ public class MainActivity extends BaseActivity {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						conflictBuilder = null;
-						AppManager.getInstance().finishActivity(instance);
+						AppManager.getInstance().finishActivity(getInstance());
 						Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
@@ -568,7 +568,7 @@ public class MainActivity extends BaseActivity {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						accountRemovedBuilder = null;
-						AppManager.getInstance().finishActivity(instance);
+						AppManager.getInstance().finishActivity(getInstance());
 						startActivity(new Intent(MainActivity.this, LoginActivity.class));
 					}
 				});
@@ -608,7 +608,7 @@ public class MainActivity extends BaseActivity {
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 // 重新显示登陆页面
-								AppManager.getInstance().finishActivity(instance);
+								AppManager.getInstance().finishActivity(getInstance());
                                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                                 
                             }

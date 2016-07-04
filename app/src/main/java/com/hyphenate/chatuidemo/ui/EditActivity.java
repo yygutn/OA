@@ -33,6 +33,6 @@ public class EditActivity extends BaseActivity{
 	
 	public void save(View view){
 		setResult(RESULT_OK,new Intent().putExtra("data", editText.getText().toString()));
-		AppManager.getInstance().finishActivity(instance);
+		AppManager.getInstance().finishActivity(getInstance());
 	}
 }

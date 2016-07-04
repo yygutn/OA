@@ -77,12 +77,6 @@ public class SendMeetingActivity extends BaseActivity{
     LinearLayout uploadView;
     int index = 0;
 
-    static SendMeetingActivity instance;
-
-    public static SendMeetingActivity getInstance() {
-        return instance;
-    }
-
     private MultiDropDownAdapter mUnitAdapter;
     private ListDropDownAdapter mLevelAdapter;
 
@@ -108,7 +102,6 @@ public class SendMeetingActivity extends BaseActivity{
 
     @AfterViews
     void start(){
-        instance = this;
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

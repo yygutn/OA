@@ -272,7 +272,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 										if (file.exists())
 											file.delete();
 									}
-									AppManager.getInstance().finishActivity(instance);
+									AppManager.getInstance().finishActivity(getInstance());
 
 								}
 							}).setCancelable(false).show();
@@ -475,7 +475,7 @@ public class RecorderVideoActivity extends BaseActivity implements
     						msc.disconnect();
     						progressDialog.dismiss();
     						setResult(RESULT_OK, getIntent().putExtra("uri", uri));
-							AppManager.getInstance().finishActivity(instance);
+							AppManager.getInstance().finishActivity(getInstance());
     					}
     
     					@Override
@@ -579,7 +579,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								AppManager.getInstance().finishActivity(instance);
+								AppManager.getInstance().finishActivity(getInstance());
 
 							}
 						}).setCancelable(false).show();

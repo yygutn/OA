@@ -68,21 +68,21 @@ public class ContextMenuActivity extends BaseActivity {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		AppManager.getInstance().finishActivity(instance);
+		AppManager.getInstance().finishActivity(getInstance());
 		return true;
 	}
 
 	public void copy(View view){
 		setResult(RESULT_CODE_COPY);
-		AppManager.getInstance().finishActivity(instance);
+		AppManager.getInstance().finishActivity(getInstance());
 	}
 	public void delete(View view){
 		setResult(RESULT_CODE_DELETE);
-		AppManager.getInstance().finishActivity(instance);
+		AppManager.getInstance().finishActivity(getInstance());
 	}
 	public void forward(View view){
 		setResult(RESULT_CODE_FORWARD);
-		AppManager.getInstance().finishActivity(instance);
+		AppManager.getInstance().finishActivity(getInstance());
 	}
 	
 }

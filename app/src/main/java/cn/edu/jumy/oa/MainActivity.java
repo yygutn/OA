@@ -70,7 +70,7 @@ public class MainActivity extends BaseActivity {
 
     private static MainActivity instance;
 
-    public static MainActivity getInstance() {
+    public static MainActivity getMainInstance() {
         if (instance == null){
             instance = new MainActivity();
         }

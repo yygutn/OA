@@ -44,17 +44,17 @@ public class ExitGroupDialog extends BaseActivity{
     
     public void logout(View view){
     	setResult(RESULT_OK);
-        AppManager.getInstance().finishActivity(instance);
+        AppManager.getInstance().finishActivity(getInstance());
         
     }
     
     public void cancel(View view) {
-        AppManager.getInstance().finishActivity(instance);
+        AppManager.getInstance().finishActivity(getInstance());
     }
     
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        AppManager.getInstance().finishActivity(instance);
+        AppManager.getInstance().finishActivity(getInstance());
         return true;
     }
 }

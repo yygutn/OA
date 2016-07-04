@@ -71,7 +71,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if(savedInstanceState != null){
-            AppManager.getInstance().finishActivity(instance);
+            AppManager.getInstance().finishActivity(getInstance());
         	return;
         }
 		setContentView(R.layout.em_activity_voice_call);
@@ -211,14 +211,14 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                 case VOICE_PAUSE:
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "VOICE_PAUSE", 0).show();
+                            Toast.makeText(getApplicationContext(), "VOICE_PAUSE", Toast.LENGTH_SHORT).show();
                         }
                     });
                     break;
                 case VOICE_RESUME:
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "VOICE_RESUME", 0).show();
+                            Toast.makeText(getApplicationContext(), "VOICE_RESUME", Toast.LENGTH_SHORT).show();
                         }
                     });
                     break;
@@ -239,7 +239,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                             Animation animation = new AlphaAnimation(1.0f, 0.0f);
                                             animation.setDuration(800);
                                             findViewById(R.id.root_layout).startAnimation(animation);
-                                            AppManager.getInstance().finishActivity(instance);
+                                            AppManager.getInstance().finishActivity(getInstance());
                                         }
                                     });
                                 }

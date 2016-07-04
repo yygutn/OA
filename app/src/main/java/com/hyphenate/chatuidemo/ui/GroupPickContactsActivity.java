@@ -116,7 +116,7 @@ public class GroupPickContactsActivity extends BaseActivity {
 	 */
 	public void save(View v) {
 		setResult(RESULT_OK, new Intent().putExtra("newmembers", getToBeAddMembers().toArray(new String[0])));
-		AppManager.getInstance().finishActivity(instance);
+		AppManager.getInstance().finishActivity(getInstance());
 	}
 
 	/**

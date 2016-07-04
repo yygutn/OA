@@ -142,7 +142,7 @@ public class CallActivity extends BaseActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                         saveCallRecord();
-                        AppManager.getInstance().finishActivity(instance);
+                        AppManager.getInstance().finishActivity(getInstance());
                         return;
                     }
                 }
@@ -155,7 +155,7 @@ public class CallActivity extends BaseActivity {
                 } catch (Exception e1) {
                     e1.printStackTrace();
                     saveCallRecord();
-                    AppManager.getInstance().finishActivity(instance);
+                    AppManager.getInstance().finishActivity(getInstance());
                 }
                 callingState = CallingState.REFUESD;
                 break;
@@ -166,7 +166,7 @@ public class CallActivity extends BaseActivity {
                     EMClient.getInstance().callManager().endCall();
                 } catch (Exception e) {
                     saveCallRecord();
-                    AppManager.getInstance().finishActivity(instance);
+                    AppManager.getInstance().finishActivity(getInstance());
                 }
                 
                 break;
@@ -200,8 +200,8 @@ public class CallActivity extends BaseActivity {
     /**
      * 播放拨号响铃
      * 
-     * @param sound
-     * @param number
+     * @param
+     * @param
      */
     protected int playMakeCallSounds() {
         try {
@@ -260,7 +260,7 @@ public class CallActivity extends BaseActivity {
 
     /**
      * 保存通话消息记录
-     * @param type 0：音频，1：视频
+     * @param ：音频，1：视频
      */
     protected void saveCallRecord() {
         EMMessage message = null;

@@ -53,7 +53,7 @@ public class ForwardMessageActivity extends PickContactNoCheckboxActivity {
                         intent.putExtra("userId", selectUser.getUsername());
                         intent.putExtra("forward_msg_id", forward_msg_id);
                         startActivity(intent);
-                        AppManager.getInstance().finishActivity(instance);
+                        AppManager.getInstance().finishActivity(getInstance());
                     }
                 }
             }, true).show();

@@ -20,7 +20,7 @@ public class NotificationClickHandler extends UmengNotificationClickHandler{
 
     @Override
     public void launchApp(Context context, UMessage uMessage) {
-        MainActivity.getInstance().mTabHost.onTabChanged(MainActivity.getInstance().mTextViewArray[0]);
+        MainActivity.getMainInstance().mTabHost.onTabChanged(MainActivity.getMainInstance().mTextViewArray[0]);
         super.launchApp(context, uMessage);
     }
 }

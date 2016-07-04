@@ -119,7 +119,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(savedInstanceState != null){
-            AppManager.getInstance().finishActivity(instance);
+            AppManager.getInstance().finishActivity(getInstance());
         	return;
         }
         setContentView(R.layout.em_activity_video_call);
@@ -351,7 +351,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                     Animation animation = new AlphaAnimation(1.0f, 0.0f);
                                     animation.setDuration(800);
                                     rootContainer.startAnimation(animation);
-                                    AppManager.getInstance().finishActivity(instance);
+                                    AppManager.getInstance().finishActivity(getInstance());
                                 }
 
                             }, 200);
