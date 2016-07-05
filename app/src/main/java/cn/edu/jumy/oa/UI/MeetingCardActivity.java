@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
+import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
@@ -29,6 +30,7 @@ import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.web.SignUpActivity_;
 import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
 import cn.edu.jumy.oa.bean.Card;
+import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 import cn.edu.jumy.oa.widget.utils.CardGenerator;
 
@@ -48,7 +50,7 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
 
     ImageView mEmptyImageView;
 
-    private List<Card> cardDataList = new ArrayList<>();
+    private List<Node> cardDataList = new ArrayList<>();
 
     Handler handler = new Handler();
 
@@ -66,11 +68,6 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
         });
 
         try {
-//            LoadMoreView loadMoreView = new LoadMoreView(this, mListView.getRecyclerView());
-//            loadMoreView.setLoadmoreString("加载中...");
-//            loadMoreView.setLoadMorePadding(100);
-//            mListView.setLoadMoreFooter(loadMoreView);
-
             mListView.setLoadmoreString("加载中...");
 
             mEmptyImageView = (ImageView) View.inflate(mContext, R.layout.item_empty_view, null);
@@ -158,7 +155,7 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
             array = new SparseArray<String>();
             title = "召开传达中央文件精神会议";
             String message = CardGenerator.generateNotifyString(0, array);
-            cardDataList.add(new Card(title, message, 0));
+            cardDataList.add(new Node(title, message, 0));
         }
         MeetingCardAdapter adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification, cardDataList);
         mListView.setAdapter(adapter);
@@ -178,7 +175,11 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
     @Override
     protected void onDestroy() {
         //存入缓存
-        ACache.get(mContext).put("meeting_items", (ArrayList<Card>) cardDataList);
+        try {
+            ACache.get(mContext).put("meeting_items", (ArrayList<Node>) cardDataList);
+        } catch (Exception e) {
+            Logger.e("Exception : ",e);
+        }
         super.onDestroy();
     }
 }

@@ -13,6 +13,7 @@ import java.util.List;
 
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.bean.Card;
+import cn.edu.jumy.oa.bean.Node;
 
 /**
  * Created by Jumy on 16/6/1 17:48.
@@ -42,15 +43,15 @@ import cn.edu.jumy.oa.bean.Card;
  * #                                                   #
  * *****************************************************
  */
-public class MeetingCardAdapter extends CommonAdapter<Card>{
+public class MeetingCardAdapter extends CommonAdapter<Node>{
     public MeetingCardAdapter(Context context, int layoutId, List datas) {
         super(context, layoutId, datas);
     }
 
     @Override
-    public void convert(ViewHolder holder, Card cardData) {
+    public void convert(ViewHolder holder, Node cardData) {
         holder.setText(R.id.subtitle,cardData.getTitle());
-        holder.setText(R.id.supportingText,cardData.getMessage());
+        holder.setText(R.id.supportingText,cardData.getContent());
         try {
             holder.setTextColor(R.id.subtitle, Color.WHITE);
             holder.setTextColor(R.id.supportingText, Color.WHITE);

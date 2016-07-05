@@ -65,13 +65,27 @@
                 android:text="杭州市人大常委:"
                 android:textColor="@color/black" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/document_details_content"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:text="@string/temp"
-                android:textColor="@color/black" />
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.AppCompatTextView
+                    android:visibility="visible"
+                    android:id="@+id/document_details_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:text="@string/temp"
+                    android:textColor="@color/black" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:visibility="gone"
+                    android:id="@+id/document_details_content_meet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="50dp"
+                    android:text="@string/content2"
+                    android:textColor="@color/black" />
+
+            </FrameLayout>
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/document_details_time"
@@ -104,7 +118,7 @@
                 android:textColor="@color/white"
                 android:textSize="20sp" />
             <android.support.v7.widget.AppCompatTextView
-                android:visibility="visible"
+                android:visibility="gone"
                 android:id="@+id/document_details_sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

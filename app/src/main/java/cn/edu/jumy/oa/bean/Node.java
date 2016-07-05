@@ -108,6 +108,14 @@ public class Node extends DataSupport implements Serializable {
     private Integer signNum;
     private String other;// 其他
 
+    public Node(String title, String content, int type) {
+        this.title = title;
+        this.content = content;
+        this.type = type;
+    }
+    public Node(){
+
+    }
 
     public String getTitle() {
         return title;

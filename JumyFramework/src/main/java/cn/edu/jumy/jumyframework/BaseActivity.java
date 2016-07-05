@@ -2,6 +2,7 @@ package cn.edu.jumy.jumyframework;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -43,10 +44,12 @@ public class BaseActivity extends AppCompatActivity {
         mContext = this;
         instance = new WeakReference<BaseActivity>(this);
     }
+
     @AfterViews
-    public void initStatusBarColor(){
-        StatusBarCompat.compat(this,getResources().getColor(R.color.pressed));
+    public void initStatusBarColor() {
+        StatusBarCompat.compat(this, getResources().getColor(R.color.pressed));
     }
+
     protected void addToStack() {
         AppManager.getInstance().addActivity(this);
     }
@@ -62,11 +65,11 @@ public class BaseActivity extends AppCompatActivity {
         if (size <= 1) {
             if (System.currentTimeMillis() - exitTime > 2000) {
                 showToast("再按一次退出程序");
-                Log.w("JumyXx","再按一次退出程序");
+                Log.w("JumyXx", "再按一次退出程序");
                 exitTime = System.currentTimeMillis();
             } else {
                 //结束所有activity并清空堆栈
-                Log.w("JumyXx","退出程序");
+                Log.w("JumyXx", "退出程序");
                 AppManager.getInstance().AppExit(this);
             }
         } else if (size > 1) {
@@ -78,7 +81,6 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         backToPreActivity();
     }
 
@@ -96,37 +98,34 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void showToast(@StringRes int resId) {
-            Toast.makeText(this,getResources().getText(resId), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getText(resId), Toast.LENGTH_SHORT).show();
     }
-    public void showDebugLoge(CharSequence message){
-        if (DEBUG){
+
+    public void showDebugLoge(CharSequence message) {
+        if (DEBUG) {
             Logger.e(message.toString());
         }
     }
-    public void showDebugLogw(CharSequence message){
-        if (DEBUG){
+
+    public void showDebugLogw(CharSequence message) {
+        if (DEBUG) {
             Logger.w(message.toString());
+        }
+    }
+
+    public void showDebugLogd(CharSequence message) {
+        if (DEBUG) {
+            Logger.d(message.toString());
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (instance != null){
+        if (instance != null) {
             instance = null;
         }
-        if (mContext != null){
-            mContext = null;
-        }
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        if (instance != null){
-            instance = null;
-        }
-        if (mContext != null){
+        if (mContext != null) {
             mContext = null;
         }
     }

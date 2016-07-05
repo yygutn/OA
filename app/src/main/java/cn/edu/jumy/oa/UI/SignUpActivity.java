@@ -25,15 +25,15 @@ import cn.edu.jumy.oa.widget.DropDownMenu;
 import cn.edu.jumy.oa.widget.customview.NoScrollGridView;
 
 /**
- * 报名详情
+ * 报名
  * Created by Jumy on 16/7/1 11:49.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-@EActivity(R.layout.activity_sign_up_details)
+@EActivity(R.layout.activity_sign_up)
 @OptionsMenu(R.menu.sign_up_details)
 public class SignUpActivity extends BaseActivity {
     @ViewById(R.id.title_bar)
-    protected Toolbar mTitleBar;
+    protected Toolbar mToolBar;
     @ViewById(R.id.sign_up_name)
     protected AppCompatEditText mSignUpName;
     @ViewById(R.id.sign_up_position)
@@ -64,12 +64,14 @@ public class SignUpActivity extends BaseActivity {
      */
     @AfterViews
     void start() {
-        mTitleBar.setNavigationOnClickListener(new View.OnClickListener() {
+        setSupportActionBar(mToolBar);
+        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 backToPreActivity();
             }
         });
+        initUnitView();
     }
 
     private void initUnitView() {
@@ -102,6 +104,7 @@ public class SignUpActivity extends BaseActivity {
     @OptionsItem(R.id.action_details)
     void skipToDetails(){
         // TODO: 16/7/4 跳转到详情
+        SignUpDetailsActivity_.intent(mContext).start();
     }
 
     /**
@@ -110,21 +113,24 @@ public class SignUpActivity extends BaseActivity {
      */
     @Click({R.id.sign_up_ll_join, R.id.sign_up_ll_leave, R.id.sign_up_ll_listen})
     void click(View view) {
-        resetButton();
         switch (view.getId()) {
             case R.id.sign_up_ll_join: {//参会
+                resetButton();
                 mSignUpJoinButton.setChecked(true);
                 break;
             }
             case R.id.sign_up_ll_leave: {//请假
+                resetButton();
                 mSignUpLeaveButton.setChecked(true);
                 mSignUpLeave.setFocusable(true);
                 break;
             }
             case R.id.sign_up_ll_listen: {//听会
+                resetButton();
                 mSignUpListenButton.setChecked(true);
                 break;
             }
+            default:break;
         }
     }
     @Click(R.id.submit)
@@ -148,6 +154,17 @@ public class SignUpActivity extends BaseActivity {
         mSignUpLeaveButton.setChecked(false);
         mSignUpJoinButton.setChecked(false);
         mSignUpListenButton.setChecked(false);
+        mSignUpLeave.clearFocus();
         mSignUpLeave.setFocusable(false);
+    }
+
+    /**
+     * 清除焦点
+     */
+    private void clearFocus(){
+        mSignUpName.clearFocus();
+        mSignUpPosition.clearFocus();
+        mSignUpPhone.clearFocus();
+        mSignUpLeave.clearFocus();
     }
 }

@@ -91,6 +91,7 @@
             android:theme="@style/JumyTheme"/>
         <activity android:name=".UI.TaskItem.StudyOnlineActivity_"
             android:theme="@style/JumyTheme"/>
+        <activity android:name=".UI.SignUpActivity_"/>
 
 
 

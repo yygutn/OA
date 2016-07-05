@@ -2,6 +2,7 @@ package cn.edu.jumy.oa;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.fsck.k9.K9;
@@ -26,11 +27,11 @@ import okhttp3.OkHttpClient;
 /**
  * 全局Application
  */
-public class MyApplication extends Application {
+public class MyApplication extends MultiDexApplication {
 
     private static final String TAG = "Application";
 
-    private static Context context;
+    private static volatile Context context;
     public static final String API_URL = "";
     public static String DEVICE_ID = "";
 
@@ -79,6 +80,13 @@ public class MyApplication extends Application {
     }
 
     public static Context getContext() {
+        if (context == null) {
+            synchronized (MyApplication.class) {
+                if (context == null) {
+                    context = new MyApplication();
+                }
+            }
+        }
         return context;
     }
 

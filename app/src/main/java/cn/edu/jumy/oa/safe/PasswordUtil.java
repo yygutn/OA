@@ -45,7 +45,7 @@ public class PasswordUtil {
      * 测试
      * 
      */
-	public static void main(String[] args) {
+	public static void test(String[] args) {
 		String acc_pwd="admin_11111";
 		//加密
 		String encpytStr=simpleEncpyt(acc_pwd);

@@ -29,7 +29,7 @@ public interface SimpleCipher {
     /**
      * 设置密钥文件
      * 
-     * @param keyFile 密钥文件
+     * @param keyString 密钥字串
      */
     public void setKeyString(String keyString);
 

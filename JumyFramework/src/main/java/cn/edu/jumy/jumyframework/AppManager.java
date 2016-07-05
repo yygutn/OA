@@ -127,11 +127,12 @@ public class AppManager {
     public void finishActivity(Activity activity) {
         showDebugLog("Finishing " + activity.getClass().getSimpleName());
         showDebugLog("Before finish, the Stack size is :" + AppManager.getStackSize());
-        finishActivity(activity.getClass());
         if (activity != null) {
             activity.finish();
+            mCurInstance.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
             activity = null;
         }
+        finishActivity(activity.getClass());
         showDebugLog("After finished, the Stack size is :" + AppManager.getStackSize());
     }
 

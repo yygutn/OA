@@ -13,7 +13,6 @@ import android.widget.ImageView;
 
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.squareup.picasso.Picasso;
-import cn.edu.jumy.jumyframework.BaseFragment;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 
 import org.androidannotations.annotations.AfterViews;
@@ -24,11 +23,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.edu.jumy.jumyframework.BaseFragment;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
-import cn.edu.jumy.oa.UI.web.SignUpActivity_;
 import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
 import cn.edu.jumy.oa.bean.Card;
+import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 import cn.edu.jumy.oa.widget.utils.CardGenerator;
 
@@ -67,7 +67,7 @@ public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.O
     PullToRefreshRecyclerView mListView;
 
     ImageView mEmptyImageView;
-    private List<Card> cardList = new ArrayList<>();
+    private List<Node> cardList = new ArrayList<>();
     public boolean isCache = false;
 
     Handler handler = new Handler();
@@ -142,7 +142,7 @@ public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.O
                 }
             }
             String message = CardGenerator.generateNotifyString(tag, array);
-            cardList.add(new Card(title, message,tag));
+            cardList.add(new Node(title, message,tag));
         }
         MeetingCardAdapter adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification, cardList);
         mListView.setAdapter(adapter);
@@ -152,7 +152,7 @@ public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.O
     @Override
     public void onDestroy() {
         //存入缓存
-        ACache.get(getActivity()).put("notify_items", (ArrayList<Card>) cardList);
+        ACache.get(getActivity()).put("notify_items", (ArrayList<Node>) cardList);
         super.onDestroy();
     }
 
@@ -179,21 +179,8 @@ public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.O
 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-        Card card = (Card) o;
-        switch ((int) card.getTAG()) {
-            case 0: {//meeting
-                SignUpActivity_.intent(getActivity()).start();
-                break;
-            }
-            case 1: {//notice
-                DetailsActivity_.intent(mContext).start();
-                break;
-            }
-            case 2: {//document
-                DetailsActivity_.intent(mContext).start();
-                break;
-            }
-        }
+        Node node = (Node) o;
+        DetailsActivity_.intent(mContext).extra("details",node).start();
     }
 
     @Override
