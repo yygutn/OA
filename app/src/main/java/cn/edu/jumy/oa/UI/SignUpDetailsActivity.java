@@ -41,8 +41,8 @@ public class SignUpDetailsActivity extends BaseActivity {
         });
 
         mTableSigned.addView(ItemTableRow_.build(mContext));
-//        mTableUnsigned.addView(ItemTableRow_.build(mContext));
-//        mTableUnsigned.addView(ItemTableRow_.build(mContext));
-//        mTableUnsigned.addView(ItemTableRow_.build(mContext));
+        mTableUnsigned.addView(ItemTableRow_.build(mContext));
+        mTableUnsigned.addView(ItemTableRow_.build(mContext));
+        mTableUnsigned.addView(ItemTableRow_.build(mContext));
     }
 }
