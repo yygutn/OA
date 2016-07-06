@@ -32,7 +32,7 @@ public class MyApplication extends MultiDexApplication {
     private static final String TAG = "Application";
 
     private static volatile Context context;
-    public static final String API_URL = "";
+    public static final String API_URL = "http://121.41.102.69:8080/OA_console/phone/";
     public static String DEVICE_ID = "";
 
     @Override

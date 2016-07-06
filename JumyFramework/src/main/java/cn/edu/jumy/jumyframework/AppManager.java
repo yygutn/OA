@@ -14,8 +14,8 @@ import java.util.Stack;
  */
 public class AppManager {
     private static final String TAG = AppManager.class.getSimpleName();
-    private static Stack<Activity> mActivityStack;
-    private static Activity mCurInstance = null;
+    private static Stack<BaseActivity> mActivityStack;
+    private static BaseActivity mCurInstance = null;
     private static AppManager instance;
 
 
@@ -38,14 +38,14 @@ public class AppManager {
         mActivityStack = new Stack<>();
     }
 
-    public static void addActivities(Activity activity) {
+    public static void addActivities(BaseActivity activity) {
         AppManager.getInstance().addActivity(activity);
     }
 
     /**
      * 添加Activity到堆栈
      */
-    public void addActivity(Activity activity) {
+    public void addActivity(BaseActivity activity) {
         if (mActivityStack == null) {
             mActivityStack = new Stack<>();
         }
@@ -58,7 +58,7 @@ public class AppManager {
     /**
      * 添加单例Activity到堆栈
      */
-    public void addSingleActivity(Activity activity) {
+    public void addSingleActivity(BaseActivity activity) {
         if (mActivityStack == null) {
             mActivityStack = new Stack<>();
         }
@@ -99,12 +99,12 @@ public class AppManager {
      * 结束除了当前Activity（堆栈中最后一个压入的）所有的Activity
      */
     public void finishAllBesideTop() {
-        Activity activity = mActivityStack.lastElement();
+        BaseActivity activity = mActivityStack.lastElement();
         if (activity == null){
             return;
         }
         String name = activity.getClass().getSimpleName();
-        for (Activity activities : mActivityStack){
+        for (BaseActivity activities : mActivityStack){
             if (!activities.getClass().getSimpleName().equals(name)){
                 finishActivity(activities);
             }
@@ -116,7 +116,7 @@ public class AppManager {
      *
      * @param baseActivity
      */
-    public void removeActivity(Activity baseActivity) {
+    public void removeActivity(BaseActivity baseActivity) {
         mActivityStack.remove(baseActivity);
     }
 
@@ -124,15 +124,15 @@ public class AppManager {
     /**
      * 结束指定的Activity
      */
-    public void finishActivity(Activity activity) {
+    public void finishActivity(BaseActivity activity) {
         showDebugLog("Finishing " + activity.getClass().getSimpleName());
         showDebugLog("Before finish, the Stack size is :" + AppManager.getStackSize());
+        finishActivity(activity.getClass());
         if (activity != null) {
             activity.finish();
-            mCurInstance.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+            activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
             activity = null;
         }
-        finishActivity(activity.getClass());
         showDebugLog("After finished, the Stack size is :" + AppManager.getStackSize());
     }
 
@@ -142,7 +142,7 @@ public class AppManager {
     public void finishActivity(Class<?> cls) {
         try {
             mCurInstance = null;
-            for (Activity activity : mActivityStack) {
+            for (BaseActivity activity : mActivityStack) {
                 if (activity.getClass().equals(cls)) {
                     removeActivity(activity);
                 }

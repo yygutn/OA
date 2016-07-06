@@ -129,4 +129,9 @@ public class BaseActivity extends AppCompatActivity {
             mContext = null;
         }
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+    }
 }

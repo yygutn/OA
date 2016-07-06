@@ -142,6 +142,18 @@
                 </TableRow>
                 <!--第二行与第三行布局参考第一行-->
             </TableLayout>
+
+            <Button
+                android:id="@+id/sign_details_skip_approval"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/pressed"
+                android:text="进入审核"
+                android:textColor="@color/white"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"/>
         </LinearLayout>
     </ScrollView>
 

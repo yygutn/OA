@@ -129,15 +129,15 @@ public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.O
             int tag = i%3;
             switch (tag){
                 case 0:{
-                    title = "(会议)召开传达中央文件精神会议";
+                    title = "(会议)" + "召开传达中央文件精神会议";
                     break;
                 }
                 case 1:{
-                    title = "(公文)省人大常委会公告(第25号)";
+                    title = "(公文)" + "省人大常委会公告(第25号)";
                     break;
                 }
                 case 2:{
-                    title = "(公告)浙江省人民政府关于建立江山仙霞岭省级自然保护区的批复";
+                    title = "(公告)" + "浙江省人民政府关于建立江山仙霞岭省级自然保护区的批复";
                     break;
                 }
             }

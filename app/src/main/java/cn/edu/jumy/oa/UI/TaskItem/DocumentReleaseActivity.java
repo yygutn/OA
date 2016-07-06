@@ -13,26 +13,44 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bluelinelabs.logansquare.LoganSquare;
+import com.hyphenate.chat.EMClient;
+import com.orhanobut.logger.Logger;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.Callback;
+import com.zhy.http.okhttp.callback.StringCallback;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.ColorRes;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
+import cn.edu.jumy.oa.API.GetSendUnit;
+import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.adapter.ListDropDownAdapter;
 import cn.edu.jumy.oa.adapter.MultiDropDownAdapter;
+import cn.edu.jumy.oa.bean.Account;
+import cn.edu.jumy.oa.bean.BaseResponse;
+import cn.edu.jumy.oa.safe.PasswordUtil;
 import cn.edu.jumy.oa.server.UploadServer;
 import cn.edu.jumy.oa.widget.DropDownMenu;
 import cn.edu.jumy.oa.widget.customview.NoScrollGridView;
 import cn.edu.jumy.oa.widget.customview.NoScrollListView;
 import cn.edu.jumy.oa.widget.customview.UploadItem;
 import cn.edu.jumy.oa.widget.customview.UploadItem_;
+import okhttp3.Call;
+import okhttp3.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Jumy on 16/6/23 11:58.
@@ -93,6 +111,54 @@ public class DocumentReleaseActivity extends BaseActivity {
             }
         });
         try {
+            long time = new Date().getTime();
+            String base = EMClient.getInstance().getCurrentUser()+"_"+time;
+            String zip = PasswordUtil.simpleEncpyt(base);
+            Logger.w(base+"\n"+zip);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("value",zip);
+
+            OkHttpUtils.post()
+                    .url(MyApplication.API_URL+"getOrganizationData")
+                    .addParams("value",zip)
+                    .build()
+                    .execute(new Callback() {
+                        @Override
+                        public Object parseNetworkResponse(Response response, int id) throws Exception {
+                            String string = response.body().toString();
+                            return string;
+                        }
+
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                            e.printStackTrace();
+                            Logger.e(e.getMessage());
+                        }
+
+                        @Override
+                        public void onResponse(Object response, int id) {
+
+                        }
+                    });
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(MyApplication.API_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            GetSendUnit getSendUnit = retrofit.create(GetSendUnit.class);
+            retrofit2.Call<String> call = getSendUnit.getUnits(zip);
+            call.enqueue(new retrofit2.Callback<String>() {
+
+                @Override
+                public void onResponse(retrofit2.Call<String> call, retrofit2.Response<String> response) {
+
+                }
+
+                @Override
+                public void onFailure(retrofit2.Call<String> call, Throwable t) {
+
+                }
+            });
             initUnitView();
             initLevelView();
         } catch (Exception e) {
@@ -102,9 +168,7 @@ public class DocumentReleaseActivity extends BaseActivity {
         filter.addAction(UploadServer.UPLOAD_BR_RESULT);
         registerReceiver(uploadBroadcastReceiver,filter);
 
-
         UploadItem item = UploadItem_.build(mContext,this);
-        uploadView.addView(item,index++);
     }
 
     @Click({R.id.submit,R.id.addUpload})

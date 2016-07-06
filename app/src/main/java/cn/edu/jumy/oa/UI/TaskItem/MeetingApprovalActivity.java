@@ -1,5 +1,8 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
+import android.view.View;
+import android.view.ViewGroup;
+
 import org.androidannotations.annotations.EActivity;
 
 import cn.edu.jumy.oa.R;
@@ -34,5 +37,10 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity{
     @Override
     protected void doLoadMore() {
 
+    }
+
+    @Override
+    public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+        MeetAuditActivity_.intent(mContext).start();
     }
 }
