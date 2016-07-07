@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
-//apply plugin: 'realm-android'
 repositories {
     jcenter()
     flatDir {
@@ -106,4 +105,9 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     //节操播放器
     compile 'fm.jiecao:jiecaovideoplayer:3.6.1'
+
+    //LoganSquare
+//    apt 'com.bluelinelabs:logansquare-compiler:1.3.6'
+//    compile 'com.bluelinelabs:logansquare:1.3.6'
+//    compile 'com.github.aurae.retrofit2:converter-logansquare:1.4.1'
 }

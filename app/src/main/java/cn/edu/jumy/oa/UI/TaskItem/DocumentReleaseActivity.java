@@ -8,16 +8,16 @@ import android.content.IntentFilter;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bluelinelabs.logansquare.LoganSquare;
+import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.orhanobut.logger.Logger;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.androidannotations.annotations.AfterViews;
@@ -25,6 +25,7 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.ColorRes;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -33,13 +34,11 @@ import java.util.Date;
 import java.util.List;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
-import cn.edu.jumy.oa.API.GetSendUnit;
 import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.adapter.ListDropDownAdapter;
 import cn.edu.jumy.oa.adapter.MultiDropDownAdapter;
-import cn.edu.jumy.oa.bean.Account;
-import cn.edu.jumy.oa.bean.BaseResponse;
+import cn.edu.jumy.oa.bean.AccountResult;
 import cn.edu.jumy.oa.safe.PasswordUtil;
 import cn.edu.jumy.oa.server.UploadServer;
 import cn.edu.jumy.oa.widget.DropDownMenu;
@@ -47,10 +46,6 @@ import cn.edu.jumy.oa.widget.customview.NoScrollGridView;
 import cn.edu.jumy.oa.widget.customview.NoScrollListView;
 import cn.edu.jumy.oa.widget.customview.UploadItem;
 import cn.edu.jumy.oa.widget.customview.UploadItem_;
-import okhttp3.Call;
-import okhttp3.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Jumy on 16/6/23 11:58.
@@ -73,6 +68,8 @@ public class DocumentReleaseActivity extends BaseActivity {
     @ViewById
     TextView submit;
 
+    String temp = "{\"msg\":\"\",\"code\":0,\"data\":[{\"id\":\"1\",\"name\":\"管理员单位\",\"typeid\":null,\"pid\":\"0\",\"sort\":null,\"level\":0,\"contact1\":null,\"contact2\":null,\"contact3\":null,\"isdef\":0,\"isuse\":0,\"remark\":null,\"cuid\":null,\"uuid\":null,\"createTime\":null,\"updataTime\":null,\"orderBy\":null,\"organizationList\":[]},{\"id\":\"2\",\"name\":\"省委办公厅\",\"typeid\":null,\"pid\":\"0\",\"sort\":null,\"level\":0,\"contact1\":null,\"contact2\":null,\"contact3\":null,\"isdef\":1,\"isuse\":0,\"remark\":null,\"cuid\":\"1\",\"uuid\":\"1\",\"createTime\":1467104287000,\"updataTime\":1467695810000,\"orderBy\":null,\"organizationList\":null},{\"id\":\"de8df8b0f7784d47b2ce930cc26f96f7\",\"name\":\"省信访局\",\"typeid\":null,\"pid\":\"0\",\"sort\":null,\"level\":0,\"contact1\":null,\"contact2\":null,\"contact3\":null,\"isdef\":1,\"isuse\":0,\"remark\":null,\"cuid\":\"1\",\"uuid\":null,\"createTime\":1467523584000,\"updataTime\":null,\"orderBy\":null,\"organizationList\":null}]}\n";
+
     List<String> mFilePath = new ArrayList<>();
     @ViewById(R.id.uploadView)
     LinearLayout uploadView;
@@ -93,9 +90,9 @@ public class DocumentReleaseActivity extends BaseActivity {
     BroadcastReceiver uploadBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction() == UploadServer.UPLOAD_BR_RESULT){
-                String path= intent.getStringExtra(UploadServer.EXTRA_PATH);
-                if (!mFilePath.contains(path)){
+            if (intent.getAction() == UploadServer.UPLOAD_BR_RESULT) {
+                String path = intent.getStringExtra(UploadServer.EXTRA_PATH);
+                if (!mFilePath.contains(path)) {
                     mFilePath.add(path);
                 }
             }
@@ -112,75 +109,59 @@ public class DocumentReleaseActivity extends BaseActivity {
         });
         try {
             long time = new Date().getTime();
-            String base = EMClient.getInstance().getCurrentUser()+"_"+time;
+            final String base = EMClient.getInstance().getCurrentUser() + "_" + time;
             String zip = PasswordUtil.simpleEncpyt(base);
-            Logger.w(base+"\n"+zip);
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("value",zip);
+            Logger.w(base + "\n" + zip);
+            final JSONObject jsonObject = new JSONObject();
+            jsonObject.put("value", zip);
 
             OkHttpUtils.post()
-                    .url(MyApplication.API_URL+"getOrganizationData")
-                    .addParams("value",zip)
+                    .url(MyApplication.API_URL + "getOrganizationData")
+                    .addParams("value", zip)
                     .build()
-                    .execute(new Callback() {
+                    .execute(new StringCallback() {
                         @Override
-                        public Object parseNetworkResponse(Response response, int id) throws Exception {
-                            String string = response.body().toString();
-                            return string;
-                        }
-
-                        @Override
-                        public void onError(Call call, Exception e, int id) {
+                        public void onError(okhttp3.Call call, Exception e, int id) {
                             e.printStackTrace();
-                            Logger.e(e.getMessage());
                         }
 
                         @Override
-                        public void onResponse(Object response, int id) {
+                        public void onResponse(String response, int id) {
+                            try {
 
+                                Gson gson = new Gson();
+                                AccountResult account = gson.fromJson(response, AccountResult.class);
+
+                                Log.w("POST", "onResponse: " + response);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(MyApplication.API_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            GetSendUnit getSendUnit = retrofit.create(GetSendUnit.class);
-            retrofit2.Call<String> call = getSendUnit.getUnits(zip);
-            call.enqueue(new retrofit2.Callback<String>() {
-
-                @Override
-                public void onResponse(retrofit2.Call<String> call, retrofit2.Response<String> response) {
-
-                }
-
-                @Override
-                public void onFailure(retrofit2.Call<String> call, Throwable t) {
-
-                }
-            });
             initUnitView();
             initLevelView();
-        } catch (Exception e) {
+        } catch (JSONException e) {
             e.printStackTrace();
+        } finally {
+
         }
         IntentFilter filter = new IntentFilter();
         filter.addAction(UploadServer.UPLOAD_BR_RESULT);
-        registerReceiver(uploadBroadcastReceiver,filter);
+        registerReceiver(uploadBroadcastReceiver, filter);
 
-        UploadItem item = UploadItem_.build(mContext,this);
+        UploadItem item = UploadItem_.build(mContext, this);
     }
 
-    @Click({R.id.submit,R.id.addUpload})
+    @Click({R.id.submit, R.id.addUpload})
     void clickSubmit(View view) {
         switch (view.getId()) {
             case R.id.submit: {
                 confirmSubmit();
                 break;
             }
-            case R.id.addUpload:{
-                UploadItem item = UploadItem_.build(mContext,this);
-                uploadView.addView(item,index++);
+            case R.id.addUpload: {
+                UploadItem item = UploadItem_.build(mContext, this);
+                uploadView.addView(item, index++);
                 break;
             }
             default:
@@ -206,7 +187,7 @@ public class DocumentReleaseActivity extends BaseActivity {
     }
 
     private void initUnitView() {
-        final View view = getLayoutInflater().inflate(R.layout.layout_custom_release,null);
+        final View view = getLayoutInflater().inflate(R.layout.layout_custom_release, null);
         NoScrollGridView gridView = (NoScrollGridView) view.findViewById(R.id.gridView);
         mUnitAdapter = new MultiDropDownAdapter(mContext, Arrays.asList(mUnits));
         gridView.setAdapter(mUnitAdapter);

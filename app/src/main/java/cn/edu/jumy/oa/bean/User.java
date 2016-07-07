@@ -3,9 +3,6 @@ package cn.edu.jumy.oa.bean;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.bluelinelabs.logansquare.annotation.JsonField;
-import com.bluelinelabs.logansquare.annotation.JsonIgnore;
-import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.hyphenate.easeui.domain.EaseUser;
 
 import org.litepal.crud.DataSupport;
@@ -22,38 +19,29 @@ import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
  * Created by Jumy on 16/6/14 15:24.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-@JsonObject
 public class User extends DataSupport implements Serializable {
-    @JsonField
     private String id = "";
-    @JsonField(name = "account")
     private String username = "";
     /**
      * 单位id
      */
-    @JsonField(name = "oid")
     private String nickname = "";
-    @JsonIgnore
     private String avatar = "";//头像
     /**
      * 特殊
      */
-    @JsonField(name = "code")
     private String device_token = "";//设备ID
     /**
      * 单位id
      */
-    @JsonIgnore
     private String oid = "";
     /**
      * 电话
      */
-    @JsonField
     private String phone;
     /**
      * 权限等级(0:普通人员   1:平台管理人员  2:单位管理员)
      */
-    @JsonField
     private Integer level;
 
     // 额外属性

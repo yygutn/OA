@@ -1,8 +1,5 @@
 package cn.edu.jumy.oa.bean;
 
-import com.bluelinelabs.logansquare.annotation.JsonField;
-import com.bluelinelabs.logansquare.annotation.JsonObject;
-
 import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
@@ -12,49 +9,39 @@ import java.io.Serializable;
  * Created by Jumy on 16/6/29 13:17.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-@JsonObject
 public class Attachment extends DataSupport implements Serializable{
-    @JsonField
     private String id;
     /**
      * 父id 当PID为UID的时候，他是用户头像
      */
-    @JsonField
     private String pid;
     /**
      * 创建者
      */
-    @JsonField
     private String cuid;
     /**
      * 1为公文;2为会议;3用户头像
      */
-    @JsonField
     private Integer type;
     /**
      * 文件名称
      */
-    @JsonField
     private String fileName;
     /**
      * 文件后缀名
      */
-    @JsonField
     private String suffix;
     /**
      * 文件路径
      */
-    @JsonField
     private String url;
     /**
      * 备注
      */
-    @JsonField
     private String remark;
     /**
      * 是否启用(0:是  1:否)
      */
-    @JsonField
     private Integer isuse;
 
     public String getId() {

@@ -1,7 +1,5 @@
 package cn.edu.jumy.oa.bean;
 
-import com.bluelinelabs.logansquare.annotation.JsonObject;
-
 import org.litepal.crud.DataSupport;
 
 import java.util.List;
@@ -10,7 +8,6 @@ import java.util.List;
  * Created by Jumy on 16/6/29 15:31.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-@JsonObject
 public class Organization extends DataSupport{
     private String id;
     /**

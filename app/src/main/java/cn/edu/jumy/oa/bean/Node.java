@@ -1,8 +1,5 @@
 package cn.edu.jumy.oa.bean;
 
-import com.bluelinelabs.logansquare.annotation.JsonField;
-import com.bluelinelabs.logansquare.annotation.JsonObject;
-
 import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
@@ -12,50 +9,42 @@ import java.util.List;
  * Created by Jumy on 16/6/20 15:23.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-@JsonObject
 public class Node extends DataSupport implements Serializable {
     /**
      * 类型 0-会议 1-公文 2－公告
      */
-    @JsonField
+    
     private int type;
-    @JsonField
+    
     private String id;//主键
     /**
      * 创建人员
      * --发文单位
      */
-    @JsonField(name = "cuid")
     private String dispatchUnit;
     /**
      * 发文时间
      */
-    @JsonField(name = "createTime")
     private String dispatchTime;
     /**
      * 承办单位
      */
-    @JsonField(name = "meetCompany")
     private String undertakingUnit;
     /**
      * 会议时间
      */
-    @JsonField(name = "meetTime")
     private String meetingTime;
     /**
      * 会议地点
      */
-    @JsonField(name = "addr")
     private String meetingLocation;
     /**
      * 文件文号
      */
-    @JsonField(name = "docNo")
     private String documentNumber;
     /**
      * 标题
      */
-    @JsonField(name = "name")
     private String title;
     /**
      * 内容-标题(eg:经XX研究决定:)
@@ -64,47 +53,45 @@ public class Node extends DataSupport implements Serializable {
     /**
      * 内容--正文摘要
      */
-    @JsonField(name = "docSummary")
     private String content;
     /**
      * 接收单位
      */
-    @JsonField
+    
     private String department;
     /**
      * 接收人员
      */
-    @JsonField
+    
     private String personnel;
     /**
      * 附件
      */
-    @JsonField
+    
     private List<Attachment> attachmentList;
     /**
      * 联系人姓名
      */
-    @JsonField
+    
     private String contactName;
     /**
      * 联系人电话
      */
-    @JsonField
+    
     private String contactPhone;
     /**
      * 等级:(1.特急2.加急3.平急4.特提)
      */
-    @JsonField
+    
     private String level;
     /**
      * 已签收人员
      */
-    @JsonField(name = "signUid")
     private String issuer;//签发人
     /**
      * 签收人数
      */
-    @JsonField
+    
     private Integer signNum;
     private String other;// 其他
 
