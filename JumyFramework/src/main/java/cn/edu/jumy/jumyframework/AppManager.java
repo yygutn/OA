@@ -15,7 +15,6 @@ import java.util.Stack;
 public class AppManager {
     private static final String TAG = AppManager.class.getSimpleName();
     private static Stack<BaseActivity> mActivityStack;
-    private static BaseActivity mCurInstance = null;
     private static AppManager instance;
 
 
@@ -24,10 +23,6 @@ public class AppManager {
             instance = new AppManager();
         }
         return instance;
-    }
-
-    public static Context getCurActivityInstance() {
-        return mCurInstance.getBaseContext();
     }
 
     public static int getStackSize() {
@@ -49,8 +44,7 @@ public class AppManager {
         if (mActivityStack == null) {
             mActivityStack = new Stack<>();
         }
-        mCurInstance = activity;
-        mActivityStack.push(mCurInstance);
+        mActivityStack.push(activity);
         Logger.t(TAG).w("add " + activity.getLocalClassName() + "\n" + "current size is : " + mActivityStack.size());
         logStackInfo();
     }
@@ -64,7 +58,6 @@ public class AppManager {
         }
         if (!mActivityStack.contains(activity)) {
             mActivityStack.push(activity);
-            mCurInstance = activity;
             Log.e("AppManager", "add Single" + activity.getLocalClassName() + "\n" + "current size is : " + mActivityStack.size());
         }
     }
@@ -83,7 +76,6 @@ public class AppManager {
         Activity activity = mActivityStack.pop();
         activity.finish();
         activity = null;
-        mCurInstance = mActivityStack.size() >= 1 ? mActivityStack.lastElement():null;
         logStackInfo();
     }
 
@@ -141,13 +133,11 @@ public class AppManager {
      */
     public void finishActivity(Class<?> cls) {
         try {
-            mCurInstance = null;
             for (BaseActivity activity : mActivityStack) {
                 if (activity.getClass().equals(cls)) {
                     removeActivity(activity);
                 }
             }
-            mCurInstance = mActivityStack.size() >= 1 ? mActivityStack.lastElement():null;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -157,7 +147,6 @@ public class AppManager {
      * 结束所有Activity
      */
     public void finishAllActivity() {
-        mCurInstance = null;
         while (!mActivityStack.empty()) {
             mActivityStack.pop().finish();
         }

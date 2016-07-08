@@ -18,16 +18,14 @@ import cn.edu.jumy.oa.Utils.CardGenerator;
  * Created by Jumy on 16/6/20 16:22.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-public class DocumentAdapter extends CommonAdapter<Node> {
-    public DocumentAdapter(Context context, int layoutId, List<Node> datas) {
+public class MeetApprovalAdapter extends CommonAdapter<Node> {
+    public MeetApprovalAdapter(Context context, int layoutId, List<Node> datas) {
         super(context, layoutId, datas);
     }
 
     @Override
     public void convert(ViewHolder holder, final Node node) {
         try {
-            holder.setTextColor(R.id.subtitle, Color.BLACK);
-            holder.setTextColor(R.id.supportingText, Color.BLACK);
             ((CardView)holder.getView(R.id.cardView)).setCardBackgroundColor(Color.parseColor("#30DDDDDD"));
             holder.setText(R.id.subtitle,node.getTitle());
             holder.setText(R.id.supportingText, node.getContent());

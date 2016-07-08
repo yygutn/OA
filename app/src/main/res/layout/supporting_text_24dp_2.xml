@@ -3,5 +3,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/supportingText"
     style="@style/Material_Card_Supporting_Text_24dp_2"
-    android:textColor="@color/white"
+    android:textColor="@color/black"
     tools:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam" />

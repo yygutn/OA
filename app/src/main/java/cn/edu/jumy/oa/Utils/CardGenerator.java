@@ -1,10 +1,13 @@
-package cn.edu.jumy.oa.widget.utils;
+package cn.edu.jumy.oa.Utils;
 
 import android.util.SparseArray;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
+
+import cn.edu.jumy.oa.bean.Node;
 
 /**
  * Created by Jumy on 16/5/24 15:03.
@@ -57,5 +60,13 @@ public class CardGenerator {
 //            message += "附件： " + list.get(3,"");
         }
         return message;
+    }
+
+    public static Node getStringFromArray(List<String> strings,int type) {
+        String ret = "";
+        for (int i = 1; i < strings.size() - 1; i++) {
+            ret += strings.get(i) + "\n";
+        }
+        return new Node(strings.get(0), ret, type);
     }
 }

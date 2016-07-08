@@ -81,7 +81,8 @@ public class UploadItem extends LinearLayout{
             public void onFilePicked(String currentPath) {
                 String path [] = currentPath.split("/");
                 fileName = path[path.length-1];
-                filePath = "file:/" + currentPath.trim();
+                filePath = currentPath.trim();
+//                filePath = "file:/" + currentPath.trim();
                 selectName.setText(fileName);
 
                 Intent intent = new Intent(UploadServer.UPLOAD_BR_RESULT);

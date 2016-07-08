@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="接受单位:"
+                android:text="接收单位:"
                 android:textColor="@color/black" />
 
             <cn.edu.jumy.oa.widget.DropDownMenu
@@ -134,7 +134,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/shape_document_release"
-                android:text="添加附件:"
+                android:text="添加附件"
                 android:id="@+id/addUpload"
                 android:textColor="@color/black" />
 

@@ -9,7 +9,7 @@ import com.fsck.k9.K9;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
-import com.squareup.leakcanary.LeakCanary;
+//import com.squareup.leakcanary.LeakCanary;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -56,13 +56,13 @@ public class MyApplication extends MultiDexApplication {
         //HX
         DemoApplication.getInstance().init(this);
         //end
-        LeakCanary.install(this);
+//        LeakCanary.install(this);
         //
         Logger
                 .init("Jumy")
                 .methodCount(3)
                 .logLevel(LogLevel.FULL)
-                .methodOffset(2);
+                .methodOffset(1);
         LitePalApplication.initialize(this);
     }
 

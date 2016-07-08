@@ -14,8 +14,8 @@
             android:shape="rectangle" >
             <corners android:radius="5dp" />
             <solid android:color="@color/white" />
-            <stroke android:color="@color/gray_normal" android:width="0.5dp"/>
-            <padding android:bottom="1dp" android:left="1dp" android:right="1dp" android:top="1dp"/>
-        </shape>
+        <stroke android:color="@color/gray_normal" android:width="0.5dp"/>
+        <padding android:bottom="1dp" android:left="1dp" android:right="1dp" android:top="1dp"/>
+    </shape>
     </item>
 </selector>

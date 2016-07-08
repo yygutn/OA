@@ -1,4 +1,4 @@
-package cn.edu.jumy.oa.bean;
+package cn.edu.jumy.oa.Response;
 
 /**
  * Created by Jumy on 16/7/6 16:32.

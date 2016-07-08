@@ -1,6 +1,8 @@
-package cn.edu.jumy.oa.bean;
+package cn.edu.jumy.oa.Response;
 
 import java.util.List;
+
+import cn.edu.jumy.oa.bean.Account;
 
 /**
  * Created by Jumy on 16/7/7 16:27.

@@ -19,7 +19,7 @@ public class MultiDropDownAdapter extends BaseAdapter {
     private List<String> list;
     private int checkItemPosition = 0;
 
-    private List<Integer> checkedList = new ArrayList<>();
+    public List<Integer> checkedList = new ArrayList<>();
 
     public void setCheckItem(int position) {
         checkItemPosition = position;

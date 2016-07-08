@@ -85,7 +85,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
             results.add(new Item(4, "公文阅读", R.drawable.task_receive_file));
             results.add(new Item(5, "公文发布", R.drawable.task_send_file));
             results.add(new Item(3, "会议通知", R.drawable.task_approval));
-            results.add(new Item(8, "会议发送", R.drawable.task_meet_send));
+            results.add(new Item(8, "会议发布", R.drawable.task_meet_send));
             results.add(new Item(9, "会议审核", R.drawable.task_meet_approval));
             //add 内部办公
 //            results.add(new Item(11, "内部办公", R.drawable.task_internal_office));
@@ -96,7 +96,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
             results.add(new Item(12, "公告", R.drawable.task_notice));
             results.add(new Item(7, "在线学习", R.drawable.task_learn_online));
             results.add(new Item(13, "已发送公文", R.drawable.task_file_send));
-            results.add(new Item(14,"已发送会议",R.drawable.task_meet_sent));
+            results.add(new Item(14,"已发布会议",R.drawable.task_meet_sent));
 //            results.add(new Item(1, "签到", R.drawable.task_location));
             results.add(new Item(2, "加密邮件", R.drawable.task_mail));
         }

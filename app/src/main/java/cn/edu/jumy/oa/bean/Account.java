@@ -10,7 +10,7 @@ public class Account {
 
     /**
      * id : 2
-     * name : 省委办公厅
+     * name : 省委办公厅  所属单位
      * typeid : null
      * pid : 0
      * sort : null
@@ -26,7 +26,7 @@ public class Account {
      * createTime : 1467104287000
      * updataTime : 1467695810000
      * orderBy : null
-     * organizationList : null
+     * organizationList : null  附件列表
      */
     public String id;
     public String name;

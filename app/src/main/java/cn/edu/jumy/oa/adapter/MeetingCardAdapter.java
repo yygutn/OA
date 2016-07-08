@@ -50,14 +50,8 @@ public class MeetingCardAdapter extends CommonAdapter<Node>{
 
     @Override
     public void convert(ViewHolder holder, Node cardData) {
+        ((CardView)holder.getView(R.id.cardView)).setCardBackgroundColor(Color.parseColor("#30DDDDDD"));
         holder.setText(R.id.subtitle,cardData.getTitle());
         holder.setText(R.id.supportingText,cardData.getContent());
-        try {
-            holder.setTextColor(R.id.subtitle, Color.WHITE);
-            holder.setTextColor(R.id.supportingText, Color.WHITE);
-            ((CardView)holder.getView(R.id.cardView)).setCardBackgroundColor(ContextCompat.getColor(mContext,R.color.pressed));
-        } catch (Resources.NotFoundException e) {
-            e.printStackTrace();
-        }
     }
 }

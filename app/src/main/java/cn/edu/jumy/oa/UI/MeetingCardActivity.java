@@ -1,5 +1,6 @@
 package cn.edu.jumy.oa.UI;
 
+import android.content.res.Resources;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +16,6 @@ import android.widget.ImageView;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
-import cn.edu.jumy.jumyframework.BaseActivity;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 
 import org.androidannotations.annotations.AfterViews;
@@ -24,15 +24,15 @@ import org.androidannotations.annotations.ViewById;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.UI.web.SignUpActivity_;
+import cn.edu.jumy.oa.Utils.CardGenerator;
 import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
-import cn.edu.jumy.oa.bean.Card;
 import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
-import cn.edu.jumy.oa.widget.utils.CardGenerator;
 
 
 /**
@@ -147,16 +147,31 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
     }
 
     private void fillArray() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        SparseArray<String> array;
-        cardDataList = new ArrayList<>();
-        String title = "";
-        for (int i = 0; i < 10; i++) {
-            array = new SparseArray<String>();
-            title = "召开传达中央文件精神会议";
-            String message = CardGenerator.generateNotifyString(0, array);
-            cardDataList.add(new Node(title, message, 0));
-        }
+        Resources resources = getResources();
+        String [] test1 = resources.getStringArray(R.array.test1);
+        String [] test2 = resources.getStringArray(R.array.test2);
+        String [] test3 = resources.getStringArray(R.array.test3);
+        String [] test4 = resources.getStringArray(R.array.test4);
+        String [] test5 = resources.getStringArray(R.array.test5);
+        String [] test6 = resources.getStringArray(R.array.test6);
+
+        cardDataList.add(CardGenerator.getStringFromArray(Arrays.asList(test1),0));
+        cardDataList.add(CardGenerator.getStringFromArray(Arrays.asList(test2),0));
+        cardDataList.add(CardGenerator.getStringFromArray(Arrays.asList(test3),0));
+        cardDataList.add(CardGenerator.getStringFromArray(Arrays.asList(test4),0));
+        cardDataList.add(CardGenerator.getStringFromArray(Arrays.asList(test5),0));
+        cardDataList.add(CardGenerator.getStringFromArray(Arrays.asList(test6),0));
+
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+//        SparseArray<String> array;
+//        cardDataList = new ArrayList<>();
+//        String title = "";
+//        for (int i = 0; i < 10; i++) {
+//            array = new SparseArray<String>();
+//            title = "召开传达中央文件精神会议";
+//            String message = CardGenerator.generateNotifyString(0, array);
+//            cardDataList.add(new Node(title, message, 0));
+//        }
         MeetingCardAdapter adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification, cardDataList);
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);

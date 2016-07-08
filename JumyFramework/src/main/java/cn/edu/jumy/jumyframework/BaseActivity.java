@@ -113,6 +113,12 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void showDebugException(Exception e){
+        if (DEBUG){
+            e.printStackTrace();
+        }
+    }
+
     public void showDebugLogd(CharSequence message) {
         if (DEBUG) {
             Logger.d(message.toString());

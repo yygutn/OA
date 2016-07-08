@@ -1,17 +1,21 @@
-package cn.edu.jumy.jumyframework;
+package cn.edu.jumy.oa.adapter;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 
-import com.orhanobut.logger.Logger;
+import com.zhy.base.adapter.ViewHolder;
+import com.zhy.base.adapter.recyclerview.CommonAdapter;
+
+import java.util.List;
+
+import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.bean.Node;
 
 /**
- * Created by Jumy on 16/5/25 15:48.
+ * Created by Jumy on 16/6/1 17:48.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  * *****************************************************
  * #                       _oo0oo_                     #
@@ -38,36 +42,15 @@ import com.orhanobut.logger.Logger;
  * #                                                   #
  * *****************************************************
  */
-public class BaseFragment extends Fragment {
-    protected Context mContext;
-    private boolean DEBUG = BaseActivity.DEBUG;
-
-    public void showDebugLoge(CharSequence message) {
-        if (DEBUG) {
-            Logger.e("jumy", message.toString());
-        }
-    }
-
-    public void showDebugLogw(CharSequence message) {
-        if (DEBUG) {
-            Logger.w("jumy", message.toString());
-        }
-    }
-
-    public void showDebugException(Exception e){
-        if (DEBUG){
-            e.printStackTrace();
-        }
-    }
-
-    public void showToast(CharSequence message) {
-        Toast.makeText(getActivity(), message.toString(), Toast.LENGTH_SHORT).show();
+public class NotifyCardAdapter extends CommonAdapter<Node>{
+    public NotifyCardAdapter(Context context, int layoutId, List datas) {
+        super(context, layoutId, datas);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        StatusBarCompat.compat(getActivity(), getResources().getColor(R.color.pressed));
-        mContext = getActivity();
+    public void convert(ViewHolder holder, Node cardData) {
+        holder.setText(R.id.subtitle,cardData.getTitle());
+        holder.setText(R.id.supportingText,cardData.getContent());
+        ((CardView)holder.getView(R.id.cardView)).setCardBackgroundColor(Color.parseColor("#30DDDDDD"));
     }
 }

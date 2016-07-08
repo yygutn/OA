@@ -1,5 +1,7 @@
 package cn.edu.jumy.oa.fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.TypedValue;
 import android.view.View;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.jumy.jumyframework.BaseFragment;
+import cn.edu.jumy.oa.BroadCastReceiver.DocumentBroadcastReceiver;
 import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
@@ -32,6 +35,9 @@ import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
  */
 @EFragment(R.layout.fragment_document_all)
 public class BaseSearchRefreshFragment extends BaseFragment implements OnItemClickListener {
+
+
+    DocumentBroadcastReceiver documentBroadcastReceiver;
 
     @ViewById(R.id.listview)
     protected PullToRefreshRecyclerView mListView;
@@ -97,7 +103,14 @@ public class BaseSearchRefreshFragment extends BaseFragment implements OnItemCli
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ACache.get(MyApplication.getContext()).put(DemoHelper.getInstance().getCurrentUsernName()+"_all", mList);
+        try {
+            if (documentBroadcastReceiver != null) {
+                mContext.unregisterReceiver(documentBroadcastReceiver);
+            }
+            ACache.get(MyApplication.getContext()).put(DemoHelper.getInstance().getCurrentUsernName()+"_all", mList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void onTextChanged(CharSequence message){

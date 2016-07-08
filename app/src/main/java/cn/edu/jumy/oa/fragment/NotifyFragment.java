@@ -26,11 +26,10 @@ import java.util.List;
 import cn.edu.jumy.jumyframework.BaseFragment;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
-import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
-import cn.edu.jumy.oa.bean.Card;
+import cn.edu.jumy.oa.adapter.NotifyCardAdapter;
 import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
-import cn.edu.jumy.oa.widget.utils.CardGenerator;
+import cn.edu.jumy.oa.Utils.CardGenerator;
 
 /**
  * Created by Jumy on 16/5/19 12:07.
@@ -144,7 +143,7 @@ public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.O
             String message = CardGenerator.generateNotifyString(tag, array);
             cardList.add(new Node(title, message,tag));
         }
-        MeetingCardAdapter adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification, cardList);
+        NotifyCardAdapter adapter = new NotifyCardAdapter(mContext, R.layout.item_card_notification, cardList);
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
     }

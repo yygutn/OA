@@ -18,6 +18,7 @@
         android:id="@+id/search_view"
         app:searchBackground="@color/pressed"
         android:textColor="@color/white"
+        android:hint="请输入关键字..."
         app:searchBackIcon="@drawable/ic_arrow_back_white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,7 +17,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
-import com.orhanobut.logger.Logger;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -28,17 +28,22 @@ import org.androidannotations.annotations.res.ColorRes;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.MyApplication;
+import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.adapter.ListDropDownAdapter;
 import cn.edu.jumy.oa.adapter.MultiDropDownAdapter;
-import cn.edu.jumy.oa.bean.AccountResult;
+import cn.edu.jumy.oa.bean.Account;
+import cn.edu.jumy.oa.Response.AccountResult;
 import cn.edu.jumy.oa.safe.PasswordUtil;
 import cn.edu.jumy.oa.server.UploadServer;
 import cn.edu.jumy.oa.widget.DropDownMenu;
@@ -46,6 +51,7 @@ import cn.edu.jumy.oa.widget.customview.NoScrollGridView;
 import cn.edu.jumy.oa.widget.customview.NoScrollListView;
 import cn.edu.jumy.oa.widget.customview.UploadItem;
 import cn.edu.jumy.oa.widget.customview.UploadItem_;
+import okhttp3.Call;
 
 /**
  * Created by Jumy on 16/6/23 11:58.
@@ -68,24 +74,29 @@ public class DocumentReleaseActivity extends BaseActivity {
     @ViewById
     TextView submit;
 
-    String temp = "{\"msg\":\"\",\"code\":0,\"data\":[{\"id\":\"1\",\"name\":\"管理员单位\",\"typeid\":null,\"pid\":\"0\",\"sort\":null,\"level\":0,\"contact1\":null,\"contact2\":null,\"contact3\":null,\"isdef\":0,\"isuse\":0,\"remark\":null,\"cuid\":null,\"uuid\":null,\"createTime\":null,\"updataTime\":null,\"orderBy\":null,\"organizationList\":[]},{\"id\":\"2\",\"name\":\"省委办公厅\",\"typeid\":null,\"pid\":\"0\",\"sort\":null,\"level\":0,\"contact1\":null,\"contact2\":null,\"contact3\":null,\"isdef\":1,\"isuse\":0,\"remark\":null,\"cuid\":\"1\",\"uuid\":\"1\",\"createTime\":1467104287000,\"updataTime\":1467695810000,\"orderBy\":null,\"organizationList\":null},{\"id\":\"de8df8b0f7784d47b2ce930cc26f96f7\",\"name\":\"省信访局\",\"typeid\":null,\"pid\":\"0\",\"sort\":null,\"level\":0,\"contact1\":null,\"contact2\":null,\"contact3\":null,\"isdef\":1,\"isuse\":0,\"remark\":null,\"cuid\":\"1\",\"uuid\":null,\"createTime\":1467523584000,\"updataTime\":null,\"orderBy\":null,\"organizationList\":null}]}\n";
-
     List<String> mFilePath = new ArrayList<>();
+    Map<String, File> fileMap;
     @ViewById(R.id.uploadView)
     LinearLayout uploadView;
     int index = 0;
+
+    List<Account> accountList;
+
+    String receiveUnits = "";//公文接收单位
+    String level = "0"; //等级
 
     private Object str;
 
     private MultiDropDownAdapter mUnitAdapter;
     private ListDropDownAdapter mLevelAdapter;
 
-    private String[] mUnits = {"省委办公厅", "省信访局", "省档案局", "省委机要局", "省人大常委办公厅"};
-    private String[] mLevel = {"请选择", "特急", "加急", "平急", "特提"};
+    private ArrayList<String> mUnits = new ArrayList<>(Arrays.asList(new String[]{"省委办公厅", "省信访局", "省档案局", "省委机要局", "省人大常委办公厅"}));
+    private ArrayList<String> mLevel = new ArrayList<>(Arrays.asList(new String[]{"请选择", "特急", "加急", "平急", "特提"}));
     private String headers[] = {"请选择"};
 
     private List<View> popupView1 = new ArrayList<>();
     private List<View> popupView2 = new ArrayList<>();
+
 
     BroadcastReceiver uploadBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -111,36 +122,41 @@ public class DocumentReleaseActivity extends BaseActivity {
             long time = new Date().getTime();
             final String base = EMClient.getInstance().getCurrentUser() + "_" + time;
             String zip = PasswordUtil.simpleEncpyt(base);
-            Logger.w(base + "\n" + zip);
-            final JSONObject jsonObject = new JSONObject();
-            jsonObject.put("value", zip);
 
-            OkHttpUtils.post()
-                    .url(MyApplication.API_URL + "getOrganizationData")
-                    .addParams("value", zip)
-                    .build()
-                    .execute(new StringCallback() {
-                        @Override
-                        public void onError(okhttp3.Call call, Exception e, int id) {
-                            e.printStackTrace();
-                        }
+            OAService.getOrganizationData(new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+                    e.printStackTrace();
+                    showToast("网络异常，获取可发送单位失败");
+                    mUnits.clear();
+                    mUnits.add("请选择");
+                }
 
-                        @Override
-                        public void onResponse(String response, int id) {
-                            try {
+                @Override
+                public void onResponse(String response, int id) {
+                    try {
 
-                                Gson gson = new Gson();
-                                AccountResult account = gson.fromJson(response, AccountResult.class);
-
-                                Log.w("POST", "onResponse: " + response);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                        Gson gson = new Gson();
+                        AccountResult account = gson.fromJson(response, AccountResult.class);
+                        if (account.code != 0) {
+                            showToast("网络异常，获取可发送单位失败");
+                            mUnits.clear();
+                            mUnits.add("请选择");
+                        } else {
+                            mUnits.clear();
+                            accountList = account.data;
+                            for (Account data : accountList) {
+                                mUnits.add(data.name);
                             }
                         }
-                    });
-            initUnitView();
+                        initUnitView();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
             initLevelView();
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
 
@@ -169,16 +185,74 @@ public class DocumentReleaseActivity extends BaseActivity {
         }
     }
 
+    AlertDialog alertDialog;
+
     private void confirmSubmit() {
-        AlertDialog alertDialog = new AlertDialog.Builder(mContext).
-                setTitle("确认发送")
+        alertDialog = new AlertDialog.Builder(mContext)
+                .setTitle("确认发送")
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        showToast("发送成功");
-                        getStr();
-                        // TODO: 16/6/27 启动后台上传服务，关闭当前页面
-                        backToPreActivity();
+
+                        String docNo = mEt1.getText().toString();
+                        String docTitle = mEt2.getText().toString();
+                        String docMain = mEt3.getText().toString();
+                        if (receiveUnits.equals("请选择")) {
+                            showToast("请选择发文单位");
+                            return;
+                        }
+                        if (TextUtils.isEmpty(docNo)) {
+                            showToast("发文编号不能为空");
+                            return;
+                        }
+                        if (TextUtils.isEmpty(docTitle)) {
+                            showToast("发文标题不能为空");
+                            return;
+                        }
+                        if (TextUtils.isEmpty(docMain)) {
+                            showToast("发文摘要不能为空");
+                            return;
+                        }
+                        alertDialog.setTitle("发送中，请稍后...");
+
+                        long time = new Date().getTime();
+                        final String base = EMClient.getInstance().getCurrentUser() + "_" + time;
+                        String zip = PasswordUtil.simpleEncpyt(base);
+
+                        dealZipFile();
+
+                        Map<String, String> params = new HashMap<>();
+                        params.put("department", receiveUnits);
+                        params.put("level", level);
+                        params.put("docNo", docNo);
+                        params.put("docTitle", docTitle);
+                        params.put("docSummary", docMain);
+                        OAService.docSend(params, fileMap, new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+                                showDebugException(e);
+                                showToast("网络异常,发送失败");
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                if (response.contains("0")) {
+                                    showToast("发送成功");
+                                } else {
+                                    JSONObject object = new Gson().fromJson(response, JSONObject.class);
+                                    try {
+                                        if (TextUtils.isEmpty(object.get("data").toString())) {
+                                            showToast("服务器异常,发送失败");
+                                        } else {
+                                            showToast(object.get("data").toString());
+                                        }
+                                    } catch (JSONException e) {
+                                        showToast("服务器异常,发送失败");
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        });
                     }
                 }).setNegativeButton("取消", null)
                 .create();
@@ -186,10 +260,18 @@ public class DocumentReleaseActivity extends BaseActivity {
         alertDialog.setCanceledOnTouchOutside(true);
     }
 
+    private void dealZipFile() {
+        fileMap = new HashMap<>();
+        for (String path : mFilePath) {
+            File file = new File(path);
+            fileMap.put(file.getName(), file);
+        }
+    }
+
     private void initUnitView() {
         final View view = getLayoutInflater().inflate(R.layout.layout_custom_release, null);
         NoScrollGridView gridView = (NoScrollGridView) view.findViewById(R.id.gridView);
-        mUnitAdapter = new MultiDropDownAdapter(mContext, Arrays.asList(mUnits));
+        mUnitAdapter = new MultiDropDownAdapter(mContext, mUnits);
         gridView.setAdapter(mUnitAdapter);
 
         TextView textView = (TextView) view.findViewById(R.id.ok);
@@ -197,6 +279,7 @@ public class DocumentReleaseActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 mDropDownMenu1.setTabText(mUnitAdapter.getNeedString());
+                getUnits(mUnitAdapter.checkedList);
                 mDropDownMenu1.closeMenu();
             }
         });
@@ -214,10 +297,25 @@ public class DocumentReleaseActivity extends BaseActivity {
 
     }
 
+    private void getUnits(List<Integer> checkedList) {
+        receiveUnits = "";
+        if (accountList == null || accountList.size() <= 0) {
+            receiveUnits = "请选择";
+            return;
+        }
+        for (int i = 0; i < checkedList.size(); i++) {
+            if (i == 0) {
+                receiveUnits += accountList.get(checkedList.get(0)).id;
+            } else {
+                receiveUnits += "," + accountList.get(checkedList.get(i)).id;
+            }
+        }
+    }
+
     private void initLevelView() {
         final NoScrollListView listView = new NoScrollListView(mContext);
         listView.setDividerHeight(0);
-        mLevelAdapter = new ListDropDownAdapter(mContext, Arrays.asList(mLevel));
+        mLevelAdapter = new ListDropDownAdapter(mContext, mLevel);
         listView.setAdapter(mLevelAdapter);
 
         popupView2.add(listView);
@@ -226,7 +324,8 @@ public class DocumentReleaseActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mLevelAdapter.setCheckItem(position);
-                mDropDownMenu2.setTabText(mLevel[position]);
+                mDropDownMenu2.setTabText(mLevel.get(position));
+                level = position + "";
                 mDropDownMenu2.setTabTextColor(pressed);
                 mDropDownMenu2.closeMenu();
             }
@@ -254,9 +353,5 @@ public class DocumentReleaseActivity extends BaseActivity {
         } else {
             super.onBackPressed();
         }
-    }
-
-    private void getStr() {
-        // TODO: 16/6/27 获取输入框内文字
     }
 }

@@ -1,5 +1,8 @@
 package cn.edu.jumy.oa.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
@@ -9,82 +12,142 @@ import java.util.List;
  * Created by Jumy on 16/6/29 15:22.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-public class Doc extends DataSupport{
-    
-    private String id;
+public class Doc extends DataSupport implements Parcelable {
+
+    public String id;
     /**
      * 公文接收单位
      */
-    
-    private String department;
+
+    public String department;
     /**
      * 公文接收人员
      */
-    
-    private String personnel;
+
+    public String personnel;
 
     /**
      * 公文等级(1:特急 2:加急 3:平急 4:特提)
      */
-    
-    private Integer level;
+
+    public Integer level;
     /**
      * 公文编号
      */
-    
-    private String docNo;
+
+    public String docNo;
     /**
      * 公文标题
      */
-    
-    private String docTitle;
+
+    public String docTitle;
     /**
      * 公文摘要
      */
-    
-    private String docSummary;
+
+    public String docSummary;
 
     /**
      * 签收人数
      */
-    
-    private Integer signNum;
+
+    public Integer signNum;
     /**
      * 签收状态(0:是 1:否)
      */
-    
-    private Integer signStatus;
+
+    public Integer signStatus;
     /**
      * 是否启用(0:是  1:否)
      */
-    
-    private Integer isuse;
+
+    public Integer isuse;
     /**
      * 备注
      */
-    
-    private String remark;
+
+    public String remark;
     /**
      * 创建人员
      */
-    
-    private String cuid;
+
+    public String cuid;
     /**
      * 修改人员
      */
-    
-    private String uuid;
+
+    public String uuid;
 
     // 额外属性
 
     /**
      * 已签收人员
      */
-    private String signUid;
+    public String signUid;
 
-    private String orderBy;
+    public String orderBy;
     /**
      * 附件
      */
-    private List<Attachment> attachmentList = new ArrayList<>();
+    public List<Attachment> attachmentList = new ArrayList<>();
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.department);
+        dest.writeString(this.personnel);
+        dest.writeValue(this.level);
+        dest.writeString(this.docNo);
+        dest.writeString(this.docTitle);
+        dest.writeString(this.docSummary);
+        dest.writeValue(this.signNum);
+        dest.writeValue(this.signStatus);
+        dest.writeValue(this.isuse);
+        dest.writeString(this.remark);
+        dest.writeString(this.cuid);
+        dest.writeString(this.uuid);
+        dest.writeString(this.signUid);
+        dest.writeString(this.orderBy);
+        dest.writeList(this.attachmentList);
+    }
+
+    public Doc() {
+    }
+
+    protected Doc(Parcel in) {
+        this.id = in.readString();
+        this.department = in.readString();
+        this.personnel = in.readString();
+        this.level = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.docNo = in.readString();
+        this.docTitle = in.readString();
+        this.docSummary = in.readString();
+        this.signNum = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.signStatus = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.isuse = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.remark = in.readString();
+        this.cuid = in.readString();
+        this.uuid = in.readString();
+        this.signUid = in.readString();
+        this.orderBy = in.readString();
+        this.attachmentList = new ArrayList<Attachment>();
+        in.readList(this.attachmentList, Attachment.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Doc> CREATOR = new Parcelable.Creator<Doc>() {
+        @Override
+        public Doc createFromParcel(Parcel source) {
+            return new Doc(source);
+        }
+
+        @Override
+        public Doc[] newArray(int size) {
+            return new Doc[size];
+        }
+    };
 }

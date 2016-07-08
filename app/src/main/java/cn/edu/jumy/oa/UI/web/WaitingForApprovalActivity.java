@@ -44,6 +44,6 @@ public class WaitingForApprovalActivity extends BaseWebActivity {
     @Override
     protected void initViews() {
         super.initViews();
-        mToolbar.setTitle("待我审批");
+        mToolbar.setTitle("由我审批");
     }
 }

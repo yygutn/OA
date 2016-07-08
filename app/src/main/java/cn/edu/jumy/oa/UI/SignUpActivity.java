@@ -1,11 +1,18 @@
 package cn.edu.jumy.oa.UI;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.hyphenate.chat.EMClient;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -13,16 +20,24 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
+import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.adapter.MultiDropDownAdapter;
+import cn.edu.jumy.oa.safe.PasswordUtil;
 import cn.edu.jumy.oa.widget.DropDownMenu;
 import cn.edu.jumy.oa.widget.customview.NoScrollGridView;
+import okhttp3.Call;
 
 /**
  * 报名
@@ -137,14 +152,31 @@ public class SignUpActivity extends BaseActivity {
     void submit(){
         // TODO: 16/7/1 确认报名
         doMsgUpload();
-        backToPreActivity();
     }
 
     /**
      * 上传（个人/单位）会议报名信息
      */
+    AlertDialog alertDialog;
     private void doMsgUpload() {
+        alertDialog = new AlertDialog.Builder(mContext)
+                .setTitle("确认报名")
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showToast("报名成功");
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        backToPreActivity();
 
+                    }
+                }).setNegativeButton("取消", null)
+                .create();
+        alertDialog.show();
+        alertDialog.setCanceledOnTouchOutside(true);
     }
 
     /**

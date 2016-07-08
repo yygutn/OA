@@ -1,9 +1,11 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -199,6 +201,7 @@ public class DetailsActivity extends BaseActivity {
     void click(View view) {
         switch (view.getId()) {
             case R.id.document_details_download: {// TODO: 16/7/5 下载附件
+                doFileDownload();
                 break;
             }
             case R.id.document_details_sign_up: {// TODO: 16/7/5 报名
@@ -208,6 +211,28 @@ public class DetailsActivity extends BaseActivity {
             default:
                 break;
         }
+    }
+
+    private void doFileDownload() {
+        AlertDialog alertDialog = new AlertDialog.Builder(mContext)
+                .setTitle("附件下载")
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            Thread.sleep(1000);
+                            showToast("下载成功");
+                            dialog.cancel();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .setMessage("关于召开重点立项课题成果汇报的通知.doc")
+                .setNegativeButton("取消",null)
+                .create();
+        alertDialog.show();
+        alertDialog.setCanceledOnTouchOutside(true);
     }
 
     private class OnTvGlobalLayoutListener implements ViewTreeObserver.OnGlobalLayoutListener {

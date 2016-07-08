@@ -1,5 +1,7 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
@@ -13,11 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.hyphenate.chat.EMClient;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.shizhefei.view.indicator.Indicator;
 import com.shizhefei.view.indicator.IndicatorViewPager;
 import com.shizhefei.view.indicator.slidebar.ColorBar;
 import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.Callback;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -26,12 +32,27 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.ColorRes;
 import org.androidannotations.annotations.res.DrawableRes;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import cn.edu.jumy.jumyframework.BaseActivity;
+import cn.edu.jumy.oa.BroadCastReceiver.DocumentBroadcastReceiver;
+import cn.edu.jumy.oa.MyApplication;
+import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.Response.DocResponse;
+import cn.edu.jumy.oa.bean.Doc;
 import cn.edu.jumy.oa.fragment.DocumentAllFragment_;
 import cn.edu.jumy.oa.fragment.BaseSearchRefreshFragment;
 import cn.edu.jumy.oa.fragment.DocumentReadFragment_;
 import cn.edu.jumy.oa.fragment.DocumentUnreadFragment_;
+import cn.edu.jumy.oa.safe.PasswordUtil;
+import cn.edu.jumy.oa.server.UploadServer;
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * Created by Jumy on 16/6/22 10:02.
@@ -58,9 +79,10 @@ public class DocumentReadActivity extends BaseActivity {
     MyAdapter adapter;
 
 
-
     @AfterViews
-    void start(){
+    void start() {
+        downloadList();
+
         try {
             indicator = (Indicator) findViewById(R.id.document_indicator);
             float unSelectSize = 16;
@@ -69,7 +91,7 @@ public class DocumentReadActivity extends BaseActivity {
             int selectColor = getResources().getColor(R.color.pressed);
             int unSelectColor = getResources().getColor(R.color.normal);
             indicator.setScrollBar(new ColorBar(getApplicationContext(), getResources().getColor(R.color.pressed), 5));
-            indicator.setOnTransitionListener(new OnTransitionTextListener().setSize(selectSize, unSelectSize).setColor(selectColor,unSelectColor));
+            indicator.setOnTransitionListener(new OnTransitionTextListener().setSize(selectSize, unSelectSize).setColor(selectColor, unSelectColor));
             viewPager.setOffscreenPageLimit(3);
             adapter = new MyAdapter(getSupportFragmentManager());
             indicatorViewPager = new IndicatorViewPager(indicator, viewPager);
@@ -89,16 +111,18 @@ public class DocumentReadActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+
     }
+
     @PageScrollStateChanged(R.id.document_viewPager)
-    void onPageScrollStateChangedNoParam(){
-        if (mSearchView.isSearchOpen()){
+    void onPageScrollStateChangedNoParam() {
+        if (mSearchView.isSearchOpen()) {
             mSearchView.closeSearch();
         }
     }
 
     private class MyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        private String[] tabNames = { "未签收", "已签收", "全部"};
+        private String[] tabNames = {"未签收", "已签收", "全部"};
         private LayoutInflater inflater;
 
         public MyAdapter(FragmentManager fragmentManager) {
@@ -115,7 +139,7 @@ public class DocumentReadActivity extends BaseActivity {
         public View getViewForTab(int position, View convertView, ViewGroup container) {
             try {
                 if (convertView == null) {
-                    convertView = (TextView)inflater.inflate(R.layout.document_tab, container, false);
+                    convertView = (TextView) inflater.inflate(R.layout.document_tab, container, false);
                 }
                 ((TextView) convertView).setText(tabNames[position]);
                 return convertView;
@@ -127,24 +151,25 @@ public class DocumentReadActivity extends BaseActivity {
 
         @Override
         public Fragment getFragmentForPage(int position) {
-            switch (position){
-                case 0:{
+            switch (position) {
+                case 0: {
                     return new DocumentUnreadFragment_();
                 }
-                case 1:{
+                case 1: {
                     return new DocumentReadFragment_();
                 }
-                case 2:{
+                case 2: {
                     return new DocumentAllFragment_();
                 }
-                default:return null;
+                default:
+                    return null;
             }
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.document,menu);
+        getMenuInflater().inflate(R.menu.document, menu);
         MenuItem item = menu.findItem(R.id.action_search);
         mSearchView.setMenuItem(item);
         return true;
@@ -189,6 +214,7 @@ public class DocumentReadActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
+
     @DrawableRes(R.drawable.ic_arrow_back_white)
     Drawable back;
     @DrawableRes(R.drawable.ic_clear_white)
@@ -198,10 +224,79 @@ public class DocumentReadActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (mSearchView.isSearchOpen()){
+        if (mSearchView.isSearchOpen()) {
             mSearchView.closeSearch();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    private void downloadList() {
+        long time = new Date().getTime();
+        final String base = EMClient.getInstance().getCurrentUser() + "_" + time;
+        String zip = PasswordUtil.simpleEncpyt(base);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("page", "1");
+        params.put("size", "20");
+        params.put("level", "");
+        params.put("docNo", "");
+        params.put("docTitle", "");
+        params.put("startTime", "2011-09-20 08:30:45");
+        params.put("endTime", "2016-07-08 08:30:45");
+
+        OAService.docReceive(params, new DocCallback() {
+            @Override
+            public void onResponse(DocResponse response, int id) {
+                ArrayList<Doc> list = response.data.pageObject;
+                showDebugLogw(list.toString());
+                //全部
+                Intent intent = new Intent(DocumentBroadcastReceiver.DOC);
+                intent.putParcelableArrayListExtra(DocumentBroadcastReceiver.DOC_LIST, list);
+                intent.putExtra(DocumentBroadcastReceiver.TYPE, 2);
+                sendBroadcast(intent);
+                //已签收
+                ArrayList<Doc> list0 = new ArrayList<Doc>();
+                for (Doc doc : list) {
+                    if (doc.signStatus == 0) {
+                        list0.add(doc);
+                    }
+                }
+                intent = new Intent(DocumentBroadcastReceiver.DOC);
+                intent.putParcelableArrayListExtra(DocumentBroadcastReceiver.DOC_LIST, list0);
+                intent.putExtra(DocumentBroadcastReceiver.TYPE, 0);
+                sendBroadcast(intent);
+                //未签收
+                ArrayList<Doc> list1 = new ArrayList<Doc>();
+                for (Doc doc : list) {
+                    if (doc.signStatus == 1) {
+                        list0.add(doc);
+                    }
+                }
+                intent = new Intent(DocumentBroadcastReceiver.DOC);
+                intent.putParcelableArrayListExtra(DocumentBroadcastReceiver.DOC_LIST, list1);
+                intent.putExtra(DocumentBroadcastReceiver.TYPE, 1);
+                sendBroadcast(intent);
+            }
+        });
+
+    }
+
+
+    private abstract class DocCallback extends Callback<DocResponse> {
+
+        @Override
+        public DocResponse parseNetworkResponse(Response response, int id) throws Exception {
+            String data = response.body().string();
+            Gson gson = new Gson();
+            DocResponse account = gson.fromJson(data, DocResponse.class);
+            return account;
+        }
+
+        @Override
+        public void onError(Call call, Exception e, int id) {
+            showDebugException(e);
+            showToast("网络异常,获取公文失败");
         }
     }
 }
