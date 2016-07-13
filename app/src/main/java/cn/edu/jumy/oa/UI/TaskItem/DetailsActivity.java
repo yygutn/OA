@@ -4,7 +4,7 @@ import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.os.Build;
-import android.support.annotation.NonNull;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +13,11 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
+import com.zhy.http.okhttp.callback.Callback;
+import com.zhy.http.okhttp.callback.FileCallBack;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -21,10 +25,23 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import cn.edu.jumy.jumyframework.BaseActivity;
+import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.Response.AttachResponse;
+import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.UI.SignUpActivity_;
+import cn.edu.jumy.oa.Utils.CallOtherOpenFile;
+import cn.edu.jumy.oa.Utils.TempFileCallBack;
+import cn.edu.jumy.oa.bean.Attachment;
 import cn.edu.jumy.oa.bean.Node;
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * Created by Jumy on 16/6/20 16:53.
@@ -74,7 +91,38 @@ public class DetailsActivity extends BaseActivity {
         } catch (Exception e) {
             Logger.e("Exception: ", e);
         }
+
+        if (mNode.getType() == 1){
+            DocSignBackground();
+        }
     }
+
+    private void DocSignBackground() {
+        OAService.docSign(mNode.tid, new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                showDebugException(e);
+                showToast("当前网络不可用,签收公文失败");
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                Gson gson = new Gson();
+                BaseResponse baseResponse = gson.fromJson(response,BaseResponse.class);
+                if (baseResponse.code == 0){
+                    showToast("已签收该公文");
+                } else {
+                    if (!TextUtils.isEmpty(baseResponse.msg)) {
+                        showToast(baseResponse.msg);
+                    }
+                    else {
+                        showToast("当前网络不可用,签收公文失败");
+                    }
+                }
+            }
+        });
+    }
+
 
     private void setUpViews() {
         switch (mNode.getType()) {
@@ -97,7 +145,8 @@ public class DetailsActivity extends BaseActivity {
         }
         if (false) {
             try {
-                mDocumentDetailsLevel.setText(mNode.getLevel());
+                // TODO: 16/7/12 根据LEVEL的等级ID设置不同的等级显示
+                mDocumentDetailsLevel.setText(mNode.getLevel() + "");
                 mDocumentDetailsTitle.setText(mNode.getTitle());
                 mDocumentDetailsNumber.setText(mNode.getDocumentNumber());
                 mDocumentDetailsContentHead.setText(mNode.getContentHead());
@@ -201,7 +250,11 @@ public class DetailsActivity extends BaseActivity {
     void click(View view) {
         switch (view.getId()) {
             case R.id.document_details_download: {// TODO: 16/7/5 下载附件
-                doFileDownload();
+                try {
+                    doFileDownload();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             }
             case R.id.document_details_sign_up: {// TODO: 16/7/5 报名
@@ -213,26 +266,59 @@ public class DetailsActivity extends BaseActivity {
         }
     }
 
+    AlertDialog alertDialog;
+
     private void doFileDownload() {
-        AlertDialog alertDialog = new AlertDialog.Builder(mContext)
-                .setTitle("附件下载")
-                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            Thread.sleep(1000);
-                            showToast("下载成功");
-                            dialog.cancel();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                })
-                .setMessage("关于召开重点立项课题成果汇报的通知.doc")
-                .setNegativeButton("取消",null)
-                .create();
-        alertDialog.show();
-        alertDialog.setCanceledOnTouchOutside(true);
+        Map<String, String> params = new HashMap<>();
+        params.put("pid", TextUtils.isEmpty(mNode.getID()) ? "" : mNode.getID());
+        OAService.getAttachmentList(params, new AttachListCallBack() {
+            @Override
+            public void onResponse(AttachResponse response, int id) {
+                final ArrayList<Attachment> list = response.data;
+                if (list == null || list.size() == 0 || response.code == 1) {
+                    onError(null, null, 0);
+                }
+                ArrayList<String> item_list = new ArrayList<String>();
+                for (Attachment attachment : list) {
+                    item_list.add(attachment.getFileName());
+                }
+                String[] items = item_list.toArray(new String[item_list.size()]);
+                alertDialog = new AlertDialog.Builder(mContext)
+                        .setTitle("附件下载")
+                        .setPositiveButton("确认", null)
+                        .setItems(items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    String id = list.get(which).getId();
+                                    id = TextUtils.isEmpty(id) ? "" : id;
+                                    String filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download";
+                                    String filename = list.get(which).getFileName();
+                                    OAService.downloadAttachment(id, new TempFileCallBack(filepath, filename) {
+                                        @Override
+                                        public void onError(Call call, Exception e, int id) {
+                                            showToast("下载附件失败");
+                                        }
+
+                                        @Override
+                                        public void onResponse(File file, int id) {
+                                            CallOtherOpenFile.openFile(mContext,file);
+                                            file.deleteOnExit();
+                                        }
+                                    });
+                                    alertDialog.cancel();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        })
+                        .setNegativeButton("取消", null)
+                        .create();
+                alertDialog.show();
+                alertDialog.setCanceledOnTouchOutside(true);
+            }
+        });
+
     }
 
     private class OnTvGlobalLayoutListener implements ViewTreeObserver.OnGlobalLayoutListener {
@@ -244,6 +330,26 @@ public class DetailsActivity extends BaseActivity {
             if (!TextUtils.isEmpty(newText)) {
                 mDocumentDetailsContent_meet.setText(newText);
             }
+        }
+    }
+
+    abstract class AttachListCallBack extends Callback<AttachResponse> {
+        @Override
+        public AttachResponse parseNetworkResponse(Response response, int id) throws Exception {
+            String data = response.body().string();
+            Gson gson = new Gson();
+            BaseResponse baseResponse = gson.fromJson(data, BaseResponse.class);
+            if (baseResponse.code == 0) {
+                return gson.fromJson(data, AttachResponse.class);
+            } else if (baseResponse.code == 1) {
+                return new AttachResponse(baseResponse.msg, baseResponse.code, null);
+            }
+            return null;
+        }
+
+        @Override
+        public void onError(Call call, Exception e, int id) {
+            showToast("获取附件列表失败");
         }
     }
 }

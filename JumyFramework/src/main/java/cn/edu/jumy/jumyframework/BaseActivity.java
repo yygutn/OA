@@ -107,19 +107,19 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void showDebugLogw(CharSequence message) {
+    public static void showDebugLogw(CharSequence message) {
         if (DEBUG) {
             Logger.w(message.toString());
         }
     }
 
-    public void showDebugException(Exception e){
+    public static void showDebugException(Exception e){
         if (DEBUG){
             e.printStackTrace();
         }
     }
 
-    public void showDebugLogd(CharSequence message) {
+    public static void showDebugLogd(CharSequence message) {
         if (DEBUG) {
             Logger.d(message.toString());
         }

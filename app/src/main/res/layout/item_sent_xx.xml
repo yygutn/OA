@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/item_text"
+        android:layout_alignParentLeft="true"
+        android:text="测试测试"
+        android:padding="5dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/item_text_button"
+        android:layout_alignParentRight="true"
+        android:text="催收"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:background="@drawable/shape_normal_gray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

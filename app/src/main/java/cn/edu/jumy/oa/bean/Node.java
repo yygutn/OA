@@ -3,6 +3,8 @@ package cn.edu.jumy.oa.bean;
 import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -83,7 +85,7 @@ public class Node extends DataSupport implements Serializable {
      * 等级:(1.特急2.加急3.平急4.特提)
      */
     
-    private String level;
+    private Integer level;
     /**
      * 已签收人员
      */
@@ -95,6 +97,8 @@ public class Node extends DataSupport implements Serializable {
     private Integer signNum;
     private String other;// 其他
 
+    public String tid;
+
     public Node(String title, String content, int type) {
         this.title = title;
         this.content = content;
@@ -102,6 +106,35 @@ public class Node extends DataSupport implements Serializable {
     }
     public Node(){
 
+    }
+    public Node(Doc doc){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        this.type = 1;
+        this.attachmentList = doc.attachmentList;
+        this.id = doc.id;
+        this.level = doc.level;
+        this.content = doc.docSummary;
+        this.department = doc.department;
+        this.documentNumber = doc.docNo;
+        this.attachmentList = doc.attachmentList;
+        this.title = doc.docTitle;
+        this.dispatchTime = sdf.format(new Date(doc.createTime));
+        this.tid = doc.tid;
+    }
+    public Node(Meet meet){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        this.contactName = meet.contactName;
+        this.type = 0;
+        this.attachmentList = meet.attachmentList;
+        this.id = meet.id;
+        this.meetingLocation = meet.addr;
+        this.meetingTime = sdf.format(new Date(meet.meetTime));
+        this.undertakingUnit = meet.meetCompanyName;
+        this.dispatchTime = sdf.format(new Date(meet.createTime));
+        this.dispatchUnit = meet.sendDepartmentInfo;
+        this.department = meet.departmentInfo;
+        this.level = meet.level;
+        this.content = meet.docSummary;
     }
 
     public String getTitle() {
@@ -176,11 +209,11 @@ public class Node extends DataSupport implements Serializable {
         this.id = ID;
     }
 
-    public String getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 
@@ -214,14 +247,6 @@ public class Node extends DataSupport implements Serializable {
 
     public void setOther(String other) {
         this.other = other;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getDepartment() {

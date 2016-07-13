@@ -1,7 +1,5 @@
 package cn.edu.jumy.oa.fragment;
 
-import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.TypedValue;
 import android.view.View;
@@ -10,7 +8,6 @@ import android.widget.ImageView;
 
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
-import com.squareup.picasso.Picasso;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 
 import org.androidannotations.annotations.AfterViews;
@@ -26,6 +23,7 @@ import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
 import cn.edu.jumy.oa.adapter.DocumentAdapter;
+import cn.edu.jumy.oa.bean.Doc;
 import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 
@@ -44,21 +42,16 @@ public class BaseSearchRefreshFragment extends BaseFragment implements OnItemCli
 
     protected ImageView mEmptyImageView;
 
-    protected ArrayList<Node> mList = new ArrayList<>();
+    protected ArrayList<Doc> mList = new ArrayList<>();
     protected DocumentAdapter adapter;
 
     @AfterViews
-    protected void start(){
+    protected void start() {
         mContext = getActivity();
         try {
             mListView.setLoadmoreString("加载中...");
 
             mEmptyImageView = (ImageView) View.inflate(mContext, R.layout.item_empty_view, null);
-            Picasso.with(mContext)
-                    .load("https://www.skyverge.com/wp-content/uploads/2012/05/github-logo.png")
-                    .resize(200, 200)
-                    .centerInside()
-                    .into(mEmptyImageView);
             mListView.setEmptyView(mEmptyImageView);
 
             mListView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -83,7 +76,7 @@ public class BaseSearchRefreshFragment extends BaseFragment implements OnItemCli
     /**
      * 更新卡片
      */
-    private void updateListView() {
+    protected void updateListView() {
         adapter = new DocumentAdapter(mContext, R.layout.item_card_notification, new ArrayList<>(mList));
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
@@ -91,8 +84,9 @@ public class BaseSearchRefreshFragment extends BaseFragment implements OnItemCli
 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-        showDebugLogw("点击"+position);
-        DetailsActivity_.intent(mContext).extra("details",mList.get(position)).start();
+        showDebugLogw("点击" + position);
+        Node node = new Node((Doc) o);
+        DetailsActivity_.intent(mContext).extra("details", node).start();
     }
 
     @Override
@@ -107,22 +101,27 @@ public class BaseSearchRefreshFragment extends BaseFragment implements OnItemCli
             if (documentBroadcastReceiver != null) {
                 mContext.unregisterReceiver(documentBroadcastReceiver);
             }
-            ACache.get(MyApplication.getContext()).put(DemoHelper.getInstance().getCurrentUsernName()+"_all", mList);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void onTextChanged(CharSequence message){
-        if (message == null){
+    public void onTextChanged(CharSequence message) {
+        if (message == null) {
             return;
         }
-        List<Node> list = new ArrayList<>();
-        list.add(mList.get(0));
+        List<Doc> list = new ArrayList<>();
         // TODO: 16/6/22  根据搜索提供的字符串，处理&&筛选出所需的数据
+        for (Doc document : mList) {
+            if (document.docTitle.contains(message) || document.docSummary.contains(message) || document.docNo.contains(message)) {
+                list.add(document);
+            }
+        }
         adapter.setList(list);
-    };
-    public void onSearchCancel(){
+    }
+
+
+    public void onSearchCancel() {
         adapter.setList(new ArrayList<>(mList));
     }
 }

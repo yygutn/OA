@@ -164,11 +164,15 @@
                 android:text="会议时间:"
                 android:textColor="@color/black" />
 
-            <android.support.v7.widget.AppCompatEditText
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/meeting_time"
                 android:background="@drawable/shape_normal_gray"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:minHeight="48dp" />

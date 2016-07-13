@@ -107,6 +107,12 @@ public class DocumentReleaseActivity extends BaseActivity {
                     mFilePath.add(path);
                 }
             }
+            if (intent.getAction() == UploadServer.UPLOAD_BR_RESULT_DELETE){
+                String path = intent.getStringExtra(UploadServer.EXTRA_PATH);
+                if (mFilePath.contains(path)) {
+                    mFilePath.remove(path);
+                }
+            }
         }
     };
 
@@ -119,14 +125,11 @@ public class DocumentReleaseActivity extends BaseActivity {
             }
         });
         try {
-            long time = new Date().getTime();
-            final String base = EMClient.getInstance().getCurrentUser() + "_" + time;
-            String zip = PasswordUtil.simpleEncpyt(base);
 
             OAService.getOrganizationData(new StringCallback() {
                 @Override
                 public void onError(Call call, Exception e, int id) {
-                    e.printStackTrace();
+                    showDebugException(e);
                     showToast("网络异常，获取可发送单位失败");
                     mUnits.clear();
                     mUnits.add("请选择");
@@ -163,9 +166,9 @@ public class DocumentReleaseActivity extends BaseActivity {
         }
         IntentFilter filter = new IntentFilter();
         filter.addAction(UploadServer.UPLOAD_BR_RESULT);
+        filter.addAction(UploadServer.UPLOAD_BR_RESULT_DELETE);
         registerReceiver(uploadBroadcastReceiver, filter);
 
-        UploadItem item = UploadItem_.build(mContext, this);
     }
 
     @Click({R.id.submit, R.id.addUpload})
@@ -201,16 +204,8 @@ public class DocumentReleaseActivity extends BaseActivity {
                             showToast("请选择发文单位");
                             return;
                         }
-                        if (TextUtils.isEmpty(docNo)) {
-                            showToast("发文编号不能为空");
-                            return;
-                        }
                         if (TextUtils.isEmpty(docTitle)) {
                             showToast("发文标题不能为空");
-                            return;
-                        }
-                        if (TextUtils.isEmpty(docMain)) {
-                            showToast("发文摘要不能为空");
                             return;
                         }
                         alertDialog.setTitle("发送中，请稍后...");

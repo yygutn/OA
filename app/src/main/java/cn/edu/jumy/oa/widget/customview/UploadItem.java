@@ -3,6 +3,7 @@ package cn.edu.jumy.oa.widget.customview;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -80,6 +81,11 @@ public class UploadItem extends LinearLayout{
             @Override
             public void onFilePicked(String currentPath) {
                 String path [] = currentPath.split("/");
+                if (!TextUtils.isEmpty(filePath)){
+                    Intent intent = new Intent(UploadServer.UPLOAD_BR_RESULT_DELETE);
+                    intent.putExtra(UploadServer.EXTRA_PATH, filePath);
+                    mContext.sendBroadcast(intent);
+                }
                 fileName = path[path.length-1];
                 filePath = currentPath.trim();
 //                filePath = "file:/" + currentPath.trim();

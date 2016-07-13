@@ -40,21 +40,21 @@ import com.orhanobut.logger.Logger;
  */
 public class BaseFragment extends Fragment {
     protected Context mContext;
-    private boolean DEBUG = BaseActivity.DEBUG;
+    private static boolean DEBUG = BaseActivity.DEBUG;
 
     public void showDebugLoge(CharSequence message) {
         if (DEBUG) {
-            Logger.e("jumy", message.toString());
+            Logger.e(message.toString());
         }
     }
 
     public void showDebugLogw(CharSequence message) {
         if (DEBUG) {
-            Logger.w("jumy", message.toString());
+            Logger.w(message.toString());
         }
     }
 
-    public void showDebugException(Exception e){
+    public static void showDebugException(Exception e){
         if (DEBUG){
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ package cn.edu.jumy.oa;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
@@ -9,7 +10,6 @@ import com.fsck.k9.K9;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
-//import com.squareup.leakcanary.LeakCanary;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -20,8 +20,11 @@ import org.litepal.LitePalApplication;
 import java.util.concurrent.TimeUnit;
 
 import cn.edu.jumy.jumyframework.AppManager;
+import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.jumyframework.CrashHandler;
 import okhttp3.OkHttpClient;
+
+//import com.squareup.leakcanary.LeakCanary;
 
 
 /**
@@ -32,45 +35,35 @@ public class MyApplication extends MultiDexApplication {
     private static final String TAG = "Application";
 
     private static volatile Context context;
-    public static final String API_URL = "http://121.41.102.69:8080/OA_console/phone/";
     public static String DEVICE_ID = "";
 
     @Override
     public void onCreate() {
         super.onCreate();
-        AppManager.getInstance().init();
-        K9.getInstance().onCreate(this);
         context = getApplicationContext();
+        AppManager.getInstance().init();
         CrashHandler.getInstance().init(context);
         initOkHttpUtils();
-        //Umeng Push init start
-        PushAgent.getInstance(context).enable(new IUmengRegisterCallback() {
-            @Override
-            public void onRegistered(String DeviceId) {
-                DEVICE_ID = DeviceId;
-                Log.e(TAG, "onRegistered: " + DeviceId);
-            }
-        });
-        PushAgent.getInstance(context).setNotificationClickHandler(new NotificationClickHandler());
-        //Umeng Push init end
+        initBackground();
         //HX
         DemoApplication.getInstance().init(this);
-        //end
-//        LeakCanary.install(this);
         //
-        Logger
-                .init("Jumy")
+        Logger.init("Jumy")
                 .methodCount(3)
                 .logLevel(LogLevel.FULL)
                 .methodOffset(1);
         LitePalApplication.initialize(this);
     }
 
+    private void initBackground() {
+        BackgroundTask backgroundTask = new BackgroundTask();
+        backgroundTask.execute(this);
+    }
+
     private void initOkHttpUtils() {
         HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);//可访问所有Https网站
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
-                //                .addInterceptor(new LoggerInterceptor("TAG"))
                 .connectTimeout(10000L, TimeUnit.MILLISECONDS)
                 .readTimeout(10000L, TimeUnit.MILLISECONDS)
                 //其他配置
@@ -88,6 +81,30 @@ public class MyApplication extends MultiDexApplication {
             }
         }
         return context;
+    }
+
+    class BackgroundTask extends AsyncTask<Application, Integer, String> {
+
+
+        @Override
+        protected String doInBackground(Application... params) {
+
+            K9.getInstance().onCreate(params[0]);
+            //Umeng Push init start
+            PushAgent.getInstance(context).enable(new IUmengRegisterCallback() {
+                @Override
+                public void onRegistered(String DeviceId) {
+                    DEVICE_ID = DeviceId;
+                    Log.e(TAG, "onRegistered: " + DeviceId);
+                }
+            });
+            PushAgent.getInstance(context).setNotificationClickHandler(new NotificationClickHandler());
+            //Umeng Push init end
+            if (BaseActivity.DEBUG) {
+                Logger.t("Application Init K9  &&  UmengPush").w("初始化结束");
+            }
+            return null;
+        }
     }
 
 }

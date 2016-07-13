@@ -32,6 +32,7 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.ColorRes;
 import org.androidannotations.annotations.res.DrawableRes;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,6 +44,7 @@ import cn.edu.jumy.oa.BroadCastReceiver.DocumentBroadcastReceiver;
 import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.Response.DocResponse;
 import cn.edu.jumy.oa.bean.Doc;
 import cn.edu.jumy.oa.fragment.DocumentAllFragment_;
@@ -232,9 +234,22 @@ public class DocumentReadActivity extends BaseActivity {
     }
 
     private void downloadList() {
-        long time = new Date().getTime();
-        final String base = EMClient.getInstance().getCurrentUser() + "_" + time;
-        String zip = PasswordUtil.simpleEncpyt(base);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        int year,month,day;
+        year = date.getYear();
+        month = date.getMonth() - 1;
+        day = date.getDay();
+        if (month < 0){
+            year -- ;
+            month = 11;
+            day = 31;
+        } else {
+            day = month == 1 ? 28 : 30;
+        }
+        String before = sdf.format(new Date(year,month,day));
+        String now = sdf.format(date);
 
         Map<String, String> params = new HashMap<>();
         params.put("page", "1");
@@ -242,12 +257,16 @@ public class DocumentReadActivity extends BaseActivity {
         params.put("level", "");
         params.put("docNo", "");
         params.put("docTitle", "");
-        params.put("startTime", "2011-09-20 08:30:45");
-        params.put("endTime", "2016-07-08 08:30:45");
+        params.put("startTime", before);
+        params.put("endTime", now);
 
         OAService.docReceive(params, new DocCallback() {
             @Override
             public void onResponse(DocResponse response, int id) {
+                if (response.code == 1){
+                    showToast("获取公文失败");
+                    return;
+                }
                 ArrayList<Doc> list = response.data.pageObject;
                 showDebugLogw(list.toString());
                 //全部
@@ -255,24 +274,23 @@ public class DocumentReadActivity extends BaseActivity {
                 intent.putParcelableArrayListExtra(DocumentBroadcastReceiver.DOC_LIST, list);
                 intent.putExtra(DocumentBroadcastReceiver.TYPE, 2);
                 sendBroadcast(intent);
-                //已签收
+                //已签收-list
                 ArrayList<Doc> list0 = new ArrayList<Doc>();
+                //未签收-list
+                ArrayList<Doc> list1 = new ArrayList<Doc>();
                 for (Doc doc : list) {
                     if (doc.signStatus == 0) {
                         list0.add(doc);
+                    } else if (doc.signStatus == 1){
+                        list1.add(doc);
                     }
                 }
+                //已签收
                 intent = new Intent(DocumentBroadcastReceiver.DOC);
                 intent.putParcelableArrayListExtra(DocumentBroadcastReceiver.DOC_LIST, list0);
                 intent.putExtra(DocumentBroadcastReceiver.TYPE, 0);
                 sendBroadcast(intent);
                 //未签收
-                ArrayList<Doc> list1 = new ArrayList<Doc>();
-                for (Doc doc : list) {
-                    if (doc.signStatus == 1) {
-                        list0.add(doc);
-                    }
-                }
                 intent = new Intent(DocumentBroadcastReceiver.DOC);
                 intent.putParcelableArrayListExtra(DocumentBroadcastReceiver.DOC_LIST, list1);
                 intent.putExtra(DocumentBroadcastReceiver.TYPE, 1);
@@ -289,8 +307,12 @@ public class DocumentReadActivity extends BaseActivity {
         public DocResponse parseNetworkResponse(Response response, int id) throws Exception {
             String data = response.body().string();
             Gson gson = new Gson();
-            DocResponse account = gson.fromJson(data, DocResponse.class);
-            return account;
+            BaseResponse baseResponse = gson.fromJson(data,BaseResponse.class);
+            if (baseResponse.code==0) {
+                return gson.fromJson(data, DocResponse.class);
+            } else {
+                return new DocResponse(baseResponse.msg,baseResponse.code,null);
+            }
         }
 
         @Override

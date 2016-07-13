@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
+import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.adapter.AuditAdapter;
 import cn.edu.jumy.oa.bean.AuditUser;
@@ -48,9 +49,7 @@ public class MeetAuditActivity extends BaseActivity {
             }
         });
 
-        list.add(new AuditUser("张三","省人大办公室"));
-        list.add(new AuditUser("李四","省委办公厅"));
-        list.add(new AuditUser("张三儿","省委办公厅"));
+        initList();
 
 
         adapter = new AuditAdapter(mContext,R.layout.item_audit_meet,list);
@@ -58,6 +57,14 @@ public class MeetAuditActivity extends BaseActivity {
         mAuditListView.setLayoutManager(new LinearLayoutManager(mContext));
         mAuditListView.setAdapter(adapter);
     }
+
+    private void initList() {
+        list.add(new AuditUser("张三","省人大办公室"));
+        list.add(new AuditUser("李四","省委办公厅"));
+        list.add(new AuditUser("张三儿","省委办公厅"));
+
+    }
+
     @Click(R.id.out)
     void click(){
         showToast("导出...");

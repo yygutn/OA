@@ -91,6 +91,26 @@ public class Doc extends DataSupport implements Parcelable {
      */
     public List<Attachment> attachmentList = new ArrayList<>();
 
+    /**
+     * 创建时间
+     */
+    public long createTime;
+
+    /**
+     * 发送单位名称-self
+     */
+    public String sendDepartmentInfo;
+    /**
+     * 接收单位多个以,隔开
+     */
+    public String departmentInfo;
+
+    public String didtask;
+    /**
+     * 任务ID
+     */
+    public String tid;
+
     @Override
     public int describeContents() {
         return 0;
@@ -114,6 +134,11 @@ public class Doc extends DataSupport implements Parcelable {
         dest.writeString(this.signUid);
         dest.writeString(this.orderBy);
         dest.writeList(this.attachmentList);
+        dest.writeLong(this.createTime);
+        dest.writeString(departmentInfo);
+        dest.writeString(sendDepartmentInfo);
+        dest.writeString(didtask);
+        dest.writeString(tid);
     }
 
     public Doc() {
@@ -137,6 +162,11 @@ public class Doc extends DataSupport implements Parcelable {
         this.orderBy = in.readString();
         this.attachmentList = new ArrayList<Attachment>();
         in.readList(this.attachmentList, Attachment.class.getClassLoader());
+        this.createTime = in.readLong();
+        this.departmentInfo = in.readString();
+        this.sendDepartmentInfo = in.readString();
+        this.didtask = in.readString();
+        this.tid = in.readString();
     }
 
     public static final Parcelable.Creator<Doc> CREATOR = new Parcelable.Creator<Doc>() {

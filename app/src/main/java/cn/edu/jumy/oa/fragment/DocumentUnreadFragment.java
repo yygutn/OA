@@ -22,28 +22,15 @@ import cn.edu.jumy.oa.bean.Node;
 public class DocumentUnreadFragment extends BaseSearchRefreshFragment {
     @Override
     protected void initList() {
-        Resources resources = getResources();
-        String [] test1 = resources.getStringArray(R.array.test1);
-        String [] test2 = resources.getStringArray(R.array.test2);
-        String [] test3 = resources.getStringArray(R.array.test3);
-        String [] test4 = resources.getStringArray(R.array.test4);
-        String [] test5 = resources.getStringArray(R.array.test5);
-        String [] test6 = resources.getStringArray(R.array.test6);
-
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test1),1));
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test2),1));
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test3),1));
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test4),1));
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test5),1));
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test6),1));
 
         documentBroadcastReceiver = new DocumentBroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 super.onReceive(context, intent);
                 if (getType() == 1) {
-                    // TODO: 16/7/8 赋值操作
-                    // mList = getDocList();
+                    // xxx: 16/7/8 赋值操作
+                    mList = getDocList();
+                    updateListView();
                 }
             }
         };
@@ -51,5 +38,13 @@ public class DocumentUnreadFragment extends BaseSearchRefreshFragment {
         IntentFilter filter = new IntentFilter();
         filter.addAction(DocumentBroadcastReceiver.DOC);
         mContext.registerReceiver(documentBroadcastReceiver, filter);
+    }
+
+    @Override
+    protected void updateListView() {
+        super.updateListView();
+        if (mList == null || mList.size() == 0){
+            // TODO: 16/7/12 无公文交互提示
+        }
     }
 }

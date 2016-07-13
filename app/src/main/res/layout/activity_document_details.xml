@@ -114,7 +114,7 @@
                 android:background="@drawable/shape_logout"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="附件下载"
+                android:text="附件查看"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
             <android.support.v7.widget.AppCompatTextView

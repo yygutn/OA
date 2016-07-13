@@ -32,6 +32,7 @@ public class UploadServer extends IntentService {
     public static final String EXTRA_PATH = "EXTRA_PATH";
     public static final String EXTRA_NAME = "EXTRA_NAME";
     public static final String UPLOAD_BR_RESULT = "cn.edu.jumy.UPLOAD_BR_RESULT";
+    public static final String UPLOAD_BR_RESULT_DELETE = "cn.edu.jumy.UPLOAD_BR_RESULT_DELETE";
 
     public static void startUpload(Context context, String path, String name,int type)
     {

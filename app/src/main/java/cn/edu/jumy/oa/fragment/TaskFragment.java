@@ -25,6 +25,8 @@ import cn.edu.jumy.oa.UI.TaskItem.DocumentReleaseActivity_;
 import cn.edu.jumy.oa.UI.TaskItem.MeetingApprovalActivity_;
 import cn.edu.jumy.oa.UI.TaskItem.NotifyActivity_;
 import cn.edu.jumy.oa.UI.TaskItem.SendMeetingActivity_;
+import cn.edu.jumy.oa.UI.TaskItem.SentDocumentActivity_;
+import cn.edu.jumy.oa.UI.TaskItem.SentMeetingActivity_;
 import cn.edu.jumy.oa.UI.VerifyActivity_;
 import cn.edu.jumy.oa.UI.VideoPlayerActivity_;
 import cn.edu.jumy.oa.UI.web.FileSentActivity_;
@@ -205,11 +207,13 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                         break;
                     }
                     case 13:{//已发送公文
-                        FileSentActivity_.intent(mContext).start();
+//                        FileSentActivity_.intent(mContext).start();
+                        SentDocumentActivity_.intent(mContext).start();
                         break;
                     }
                     case 14:{
-                        MeetingSentActivity_.intent(mContext).start();
+//                        MeetingSentActivity_.intent(mContext).start();
+                        SentMeetingActivity_.intent(mContext).start();
                         break;
                     }
                     default:

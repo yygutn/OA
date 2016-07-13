@@ -1,38 +1,48 @@
 package cn.edu.jumy.oa.UI;
 
-import android.content.res.Resources;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.Toolbar;
-import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
+import com.zhy.http.okhttp.callback.Callback;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
+import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.Utils.CardGenerator;
+import cn.edu.jumy.oa.Response.BaseResponse;
+import cn.edu.jumy.oa.Response.MeetResponse;
+import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
 import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
+import cn.edu.jumy.oa.bean.Meet;
 import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
+import okhttp3.Call;
+import okhttp3.Response;
 
 
 /**
@@ -47,10 +57,11 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
     Toolbar mToolBar;
     @ViewById(R.id.meeting_listView)
     PullToRefreshRecyclerView mListView;
+    MeetingCardAdapter adapter;
 
     ImageView mEmptyImageView;
 
-    private List<Node> cardDataList = new ArrayList<>();
+    private List<Meet> mList = new ArrayList<>();
 
     Handler handler = new Handler();
 
@@ -71,11 +82,6 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
             mListView.setLoadmoreString("加载中...");
 
             mEmptyImageView = (ImageView) View.inflate(mContext, R.layout.item_empty_view, null);
-            Picasso.with(mContext)
-                    .load("https://www.skyverge.com/wp-content/uploads/2012/05/github-logo.png")
-                    .resize(200, 200)
-                    .centerInside()
-                    .into(mEmptyImageView);
             mListView.setEmptyView(mEmptyImageView);
 
             mListView.setSwipeEnable(true);
@@ -104,6 +110,9 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
                     lastVisiblePosition = ((LinearLayoutManager) mListView.getLayoutManager()).findLastVisibleItemPosition();
                 }
             });
+            adapter = new MeetingCardAdapter(mContext,R.layout.item_card_notification,mList);
+            mListView.setAdapter(adapter);
+            adapter.setOnItemClickListener(this);
 
             //set list data
             updateList();
@@ -143,43 +152,58 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
      * 更新会议卡片
      */
     private void updateList() {
-        fillArray();
-    }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        int year, month, day;
+        year = date.getYear();
+        month = date.getMonth() - 1;
+        day = date.getDay();
+        if (month < 0) {
+            year--;
+            month = 11;
+            day--;
+        } else {
+            day--;
+            if (month == 1) {
+                if (day > 28) {
+                    day = 28;
+                }
+            }
+        }
+        String before = sdf.format(new Date(year, month, day));
+        String now = sdf.format(date);
 
-    private void fillArray() {
-        Resources resources = getResources();
-        String [] test1 = resources.getStringArray(R.array.test1);
-        String [] test2 = resources.getStringArray(R.array.test2);
-        String [] test3 = resources.getStringArray(R.array.test3);
-        String [] test4 = resources.getStringArray(R.array.test4);
-        String [] test5 = resources.getStringArray(R.array.test5);
-        String [] test6 = resources.getStringArray(R.array.test6);
+        Map<String, String> params = new HashMap<>();
+        params.put("page", "1");
+        params.put("size", "20");
+        params.put("startTime", before);
+        params.put("endTime", now);
+        params.put("level", "");
+        params.put("docNo", "");
+        params.put("docTitle", "");
+        params.put("meetCompany", "");
+        params.put("signStatus", "");
+        params.put("passStatus", "");
 
-        cardDataList.add(CardGenerator.getStringFromArray(Arrays.asList(test1),0));
-        cardDataList.add(CardGenerator.getStringFromArray(Arrays.asList(test2),0));
-        cardDataList.add(CardGenerator.getStringFromArray(Arrays.asList(test3),0));
-        cardDataList.add(CardGenerator.getStringFromArray(Arrays.asList(test4),0));
-        cardDataList.add(CardGenerator.getStringFromArray(Arrays.asList(test5),0));
-        cardDataList.add(CardGenerator.getStringFromArray(Arrays.asList(test6),0));
+        OAService.meetReceive(params, new MeetCallback() {
+            @Override
+            public void onResponse(MeetResponse response, int id) {
+                if (response.code == 1 || response.data == null) {
+                    showToast("获取会议列表失败");
+                    adapter.setList(new ArrayList<Meet>());
+                    return;
+                }
+                adapter.setList(response.data.pageObject);
+            }
+        });
 
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-//        SparseArray<String> array;
-//        cardDataList = new ArrayList<>();
-//        String title = "";
-//        for (int i = 0; i < 10; i++) {
-//            array = new SparseArray<String>();
-//            title = "召开传达中央文件精神会议";
-//            String message = CardGenerator.generateNotifyString(0, array);
-//            cardDataList.add(new Node(title, message, 0));
-//        }
-        MeetingCardAdapter adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification, cardDataList);
-        mListView.setAdapter(adapter);
-        adapter.setOnItemClickListener(this);
+
     }
 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-        SignUpActivity_.intent(mContext).start();
+        Node node = new Node((Meet) o);
+        DetailsActivity_.intent(mContext).start();
     }
 
     @Override
@@ -187,14 +211,28 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
         return false;
     }
 
-    @Override
-    protected void onDestroy() {
-        //存入缓存
-        try {
-            ACache.get(mContext).put("meeting_items", (ArrayList<Node>) cardDataList);
-        } catch (Exception e) {
-            Logger.e("Exception : ",e);
+    abstract class MeetCallback extends Callback<MeetResponse> {
+        @Override
+        public MeetResponse parseNetworkResponse(Response response, int id) throws Exception {
+            try {
+                String data = response.body().string();
+                Gson gson = new Gson();
+                BaseResponse baseResponse = gson.fromJson(data, BaseResponse.class);
+                if (baseResponse.code == 0) {
+                    return gson.fromJson(data, MeetResponse.class);
+                } else if (baseResponse.code == 1) {
+                    return new MeetResponse(baseResponse);
+                }
+            } catch (Exception e) {
+                onError(null, e, 0);
+            }
+            return null;
         }
-        super.onDestroy();
+
+        @Override
+        public void onError(Call call, Exception e, int id) {
+            showDebugException(e);
+            showToast("获取会议列表失败");
+        }
     }
 }

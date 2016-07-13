@@ -20,7 +20,7 @@ import cn.edu.jumy.oa.server.UploadServer;
  */
 public class DocumentBroadcastReceiver extends BroadcastReceiver{
 
-    private List<Doc> docList;
+    private ArrayList<Doc> docList;
     private int type;
 
     public static final String DOC = "cn.edu.jumy.DOC";
@@ -31,13 +31,14 @@ public class DocumentBroadcastReceiver extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction() == DOC){
             docList = intent.getParcelableArrayListExtra(DOC_LIST);
+            type = intent.getIntExtra(TYPE,0);
             if (BaseActivity.DEBUG){
-                Logger.t("DocumentBroadcastReceiver").w(docList.toString());
+                Logger.t("DocumentBroadcastReceiver").d(docList.toString());
             }
         }
     }
 
-    public List<Doc> getDocList() {
+    public ArrayList<Doc> getDocList() {
         return docList;
     }
 

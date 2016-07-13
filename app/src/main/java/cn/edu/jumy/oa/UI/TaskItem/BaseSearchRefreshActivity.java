@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
-import com.squareup.picasso.Picasso;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 
 import org.androidannotations.annotations.AfterViews;
@@ -31,7 +30,6 @@ import java.util.List;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.adapter.DocumentAdapter;
 import cn.edu.jumy.oa.adapter.MeetApprovalAdapter;
 import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
@@ -69,11 +67,6 @@ public class BaseSearchRefreshActivity extends BaseActivity implements OnItemCli
             mListView.setLoadmoreString("加载中...");
 
             mEmptyImageView = (ImageView) View.inflate(mContext, R.layout.item_empty_view, null);
-            Picasso.with(mContext)
-                    .load("https://www.skyverge.com/wp-content/uploads/2012/05/github-logo.png")
-                    .resize(200, 200)
-                    .centerInside()
-                    .into(mEmptyImageView);
             mListView.setEmptyView(mEmptyImageView);
             mListView.setSwipeEnable(true);
             mListView.setLayoutManager(new LinearLayoutManager(this));

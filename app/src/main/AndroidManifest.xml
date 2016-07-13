@@ -93,6 +93,8 @@
             android:theme="@style/JumyTheme"/>
         <activity android:name=".UI.SignUpActivity_"/>
         <activity android:name=".UI.TaskItem.MeetAuditActivity_"/>
+        <activity android:name=".UI.TaskItem.SentDocumentActivity_"/>
+        <activity android:name=".UI.TaskItem.SentMeetingActivity_"/>
 
 
 
