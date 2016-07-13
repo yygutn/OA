@@ -21,11 +21,12 @@ import okhttp3.Call;
 
 /**
  * Created by Jumy on 16/6/20 13:57.
+ *
  * @会议审核 会议审核和检索功能
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EActivity(R.layout.activity_document_cabinet)
-public class MeetingApprovalActivity extends BaseSearchRefreshActivity{
+public class MeetingApprovalActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void setTile() {
@@ -35,19 +36,19 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity{
     @Override
     protected void initData() {
         Resources resources = getResources();
-        String [] test1 = resources.getStringArray(R.array.test1);
-        String [] test2 = resources.getStringArray(R.array.test2);
-        String [] test3 = resources.getStringArray(R.array.test3);
-        String [] test4 = resources.getStringArray(R.array.test4);
-        String [] test5 = resources.getStringArray(R.array.test5);
-        String [] test6 = resources.getStringArray(R.array.test6);
+        String[] test1 = resources.getStringArray(R.array.test1);
+        String[] test2 = resources.getStringArray(R.array.test2);
+        String[] test3 = resources.getStringArray(R.array.test3);
+        String[] test4 = resources.getStringArray(R.array.test4);
+        String[] test5 = resources.getStringArray(R.array.test5);
+        String[] test6 = resources.getStringArray(R.array.test6);
 
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test1),0));
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test2),0));
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test3),0));
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test4),0));
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test5),0));
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test6),0));
+        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test1), 0));
+        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test2), 0));
+        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test3), 0));
+        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test4), 0));
+        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test5), 0));
+        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test6), 0));
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
@@ -55,16 +56,24 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity{
         year = date.getYear();
         month = date.getMonth() - 1;
         day = date.getDay();
-        if (month < 0) {
-            year--;
-            month = 11;
-            day = 31;
+        if ((month < 8 && (month & 1) == 1) || (month >= 8 && (month & 1) == 0)) {
+            if (day == 31) {
+                day--;
+            }
+            if (month == 2 && day > 28) {
+                day = 28;
+            }
+            if (month == 0) {
+                month = 11;
+            } else {
+                month--;
+            }
         } else {
-            day = month == 1 ? 28 : 30;
+            month--;
         }
         String before = sdf.format(new Date(year, month, day));
         String now = sdf.format(date);
-        Map<String,String> params = new HashMap<>();
+        Map<String, String> params = new HashMap<>();
         params.put("page", "1");
         params.put("size", "20");
         params.put("level", "");

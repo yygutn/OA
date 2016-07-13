@@ -39,12 +39,20 @@ public class SentDocumentActivity extends BaseSearchRefreshActivity {
         year = date.getYear();
         month = date.getMonth() - 1;
         day = date.getDay();
-        if (month < 0) {
-            year--;
-            month = 11;
-            day = 31;
+        if ((month < 8 && (month & 1) == 1) || (month >= 8 && (month & 1) == 0)) {
+            if (day == 31) {
+                day--;
+            }
+            if (month == 2 && day > 28) {
+                day = 28;
+            }
+            if (month == 0) {
+                month = 11;
+            } else {
+                month--;
+            }
         } else {
-            day = month == 1 ? 28 : 30;
+            month--;
         }
         String before = sdf.format(new Date(year, month, day));
         String now = sdf.format(date);
