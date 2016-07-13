@@ -1,23 +1,24 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
-import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.androidannotations.annotations.EActivity;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.edu.jumy.oa.CallBack.MeetCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.Utils.CardGenerator;
-import okhttp3.Call;
+import cn.edu.jumy.oa.Response.MeetResponse;
+import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
+import cn.edu.jumy.oa.bean.Meet;
+import cn.edu.jumy.oa.bean.Node;
 
 /**
  * Created by Jumy on 16/6/20 13:57.
@@ -28,6 +29,9 @@ import okhttp3.Call;
 @EActivity(R.layout.activity_document_cabinet)
 public class MeetingApprovalActivity extends BaseSearchRefreshActivity {
 
+    MeetingCardAdapter adapter;
+    ArrayList<Meet> mList = new ArrayList<>();
+
     @Override
     protected void setTile() {
         mTitleBar.setTitle("会议审核");
@@ -35,27 +39,13 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void initData() {
-        Resources resources = getResources();
-        String[] test1 = resources.getStringArray(R.array.test1);
-        String[] test2 = resources.getStringArray(R.array.test2);
-        String[] test3 = resources.getStringArray(R.array.test3);
-        String[] test4 = resources.getStringArray(R.array.test4);
-        String[] test5 = resources.getStringArray(R.array.test5);
-        String[] test6 = resources.getStringArray(R.array.test6);
-
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test1), 0));
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test2), 0));
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test3), 0));
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test4), 0));
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test5), 0));
-        mList.add(CardGenerator.getStringFromArray(Arrays.asList(test6), 0));
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
         int year, month, day;
-        year = date.getYear();
-        month = date.getMonth() - 1;
-        day = date.getDay();
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR) - 1900;
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
         if ((month < 8 && (month & 1) == 1) || (month >= 8 && (month & 1) == 0)) {
             if (day == 31) {
                 day--;
@@ -65,6 +55,7 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity {
             }
             if (month == 0) {
                 month = 11;
+                year--;
             } else {
                 month--;
             }
@@ -84,17 +75,23 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity {
         params.put("signStatus", "");
         params.put("passStatus", "");
 
-        OAService.meetCompany(params, new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                showDebugException(e);
-            }
+        OAService.meetCompany(params, new MeetCallback() {
 
             @Override
-            public void onResponse(String response, int id) {
-                showDebugLogd(response);
+            public void onResponse(MeetResponse response, int id) {
+                if (response != null && response.data != null && response.code == 0) {
+                    mList = response.data.pageObject;
+                    adapter.setList(response.data.pageObject);
+                }
             }
         });
+    }
+
+    @Override
+    protected void initListView() {
+        adapter = new MeetingCardAdapter(mContext,R.layout.item_card_notification,new ArrayList(mList));
+        mListView.setAdapter(adapter);
+        adapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -114,6 +111,6 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity {
 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-        MeetAuditActivity_.intent(mContext).start();
+        MeetAuditActivity_.intent(mContext).extra("audit",(Meet)o).start();
     }
 }

@@ -29,7 +29,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +59,7 @@ public class SendMeetingActivity extends BaseActivity {
     @ViewById(R.id.toolbar)
     protected Toolbar mToolbar;
     @ViewById(R.id.Undertaking_Unit)
-    protected AppCompatEditText mUndertakingUnit;
+    protected DropDownMenu mDropDownMenuUnit;
     @ViewById(R.id.dropDownMenu_1)
     protected DropDownMenu mDropDownMenu1;
     @ViewById(R.id.dropDownMenu_2)
@@ -94,11 +93,13 @@ public class SendMeetingActivity extends BaseActivity {
     int index = 0;
 
     String receiveUnits = "";//接收单位
+    String UndertakingUnits = "";//承办单位
     String level = "0"; //等级
     List<Account> accountList;
     Map<String, File> fileMap;
 
     private MultiDropDownAdapter mUnitAdapter;
+    private MultiDropDownAdapter mUndertakingUnitAdapter;
     private ListDropDownAdapter mLevelAdapter;
 
     private ArrayList<String> mUnits = new ArrayList<>(Arrays.asList(new String[]{"省委办公厅", "省信访局", "省档案局", "省委机要局", "省人大常委办公厅"}));
@@ -107,6 +108,7 @@ public class SendMeetingActivity extends BaseActivity {
 
     private List<View> popupView1 = new ArrayList<>();
     private List<View> popupView2 = new ArrayList<>();
+    private List<View> popupView = new ArrayList<>();
 
 
     BroadcastReceiver uploadBroadcastReceiver = new BroadcastReceiver() {
@@ -118,7 +120,7 @@ public class SendMeetingActivity extends BaseActivity {
                     mFilePath.add(path);
                 }
             }
-            if (intent.getAction() == UploadServer.UPLOAD_BR_RESULT_DELETE){
+            if (intent.getAction() == UploadServer.UPLOAD_BR_RESULT_DELETE) {
                 String path = intent.getStringExtra(UploadServer.EXTRA_PATH);
                 if (mFilePath.contains(path)) {
                     mFilePath.remove(path);
@@ -169,6 +171,7 @@ public class SendMeetingActivity extends BaseActivity {
                         }
                     }
                     initUnitView();
+                    initUndertakingUnitView();
                 }
             });
             initLevelView();
@@ -237,26 +240,26 @@ public class SendMeetingActivity extends BaseActivity {
 
     private void doSending(final DialogInterface dialog) {
 
-        String undertakingUnit = mUndertakingUnit.getText().toString();
-//        if (TextUtils.isEmpty(undertakingUnit)){
-//            showToast("承办单位不能为空");
-//            return;
-//        }
-//        if (receiveUnits.contains("请选择")){
-//            showToast("接收单位不能为空");
-//            return;
-//        }
+
+        if (UndertakingUnits.contains("请选择")) {
+            showToast("承办单位不能为空");
+            return;
+        }
+        if (receiveUnits.contains("请选择")){
+            showToast("接收单位不能为空");
+            return;
+        }
         String docNo = mMeetingNumber.getText().toString();
         String docTitle = mMeetingTitle.getText().toString();
-//        if (TextUtils.isEmpty(docTitle)){
-//            showToast("发文标题不能为空");
-//            return;
-//        }
+        if (TextUtils.isEmpty(docTitle)){
+            showToast("发文标题不能为空");
+            return;
+        }
         String name = mMeetingName.getText().toString();
-//        if (TextUtils.isEmpty(name)){
-//            showToast("会议名称不能为空");
-//            return;
-//        }
+        if (TextUtils.isEmpty(name)){
+            showToast("会议名称不能为空");
+            return;
+        }
         String docSummary = mMeetingDetails.getText().toString();
         String contactName = mMeetingPeople.getText().toString();
         String contactPhone = mMeetingPhone.getText().toString();
@@ -264,7 +267,7 @@ public class SendMeetingActivity extends BaseActivity {
         String time = mMeetingTime.getText().toString();
         Map<String, String> params = new HashMap<>();
         params.put("department", receiveUnits);
-        params.put("meetCompany", undertakingUnit);
+        params.put("meetCompany", UndertakingUnits);
         params.put("level", level);
         params.put("docNo", docNo);
         params.put("docTitle", docTitle);
@@ -334,6 +337,7 @@ public class SendMeetingActivity extends BaseActivity {
 
     }
 
+
     private void getUnits(List<Integer> checkedList) {
         receiveUnits = "";
         if (accountList == null || accountList.size() <= 0) {
@@ -345,6 +349,50 @@ public class SendMeetingActivity extends BaseActivity {
                 receiveUnits += accountList.get(checkedList.get(0)).id;
             } else {
                 receiveUnits += "," + accountList.get(checkedList.get(i)).id;
+            }
+        }
+    }
+
+    private void initUndertakingUnitView() {
+        final View view = getLayoutInflater().inflate(R.layout.layout_custom_release, null);
+        NoScrollGridView gridView = (NoScrollGridView) view.findViewById(R.id.gridView);
+        mUndertakingUnitAdapter = new MultiDropDownAdapter(mContext, mUnits);
+        gridView.setAdapter(mUndertakingUnitAdapter);
+
+        TextView textView = (TextView) view.findViewById(R.id.ok);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDropDownMenuUnit.setTabText(mUndertakingUnitAdapter.getNeedString());
+                getUndertakingUnits(mUndertakingUnitAdapter.checkedList);
+                mDropDownMenuUnit.closeMenu();
+            }
+        });
+
+        popupView.add(view);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mUndertakingUnitAdapter.setCheckItem(position);
+            }
+        });
+
+        mDropDownMenuUnit.setDropDownMenu(Arrays.asList(headers), popupView, null);
+
+    }
+
+    private void getUndertakingUnits(List<Integer> checkedList) {
+        UndertakingUnits = "";
+        if (accountList == null || accountList.size() <= 0) {
+            UndertakingUnits = "请选择";
+            return;
+        }
+        for (int i = 0; i < checkedList.size(); i++) {
+            if (i == 0) {
+                UndertakingUnits += accountList.get(checkedList.get(0)).id;
+            } else {
+                UndertakingUnits += "," + accountList.get(checkedList.get(i)).id;
             }
         }
     }

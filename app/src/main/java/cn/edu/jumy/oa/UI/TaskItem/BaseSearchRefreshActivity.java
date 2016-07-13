@@ -30,7 +30,8 @@ import java.util.List;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.adapter.MeetApprovalAdapter;
+import cn.edu.jumy.oa.adapter.BaseSearchRefreshAdapter;
+import cn.edu.jumy.oa.bean.Meet;
 import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 
@@ -47,7 +48,7 @@ public class BaseSearchRefreshActivity extends BaseActivity implements OnItemCli
     MaterialSearchView mSearchView;
     @ViewById(R.id.recView)
     protected PullToRefreshRecyclerView mListView;
-    protected MeetApprovalAdapter adapter;
+    protected BaseSearchRefreshAdapter adapter;
     ImageView mEmptyImageView;
 
     int lastVisiblePosition = 0;
@@ -127,7 +128,7 @@ public class BaseSearchRefreshActivity extends BaseActivity implements OnItemCli
      * 更新卡片
      */
     protected void initListView() {
-        adapter = new MeetApprovalAdapter(mContext, R.layout.item_card_notification, new ArrayList<>(mList));
+        adapter = new BaseSearchRefreshAdapter(mContext, R.layout.item_card_notification, new ArrayList<>(mList));
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
     }

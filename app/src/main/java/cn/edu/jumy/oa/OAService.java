@@ -331,7 +331,8 @@ public class OAService {
 
     /**
      * 获取签收信息
-     * @param pid 公文ID||会议ID
+     *
+     * @param pid      公文ID||会议ID
      * @param callback
      */
     public static void getCheckInfo(final String pid, final Callback callback) {
@@ -376,4 +377,58 @@ public class OAService {
             }
         });
     }
+
+    /**
+     * 承办单位获取会议报名表
+     *
+     * @param mid      会议ID
+     * @param callback
+     */
+    public static void getMEntryByPassStatus(final String mid, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                callback.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "getMEntryByPassStatus")
+                        .addParams("value", response)
+                        .addParams("mid", mid)
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
+
+    /**
+     * 会议承办方审核人员报名，通过/退回
+     * @param id 报名人员id
+     * @param pass (true:通过  false:不通过)
+     * @param passRemark 审批反馈(不通过时)
+     * @param callback
+     */
+    public static void meetUserPass(final String id,final String pass,final String passRemark, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                callback.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(String response, int sid) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "meetUserPass")
+                        .addParams("value", response)
+                        .addParams("id", id)
+                        .addParams("pass", pass)
+                        .addParams("passRemark", passRemark)
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
+
 }

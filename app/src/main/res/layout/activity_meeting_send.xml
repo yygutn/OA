@@ -33,15 +33,23 @@
                 android:padding="10dp"
                 android:text="承办单位:"
                 android:textColor="@color/black" />
-
-            <android.support.v7.widget.AppCompatEditText
+            <cn.edu.jumy.oa.widget.DropDownMenu
                 android:id="@+id/Undertaking_Unit"
-                android:background="@drawable/shape_normal_gray"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="48dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp" />
+                android:layout_marginRight="10dp"
+                android:minHeight="48dp"
+                android:background="@drawable/shape_normal_gray"
+                app:dddividerColor="@color/gray"
+                app:ddunderlineColor="@android:color/transparent"
+                app:ddmaskColor="@color/mask_color"
+                app:ddmenuBackgroundColor="@color/white"
+                app:ddmenuSelectedIcon="@drawable/ic_expand_less"
+                app:ddmenuTextSize="16sp"
+                app:ddmenuUnselectedIcon="@drawable/ic_expand_more"
+                app:ddtextSelectedColor="@color/pressed"
+                app:ddtextUnselectedColor="@color/drop_down_unselected" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"

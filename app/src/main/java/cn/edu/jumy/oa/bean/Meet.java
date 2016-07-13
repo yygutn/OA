@@ -2,6 +2,7 @@ package cn.edu.jumy.oa.bean;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * Created by Jumy on 16/6/29 15:24.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-public class Meet extends DataSupport{
+public class Meet extends DataSupport implements Serializable{
     
     public String id;
     /**

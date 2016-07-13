@@ -18,8 +18,8 @@ import cn.edu.jumy.oa.Utils.CardGenerator;
  * Created by Jumy on 16/6/20 16:22.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-public class MeetApprovalAdapter extends CommonAdapter<Node> {
-    public MeetApprovalAdapter(Context context, int layoutId, List<Node> datas) {
+public class BaseSearchRefreshAdapter extends CommonAdapter<Node> {
+    public BaseSearchRefreshAdapter(Context context, int layoutId, List<Node> datas) {
         super(context, layoutId, datas);
     }
 
