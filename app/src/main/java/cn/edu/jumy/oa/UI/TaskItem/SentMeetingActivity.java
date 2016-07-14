@@ -1,7 +1,6 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
-import android.view.View;
-import android.view.ViewGroup;
+import android.text.TextUtils;
 
 import org.androidannotations.annotations.EActivity;
 
@@ -16,12 +15,8 @@ import cn.edu.jumy.oa.CallBack.MeetCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.MeetResponse;
-import cn.edu.jumy.oa.adapter.DocumentAdapter;
-import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
 import cn.edu.jumy.oa.adapter.SentMeetAdapter;
-import cn.edu.jumy.oa.bean.Doc;
 import cn.edu.jumy.oa.bean.Meet;
-import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.customview.SimpleDividerItemDecoration;
 
 /**
@@ -99,7 +94,20 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void onTextSubmit(String str) {
-        super.onTextSubmit(str);
+        if (TextUtils.isEmpty(str)){
+            showToast("请输入有效关键字");
+        }
+        ArrayList<Meet> list = new ArrayList<>();
+        for (Meet meet : mListMeet){
+            if (meet.docTitle.contains(str)){
+                list.add(meet);
+            }
+        }
+        adapter.setList(list);
     }
 
+    @Override
+    protected void onSearchClose() {
+        adapter.setList(new ArrayList<>(mListMeet));
+    }
 }

@@ -52,6 +52,7 @@ import cn.edu.jumy.oa.widget.customview.NoScrollListView;
 import cn.edu.jumy.oa.widget.customview.UploadItem;
 import cn.edu.jumy.oa.widget.customview.UploadItem_;
 import okhttp3.Call;
+import okhttp3.Request;
 
 /**
  * Created by Jumy on 16/6/23 11:58.
@@ -227,6 +228,16 @@ public class DocumentReleaseActivity extends BaseActivity {
                             public void onError(Call call, Exception e, int id) {
                                 showDebugException(e);
                                 showToast("网络异常,发送失败");
+                            }
+
+                            @Override
+                            public void onBefore(Request request, int id) {
+                                super.onBefore(request, id);
+                            }
+
+                            @Override
+                            public void inProgress(float progress, long total, int id) {
+                                super.inProgress(progress, total, id);
                             }
 
                             @Override

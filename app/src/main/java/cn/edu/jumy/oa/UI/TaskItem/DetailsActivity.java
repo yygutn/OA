@@ -94,10 +94,39 @@ public class DetailsActivity extends BaseActivity {
 
         if (mNode.getType() == 1){
             DocSignBackground();
+            setResult(1025);
+        } else if (mNode.getType() == 0){
+            MeetSign();
         }
     }
 
+    private void MeetSign() {
+        if (TextUtils.isEmpty(mNode.tid)){
+            return;
+        }
+        OAService.meetSign(mNode.tid, new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                showToast("当前网络不可用,签收会议失败");
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                Gson gson = new Gson();
+                BaseResponse baseResponse = gson.fromJson(response, BaseResponse.class);
+                if (baseResponse.code == 0){
+                    showToast("签收会议成功");
+                } else if (baseResponse.code == 1){
+                    showToast("签收会议失败");
+                }
+            }
+        });
+    }
+
     private void DocSignBackground() {
+        if (TextUtils.isEmpty(mNode.tid)){
+            return;
+        }
         OAService.docSign(mNode.tid, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {

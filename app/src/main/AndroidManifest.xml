@@ -95,6 +95,7 @@
         <activity android:name=".UI.TaskItem.MeetAuditActivity_"/>
         <activity android:name=".UI.TaskItem.SentDocumentActivity_"/>
         <activity android:name=".UI.TaskItem.SentMeetingActivity_"/>
+        <activity android:name=".UI.TaskItem.SignDetailsActivity_"/>
 
 
 

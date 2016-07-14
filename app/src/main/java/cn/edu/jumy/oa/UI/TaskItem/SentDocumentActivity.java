@@ -1,5 +1,7 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
+import android.text.TextUtils;
+
 import org.androidannotations.annotations.EActivity;
 
 import java.text.SimpleDateFormat;
@@ -25,7 +27,7 @@ import cn.edu.jumy.oa.widget.customview.SimpleDividerItemDecoration;
 public class SentDocumentActivity extends BaseSearchRefreshActivity {
 
     private ArrayList<Doc> mListDoc = new ArrayList<>();
-    SentDocAdapter documentAdapter;
+    SentDocAdapter adapter;
     @Override
     protected void setTile() {
         mTitleBar.setTitle("已发送公文");
@@ -75,7 +77,7 @@ public class SentDocumentActivity extends BaseSearchRefreshActivity {
             public void onResponse(DocResponse response, int id) {
                 if (response != null && response.code == 0 && response.data != null){
                     mListDoc = response.data.pageObject;
-                    documentAdapter.setList(response.data.pageObject);
+                    adapter.setList(response.data.pageObject);
                 }
             }
         });
@@ -83,13 +85,27 @@ public class SentDocumentActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void initListView() {
-        documentAdapter = new SentDocAdapter(mContext, R.layout.item_sent_xx, new ArrayList<>(mListDoc));
-        mListView.setAdapter(documentAdapter);
+        adapter = new SentDocAdapter(mContext, R.layout.item_sent_xx, new ArrayList<>(mListDoc));
+        mListView.setAdapter(adapter);
         mListView.getRecyclerView().addItemDecoration(new SimpleDividerItemDecoration(mContext));
     }
 
     @Override
     protected void onTextSubmit(String str) {
-        super.onTextSubmit(str);
+        if (TextUtils.isEmpty(str)){
+            showToast("请输入有效关键字");
+        }
+        ArrayList<Doc> list = new ArrayList<>();
+        for (Doc doc : mListDoc){
+            if (doc.docTitle.contains(str)){
+                list.add(doc);
+            }
+        }
+        adapter.setList(list);
+    }
+
+    @Override
+    protected void onSearchClose() {
+        adapter.setList(new ArrayList<>(mListDoc));
     }
 }

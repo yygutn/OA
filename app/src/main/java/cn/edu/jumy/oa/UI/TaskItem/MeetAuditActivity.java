@@ -121,6 +121,9 @@ public class MeetAuditActivity extends BaseActivity {
     }
 
     private void initList() {
+        if (node == null || TextUtils.isEmpty(node.id)) {
+            return;
+        }
         OAService.getMEntryByPassStatus(node.id, new AuditCallback() {
             @Override
             public void onResponse(AuditResponse response, int id) {
@@ -163,5 +166,11 @@ public class MeetAuditActivity extends BaseActivity {
     @Click(R.id.out)
     void click() {
         showToast("导出...");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(successBroadCastReceiver);
     }
 }

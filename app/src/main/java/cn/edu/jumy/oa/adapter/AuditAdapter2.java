@@ -24,8 +24,8 @@ import okhttp3.Call;
  * Created by Jumy on 16/7/6 12:52.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-public class AuditAdapter extends CommonAdapter<AuditUser> {
-    public AuditAdapter(Context context, int layoutId, List datas) {
+public class AuditAdapter2 extends CommonAdapter<AuditUser> {
+    public AuditAdapter2(Context context, int layoutId, List datas) {
         super(context, layoutId, datas);
     }
 
@@ -38,23 +38,19 @@ public class AuditAdapter extends CommonAdapter<AuditUser> {
             holder.setText(R.id.audit_meet_header_tv, user.organame);
         }
         holder.setText(R.id.audit_item_name, user.uname);
+        holder.setText(R.id.audit_item_pass, "催收");
         holder.setOnClickListener(R.id.audit_item_pass, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 letGo(user,true,holder.getLayoutPosition());
             }
         });
-        holder.setOnClickListener(R.id.audit_item_back, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                letGo(user,false,holder.getLayoutPosition());
-            }
-        });
+        holder.setVisible(R.id.audit_item_back,false);
 
     }
 
     /**
-     * 承办方：会议报名审核
+     * 会议/公文：催收
      * @param user
      * @param pass true 通过  false 退回
      * @param position
@@ -63,7 +59,7 @@ public class AuditAdapter extends CommonAdapter<AuditUser> {
         OAService.meetUserPass(user.id,String.valueOf(pass),"", new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                Toast.makeText(mContext,"当前网络不可用,审核报名失败",Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext,"当前网络不可用,催收失败",Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -72,14 +68,11 @@ public class AuditAdapter extends CommonAdapter<AuditUser> {
                 BaseResponse baseResponse = gson.fromJson(response,BaseResponse.class);
                 if (baseResponse.code == 0){
                     //审核通过/退回
-                    Toast.makeText(mContext, "审核通过", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "催收通过", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent("POSITION");
                     intent.putExtra("passed_position",position);
-                    intent.putExtra("passed_flag",pass);
                     mContext.sendBroadcast(intent);
-                } else {
-                    Toast.makeText(mContext,"当前网络不可用,审核报名失败",Toast.LENGTH_SHORT).show();
                 }
             }
         });

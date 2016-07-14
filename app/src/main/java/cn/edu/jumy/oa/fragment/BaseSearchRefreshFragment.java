@@ -86,7 +86,7 @@ public class BaseSearchRefreshFragment extends BaseFragment implements OnItemCli
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         showDebugLogw("点击" + position);
         Node node = new Node((Doc) o);
-        DetailsActivity_.intent(mContext).extra("details", node).start();
+        DetailsActivity_.intent(mContext).extra("details", node).startForResult(1024);
     }
 
     @Override

@@ -305,9 +305,15 @@ public class DocumentReadActivity extends BaseActivity {
                 sendBroadcast(intent);
             }
         });
-
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1024 && resultCode == 1025){
+            downloadList();
+        }
+    }
 
     private abstract class DocCallback extends Callback<DocResponse> {
 

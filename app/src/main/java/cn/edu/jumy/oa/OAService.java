@@ -330,7 +330,7 @@ public class OAService {
     }
 
     /**
-     * 获取签收信息
+     * 获取签收信息-列表
      *
      * @param pid      公文ID||会议ID
      * @param callback
@@ -431,4 +431,23 @@ public class OAService {
         });
     }
 
+
+    public static void meetSign(final String tid, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                callback.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "meetSign")
+                        .addParams("value", response)
+                        .addParams("tid", tid)
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
 }
