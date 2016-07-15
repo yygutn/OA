@@ -221,11 +221,11 @@ public class SendMeetingActivity extends BaseActivity {
     private void doSending(final DialogInterface dialog) {
 
 
-        if (TextUtils.isEmpty(UndertakingUnits)) {
+        if (TextUtils.isEmpty(UndertakingUnitsID)) {
             showToast("承办单位不能为空");
             return;
         }
-        if (TextUtils.isEmpty(receiveUnits)) {
+        if (TextUtils.isEmpty(receiveUnitsID)) {
             showToast("接收单位不能为空");
             return;
         }
