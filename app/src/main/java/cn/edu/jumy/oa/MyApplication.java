@@ -4,14 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.multidex.MultiDexApplication;
-import android.util.Log;
 
 import com.fsck.k9.K9;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
-import com.umeng.message.IUmengRegisterCallback;
-import com.umeng.message.PushAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.https.HttpsUtils;
 
@@ -91,14 +88,14 @@ public class MyApplication extends MultiDexApplication {
 
             K9.getInstance().onCreate(params[0]);
             //Umeng Push init start
-            PushAgent.getInstance(context).enable(new IUmengRegisterCallback() {
-                @Override
-                public void onRegistered(String DeviceId) {
-                    DEVICE_ID = DeviceId;
-                    Log.e(TAG, "onRegistered: " + DeviceId);
-                }
-            });
-            PushAgent.getInstance(context).setNotificationClickHandler(new NotificationClickHandler());
+//            PushAgent.getInstance(context).enable(new IUmengRegisterCallback() {
+//                @Override
+//                public void onRegistered(String DeviceId) {
+//                    DEVICE_ID = DeviceId;
+//                    Log.e(TAG, "onRegistered: " + DeviceId);
+//                }
+//            });
+//            PushAgent.getInstance(context).setNotificationClickHandler(new NotificationClickHandler());
             //Umeng Push init end
             if (BaseActivity.DEBUG) {
                 Logger.t("Application Init K9  &&  UmengPush").w("初始化结束");
