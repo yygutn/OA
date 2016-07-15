@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.zhy.http.okhttp.callback.Callback;
-import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.androidannotations.annotations.AfterViews;
@@ -37,7 +36,7 @@ import cn.edu.jumy.oa.Response.AttachResponse;
 import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.UI.SignUpActivity_;
 import cn.edu.jumy.oa.Utils.CallOtherOpenFile;
-import cn.edu.jumy.oa.Utils.TempFileCallBack;
+import cn.edu.jumy.oa.CallBack.TempFileCallBack;
 import cn.edu.jumy.oa.bean.Attachment;
 import cn.edu.jumy.oa.bean.Node;
 import okhttp3.Call;

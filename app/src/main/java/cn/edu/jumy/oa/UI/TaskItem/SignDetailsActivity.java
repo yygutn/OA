@@ -24,7 +24,6 @@ import cn.edu.jumy.oa.CallBack.AuditCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.AuditResponse;
-import cn.edu.jumy.oa.adapter.AuditAdapter;
 import cn.edu.jumy.oa.adapter.AuditAdapter2;
 import cn.edu.jumy.oa.bean.AuditUser;
 

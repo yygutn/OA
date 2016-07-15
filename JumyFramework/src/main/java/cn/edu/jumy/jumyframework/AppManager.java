@@ -117,15 +117,17 @@ public class AppManager {
      * 结束指定的Activity
      */
     public void finishActivity(BaseActivity activity) {
-        showDebugLog("Finishing " + activity.getClass().getSimpleName());
-        showDebugLog("Before finish, the Stack size is :" + AppManager.getStackSize());
+        String message = "";
+        message += "Finishing " + activity.getClass().getSimpleName()+"\n";
+        message += "Before finish, the Stack size is :" + AppManager.getStackSize() +"\n";
         finishActivity(activity.getClass());
         if (activity != null) {
             activity.finish();
             activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
             activity = null;
         }
-        showDebugLog("After finished, the Stack size is :" + AppManager.getStackSize());
+        message += ("After finished, the Stack size is :" + AppManager.getStackSize()) + "\n";
+        showDebugLog(message);
     }
 
     /**

@@ -76,7 +76,7 @@ public class UploadItem extends LinearLayout{
     void click(){
         FilePicker picker = new FilePicker(ac, FilePicker.FILE);
         picker.setShowHideDir(false);
-        picker.setRootPath(StorageUtils.getRootPath(mContext) + "Download/");
+        picker.setRootPath(StorageUtils.getRootPath(mContext) + "Pictures/");
         picker.setOnFilePickListener(new FilePicker.OnFilePickListener() {
             @Override
             public void onFilePicked(String currentPath) {

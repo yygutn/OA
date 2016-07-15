@@ -33,23 +33,18 @@
                 android:padding="10dp"
                 android:text="承办单位:"
                 android:textColor="@color/black" />
-            <cn.edu.jumy.oa.widget.DropDownMenu
+
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/Undertaking_Unit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:minHeight="48dp"
                 android:background="@drawable/shape_normal_gray"
-                app:dddividerColor="@color/gray"
-                app:ddunderlineColor="@android:color/transparent"
-                app:ddmaskColor="@color/mask_color"
-                app:ddmenuBackgroundColor="@color/white"
-                app:ddmenuSelectedIcon="@drawable/ic_expand_less"
-                app:ddmenuTextSize="16sp"
-                app:ddmenuUnselectedIcon="@drawable/ic_expand_more"
-                app:ddtextSelectedColor="@color/pressed"
-                app:ddtextUnselectedColor="@color/drop_down_unselected" />
+                android:gravity="center"
+                android:hint="请选择承办单位"
+                android:minHeight="48dp"
+                android:textColor="@color/black" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
@@ -58,24 +53,17 @@
                 android:text="接收单位:"
                 android:textColor="@color/black" />
 
-            <cn.edu.jumy.oa.widget.DropDownMenu
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/dropDownMenu_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:minHeight="48dp"
                 android:background="@drawable/shape_normal_gray"
-                app:dddividerColor="@color/gray"
-                app:ddunderlineColor="@android:color/transparent"
-                app:ddmaskColor="@color/mask_color"
-                app:ddmenuBackgroundColor="@color/white"
-                app:ddmenuSelectedIcon="@drawable/ic_expand_less"
-                app:ddmenuTextSize="16sp"
-                app:ddmenuUnselectedIcon="@drawable/ic_expand_more"
-                app:ddtextSelectedColor="@color/pressed"
-                app:ddtextUnselectedColor="@color/drop_down_unselected" />
-
+                android:gravity="center"
+                android:hint="请选择接收单位"
+                android:minHeight="48dp"
+                android:textColor="@color/black" />
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -232,17 +220,34 @@
                 android:layout_marginRight="10dp"
                 android:minHeight="48dp" />
 
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/shape_document_release"
-                android:text="添加附件"
-                android:id="@+id/addUpload"
-                android:textColor="@color/black" />
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/addUpload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_document_release"
+                    android:padding="10dp"
+                    android:text="添加附件"
+                    android:textColor="@color/black" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/addUpload_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_document_release"
+                    android:padding="10dp"
+                    android:text="扫描"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
 
 
             <LinearLayout

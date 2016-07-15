@@ -21,6 +21,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.ColorRes;
 import org.json.JSONException;
@@ -36,7 +37,9 @@ import java.util.Map;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.Response.AccountResult;
+import cn.edu.jumy.oa.Response.AccountResponse;
+import cn.edu.jumy.oa.UI.DepartmentSelectActivity_;
+import cn.edu.jumy.oa.Utils.OpenApp;
 import cn.edu.jumy.oa.adapter.ListDropDownAdapter;
 import cn.edu.jumy.oa.adapter.MultiDropDownAdapter;
 import cn.edu.jumy.oa.bean.Account;
@@ -59,9 +62,9 @@ public class SendMeetingActivity extends BaseActivity {
     @ViewById(R.id.toolbar)
     protected Toolbar mToolbar;
     @ViewById(R.id.Undertaking_Unit)
-    protected DropDownMenu mDropDownMenuUnit;
+    protected AppCompatTextView mDropDownMenuUnit;
     @ViewById(R.id.dropDownMenu_1)
-    protected DropDownMenu mDropDownMenu1;
+    protected AppCompatTextView mDropDownMenu1;
     @ViewById(R.id.dropDownMenu_2)
     protected DropDownMenu mDropDownMenu2;
     @ViewById(R.id.meetingNumber)
@@ -93,22 +96,19 @@ public class SendMeetingActivity extends BaseActivity {
     int index = 0;
 
     String receiveUnits = "";//接收单位
+    String receiveUnitsID = "";//接收单位ID
     String UndertakingUnits = "";//承办单位
+    String UndertakingUnitsID = "";//承办单位ID
     String level = "0"; //等级
-    List<Account> accountList;
     Map<String, File> fileMap;
 
-    private MultiDropDownAdapter mUnitAdapter;
-    private MultiDropDownAdapter mUndertakingUnitAdapter;
     private ListDropDownAdapter mLevelAdapter;
 
     private ArrayList<String> mUnits = new ArrayList<>(Arrays.asList(new String[]{"省委办公厅", "省信访局", "省档案局", "省委机要局", "省人大常委办公厅"}));
     private ArrayList<String> mLevel = new ArrayList<>(Arrays.asList(new String[]{"请选择", "特急", "加急", "平急", "特提"}));
     private String headers[] = {"请选择"};
 
-    private List<View> popupView1 = new ArrayList<>();
     private List<View> popupView2 = new ArrayList<>();
-    private List<View> popupView = new ArrayList<>();
 
 
     BroadcastReceiver uploadBroadcastReceiver = new BroadcastReceiver() {
@@ -145,46 +145,14 @@ public class SendMeetingActivity extends BaseActivity {
                 backToPreActivity();
             }
         });
-        try {
-            OAService.getOrganizationData(new StringCallback() {
-                @Override
-                public void onError(Call call, Exception e, int id) {
-                    showDebugException(e);
-                    showToast("网络异常，获取可发送单位失败");
-                    mUnits.clear();
-                    mUnits.add("请选择");
-                }
-
-                @Override
-                public void onResponse(String response, int id) {
-                    Gson gson = new Gson();
-                    AccountResult account = gson.fromJson(response, AccountResult.class);
-                    if (account.code != 0) {
-                        showToast("网络异常，获取可发送单位失败");
-                        mUnits.clear();
-                        mUnits.add("请选择");
-                    } else {
-                        mUnits.clear();
-                        accountList = account.data;
-                        for (Account data : accountList) {
-                            mUnits.add(data.name);
-                        }
-                    }
-                    initUnitView();
-                    initUndertakingUnitView();
-                }
-            });
-            initLevelView();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        initLevelView();
         IntentFilter filter = new IntentFilter();
         filter.addAction(UploadServer.UPLOAD_BR_RESULT);
         filter.addAction(UploadServer.UPLOAD_BR_RESULT_DELETE);
         registerReceiver(uploadBroadcastReceiver, filter);
     }
 
-    @Click({R.id.submit, R.id.addUpload, R.id.meeting_time})
+    @Click({R.id.submit, R.id.addUpload, R.id.meeting_time,R.id.addUpload_2,R.id.Undertaking_Unit,R.id.dropDownMenu_1})
     void clickSubmit(View view) {
         switch (view.getId()) {
             case R.id.submit: {
@@ -206,6 +174,18 @@ public class SendMeetingActivity extends BaseActivity {
                     }
                 });
                 picker.show();
+                break;
+            }
+            case R.id.addUpload_2:{
+                OpenApp.doStartApplicationWithPackageName(OpenApp.OFFICE_LENS,mContext);
+                break;
+            }
+            case R.id.Undertaking_Unit:{
+                DepartmentSelectActivity_.intent(mContext).startForResult(0);
+                break;
+            }
+            case R.id.dropDownMenu_1:{
+                DepartmentSelectActivity_.intent(mContext).startForResult(1);
                 break;
             }
             default:
@@ -241,22 +221,22 @@ public class SendMeetingActivity extends BaseActivity {
     private void doSending(final DialogInterface dialog) {
 
 
-        if (UndertakingUnits.contains("请选择")) {
+        if (TextUtils.isEmpty(UndertakingUnits)) {
             showToast("承办单位不能为空");
             return;
         }
-        if (receiveUnits.contains("请选择")){
+        if (TextUtils.isEmpty(receiveUnits)) {
             showToast("接收单位不能为空");
             return;
         }
         String docNo = mMeetingNumber.getText().toString();
         String docTitle = mMeetingTitle.getText().toString();
-        if (TextUtils.isEmpty(docTitle)){
+        if (TextUtils.isEmpty(docTitle)) {
             showToast("发文标题不能为空");
             return;
         }
         String name = mMeetingName.getText().toString();
-        if (TextUtils.isEmpty(name)){
+        if (TextUtils.isEmpty(name)) {
             showToast("会议名称不能为空");
             return;
         }
@@ -308,95 +288,6 @@ public class SendMeetingActivity extends BaseActivity {
     }
 
 
-    private void initUnitView() {
-        final View view = getLayoutInflater().inflate(R.layout.layout_custom_release, null);
-        NoScrollGridView gridView = (NoScrollGridView) view.findViewById(R.id.gridView);
-        mUnitAdapter = new MultiDropDownAdapter(mContext, mUnits);
-        gridView.setAdapter(mUnitAdapter);
-
-        TextView textView = (TextView) view.findViewById(R.id.ok);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDropDownMenu1.setTabText(mUnitAdapter.getNeedString());
-                getUnits(mUnitAdapter.checkedList);
-                mDropDownMenu1.closeMenu();
-            }
-        });
-
-        popupView1.add(view);
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mUnitAdapter.setCheckItem(position);
-            }
-        });
-
-        mDropDownMenu1.setDropDownMenu(Arrays.asList(headers), popupView1, null);
-
-    }
-
-
-    private void getUnits(List<Integer> checkedList) {
-        receiveUnits = "";
-        if (accountList == null || accountList.size() <= 0) {
-            receiveUnits = "请选择";
-            return;
-        }
-        for (int i = 0; i < checkedList.size(); i++) {
-            if (i == 0) {
-                receiveUnits += accountList.get(checkedList.get(0)).id;
-            } else {
-                receiveUnits += "," + accountList.get(checkedList.get(i)).id;
-            }
-        }
-    }
-
-    private void initUndertakingUnitView() {
-        final View view = getLayoutInflater().inflate(R.layout.layout_custom_release, null);
-        NoScrollGridView gridView = (NoScrollGridView) view.findViewById(R.id.gridView);
-        mUndertakingUnitAdapter = new MultiDropDownAdapter(mContext, mUnits);
-        gridView.setAdapter(mUndertakingUnitAdapter);
-
-        TextView textView = (TextView) view.findViewById(R.id.ok);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDropDownMenuUnit.setTabText(mUndertakingUnitAdapter.getNeedString());
-                getUndertakingUnits(mUndertakingUnitAdapter.checkedList);
-                mDropDownMenuUnit.closeMenu();
-            }
-        });
-
-        popupView.add(view);
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mUndertakingUnitAdapter.setCheckItem(position);
-            }
-        });
-
-        mDropDownMenuUnit.setDropDownMenu(Arrays.asList(headers), popupView, null);
-
-    }
-
-    private void getUndertakingUnits(List<Integer> checkedList) {
-        UndertakingUnits = "";
-        if (accountList == null || accountList.size() <= 0) {
-            UndertakingUnits = "请选择";
-            return;
-        }
-        for (int i = 0; i < checkedList.size(); i++) {
-            if (i == 0) {
-                UndertakingUnits += accountList.get(checkedList.get(0)).id;
-            } else {
-                UndertakingUnits += "," + accountList.get(checkedList.get(i)).id;
-            }
-        }
-    }
-
     private void initLevelView() {
         final NoScrollListView listView = new NoScrollListView(mContext);
         listView.setDividerHeight(0);
@@ -431,12 +322,46 @@ public class SendMeetingActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         //退出activity前关闭菜单
-        if (mDropDownMenu1.isShowing()) {
-            mDropDownMenu1.closeMenu();
-        } else if (mDropDownMenu2.isShowing()) {
+        if (mDropDownMenu2.isShowing()) {
             mDropDownMenu2.closeMenu();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    /**
+     * 承办单位
+     *
+     * @param resultCode
+     * @param data
+     */
+    @OnActivityResult(0)
+    void result1(int resultCode, Intent data) {
+        if (resultCode == 0) {
+            UndertakingUnitsID = data.getStringExtra("ids");
+            UndertakingUnits = data.getStringExtra("str");
+            mDropDownMenuUnit.setText(UndertakingUnits);
+        } else if (resultCode == 1) {
+            //没有选择接收单位
+            UndertakingUnits = UndertakingUnitsID = "";
+        }
+    }
+
+    /**
+     * 接收单位
+     *
+     * @param resultCode
+     * @param data
+     */
+    @OnActivityResult(1)
+    void result2(int resultCode, Intent data) {
+        if (resultCode == 0) {
+            receiveUnitsID = data.getStringExtra("ids");
+            receiveUnits = data.getStringExtra("str");
+            mDropDownMenu1.setText(receiveUnits);
+        } else if (resultCode == 1) {
+            //没有选择接收单位
+            receiveUnits = receiveUnitsID = "";
         }
     }
 }

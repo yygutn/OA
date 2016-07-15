@@ -5,11 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -17,12 +18,12 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
-import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.ColorRes;
 import org.json.JSONException;
@@ -37,17 +38,17 @@ import java.util.List;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
-import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.Response.AccountResponse;
+import cn.edu.jumy.oa.UI.DepartmentSelectActivity;
+import cn.edu.jumy.oa.UI.DepartmentSelectActivity_;
+import cn.edu.jumy.oa.Utils.OpenApp;
 import cn.edu.jumy.oa.adapter.ListDropDownAdapter;
-import cn.edu.jumy.oa.adapter.MultiDropDownAdapter;
 import cn.edu.jumy.oa.bean.Account;
-import cn.edu.jumy.oa.Response.AccountResult;
 import cn.edu.jumy.oa.safe.PasswordUtil;
 import cn.edu.jumy.oa.server.UploadServer;
 import cn.edu.jumy.oa.widget.DropDownMenu;
-import cn.edu.jumy.oa.widget.customview.NoScrollGridView;
 import cn.edu.jumy.oa.widget.customview.NoScrollListView;
 import cn.edu.jumy.oa.widget.customview.UploadItem;
 import cn.edu.jumy.oa.widget.customview.UploadItem_;
@@ -61,7 +62,7 @@ import okhttp3.Request;
 @EActivity(R.layout.activity_document_release)
 public class DocumentReleaseActivity extends BaseActivity {
     @ViewById(R.id.dropDownMenu_1)
-    protected DropDownMenu mDropDownMenu1;
+    protected AppCompatTextView mDropDownMenu1;
     @ViewById(R.id.dropDownMenu_2)
     protected DropDownMenu mDropDownMenu2;
     @ViewById(R.id.et_1)
@@ -81,21 +82,19 @@ public class DocumentReleaseActivity extends BaseActivity {
     LinearLayout uploadView;
     int index = 0;
 
-    List<Account> accountList;
+    ArrayList<Account> accountList;
 
-    String receiveUnits = "";//公文接收单位
+    String receiveUnitsID = "";//公文接收单位
+    String receiveUnitsStr = "";//公文接收单位
     String level = "0"; //等级
 
     private Object str;
 
-    private MultiDropDownAdapter mUnitAdapter;
     private ListDropDownAdapter mLevelAdapter;
 
-    private ArrayList<String> mUnits = new ArrayList<>(Arrays.asList(new String[]{"省委办公厅", "省信访局", "省档案局", "省委机要局", "省人大常委办公厅"}));
     private ArrayList<String> mLevel = new ArrayList<>(Arrays.asList(new String[]{"请选择", "特急", "加急", "平急", "特提"}));
     private String headers[] = {"请选择"};
 
-    private List<View> popupView1 = new ArrayList<>();
     private List<View> popupView2 = new ArrayList<>();
 
 
@@ -108,7 +107,7 @@ public class DocumentReleaseActivity extends BaseActivity {
                     mFilePath.add(path);
                 }
             }
-            if (intent.getAction() == UploadServer.UPLOAD_BR_RESULT_DELETE){
+            if (intent.getAction() == UploadServer.UPLOAD_BR_RESULT_DELETE) {
                 String path = intent.getStringExtra(UploadServer.EXTRA_PATH);
                 if (mFilePath.contains(path)) {
                     mFilePath.remove(path);
@@ -126,44 +125,9 @@ public class DocumentReleaseActivity extends BaseActivity {
             }
         });
         try {
-
-            OAService.getOrganizationData(new StringCallback() {
-                @Override
-                public void onError(Call call, Exception e, int id) {
-                    showDebugException(e);
-                    showToast("网络异常，获取可发送单位失败");
-                    mUnits.clear();
-                    mUnits.add("请选择");
-                }
-
-                @Override
-                public void onResponse(String response, int id) {
-                    try {
-
-                        Gson gson = new Gson();
-                        AccountResult account = gson.fromJson(response, AccountResult.class);
-                        if (account.code != 0) {
-                            showToast("网络异常，获取可发送单位失败");
-                            mUnits.clear();
-                            mUnits.add("请选择");
-                        } else {
-                            mUnits.clear();
-                            accountList = account.data;
-                            for (Account data : accountList) {
-                                mUnits.add(data.name);
-                            }
-                        }
-                        initUnitView();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
             initLevelView();
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-
+            showDebugException(e);
         }
         IntentFilter filter = new IntentFilter();
         filter.addAction(UploadServer.UPLOAD_BR_RESULT);
@@ -172,7 +136,7 @@ public class DocumentReleaseActivity extends BaseActivity {
 
     }
 
-    @Click({R.id.submit, R.id.addUpload})
+    @Click({R.id.submit, R.id.addUpload, R.id.dropDownMenu_1, R.id.addUpload_2})
     void clickSubmit(View view) {
         switch (view.getId()) {
             case R.id.submit: {
@@ -182,6 +146,14 @@ public class DocumentReleaseActivity extends BaseActivity {
             case R.id.addUpload: {
                 UploadItem item = UploadItem_.build(mContext, this);
                 uploadView.addView(item, index++);
+                break;
+            }
+            case R.id.dropDownMenu_1: {
+                DepartmentSelectActivity_.intent(mContext).startForResult(REQUEST_CODE);
+                break;
+            }
+            case R.id.addUpload_2: {
+                OpenApp.doStartApplicationWithPackageName(OpenApp.OFFICE_LENS, mContext);
                 break;
             }
             default:
@@ -201,8 +173,8 @@ public class DocumentReleaseActivity extends BaseActivity {
                         String docNo = mEt1.getText().toString();
                         String docTitle = mEt2.getText().toString();
                         String docMain = mEt3.getText().toString();
-                        if (receiveUnits.equals("请选择")) {
-                            showToast("请选择发文单位");
+                        if (TextUtils.isEmpty(receiveUnitsID)) {
+                            showToast("请选择接收单位");
                             return;
                         }
                         if (TextUtils.isEmpty(docTitle)) {
@@ -218,7 +190,7 @@ public class DocumentReleaseActivity extends BaseActivity {
                         dealZipFile();
 
                         Map<String, String> params = new HashMap<>();
-                        params.put("department", receiveUnits);
+                        params.put("department", receiveUnitsID);
                         params.put("level", level);
                         params.put("docNo", docNo);
                         params.put("docTitle", docTitle);
@@ -274,50 +246,6 @@ public class DocumentReleaseActivity extends BaseActivity {
         }
     }
 
-    private void initUnitView() {
-        final View view = getLayoutInflater().inflate(R.layout.layout_custom_release, null);
-        NoScrollGridView gridView = (NoScrollGridView) view.findViewById(R.id.gridView);
-        mUnitAdapter = new MultiDropDownAdapter(mContext, mUnits);
-        gridView.setAdapter(mUnitAdapter);
-
-        TextView textView = (TextView) view.findViewById(R.id.ok);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDropDownMenu1.setTabText(mUnitAdapter.getNeedString());
-                getUnits(mUnitAdapter.checkedList);
-                mDropDownMenu1.closeMenu();
-            }
-        });
-
-        popupView1.add(view);
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mUnitAdapter.setCheckItem(position);
-            }
-        });
-
-        mDropDownMenu1.setDropDownMenu(Arrays.asList(headers), popupView1, null);
-
-    }
-
-    private void getUnits(List<Integer> checkedList) {
-        receiveUnits = "";
-        if (accountList == null || accountList.size() <= 0) {
-            receiveUnits = "请选择";
-            return;
-        }
-        for (int i = 0; i < checkedList.size(); i++) {
-            if (i == 0) {
-                receiveUnits += accountList.get(checkedList.get(0)).id;
-            } else {
-                receiveUnits += "," + accountList.get(checkedList.get(i)).id;
-            }
-        }
-    }
-
     private void initLevelView() {
         final NoScrollListView listView = new NoScrollListView(mContext);
         listView.setDividerHeight(0);
@@ -352,12 +280,24 @@ public class DocumentReleaseActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         //退出activity前关闭菜单
-        if (mDropDownMenu1.isShowing()) {
-            mDropDownMenu1.closeMenu();
-        } else if (mDropDownMenu2.isShowing()) {
+        if (mDropDownMenu2.isShowing()) {
             mDropDownMenu2.closeMenu();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    protected static final int REQUEST_CODE = 0;
+
+    @OnActivityResult(REQUEST_CODE)
+    void onResult(int resultCode, Intent data) {
+        if (resultCode == 0) {
+            receiveUnitsID = data.getStringExtra("ids");
+            receiveUnitsStr = data.getStringExtra("str");
+            mDropDownMenu1.setText(receiveUnitsStr);
+        } else if (resultCode == 1) {
+            //没有选择接收单位
+            receiveUnitsStr = receiveUnitsID = "";
         }
     }
 }

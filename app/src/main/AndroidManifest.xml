@@ -96,6 +96,7 @@
         <activity android:name=".UI.TaskItem.SentDocumentActivity_"/>
         <activity android:name=".UI.TaskItem.SentMeetingActivity_"/>
         <activity android:name=".UI.TaskItem.SignDetailsActivity_"/>
+        <activity android:name=".UI.DepartmentSelectActivity_"/>
 
 
 

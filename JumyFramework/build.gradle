@@ -59,4 +59,8 @@ dependencies {
 //    FASTJSON
 //    compile 'com.alibaba:fastjson:1.2.13'
     compile 'com.google.code.gson:gson:2.7'
+
+
+//    compile 'com.github.promeg:tinypinyin:1.0.0'
+    compile 'me.yokeyword:indexablestickylistview:0.6.3'
 }
