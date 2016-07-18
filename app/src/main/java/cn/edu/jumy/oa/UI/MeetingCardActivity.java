@@ -12,10 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
-import com.orhanobut.logger.Logger;
-import com.squareup.picasso.Picasso;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 import com.zhy.http.okhttp.callback.Callback;
 
@@ -23,7 +20,6 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,7 +36,6 @@ import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
 import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
 import cn.edu.jumy.oa.bean.Meet;
 import cn.edu.jumy.oa.bean.Node;
-import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 import okhttp3.Call;
 import okhttp3.Response;
 

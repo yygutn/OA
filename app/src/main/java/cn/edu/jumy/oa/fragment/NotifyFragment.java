@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
-import com.squareup.picasso.Picasso;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 
 import org.androidannotations.annotations.AfterViews;
@@ -26,10 +26,10 @@ import java.util.List;
 import cn.edu.jumy.jumyframework.BaseFragment;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
+import cn.edu.jumy.oa.Utils.CardGenerator;
 import cn.edu.jumy.oa.adapter.NotifyCardAdapter;
 import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
-import cn.edu.jumy.oa.Utils.CardGenerator;
 
 /**
  * Created by Jumy on 16/5/19 12:07.
@@ -79,11 +79,7 @@ public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.O
         mListView.setLoadmoreString("加载中...");
 
         mEmptyImageView = (ImageView) View.inflate(mContext, R.layout.item_empty_view, null);
-        Picasso.with(mContext)
-                .load("https://www.skyverge.com/wp-content/uploads/2012/05/github-logo.png")
-                .resize(200, 200)
-                .centerInside()
-                .into(mEmptyImageView);
+        Glide.with(mContext).load("https://www.skyverge.com/wp-content/uploads/2012/05/github-logo.png").into(mEmptyImageView);
         mListView.setEmptyView(mEmptyImageView);
 
         mListView.setSwipeEnable(true);

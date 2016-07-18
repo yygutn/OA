@@ -38,9 +38,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.hyphenate.chatuidemo.ui.LoginActivity;
 import com.hyphenate.chatuidemo.ui.SplashActivity;
-import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -49,17 +49,15 @@ import org.androidannotations.annotations.LongClick;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.ColorRes;
 
-import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.StatusBarCompat;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.TaskItem.DocumentCabinetActivity_;
-import cn.edu.jumy.oa.UI.web.MyFileActivity_;
 
 /**
  * 校验指纹
  */
 @EActivity(R.layout.activity_verify)
-public class VerifyActivity extends AppCompatActivity{
+public class VerifyActivity extends AppCompatActivity {
 
     @ViewById(R.id.img_verify)
     ImageView imageView;
@@ -77,40 +75,32 @@ public class VerifyActivity extends AppCompatActivity{
     int pressed;
 
     @AfterViews
-    void start(){
-        StatusBarCompat.compat(this,pressed);
+    void start() {
+        StatusBarCompat.compat(this, pressed);
         mContext = this;
-        Picasso.with(mContext)
-                .load(R.drawable.fingerprint)
-                .resize(1080,1920)
-                .centerInside()
-                .into(imageView);
+        Glide.with(mContext).load(R.drawable.fingerprint).into(imageView);
         Bundle bundle = getIntent().getBundleExtra("file");
-        if (bundle != null){
-            file = bundle.getString("file","");
-            if (!TextUtils.isEmpty(file)&&file.contains("file")){
+        if (bundle != null) {
+            file = bundle.getString("file", "");
+            if (!TextUtils.isEmpty(file) && file.contains("file")) {
                 textView.setVisibility(View.GONE);
             }
         }
     }
 
     @Click(R.id.login_other)
-    void click(){
+    void click() {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivityForResult(intent, LOGIN_RESULT_CODE);
         finish();
     }
 
     @LongClick(R.id.img_verify)
-    void longClick(){
-        Picasso.with(mContext)
-                .load(R.drawable.fingerprint_pass)
-                .resize(1080,1920)
-                .centerInside()
-                .into(imageView);
-        if (!TextUtils.isEmpty(file)&&file.contains("file")){
+    void longClick() {
+        Glide.with(mContext).load(R.drawable.fingerprint_pass).into(imageView);
+        if (!TextUtils.isEmpty(file) && file.contains("file")) {
             DocumentCabinetActivity_.intent(mContext).start();
-        }else {
+        } else {
             startActivity(new Intent(mContext, SplashActivity.class));
         }
         finish();
