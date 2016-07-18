@@ -17,3 +17,4 @@ timapp/src/main/res/drawable-xxxhdpi/
 timapp/src/main/res/mipmap-mdpi/
 /*/src/test/
 /*/src/androidTest/
+app/multidex.keep

@@ -66,7 +66,6 @@ public class LoginActivity extends BaseActivity {
 //
 //			return;
 //		}
-		DemoHelper.getInstance().logout(false,null);
 		try {
 			setContentView(R.layout.em_activity_login);
 

@@ -1,9 +1,7 @@
 package cn.edu.jumy.oa.adapter;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 
 import com.zhy.base.adapter.ViewHolder;
@@ -13,14 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.Utils.CardGenerator;
-import cn.edu.jumy.oa.bean.Card;
 import cn.edu.jumy.oa.bean.Meet;
-import cn.edu.jumy.oa.bean.Node;
-import u.aly.da;
 
 /**
  * Created by Jumy on 16/6/1 17:48.

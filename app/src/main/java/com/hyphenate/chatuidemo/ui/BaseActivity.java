@@ -16,7 +16,6 @@ package com.hyphenate.chatuidemo.ui;
 
 import android.os.Bundle;
 import com.hyphenate.easeui.ui.EaseBaseActivity;
-import com.umeng.analytics.MobclickAgent;
 
 public class BaseActivity extends EaseBaseActivity {
 
@@ -29,14 +28,14 @@ public class BaseActivity extends EaseBaseActivity {
     protected void onResume() {
         super.onResume();
         // umeng
-        MobclickAgent.onResume(this);
+//        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         // umeng
-        MobclickAgent.onPause(this);
+//        MobclickAgent.onPause(this);
     }
 
 }

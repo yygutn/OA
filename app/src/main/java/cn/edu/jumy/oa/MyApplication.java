@@ -45,7 +45,6 @@ public class MyApplication extends MultiDexApplication {
         AppManager.getInstance().init();
         CrashHandler.getInstance().init(context);
         initOkHttpUtils();
-        initBackground();
         //HX
         DemoApplication.getInstance().init(this);
         //
@@ -54,11 +53,7 @@ public class MyApplication extends MultiDexApplication {
                 .logLevel(LogLevel.FULL)
                 .methodOffset(1);
         LitePalApplication.initialize(this);
-    }
-
-    private void initBackground() {
-        BackgroundTask backgroundTask = new BackgroundTask();
-        backgroundTask.execute(this);
+        K9.getInstance().onCreate(this);
     }
 
     private void initOkHttpUtils() {
@@ -82,20 +77,6 @@ public class MyApplication extends MultiDexApplication {
             }
         }
         return context;
-    }
-
-    class BackgroundTask extends AsyncTask<Application, Integer, String> {
-
-
-        @Override
-        protected String doInBackground(Application... params) {
-
-            K9.getInstance().onCreate(params[0]);
-            if (BaseActivity.DEBUG) {
-                Logger.t("Application Init K9").v("初始化结束");
-            }
-            return null;
-        }
     }
 
 }
