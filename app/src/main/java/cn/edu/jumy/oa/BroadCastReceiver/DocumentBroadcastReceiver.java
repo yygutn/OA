@@ -33,7 +33,7 @@ public class DocumentBroadcastReceiver extends BroadcastReceiver{
             docList = intent.getParcelableArrayListExtra(DOC_LIST);
             type = intent.getIntExtra(TYPE,0);
             if (BaseActivity.DEBUG){
-                Logger.t("DocumentBroadcastReceiver").d(docList.toString());
+                Logger.t("DocumentBroadcastReceiver").v(docList.toString());
             }
         }
     }

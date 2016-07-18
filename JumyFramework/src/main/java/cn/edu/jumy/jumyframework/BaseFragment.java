@@ -53,6 +53,16 @@ public class BaseFragment extends Fragment {
             Logger.w(message.toString());
         }
     }
+    public void showDebugLogv(CharSequence message) {
+        if (DEBUG) {
+            Logger.v(message.toString());
+        }
+    }
+    public void showDebugLogd(CharSequence message) {
+        if (DEBUG) {
+            Logger.d(message.toString());
+        }
+    }
 
     public static void showDebugException(Exception e){
         if (DEBUG){

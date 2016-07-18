@@ -112,6 +112,16 @@ public class BaseActivity extends AppCompatActivity {
             Logger.w(message.toString());
         }
     }
+    public static void showDebugLogw(String tag,CharSequence message) {
+        if (DEBUG) {
+            Logger.t(tag).w(message.toString());
+        }
+    }
+    public static void showDebugLogd(String tag,CharSequence message) {
+        if (DEBUG) {
+            Logger.t(tag).d(message.toString());
+        }
+    }
 
     public static void showDebugException(Exception e){
         if (DEBUG){

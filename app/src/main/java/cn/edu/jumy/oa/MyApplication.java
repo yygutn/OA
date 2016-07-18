@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.support.multidex.MultiDexApplication;
 
 import com.fsck.k9.K9;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
@@ -14,6 +16,8 @@ import com.zhy.http.okhttp.https.HttpsUtils;
 
 import org.litepal.LitePalApplication;
 
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import cn.edu.jumy.jumyframework.AppManager;
@@ -87,18 +91,8 @@ public class MyApplication extends MultiDexApplication {
         protected String doInBackground(Application... params) {
 
             K9.getInstance().onCreate(params[0]);
-            //Umeng Push init start
-//            PushAgent.getInstance(context).enable(new IUmengRegisterCallback() {
-//                @Override
-//                public void onRegistered(String DeviceId) {
-//                    DEVICE_ID = DeviceId;
-//                    Log.e(TAG, "onRegistered: " + DeviceId);
-//                }
-//            });
-//            PushAgent.getInstance(context).setNotificationClickHandler(new NotificationClickHandler());
-            //Umeng Push init end
             if (BaseActivity.DEBUG) {
-                Logger.t("Application Init K9").w("初始化结束");
+                Logger.t("Application Init K9").v("初始化结束");
             }
             return null;
         }

@@ -243,12 +243,11 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public void onCmdMessageReceived(List<EMMessage> messages) {
+            showDebugLogd(TAG,"收到透传消息");
             for (EMMessage message : messages) {
                 EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                 final String action = cmdMsgBody.action();//获取自定义action
-//				if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION) && message.getChatType() == EMMessage.ChatType.GroupChat) {
-//					RedPacketUtil.receiveRedPacketAckMessage(message);
-//				}
+                showDebugLogd(TAG,"action:"+action);
             }
             refreshUIWithMessage();
         }

@@ -80,10 +80,10 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
         /////////初始化数据，如果缓存中有就使用缓存中的
         ArrayList<Item> items = (ArrayList<Item>) ACache.get(mContext).getAsObject("task_items");
         if (items != null && items.size() > 0 && false) {
-            showDebugLoge("from local cache");
+            showDebugLogv("from local cache");
             results.addAll(items);
         } else {
-            showDebugLoge("from new data");
+            showDebugLogv("from new data");
             results.add(new Item(4, "公文阅读", R.drawable.task_receive_file));
             results.add(new Item(5, "公文发布", R.drawable.task_send_file));
             results.add(new Item(3, "会议通知", R.drawable.task_approval));

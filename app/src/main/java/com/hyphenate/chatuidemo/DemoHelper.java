@@ -58,6 +58,9 @@ import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
+import com.orhanobut.logger.Logger;
+
+import cn.edu.jumy.jumyframework.BaseActivity;
 
 public class DemoHelper {
     /**
@@ -758,19 +761,14 @@ public class DemoHelper {
 			@Override
 			public void onCmdMessageReceived(List<EMMessage> messages) {
 			    for (EMMessage message : messages) {
-                    EMLog.d(TAG, "收到透传消息");
+                    BaseActivity.showDebugLogd(TAG,"收到透传消息");
                     //获取消息body
                     EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action();//获取自定义action
-                    if(!easeUI.hasForegroundActivies()){
-//                        if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
-//                            RedPacketUtil.receiveRedPacketAckMessage(message);
-//                            broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION));
-//                        }
-                    }
+
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");
-                    EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));
+                    BaseActivity.showDebugLogd(TAG,String.format("透传消息：action:%s,message:%s", action,message.toString()));
                 }
 			}
 
