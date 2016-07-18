@@ -43,8 +43,6 @@ import com.hyphenate.chatuidemo.ui.LoginActivity;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.util.EMLog;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.update.UmengUpdateAgent;
 
 import java.util.List;
 
@@ -141,9 +139,9 @@ public class MainActivity extends BaseActivity {
         }
 
         //umeng api
-        MobclickAgent.updateOnlineConfig(this);
-        UmengUpdateAgent.setUpdateOnlyWifi(false);
-        UmengUpdateAgent.update(this);
+//        MobclickAgent.updateOnlineConfig(this);
+//        UmengUpdateAgent.setUpdateOnlyWifi(false);
+//        UmengUpdateAgent.update(this);
 
         if (getIntent().getBooleanExtra(Constant.ACCOUNT_CONFLICT, false) && !isConflictDialogShow) {
             showConflictDialog();
@@ -365,6 +363,7 @@ public class MainActivity extends BaseActivity {
         try {
             unregisterReceiver(internalDebugReceiver);
         } catch (Exception e) {
+            showDebugException(e);
         }
 
     }
@@ -403,10 +402,10 @@ public class MainActivity extends BaseActivity {
     /**
      * 获取未读申请与通知消息
      *
-     * @return
+     * @return int
      */
     public int getUnreadAddressCountTotal() {
-        int unreadAddressCountTotal = 0;
+        int unreadAddressCountTotal;
         unreadAddressCountTotal = inviteMessgeDao.getUnreadMessagesCount();
         return unreadAddressCountTotal;
     }
@@ -414,10 +413,10 @@ public class MainActivity extends BaseActivity {
     /**
      * 获取未读消息数
      *
-     * @return
+     * @return int
      */
     public int getUnreadMsgCountTotal() {
-        int unreadMsgCountTotal = 0;
+        int unreadMsgCountTotal;
         int chatroomUnreadMsgCount = 0;
         unreadMsgCountTotal = EMClient.getInstance().chatManager().getUnreadMsgsCount();
         for(EMConversation conversation:EMClient.getInstance().chatManager().getAllConversations().values()){
@@ -436,7 +435,7 @@ public class MainActivity extends BaseActivity {
     /**
      * 保存提示新消息
      *
-     * @param msg
+     * @param msg void
      */
     private void notifyNewIviteMessage(InviteMessage msg) {
         saveInviteMsg(msg);
@@ -453,7 +452,7 @@ public class MainActivity extends BaseActivity {
     /**
      * 保存邀请等msg
      *
-     * @param msg
+     * @param msg void
      */
     private void saveInviteMsg(InviteMessage msg) {
         // 保存msg

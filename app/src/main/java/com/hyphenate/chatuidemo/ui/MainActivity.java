@@ -13,32 +13,6 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.List;
-import java.util.List;
-
-//import com.easemob.redpacketui.RedPacketConstant;
-//import com.easemob.redpacketui.utils.RedPacketUtil;
-import com.hyphenate.EMCallBack;
-import com.hyphenate.EMContactListener;
-import com.hyphenate.EMMessageListener;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCmdMessageBody;
-import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chat.EMConversation.EMConversationType;
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chatuidemo.Constant;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.db.InviteMessgeDao;
-import com.hyphenate.chatuidemo.db.UserDao;
-import com.hyphenate.chatuidemo.domain.InviteMessage;
-import com.hyphenate.chatuidemo.runtimepermissions.PermissionsManager;
-import com.hyphenate.chatuidemo.runtimepermissions.PermissionsResultAction;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.util.EMLog;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.update.UmengUpdateAgent;
-
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -61,7 +35,31 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.EMCallBack;
+import com.hyphenate.EMContactListener;
+import com.hyphenate.EMMessageListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMConversation.EMConversationType;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chatuidemo.Constant;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.db.InviteMessgeDao;
+import com.hyphenate.chatuidemo.db.UserDao;
+import com.hyphenate.chatuidemo.domain.InviteMessage;
+import com.hyphenate.chatuidemo.runtimepermissions.PermissionsManager;
+import com.hyphenate.chatuidemo.runtimepermissions.PermissionsResultAction;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.util.EMLog;
+
+import java.util.List;
+
 import cn.edu.jumy.jumyframework.AppManager;
+
+//import com.easemob.redpacketui.RedPacketConstant;
+//import com.easemob.redpacketui.utils.RedPacketUtil;
 
 public class MainActivity extends BaseActivity {
 
@@ -130,9 +128,9 @@ public class MainActivity extends BaseActivity {
 		initView();
 
 		//umeng api
-		MobclickAgent.updateOnlineConfig(this);
-		UmengUpdateAgent.setUpdateOnlyWifi(false);
-		UmengUpdateAgent.update(this);
+//		MobclickAgent.updateOnlineConfig(this);
+//		UmengUpdateAgent.setUpdateOnlyWifi(false);
+//		UmengUpdateAgent.update(this);
 
 		if (getIntent().getBooleanExtra(Constant.ACCOUNT_CONFLICT, false) && !isConflictDialogShow) {
 			showConflictDialog();
@@ -192,7 +190,7 @@ public class MainActivity extends BaseActivity {
 	/**
 	 * button点击事件
 	 * 
-	 * @param view
+	 * @param view view
 	 */
 	public void onTabClicked(View view) {
 		int i = view.getId();
@@ -362,6 +360,7 @@ public class MainActivity extends BaseActivity {
 		try {
             unregisterReceiver(internalDebugReceiver);
         } catch (Exception e) {
+			showDebugException(e);
         }
 		
 	}
@@ -400,10 +399,10 @@ public class MainActivity extends BaseActivity {
 	/**
 	 * 获取未读申请与通知消息
 	 * 
-	 * @return
+	 * @return int
 	 */
 	public int getUnreadAddressCountTotal() {
-		int unreadAddressCountTotal = 0;
+		int unreadAddressCountTotal;
 		unreadAddressCountTotal = inviteMessgeDao.getUnreadMessagesCount();
 		return unreadAddressCountTotal;
 	}
@@ -411,10 +410,10 @@ public class MainActivity extends BaseActivity {
 	/**
 	 * 获取未读消息数
 	 * 
-	 * @return
+	 * @return int
 	 */
 	public int getUnreadMsgCountTotal() {
-		int unreadMsgCountTotal = 0;
+		int unreadMsgCountTotal;
 		int chatroomUnreadMsgCount = 0;
 		unreadMsgCountTotal = EMClient.getInstance().chatManager().getUnreadMsgsCount();
 		for(EMConversation conversation:EMClient.getInstance().chatManager().getAllConversations().values()){
@@ -433,7 +432,7 @@ public class MainActivity extends BaseActivity {
 	/**
 	 * 保存提示新消息
 	 * 
-	 * @param msg
+	 * @param msg void
 	 */
 	private void notifyNewIviteMessage(InviteMessage msg) {
 		saveInviteMsg(msg);
@@ -450,7 +449,7 @@ public class MainActivity extends BaseActivity {
 	/**
 	 * 保存邀请等msg
 	 * 
-	 * @param msg
+	 * @param msg void
 	 */
 	private void saveInviteMsg(InviteMessage msg) {
 		// 保存msg

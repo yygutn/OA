@@ -44,6 +44,7 @@ import cn.edu.jumy.oa.Response.AccountResponse;
 import cn.edu.jumy.oa.UI.DepartmentSelectActivity;
 import cn.edu.jumy.oa.UI.DepartmentSelectActivity_;
 import cn.edu.jumy.oa.Utils.OpenApp;
+import cn.edu.jumy.oa.Utils.StringUtils;
 import cn.edu.jumy.oa.adapter.ListDropDownAdapter;
 import cn.edu.jumy.oa.bean.Account;
 import cn.edu.jumy.oa.safe.PasswordUtil;
@@ -101,13 +102,13 @@ public class DocumentReleaseActivity extends BaseActivity {
     BroadcastReceiver uploadBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction() == UploadServer.UPLOAD_BR_RESULT) {
+            if (intent.getAction().equals(UploadServer.UPLOAD_BR_RESULT)) {
                 String path = intent.getStringExtra(UploadServer.EXTRA_PATH);
                 if (!mFilePath.contains(path)) {
                     mFilePath.add(path);
                 }
             }
-            if (intent.getAction() == UploadServer.UPLOAD_BR_RESULT_DELETE) {
+            if (intent.getAction().equals(UploadServer.UPLOAD_BR_RESULT_DELETE)) {
                 String path = intent.getStringExtra(UploadServer.EXTRA_PATH);
                 if (mFilePath.contains(path)) {
                     mFilePath.remove(path);

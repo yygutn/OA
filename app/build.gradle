@@ -11,7 +11,7 @@ android {
         release {
             keyAlias 'yygutn'
             keyPassword 'yygutn'
-            storeFile file('/Volumes/software/Users/Jumy/Desktop/OA/OA.jks')
+            storeFile file('../OA.jks')
             storePassword 'yygutn'
         }
         debug {
@@ -38,12 +38,10 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "boolean", "LOG_DEBUG", "true"
             debuggable true
             shrinkResources true
         }
         release {
-            buildConfigField "boolean", "LOG_DEBUG", "false"
             debuggable false
             minifyEnabled false
             shrinkResources true

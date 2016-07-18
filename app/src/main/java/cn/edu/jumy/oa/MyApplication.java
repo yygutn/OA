@@ -98,7 +98,7 @@ public class MyApplication extends MultiDexApplication {
 //            PushAgent.getInstance(context).setNotificationClickHandler(new NotificationClickHandler());
             //Umeng Push init end
             if (BaseActivity.DEBUG) {
-                Logger.t("Application Init K9  &&  UmengPush").w("初始化结束");
+                Logger.t("Application Init K9").w("初始化结束");
             }
             return null;
         }

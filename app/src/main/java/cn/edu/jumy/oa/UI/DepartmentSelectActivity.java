@@ -59,7 +59,6 @@ public class DepartmentSelectActivity extends BaseActivity {
 
     @AfterViews
     void go() {
-        Extras();
         setSupportActionBar(mTitleBar);
         mTitleBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,39 +87,9 @@ public class DepartmentSelectActivity extends BaseActivity {
             }
         });
 
-        mIndexListView.setOnItemContentClickListener(new IndexableStickyListView.OnItemContentClickListener() {
-            @Override
-            public void onItemClick(View v, IndexEntity indexEntity) {
-                CheckBox radioButton = (CheckBox) v.findViewById(R.id.radioButton);
-                boolean check = radioButton.callOnClick();
-                Account account = (Account) indexEntity;
-                account.checked = check;
-                adapter.notifyDataSetChanged();
-                if (check) {
-                    boolean flag = true;
-                    for (Account a : mSelectDepartment) {
-                        if (flag) {
-                            if (account.id.equals(a.id)) {
-                                flag = false;
-                                break;
-                            }
-                        }
-                    }
-                    if (flag) {
-                        mSelectDepartment.add(account);
-                    }
-                } else {
-                    for (Account ac : mSelectDepartment) {
-                        if (ac.id.equals(account.id))
-                            mSelectDepartment.remove(ac);
-                    }
-                }
-            }
-        });
-
     }
-
-    void Extras() {
+    @AfterViews
+    void getData() {
 //        mUsedDepartment = (ArrayList<Account>) ACache.get(mContext, EMClient.getInstance().getCurrentUser()).getAsObject(DEPARTMENT);
         if (mUsedDepartment == null) {
             mUsedDepartment = new ArrayList<>();
@@ -155,7 +124,6 @@ public class DepartmentSelectActivity extends BaseActivity {
 
     private void updateList() {
         try {
-            adapter.getSourceItems();
             if (mUsedDepartment.size() > 0) {
                 //添加最近单位Header
                 IndexHeaderEntity<Account> hotHeader = new IndexHeaderEntity<>();
