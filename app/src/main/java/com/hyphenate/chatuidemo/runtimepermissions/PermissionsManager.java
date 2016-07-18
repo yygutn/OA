@@ -24,6 +24,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+
+import com.orhanobut.logger.Logger;
+
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -98,10 +101,12 @@ public class PermissionsManager {
     if (packageInfo != null) {
       String[] permissions = packageInfo.requestedPermissions;
       if (permissions != null) {
+        String message = "Manifest contained permission: \n";
         for (String perm : permissions) {
-          Log.d(TAG, "Manifest contained permission: " + perm);
+          message += perm +"\n";
           list.add(perm);
         }
+        Logger.t(TAG).v(message);
       }
     }
     return list.toArray(new String[list.size()]);
