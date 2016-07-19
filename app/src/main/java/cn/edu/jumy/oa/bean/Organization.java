@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Jumy on 16/6/29 15:31.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-public class Organization extends DataSupport{
+public class Organization{
     private String id;
     /**
      * 单位名称

@@ -1,5 +1,6 @@
 package cn.edu.jumy.oa.bean;
 
+import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
 import java.util.Date;
@@ -18,15 +19,30 @@ public class Alarm extends DataSupport{
     /**
      * 时间
      */
+    @Column(nullable = false)
     private Date time;
     /**
-     * 创建时间
+     * 所属单位ID 或者存放Username作为标识
      */
-    private Date createTime;
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
+    @Column(nullable = false)
+    private String username;
+
+    public Alarm() {
+    }
+
+    public Alarm(String content, Date time, String username) {
+        this.content = content;
+        this.time = time;
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getContent() {
         return content;
@@ -44,19 +60,12 @@ public class Alarm extends DataSupport{
         this.time = time;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    @Override
+    public String toString() {
+        return "Alarm{" +
+                "content='" + content + '\'' +
+                ", time=" + time +
+                ", username='" + username + '\'' +
+                '}';
     }
 }

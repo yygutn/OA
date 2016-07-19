@@ -154,7 +154,7 @@ public class DocumentReleaseActivity extends BaseActivity {
                 break;
             }
             case R.id.addUpload_2: {
-                OpenApp.doStartApplicationWithPackageName(OpenApp.OFFICE_LENS, mContext);
+                OpenApp.doStartApplicationWithPackageName(OpenApp.OFFICE_LENS, mContext, "请先安装Office Lens");
                 break;
             }
             default:

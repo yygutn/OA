@@ -28,11 +28,12 @@ public class CallOtherOpenFile {
             //设置intent的data和Type属性。
             intent.setDataAndType(/*uri*/Uri.fromFile(file), type);
             //跳转
-            context.startActivity(intent);
-//	    Intent.createChooser(intent, "请选择对应的软件打开该附件！");
+//            Intent.createChooser(intent, "请选择对应的软件打开该附件！");
+            context.startActivity(Intent.createChooser(intent, "请选择对应的软件打开该附件！"));
         } catch (ActivityNotFoundException e) {
-            // TODO: handle exception
-            Toast.makeText(context, "sorry附件不能打开，请下载相关软件！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "sorry附件不能打开，请下载相关软件！\n文件保存在" + file.getPath()
+                    +"\n将在App退出后删除", Toast.LENGTH_LONG).show();
+
         }
     }
 

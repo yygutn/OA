@@ -1,6 +1,5 @@
 package cn.edu.jumy.oa.UI;
 
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,15 +7,14 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.hyphenate.chatuidemo.DemoApplication;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -35,12 +33,15 @@ import java.util.Random;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.bean.Alarm;
 import cn.edu.jumy.oa.widget.datepicker.calendar.bizs.decors.DPDecor;
 import cn.edu.jumy.oa.widget.datepicker.calendar.cons.DPMode;
 import cn.edu.jumy.oa.widget.datepicker.calendar.utils.MeasureUtil;
 import cn.edu.jumy.oa.widget.datepicker.calendar.views.MonthView;
 import cn.edu.jumy.oa.widget.datepicker.calendar.views.WeekView;
 import cn.edu.jumy.oa.widget.datepicker.view.ContentItemViewAbs;
+import cn.qqtheme.framework.picker.DatePicker;
+import cn.qqtheme.framework.picker.TimePicker;
 
 @EActivity(R.layout.activity_calendar)
 @OptionsMenu(R.menu.add)
@@ -111,30 +112,53 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
     }
 
     @OptionsItem(R.id.action_add_alarm)
-    void add_alarm(){
-        showToast("添加日程提醒");
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+    void add_alarm() {
+        int year, month, day;
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePicker picker = new cn.qqtheme.framework.picker.DatePicker(this, cn.qqtheme.framework.picker.DatePicker.YEAR_MONTH_DAY);
+        picker.setRange(2016, 2050);//年份范围
+        picker.setLabel("年", "月", "日");
+        picker.setSelectedItem(year, month + 1, day);
+        picker.setOnDatePickListener(new cn.qqtheme.framework.picker.DatePicker.OnYearMonthDayPickListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                // fixme : 16/7/4 选择日期，添加提醒事项
-                addAlarm(year,monthOfYear+1,dayOfMonth);
+            public void onDatePicked(String year, String month, String day) {
+                getTime(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day));
             }
-        },2016,7,3);
-        datePickerDialog.show();
+        });
+        picker.show();
     }
 
-    private void addAlarm(final int year, final int monthOfYear, final int dayOfMonth){
-        // TODO: 16/7/4
+    private void getTime(final int year, final int month, final int day) {
+        TimePicker timePicker = new TimePicker(this, TimePicker.HOUR_OF_DAY);
+        timePicker.setOnTimePickListener(new TimePicker.OnTimePickListener() {
+            @Override
+            public void onTimePicked(String hour, String minute) {
+                addAlarm(year, month, day, Integer.valueOf(hour), Integer.valueOf(minute));
+            }
+        });
+        timePicker.show();
+    }
+
+    private void addAlarm(final int year, final int monthOfYear, final int dayOfMonth, final int hour, final int minute) {
+        // 添加日程提醒到数据库存储起来
         final AppCompatEditText edit = new AppCompatEditText(this);
-        int margin = MeasureUtil.dp2px(MyApplication.getContext(),15);
-        edit.setPadding(margin,margin,margin,margin);
+        int margin = MeasureUtil.dp2px(MyApplication.getContext(), 15);
+        edit.setPadding(margin, margin, margin, margin);
         AlertDialog alertDialog = new AlertDialog.Builder(mContext).
-                setTitle(year+"/"+monthOfYear+"/"+dayOfMonth)
+                setTitle(year + "年" + monthOfYear + "月" + dayOfMonth + "日  " + hour + ":" + minute)
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String str = edit.getText().toString();
-                        showToast(str);
+                        Date date = new Date(year-1900, monthOfYear, dayOfMonth, hour, minute, 0);
+                        Alarm alarm = new Alarm(str, date, DemoApplication.currentUserName);
+                        boolean flag = alarm.save();
+                        String message = flag ? "创建日程提醒成功" : "创建日程提醒失败,请重新创建";
+                        showToast(message);
                     }
                 }).setNegativeButton("取消", null)
                 .setView(edit)

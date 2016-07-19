@@ -22,6 +22,7 @@ import org.androidannotations.annotations.ViewById;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -150,20 +151,25 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
         int year, month, day;
-        year = date.getYear();
-        month = date.getMonth() - 1;
-        day = date.getDay();
-        if (month < 0) {
-            year--;
-            month = 11;
-            day--;
-        } else {
-            day--;
-            if (month == 1) {
-                if (day > 28) {
-                    day = 28;
-                }
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR) - 1900;
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        if ((month < 8 && (month & 1) == 1) || (month >= 8 && (month & 1) == 0)) {
+            if (day == 31) {
+                day--;
             }
+            if (month == 2 && day > 28) {
+                day = 28;
+            }
+            if (month == 0) {
+                month = 11;
+                year--;
+            } else {
+                month--;
+            }
+        } else {
+            month--;
         }
         String before = sdf.format(new Date(year, month, day));
         String now = sdf.format(date);

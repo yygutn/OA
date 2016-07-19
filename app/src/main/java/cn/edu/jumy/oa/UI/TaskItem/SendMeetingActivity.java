@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,15 +38,11 @@ import java.util.Map;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.Response.AccountResponse;
 import cn.edu.jumy.oa.UI.DepartmentSelectActivity_;
 import cn.edu.jumy.oa.Utils.OpenApp;
 import cn.edu.jumy.oa.adapter.ListDropDownAdapter;
-import cn.edu.jumy.oa.adapter.MultiDropDownAdapter;
-import cn.edu.jumy.oa.bean.Account;
 import cn.edu.jumy.oa.server.UploadServer;
 import cn.edu.jumy.oa.widget.DropDownMenu;
-import cn.edu.jumy.oa.widget.customview.NoScrollGridView;
 import cn.edu.jumy.oa.widget.customview.NoScrollListView;
 import cn.edu.jumy.oa.widget.customview.UploadItem;
 import cn.edu.jumy.oa.widget.customview.UploadItem_;
@@ -152,7 +149,7 @@ public class SendMeetingActivity extends BaseActivity {
         registerReceiver(uploadBroadcastReceiver, filter);
     }
 
-    @Click({R.id.submit, R.id.addUpload, R.id.meeting_time,R.id.addUpload_2,R.id.Undertaking_Unit,R.id.dropDownMenu_1})
+    @Click({R.id.submit, R.id.addUpload, R.id.meeting_time, R.id.addUpload_2, R.id.Undertaking_Unit, R.id.dropDownMenu_1})
     void clickSubmit(View view) {
         switch (view.getId()) {
             case R.id.submit: {
@@ -165,8 +162,15 @@ public class SendMeetingActivity extends BaseActivity {
                 break;
             }
             case R.id.meeting_time: {
+                int year,month,day;
+                Calendar calendar = Calendar.getInstance();
+                year = calendar.get(Calendar.YEAR);
+                month = calendar.get(Calendar.MONTH);
+                day = calendar.get(Calendar.DAY_OF_MONTH);
                 DatePicker picker = new DatePicker(this, DatePicker.YEAR_MONTH_DAY);
                 picker.setRange(2016, 2050);//年份范围
+                picker.setLabel("年","月","日");
+                picker.setSelectedItem(year,month+1,day);
                 picker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
                     @Override
                     public void onDatePicked(String year, String month, String day) {
@@ -176,15 +180,15 @@ public class SendMeetingActivity extends BaseActivity {
                 picker.show();
                 break;
             }
-            case R.id.addUpload_2:{
-                OpenApp.doStartApplicationWithPackageName(OpenApp.OFFICE_LENS,mContext);
+            case R.id.addUpload_2: {
+                OpenApp.doStartApplicationWithPackageName(OpenApp.OFFICE_LENS, mContext, "请先安装Office Lens");
                 break;
             }
-            case R.id.Undertaking_Unit:{
+            case R.id.Undertaking_Unit: {
                 DepartmentSelectActivity_.intent(mContext).startForResult(0);
                 break;
             }
-            case R.id.dropDownMenu_1:{
+            case R.id.dropDownMenu_1: {
                 DepartmentSelectActivity_.intent(mContext).startForResult(1);
                 break;
             }

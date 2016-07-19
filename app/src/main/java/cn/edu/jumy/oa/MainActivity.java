@@ -1,14 +1,19 @@
 package cn.edu.jumy.oa;
 
 import android.annotation.TargetApi;
+import android.app.Application;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
@@ -43,6 +48,7 @@ import com.hyphenate.chatuidemo.ui.LoginActivity;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.util.EMLog;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -52,6 +58,7 @@ import cn.edu.jumy.oa.bean.User;
 import cn.edu.jumy.oa.fragment.MineFragment_;
 import cn.edu.jumy.oa.fragment.NotifyFragment_;
 import cn.edu.jumy.oa.fragment.TaskFragment;
+import cn.edu.jumy.oa.server.AlarmServer;
 import cn.edu.jumy.oa.widget.FragmentTabHost;
 
 /**
@@ -64,16 +71,17 @@ public class MainActivity extends BaseActivity {
     private final Class fragmentArray[] = {NotifyFragment_.class, TaskFragment.class, ConversationListFragment.class, ContactListFragment.class, MineFragment_.class};
     private int mTitleArray[] = {R.string.home_notify_tab, R.string.home_work_tab, R.string.home_message_tab, R.string.home_contact_tab, R.string.home_me_tab};
     private int mImageViewArray[] = {R.drawable.tab_notify, R.drawable.tab_work, R.drawable.tab_message, R.drawable.tab_person, R.drawable.tab_settings};
-    public String mTextViewArray[] = {"notify", "work","message",  "contact", "setting"};
+    public String mTextViewArray[] = {"notify", "work", "message", "contact", "setting"};
 
     private static MainActivity instance;
 
     public static MainActivity getMainInstance() {
-        if (instance == null){
+        if (instance == null) {
             instance = new MainActivity();
         }
         return instance;
     }
+
     // 未读消息textview
     private TextView unreadLabel;
     // 未读通讯录textview
@@ -82,12 +90,14 @@ public class MainActivity extends BaseActivity {
     public boolean isConflict = false;
     // 账号被移除
     private boolean isCurrentAccountRemoved = false;
+
     /**
      * 检查当前用户是否被删除
      */
     public boolean getCurrentAccountRemoved() {
         return isCurrentAccountRemoved;
     }
+
     private android.app.AlertDialog.Builder conflictBuilder;
     private android.app.AlertDialog.Builder accountRemovedBuilder;
     private boolean isConflictDialogShow;
@@ -95,11 +105,12 @@ public class MainActivity extends BaseActivity {
     private BroadcastReceiver internalDebugReceiver;
     private BroadcastReceiver broadcastReceiver;
     private LocalBroadcastManager broadcastManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppManager.getInstance().finishAllBesideTop();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String packageName = getPackageName();
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             if (!pm.isIgnoringBatteryOptimizations(packageName)) {
@@ -114,7 +125,7 @@ public class MainActivity extends BaseActivity {
         if (savedInstanceState != null && savedInstanceState.getBoolean(Constant.ACCOUNT_REMOVED, false)) {
             // 防止被移除后，没点确定按钮然后按了home键，长期在后台又进app导致的crash
             // 三个fragment里加的判断同理
-            DemoHelper.getInstance().logout(false,null);
+            DemoHelper.getInstance().logout(false, null);
             AppManager.getInstance().finishCurActivity();
             startActivity(new Intent(this, LoginActivity.class));
             return;
@@ -157,6 +168,8 @@ public class MainActivity extends BaseActivity {
 
 
         EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
+
+//        bind();
     }
 
     /**
@@ -164,7 +177,7 @@ public class MainActivity extends BaseActivity {
      */
     private void saveUserInfo() {
         DemoApplication.currentUserName = EMClient.getInstance().getCurrentUser();
-        User.saveUserInfo(null,EaseUserUtils.getUserInfo(DemoApplication.currentUserName));
+        User.saveUserInfo(null, EaseUserUtils.getUserInfo(DemoApplication.currentUserName));
     }
 
     private void initView() {
@@ -206,7 +219,7 @@ public class MainActivity extends BaseActivity {
             unreadLabel = (TextView) view.findViewById(R.id.tabUnread);
 //            title.setTextColor(getResources().getColor(R.color.pressed));
         }
-        if (index == 3){
+        if (index == 3) {
             unreadAddressLable = (TextView) view.findViewById(R.id.tabUnread);
 //            title.setTextColor(getResources().getColor(R.color.pressed));
         }
@@ -229,7 +242,6 @@ public class MainActivity extends BaseActivity {
     }
 
 
-
     EMMessageListener messageListener = new EMMessageListener() {
 
         @Override
@@ -243,11 +255,11 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public void onCmdMessageReceived(List<EMMessage> messages) {
-            showDebugLogd(TAG,"收到透传消息");
+            showDebugLogd(TAG, "收到透传消息");
             for (EMMessage message : messages) {
                 EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                 final String action = cmdMsgBody.action();//获取自定义action
-                showDebugLogd(TAG,"action:"+action);
+                showDebugLogd(TAG, "action:" + action);
             }
             refreshUIWithMessage();
         }
@@ -261,7 +273,8 @@ public class MainActivity extends BaseActivity {
         }
 
         @Override
-        public void onMessageChanged(EMMessage message, Object change) {}
+        public void onMessageChanged(EMMessage message, Object change) {
+        }
     };
 
     private void refreshUIWithMessage() {
@@ -272,7 +285,7 @@ public class MainActivity extends BaseActivity {
                 if (mTabHost.getCurrentTab() == 2) {
                     // 当前页面如果为聊天历史页面，刷新此页面
                     if (mTabHost.mTabs.get(2) != null) {
-                        ((ConversationListFragment)mTabHost.mTabs.get(2).fragment).refresh();
+                        ((ConversationListFragment) mTabHost.mTabs.get(2).fragment).refresh();
                     }
                 }
             }
@@ -295,17 +308,17 @@ public class MainActivity extends BaseActivity {
                     case 2:
                         // 当前页面如果为聊天历史页面，刷新此页面
                         if (mTabHost.mTabs.get(2) != null) {
-                            ((ConversationListFragment)mTabHost.mTabs.get(2).fragment).refresh();
+                            ((ConversationListFragment) mTabHost.mTabs.get(2).fragment).refresh();
                         }
                         break;
                     case 3:
                         if (mTabHost.mTabs.get(3) != null) {
-                            ((ContactListFragment)mTabHost.mTabs.get(3).fragment).refresh();
+                            ((ContactListFragment) mTabHost.mTabs.get(3).fragment).refresh();
                         }
                         break;
                 }
                 String action = intent.getAction();
-                if(action.equals(Constant.ACTION_GROUP_CHANAGED)){
+                if (action.equals(Constant.ACTION_GROUP_CHANAGED)) {
                     if (EaseCommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
                         GroupsActivity.instance.onResume();
                     }
@@ -322,7 +335,9 @@ public class MainActivity extends BaseActivity {
 
     public class MyContactListener implements EMContactListener {
         @Override
-        public void onContactAdded(String username) {}
+        public void onContactAdded(String username) {
+        }
+
         @Override
         public void onContactDeleted(final String username) {
             runOnUiThread(new Runnable() {
@@ -337,15 +352,21 @@ public class MainActivity extends BaseActivity {
                 }
             });
         }
+
         @Override
-        public void onContactInvited(String username, String reason) {}
+        public void onContactInvited(String username, String reason) {
+        }
+
         @Override
-        public void onContactAgreed(String username) {}
+        public void onContactAgreed(String username) {
+        }
+
         @Override
-        public void onContactRefused(String username) {}
+        public void onContactRefused(String username) {
+        }
     }
 
-    private void unregisterBroadcastReceiver(){
+    private void unregisterBroadcastReceiver() {
         broadcastManager.unregisterReceiver(broadcastReceiver);
     }
 
@@ -359,12 +380,14 @@ public class MainActivity extends BaseActivity {
         }
         unregisterBroadcastReceiver();
 
-        try {
-            unregisterReceiver(internalDebugReceiver);
-        } catch (Exception e) {
-            showDebugException(e);
+        if (internalDebugReceiver != null) {
+            try {
+                unregisterReceiver(internalDebugReceiver);
+            } catch (Exception e) {
+                showDebugException(e);
+            }
         }
-
+//        unbind();
     }
 
     /**
@@ -418,17 +441,15 @@ public class MainActivity extends BaseActivity {
         int unreadMsgCountTotal;
         int chatroomUnreadMsgCount = 0;
         unreadMsgCountTotal = EMClient.getInstance().chatManager().getUnreadMsgsCount();
-        for(EMConversation conversation:EMClient.getInstance().chatManager().getAllConversations().values()){
-            if(conversation.getType() == EMConversation.EMConversationType.ChatRoom)
-                chatroomUnreadMsgCount=chatroomUnreadMsgCount+conversation.getUnreadMsgCount();
+        for (EMConversation conversation : EMClient.getInstance().chatManager().getAllConversations().values()) {
+            if (conversation.getType() == EMConversation.EMConversationType.ChatRoom)
+                chatroomUnreadMsgCount = chatroomUnreadMsgCount + conversation.getUnreadMsgCount();
         }
-        return unreadMsgCountTotal-chatroomUnreadMsgCount;
+        return unreadMsgCountTotal - chatroomUnreadMsgCount;
     }
 
     private InviteMessgeDao inviteMessgeDao;
     private UserDao userDao;
-
-
 
 
     /**
@@ -445,7 +466,7 @@ public class MainActivity extends BaseActivity {
         updateUnreadAddressLable();
         // 刷新好友页面ui
         if (mTabHost.getCurrentTab() == 3)
-            ((ContactListFragment)mTabHost.mTabs.get(3).fragment).refresh();
+            ((ContactListFragment) mTabHost.mTabs.get(3).fragment).refresh();
     }
 
     /**
@@ -499,7 +520,7 @@ public class MainActivity extends BaseActivity {
      */
     private void showConflictDialog() {
         isConflictDialogShow = true;
-        DemoHelper.getInstance().logout(false,null);
+        DemoHelper.getInstance().logout(false, null);
         String st = getResources().getString(com.hyphenate.chatuidemo.R.string.Logoff_notification);
         if (!MainActivity.this.isFinishing()) {
             // clear up global variables
@@ -536,7 +557,7 @@ public class MainActivity extends BaseActivity {
      */
     private void showAccountRemovedDialog() {
         isAccountRemovedDialogShow = true;
-        DemoHelper.getInstance().logout(false,null);
+        DemoHelper.getInstance().logout(false, null);
         String st5 = getResources().getString(com.hyphenate.chatuidemo.R.string.Remove_the_notification);
         if (!MainActivity.this.isFinishing()) {
             // clear up global variables
@@ -576,49 +597,49 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    /**
-     * 内部测试代码，开发者请忽略
-     */
-    private void registerInternalDebugReceiver() {
-        internalDebugReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                DemoHelper.getInstance().logout(false,new EMCallBack() {
-
-                    @Override
-                    public void onSuccess() {
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                // 重新显示登陆页面
-                                AppManager.getInstance().finishCurActivity();
-                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onProgress(int progress, String status) {}
-
-                    @Override
-                    public void onError(int code, String message) {}
-                });
-            }
-        };
-        IntentFilter filter = new IntentFilter(getPackageName() + ".em_internal_debug");
-        registerReceiver(internalDebugReceiver, filter);
-    }
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         //getMenuInflater().inflate(R.menu.context_tab_contact, menu);
     }
 
-    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                                     @NonNull int[] grantResults) {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         PermissionsManager.getInstance().notifyPermissionsChange(permissions, grantResults);
     }
+    /**
+     * 服务回调
+     */
+    class  MyConn implements ServiceConnection {
 
+        //到服务的连接被建立了
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+
+        }
+        //到服务的连接中断了
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    }
+//    Intent service = new Intent(mContext,AlarmServer.class);
+//    class BackgroundTask extends AsyncTask<Application, Integer, String> {
+//
+//
+//        @Override
+//        protected String doInBackground(Application... params) {
+//            bindService(service,conn,BIND_ADJUST_WITH_ACTIVITY);
+//            return null;
+//        }
+//    }
+//    private MyConn conn = new MyConn();
+//    public void bind(){
+//        BackgroundTask task = new BackgroundTask();
+//        task.execute();
+//    }
+//    public void unbind(){
+//        stopService(service);
+//    }
 }

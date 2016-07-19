@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.zhy.http.okhttp.callback.Callback;
+import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.androidannotations.annotations.AfterViews;
@@ -36,7 +37,6 @@ import cn.edu.jumy.oa.Response.AttachResponse;
 import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.UI.SignUpActivity_;
 import cn.edu.jumy.oa.Utils.CallOtherOpenFile;
-import cn.edu.jumy.oa.CallBack.TempFileCallBack;
 import cn.edu.jumy.oa.bean.Attachment;
 import cn.edu.jumy.oa.bean.Node;
 import okhttp3.Call;
@@ -321,20 +321,26 @@ public class DetailsActivity extends BaseActivity {
                                     String id = list.get(which).getId();
                                     id = TextUtils.isEmpty(id) ? "" : id;
                                     String filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download";
-                                    String filename = list.get(which).getFileName();
-                                    OAService.downloadAttachment(id, new TempFileCallBack(filepath, filename) {
-                                        @Override
-                                        public void onError(Call call, Exception e, int id) {
-                                            showToast("下载附件失败");
-                                        }
+                                    String filename = "temp"+list.get(which).getFileName();
+                                    File file = new File(filepath,filename);
+                                    if (file.exists()){
+                                        CallOtherOpenFile.openFile(mContext,file);
+                                        file.deleteOnExit();
+                                    }else {
+                                        OAService.downloadAttachment(id, new FileCallBack(filepath, filename) {
+                                            @Override
+                                            public void onError(Call call, Exception e, int id) {
+                                                showToast("下载附件失败");
+                                            }
 
-                                        @Override
-                                        public void onResponse(File file, int id) {
-                                            CallOtherOpenFile.openFile(mContext,file);
-                                            file.deleteOnExit();
-                                        }
-                                    });
-                                    alertDialog.cancel();
+                                            @Override
+                                            public void onResponse(File file, int id) {
+                                                CallOtherOpenFile.openFile(mContext, file);
+                                                file.deleteOnExit();
+                                            }
+                                        });
+                                        alertDialog.cancel();
+                                    }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

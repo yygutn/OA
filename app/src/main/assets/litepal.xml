@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
-    <dbname value="office_automatic" ></dbname>
+    <dbname value="office_automatic" />
 
-    <version value="2" ></version>
+    <version value="1" ></version>
 
     <list>
-        <mapping class="cn.edu.jumy.oa.bean.Attachment"></mapping>
-        <mapping class="cn.edu.jumy.oa.bean.Doc"></mapping>
-        <mapping class="cn.edu.jumy.oa.bean.Meet"></mapping>
-        <mapping class="cn.edu.jumy.oa.bean.Organization"></mapping>
-        <mapping class="cn.edu.jumy.oa.bean.User"></mapping>
-        <mapping class="cn.edu.jumy.oa.bean.Node"></mapping>
-        <mapping class="cn.edu.jumy.oa.bean.Alarm"></mapping>
+        <!--<mapping class="cn.edu.jumy.oa.bean.Attachment"/>-->
+        <!--<mapping class="cn.edu.jumy.oa.bean.Doc"/>-->
+        <!--<mapping class="cn.edu.jumy.oa.bean.Meet"/>-->
+        <!--<mapping class="cn.edu.jumy.oa.bean.Organization"/>-->
+        <!--<mapping class="cn.edu.jumy.oa.bean.User"/>-->
+        <!--<mapping class="cn.edu.jumy.oa.bean.Node"/>-->
+        <mapping class="cn.edu.jumy.oa.bean.Alarm"/>
     </list>
 </litepal>

@@ -20,7 +20,7 @@ public class OpenApp {
 
     public static final String OFFICE_LENS = "com.microsoft.office.officelens";
 
-    public static void doStartApplicationWithPackageName(String packagename, Context context) {
+    public static void doStartApplicationWithPackageName(String packagename, Context context,String errorStr) {
 
         // 通过包名获取此APP详细信息，包括Activities、services、versioncode、name等等
         PackageInfo packageinfo = null;
@@ -28,7 +28,7 @@ public class OpenApp {
             packageinfo = context.getApplicationContext().getPackageManager().getPackageInfo(packagename, 0);
         } catch (PackageManager.NameNotFoundException e) {
             BaseActivity.showDebugException(e);
-            Toast.makeText(context,"请先安装Office Lens",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,errorStr,Toast.LENGTH_SHORT).show();
         }
         if (packageinfo == null) {
             return;

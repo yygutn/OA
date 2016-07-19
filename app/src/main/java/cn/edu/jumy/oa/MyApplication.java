@@ -1,13 +1,9 @@
 package cn.edu.jumy.oa;
 
-import android.app.Application;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.multidex.MultiDexApplication;
 
 import com.fsck.k9.K9;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
@@ -16,12 +12,9 @@ import com.zhy.http.okhttp.https.HttpsUtils;
 
 import org.litepal.LitePalApplication;
 
-import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import cn.edu.jumy.jumyframework.AppManager;
-import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.jumyframework.CrashHandler;
 import okhttp3.OkHttpClient;
 
@@ -55,7 +48,6 @@ public class MyApplication extends MultiDexApplication {
         LitePalApplication.initialize(this);
         K9.getInstance().onCreate(this);
     }
-
     private void initOkHttpUtils() {
         HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);//可访问所有Https网站
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -78,5 +70,4 @@ public class MyApplication extends MultiDexApplication {
         }
         return context;
     }
-
 }

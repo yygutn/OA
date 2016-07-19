@@ -1,6 +1,7 @@
 package cn.edu.jumy.jumyframework;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.util.Log;
 
@@ -161,9 +162,9 @@ public class AppManager {
     public void AppExit(Context context) {
         try {
             finishAllActivity();
-//            ActivityManager activityMgr = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-//            activityMgr.killBackgroundProcesses(context.getPackageName());
-            System.exit(0);
+            ActivityManager activityMgr = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            activityMgr.killBackgroundProcesses(context.getPackageName());
+//            System.exit(1);
         } catch (Exception e) {
             e.printStackTrace();
         }

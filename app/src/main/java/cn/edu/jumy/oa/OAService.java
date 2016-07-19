@@ -28,7 +28,8 @@ public class OAService {
     public static String zip = "";
     public static String base = "";
     public static String username = EMClient.getInstance().getCurrentUser() + "_";
-    public static final String BASE_URL = "http://121.41.102.69:8080/OA_console/phone/";
+    public static final String BASE_URL_ONLINE = "http://121.41.102.69:8080/OA_console/phone/";
+    public static final String BASE_URL = "http://192.168.3.124:8090/OA_console/phone/";
 
     public abstract static class DateCallBack extends Callback<String> {
 

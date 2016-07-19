@@ -34,6 +34,7 @@ import org.androidannotations.annotations.res.DrawableRes;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -238,9 +239,10 @@ public class DocumentReadActivity extends BaseActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
         int year,month,day;
-        year = date.getYear();
-        month = date.getMonth() - 1;
-        day = date.getDay();
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR) - 1900;
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
         if ((month < 8 && (month & 1) == 1) || (month >= 8 && (month & 1) == 0)) {
             if (day == 31) {
                 day--;
@@ -250,6 +252,7 @@ public class DocumentReadActivity extends BaseActivity {
             }
             if (month == 0) {
                 month = 11;
+                year--;
             } else {
                 month--;
             }
