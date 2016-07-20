@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
@@ -38,17 +37,14 @@ import java.util.List;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
+import cn.edu.jumy.oa.BroadCastReceiver.UploadBroadcastReceiver;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.Response.AccountResponse;
-import cn.edu.jumy.oa.UI.DepartmentSelectActivity;
 import cn.edu.jumy.oa.UI.DepartmentSelectActivity_;
 import cn.edu.jumy.oa.Utils.OpenApp;
-import cn.edu.jumy.oa.Utils.StringUtils;
 import cn.edu.jumy.oa.adapter.ListDropDownAdapter;
 import cn.edu.jumy.oa.bean.Account;
 import cn.edu.jumy.oa.safe.PasswordUtil;
-import cn.edu.jumy.oa.server.UploadServer;
 import cn.edu.jumy.oa.widget.DropDownMenu;
 import cn.edu.jumy.oa.widget.customview.NoScrollListView;
 import cn.edu.jumy.oa.widget.customview.UploadItem;
@@ -102,14 +98,14 @@ public class DocumentReleaseActivity extends BaseActivity {
     BroadcastReceiver uploadBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(UploadServer.UPLOAD_BR_RESULT)) {
-                String path = intent.getStringExtra(UploadServer.EXTRA_PATH);
+            if (intent.getAction().equals(UploadBroadcastReceiver.UPLOAD_BR_RESULT)) {
+                String path = intent.getStringExtra(UploadBroadcastReceiver.EXTRA_PATH);
                 if (!mFilePath.contains(path)) {
                     mFilePath.add(path);
                 }
             }
-            if (intent.getAction().equals(UploadServer.UPLOAD_BR_RESULT_DELETE)) {
-                String path = intent.getStringExtra(UploadServer.EXTRA_PATH);
+            if (intent.getAction().equals(UploadBroadcastReceiver.UPLOAD_BR_RESULT_DELETE)) {
+                String path = intent.getStringExtra(UploadBroadcastReceiver.EXTRA_PATH);
                 if (mFilePath.contains(path)) {
                     mFilePath.remove(path);
                 }
@@ -131,8 +127,8 @@ public class DocumentReleaseActivity extends BaseActivity {
             showDebugException(e);
         }
         IntentFilter filter = new IntentFilter();
-        filter.addAction(UploadServer.UPLOAD_BR_RESULT);
-        filter.addAction(UploadServer.UPLOAD_BR_RESULT_DELETE);
+        filter.addAction(UploadBroadcastReceiver.UPLOAD_BR_RESULT);
+        filter.addAction(UploadBroadcastReceiver.UPLOAD_BR_RESULT_DELETE);
         registerReceiver(uploadBroadcastReceiver, filter);
 
     }

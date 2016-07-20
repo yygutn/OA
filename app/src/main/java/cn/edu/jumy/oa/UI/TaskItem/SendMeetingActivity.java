@@ -36,12 +36,12 @@ import java.util.List;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
+import cn.edu.jumy.oa.BroadCastReceiver.UploadBroadcastReceiver;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.DepartmentSelectActivity_;
 import cn.edu.jumy.oa.Utils.OpenApp;
 import cn.edu.jumy.oa.adapter.ListDropDownAdapter;
-import cn.edu.jumy.oa.server.UploadServer;
 import cn.edu.jumy.oa.widget.DropDownMenu;
 import cn.edu.jumy.oa.widget.customview.NoScrollListView;
 import cn.edu.jumy.oa.widget.customview.UploadItem;
@@ -111,14 +111,14 @@ public class SendMeetingActivity extends BaseActivity {
     BroadcastReceiver uploadBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction() == UploadServer.UPLOAD_BR_RESULT) {
-                String path = intent.getStringExtra(UploadServer.EXTRA_PATH);
+            if (intent.getAction() == UploadBroadcastReceiver.UPLOAD_BR_RESULT) {
+                String path = intent.getStringExtra(UploadBroadcastReceiver.EXTRA_PATH);
                 if (!mFilePath.contains(path)) {
                     mFilePath.add(path);
                 }
             }
-            if (intent.getAction() == UploadServer.UPLOAD_BR_RESULT_DELETE) {
-                String path = intent.getStringExtra(UploadServer.EXTRA_PATH);
+            if (intent.getAction() == UploadBroadcastReceiver.UPLOAD_BR_RESULT_DELETE) {
+                String path = intent.getStringExtra(UploadBroadcastReceiver.EXTRA_PATH);
                 if (mFilePath.contains(path)) {
                     mFilePath.remove(path);
                 }
@@ -144,8 +144,8 @@ public class SendMeetingActivity extends BaseActivity {
         });
         initLevelView();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(UploadServer.UPLOAD_BR_RESULT);
-        filter.addAction(UploadServer.UPLOAD_BR_RESULT_DELETE);
+        filter.addAction(UploadBroadcastReceiver.UPLOAD_BR_RESULT);
+        filter.addAction(UploadBroadcastReceiver.UPLOAD_BR_RESULT_DELETE);
         registerReceiver(uploadBroadcastReceiver, filter);
     }
 
@@ -162,15 +162,15 @@ public class SendMeetingActivity extends BaseActivity {
                 break;
             }
             case R.id.meeting_time: {
-                int year,month,day;
+                int year, month, day;
                 Calendar calendar = Calendar.getInstance();
                 year = calendar.get(Calendar.YEAR);
                 month = calendar.get(Calendar.MONTH);
                 day = calendar.get(Calendar.DAY_OF_MONTH);
                 DatePicker picker = new DatePicker(this, DatePicker.YEAR_MONTH_DAY);
                 picker.setRange(2016, 2050);//年份范围
-                picker.setLabel("年","月","日");
-                picker.setSelectedItem(year,month+1,day);
+                picker.setLabel("年", "月", "日");
+                picker.setSelectedItem(year, month + 1, day);
                 picker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
                     @Override
                     public void onDatePicked(String year, String month, String day) {

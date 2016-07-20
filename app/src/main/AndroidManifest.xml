@@ -11,7 +11,6 @@
         android:supportsRtl="true"
         android:theme="@style/JumyTheme">
 
-        <service android:name=".server.UploadServer" android:process=":upload"/>
         <service android:name=".server.AlarmServer" android:process=":alarm"/>
 
         <activity

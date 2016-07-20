@@ -13,9 +13,8 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
 
+import cn.edu.jumy.oa.BroadCastReceiver.UploadBroadcastReceiver;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.UI.TaskItem.DocumentReleaseActivity;
-import cn.edu.jumy.oa.server.UploadServer;
 import cn.qqtheme.framework.picker.FilePicker;
 import cn.qqtheme.framework.util.StorageUtils;
 
@@ -82,8 +81,8 @@ public class UploadItem extends LinearLayout{
             public void onFilePicked(String currentPath) {
                 String path [] = currentPath.split("/");
                 if (!TextUtils.isEmpty(filePath)){
-                    Intent intent = new Intent(UploadServer.UPLOAD_BR_RESULT_DELETE);
-                    intent.putExtra(UploadServer.EXTRA_PATH, filePath);
+                    Intent intent = new Intent(UploadBroadcastReceiver.UPLOAD_BR_RESULT_DELETE);
+                    intent.putExtra(UploadBroadcastReceiver.EXTRA_PATH, filePath);
                     mContext.sendBroadcast(intent);
                 }
                 fileName = path[path.length-1];
@@ -91,8 +90,8 @@ public class UploadItem extends LinearLayout{
 //                filePath = "file:/" + currentPath.trim();
                 selectName.setText(fileName);
 
-                Intent intent = new Intent(UploadServer.UPLOAD_BR_RESULT);
-                intent.putExtra(UploadServer.EXTRA_PATH, filePath);
+                Intent intent = new Intent(UploadBroadcastReceiver.UPLOAD_BR_RESULT);
+                intent.putExtra(UploadBroadcastReceiver.EXTRA_PATH, filePath);
                 mContext.sendBroadcast(intent);
             }
         });

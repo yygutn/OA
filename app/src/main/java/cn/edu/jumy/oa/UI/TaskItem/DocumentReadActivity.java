@@ -1,7 +1,6 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
@@ -16,13 +15,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.hyphenate.chat.EMClient;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.shizhefei.view.indicator.Indicator;
 import com.shizhefei.view.indicator.IndicatorViewPager;
 import com.shizhefei.view.indicator.slidebar.ColorBar;
 import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
-import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
 
 import org.androidannotations.annotations.AfterViews;
@@ -37,23 +34,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.BroadCastReceiver.DocumentBroadcastReceiver;
-import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.Response.DocResponse;
 import cn.edu.jumy.oa.bean.Doc;
-import cn.edu.jumy.oa.fragment.DocumentAllFragment_;
 import cn.edu.jumy.oa.fragment.BaseSearchRefreshFragment;
+import cn.edu.jumy.oa.fragment.DocumentAllFragment_;
 import cn.edu.jumy.oa.fragment.DocumentReadFragment_;
 import cn.edu.jumy.oa.fragment.DocumentUnreadFragment_;
-import cn.edu.jumy.oa.safe.PasswordUtil;
-import cn.edu.jumy.oa.server.UploadServer;
 import okhttp3.Call;
 import okhttp3.Response;
 

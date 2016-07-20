@@ -6,13 +6,10 @@ import android.content.Intent;
 
 import com.orhanobut.logger.Logger;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.bean.Doc;
-import cn.edu.jumy.oa.server.UploadServer;
 
 /**
  * Created by Jumy on 16/6/23 17:58.
