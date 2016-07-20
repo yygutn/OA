@@ -34,7 +34,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     //滑动的过程中记录顶部坐标
     private int layoutTop;
     private int dragRang;
-    private MyTextView weekTxt;
+//    private MyTextView weekTxt;
     private int marginTop;
     private int mTouchSlop;
     private int lastX;
@@ -81,11 +81,11 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
                     weekView.setVisibility(View.INVISIBLE);
                 }
 
-                if (top <= -monthView.getHeight() * (lineCount - 1) / lineCount) {
-                    //当已经滑动到顶部时 希望周的显示 固定在日历的下方 而不要继续随着手势滑动
-                    weekTxt.layout((int) weekTxt.getX(), monthView.getMeasuredHeight(),
-                            (int) weekTxt.getX() + weekTxt.getWidth(), monthView.getMeasuredHeight() + weekTxt.getHeight());
-                }
+//                if (top <= -monthView.getHeight() * (lineCount - 1) / lineCount) {
+//                    //当已经滑动到顶部时 希望周的显示 固定在日历的下方 而不要继续随着手势滑动
+//                    weekTxt.layout((int) weekTxt.getX(), monthView.getMeasuredHeight(),
+//                            (int) weekTxt.getX() + weekTxt.getWidth(), monthView.getMeasuredHeight() + weekTxt.getHeight());
+//                }
             }
 
             @Override
@@ -161,7 +161,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
         super.onFinishInflate();
         mainLayout = (LinearLayout) findViewById(R.id.main_layout);
         monthView = (MonthView) findViewById(R.id.month_calendar);
-        weekTxt = (MyTextView) findViewById(R.id.week_text);
+//        weekTxt = (MyTextView) findViewById(R.id.week_text);
         monthView.setOnLineChooseListener(this);
         monthView.setOnLineCountChangeListener(this);
         monthView.setOnMonthDateClickListener(this);

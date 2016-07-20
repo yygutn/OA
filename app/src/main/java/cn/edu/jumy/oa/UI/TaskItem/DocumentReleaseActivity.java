@@ -1,5 +1,6 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -159,6 +160,7 @@ public class DocumentReleaseActivity extends BaseActivity {
     }
 
     AlertDialog alertDialog;
+    ProgressDialog progressDialog;
 
     private void confirmSubmit() {
         alertDialog = new AlertDialog.Builder(mContext)
@@ -178,7 +180,10 @@ public class DocumentReleaseActivity extends BaseActivity {
                             showToast("发文标题不能为空");
                             return;
                         }
-                        alertDialog.setTitle("发送中，请稍后...");
+                        progressDialog = new ProgressDialog(mContext);
+                        progressDialog.setMessage("发送中...");
+                        progressDialog.setTitle("公文发布");
+                        progressDialog.show();
 
                         long time = new Date().getTime();
                         final String base = EMClient.getInstance().getCurrentUser() + "_" + time;
@@ -195,6 +200,7 @@ public class DocumentReleaseActivity extends BaseActivity {
                         OAService.docSend(params, fileMap, new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                progressDialog.dismiss();
                                 showDebugException(e);
                                 showToast("网络异常,发送失败");
                             }
@@ -205,12 +211,8 @@ public class DocumentReleaseActivity extends BaseActivity {
                             }
 
                             @Override
-                            public void inProgress(float progress, long total, int id) {
-                                super.inProgress(progress, total, id);
-                            }
-
-                            @Override
                             public void onResponse(String response, int id) {
+                                progressDialog.dismiss();
                                 if (response.contains("0")) {
                                     showToast("发送成功");
                                 } else {
@@ -280,6 +282,7 @@ public class DocumentReleaseActivity extends BaseActivity {
         if (mDropDownMenu2.isShowing()) {
             mDropDownMenu2.closeMenu();
         } else {
+            progressDialog.dismiss();
             super.onBackPressed();
         }
     }

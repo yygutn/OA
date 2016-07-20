@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="cn.edu.jumy.oa">
-    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+    package="cn.edu.jumy.oa">
+
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
 
     <application
         android:name=".MyApplication"
@@ -11,104 +12,108 @@
         android:supportsRtl="true"
         android:theme="@style/JumyTheme">
 
+        <receiver
+            android:name=".BroadCastReceiver.NotificationBroadCastReceiver"
+            android:process=":notify" />
+
         <activity
             android:name=".UI.VerifyActivity_"
             android:theme="@style/JumyTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".MainActivity"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.ApprovalActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.CalendarActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.MeetingCardActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.SettingActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.SendFileWebActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.MyFileActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.ReceiveFileActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.AuditActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.FromMeActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.MeetingSendActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.StudyOnlineActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.WaitingForApprovalActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.FileSentActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.MeetingSentActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.web.SignUpActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
 
         <activity
             android:name=".UI.TaskItem.BaseSearchRefreshActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.TaskItem.DocumentCabinetActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.TaskItem.DetailsActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.TaskItem.DocumentReadActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.TaskItem.DocumentReleaseActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.TaskItem.SendMeetingActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.TaskItem.MeetingApprovalActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.TaskItem.NotifyActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.SignUpDetailsActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.VideoPlayerActivity_"
-            android:theme="@style/JumyTheme"/>
+            android:theme="@style/JumyTheme" />
         <activity
             android:name=".UI.TaskItem.StudyOnlineActivity_"
-            android:theme="@style/JumyTheme"/>
-        <activity android:name=".UI.SignUpActivity_"/>
-        <activity android:name=".UI.TaskItem.MeetAuditActivity_"/>
-        <activity android:name=".UI.TaskItem.SentDocumentActivity_"/>
-        <activity android:name=".UI.TaskItem.SentMeetingActivity_"/>
-        <activity android:name=".UI.TaskItem.SignDetailsActivity_"/>
-        <activity android:name=".UI.DepartmentSelectActivity_"/>
+            android:theme="@style/JumyTheme" />
+        <activity android:name=".UI.SignUpActivity_" />
+        <activity android:name=".UI.TaskItem.MeetAuditActivity_" />
+        <activity android:name=".UI.TaskItem.SentDocumentActivity_" />
+        <activity android:name=".UI.TaskItem.SentMeetingActivity_" />
+        <activity android:name=".UI.TaskItem.SignDetailsActivity_" />
+        <activity android:name=".UI.DepartmentSelectActivity_" />
 
 
         //环信 SDK
@@ -336,10 +341,10 @@
         <!-- 开机自启动服务 -->
         <receiver android:name="com.hyphenate.chatuidemo.receiver.StartServiceReceiver">
             <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </receiver>
 
@@ -372,22 +377,22 @@
         <service
             android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
         <service
             android:name="com.xiaomi.mipush.sdk.MessageHandleService"
-            android:enabled="true"/>
+            android:enabled="true" />
 
         <receiver
             android:name="com.hyphenate.chat.EMMipushReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE"/>
+                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED"/>
+                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.xiaomi.mipush.ERROR"/>
+                <action android:name="com.xiaomi.mipush.ERROR" />
             </intent-filter>
         </receiver>
         <!-- mi push end -->
@@ -435,21 +440,21 @@
         <!-- 设置环信应用的appkey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
-            android:value="ym-sx#oa"/>
+            android:value="ym-sx#oa" />
         <!-- 声明sdk所需的service -->
         <service
             android:name="com.hyphenate.chat.EMChatService"
-            android:exported="true"/>
+            android:exported="true" />
         <!-- 声明sdk所需的receiver -->
         <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-                <data android:scheme="package"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
             </intent-filter>
             <!-- 可选filter -->
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
 
@@ -457,14 +462,14 @@
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"/>
+            android:process=":remote" />
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="3ecea51f560650b1ed8a4b99808f52e8"/>
+            android:value="3ecea51f560650b1ed8a4b99808f52e8" />
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="hyphenate"/>
+            android:value="hyphenate" />
 
     </application>
 

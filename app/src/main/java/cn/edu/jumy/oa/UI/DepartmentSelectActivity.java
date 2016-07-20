@@ -11,12 +11,16 @@ import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -31,6 +35,10 @@ import me.yokeyword.indexablelistview.IndexEntity;
 import me.yokeyword.indexablelistview.IndexHeaderEntity;
 import me.yokeyword.indexablelistview.IndexableStickyListView;
 import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 /**
  * Created by Jumy on 16/7/15 09:35.
@@ -51,7 +59,6 @@ public class DepartmentSelectActivity extends BaseActivity {
     Toolbar mTitleBar;
 
     private ArrayList<Account> mUsedDepartment;
-    private ArrayList<Account> mSelectDepartment = new ArrayList<>();
 
     //初始化数据
     ArrayList<Account> mDepartments = new ArrayList<>();
@@ -88,7 +95,7 @@ public class DepartmentSelectActivity extends BaseActivity {
         });
 
     }
-    @AfterViews
+    @AfterExtras
     void getData() {
 //        mUsedDepartment = (ArrayList<Account>) ACache.get(mContext, EMClient.getInstance().getCurrentUser()).getAsObject(DEPARTMENT);
         if (mUsedDepartment == null) {
@@ -101,6 +108,11 @@ public class DepartmentSelectActivity extends BaseActivity {
             public void onError(Call call, Exception e, int id) {
                 showDebugException(e);
                 showToast("网络异常，获取可发送单位失败");
+            }
+
+            @Override
+            public void onBefore(Request request, int id) {
+                super.onBefore(request, id);
             }
 
             @Override

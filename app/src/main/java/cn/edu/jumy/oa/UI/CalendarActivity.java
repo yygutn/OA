@@ -27,13 +27,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
+import cn.edu.jumy.oa.CallBack.MeetCallback;
 import cn.edu.jumy.oa.MyApplication;
+import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.Response.MeetResponse;
 import cn.edu.jumy.oa.bean.Alarm;
+import cn.edu.jumy.oa.bean.Meet;
 import cn.edu.jumy.oa.widget.datepicker.calendar.bizs.decors.DPDecor;
 import cn.edu.jumy.oa.widget.datepicker.calendar.cons.DPMode;
 import cn.edu.jumy.oa.widget.datepicker.calendar.utils.MeasureUtil;
@@ -55,8 +61,6 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
     Toolbar toolbar;
     @ViewById(R.id.content_layout)
     LinearLayout contentLayout;
-    @ViewById(R.id.week_text)
-    TextView weekTxt;
 
     @StringRes(R.string.message)
     String mNotification;
@@ -109,6 +113,12 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
                 onBackPressed();
             }
         });
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        int y = calendar.get(Calendar.YEAR);
+        int m = calendar.get(Calendar.MONTH);
+        monthView.changeChooseDate(y,m);
     }
 
     @OptionsItem(R.id.action_add_alarm)
@@ -154,7 +164,7 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String str = edit.getText().toString();
-                        Date date = new Date(year-1900, monthOfYear, dayOfMonth, hour, minute, 0);
+                        Date date = new Date(year-1900, monthOfYear-1, dayOfMonth, hour, minute, 0);
                         Alarm alarm = new Alarm(str, date, DemoApplication.currentUserName);
                         boolean flag = alarm.save();
                         String message = flag ? "创建日程提醒成功" : "创建日程提醒失败,请重新创建";
@@ -210,14 +220,7 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
     public void onDatePicked(String date) {
         try {
             SimpleDateFormat format1 = new SimpleDateFormat("yyyy.MM.dd");
-            SimpleDateFormat format2 = new SimpleDateFormat("EEEE");
             Date chooseDate = format1.parse(date);
-            weekTxt.setText(format2.format(chooseDate));
-            if (date.equals(now.get(Calendar.YEAR) + "." + (now.get(Calendar.MONTH) + 1) + "." + now.get(Calendar.DAY_OF_MONTH))) {
-                weekTxt.setVisibility(View.INVISIBLE);
-            } else {
-                weekTxt.setVisibility(View.VISIBLE);
-            }
             contentLayout.removeAllViews();
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
@@ -245,5 +248,54 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    private void getList(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        int year, month, day;
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR) - 1900;
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        if ((month < 8 && (month & 1) == 1) || (month >= 8 && (month & 1) == 0)) {
+            if (day == 31) {
+                day--;
+            }
+            if (month == 2 && day > 28) {
+                day = 28;
+            }
+            if (month == 0) {
+                month = 11;
+                year--;
+            } else {
+                month--;
+            }
+        } else {
+            month--;
+        }
+        String before = sdf.format(new Date(year, month, day));
+        String now = sdf.format(date);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("page", "1");
+        params.put("size", "20");
+        params.put("startTime", before);
+        params.put("endTime", now);
+        params.put("level", "");
+        params.put("docNo", "");
+        params.put("docTitle", "");
+        params.put("meetCompany", "");
+        params.put("signStatus", "");
+        params.put("passStatus", "");
+
+        OAService.meetReceive(params, new MeetCallback() {
+            @Override
+            public void onResponse(MeetResponse response, int id) {
+                if (response.code == 1 || response.data == null) {
+                    showToast("获取会议列表失败");
+                    return;
+                }
+            }
+        });
     }
 }

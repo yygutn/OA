@@ -1,19 +1,14 @@
 package cn.edu.jumy.oa;
 
 import android.annotation.TargetApi;
-import android.app.Application;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
@@ -25,7 +20,6 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hyphenate.EMCallBack;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
@@ -48,12 +42,12 @@ import com.hyphenate.chatuidemo.ui.LoginActivity;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.util.EMLog;
-import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
 import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
+import cn.edu.jumy.oa.BroadCastReceiver.AlarmBroadCastReceiver;
 import cn.edu.jumy.oa.bean.User;
 import cn.edu.jumy.oa.fragment.MineFragment_;
 import cn.edu.jumy.oa.fragment.NotifyFragment_;
@@ -105,6 +99,8 @@ public class MainActivity extends BaseActivity {
     private BroadcastReceiver broadcastReceiver;
     private LocalBroadcastManager broadcastManager;
 
+    private AlarmBroadCastReceiver alarmBroadCastReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,10 +144,6 @@ public class MainActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        //umeng api
-//        MobclickAgent.updateOnlineConfig(this);
-//        UmengUpdateAgent.setUpdateOnlyWifi(false);
-//        UmengUpdateAgent.update(this);
 
         if (getIntent().getBooleanExtra(Constant.ACCOUNT_CONFLICT, false) && !isConflictDialogShow) {
             showConflictDialog();
@@ -165,7 +157,7 @@ public class MainActivity extends BaseActivity {
         //注册local广播接收者，用于接收demohelper中发出的群组联系人的变动通知
         registerBroadcastReceiver();
 
-
+        initMeetBroadCastReceiver();
         EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
 
     }
@@ -377,13 +369,15 @@ public class MainActivity extends BaseActivity {
             conflictBuilder = null;
         }
         unregisterBroadcastReceiver();
-
-        if (internalDebugReceiver != null) {
-            try {
-                unregisterReceiver(internalDebugReceiver);
-            } catch (Exception e) {
-                showDebugException(e);
+        try {
+            if (alarmBroadCastReceiver != null) {
+                unregisterReceiver(alarmBroadCastReceiver);
             }
+            if (internalDebugReceiver != null) {
+                unregisterReceiver(internalDebugReceiver);
+            }
+        } catch (Exception e) {
+            showDebugException(e);
         }
     }
 
@@ -605,20 +599,21 @@ public class MainActivity extends BaseActivity {
                                            @NonNull int[] grantResults) {
         PermissionsManager.getInstance().notifyPermissionsChange(permissions, grantResults);
     }
-    /**
-     * 服务回调
-     */
-    class  MyConn implements ServiceConnection {
 
-        //到服务的连接被建立了
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-
+    private void initMeetBroadCastReceiver() {
+        if (alarmBroadCastReceiver != null){
+            return;
         }
-        //到服务的连接中断了
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
+        try {
+            alarmBroadCastReceiver = new AlarmBroadCastReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(AlarmBroadCastReceiver.MEET_ALARM);
 
+            registerReceiver(alarmBroadCastReceiver, filter);
+
+            sendBroadcast(new Intent(AlarmBroadCastReceiver.MEET_ALARM));
+        } catch (Exception e) {
+            showDebugException(e);
         }
     }
 }

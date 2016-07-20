@@ -1,5 +1,6 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -214,15 +215,15 @@ public class SendMeetingActivity extends BaseActivity {
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        doSending(dialog);
+                        doSending();
                     }
                 }).setNegativeButton("取消", null)
                 .create();
         alertDialog.show();
         alertDialog.setCanceledOnTouchOutside(true);
     }
-
-    private void doSending(final DialogInterface dialog) {
+    ProgressDialog progressDialog;
+    private void doSending() {
 
 
         if (TextUtils.isEmpty(UndertakingUnitsID)) {
@@ -244,6 +245,10 @@ public class SendMeetingActivity extends BaseActivity {
             showToast("会议名称不能为空");
             return;
         }
+        progressDialog = new ProgressDialog(mContext);
+        progressDialog.setMessage("发送中...");
+        progressDialog.setTitle("会议发布");
+        progressDialog.show();
         String docSummary = mMeetingDetails.getText().toString();
         String contactName = mMeetingPeople.getText().toString();
         String contactPhone = mMeetingPhone.getText().toString();
@@ -264,14 +269,14 @@ public class SendMeetingActivity extends BaseActivity {
         OAService.meetSend(params, fileMap, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                dialog.cancel();
+                progressDialog.dismiss();
                 showDebugException(e);
                 showToast("网络异常,发送失败");
             }
 
             @Override
             public void onResponse(String response, int id) {
-                dialog.cancel();
+                progressDialog.dismiss();
                 if (response.contains("0")) {
                     showToast("发送成功");
                 } else {

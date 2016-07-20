@@ -6,6 +6,9 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -17,6 +20,7 @@ import cn.edu.jumy.oa.Response.DocResponse;
 import cn.edu.jumy.oa.Response.MeetResponse;
 import cn.edu.jumy.oa.safe.PasswordUtil;
 import okhttp3.Call;
+import okhttp3.MediaType;
 import okhttp3.Response;
 
 /**
@@ -29,8 +33,9 @@ public class OAService {
     public static String base = "";
     public static String username = EMClient.getInstance().getCurrentUser() + "_";
     public static final String BASE_URL_ONLINE = "http://121.41.102.69:8080/OA_console/phone/";
-    public static final String BASE_URL = "http://192.168.3.124:8090/OA_console/phone/";
+    public static final String BASE_URL_TEST = "http://192.168.3.124:8090/OA_console/phone/";
 
+    public static final String BASE_URL = BASE_URL_ONLINE;
     public abstract static class DateCallBack extends Callback<String> {
 
         @Override
@@ -66,6 +71,7 @@ public class OAService {
     public static void getTime(Callback callback) {
         OkHttpUtils.post()
                 .url(BASE_URL + "getTime")
+                .addParams("","")
                 .build()
                 .execute(callback);
     }
@@ -446,6 +452,57 @@ public class OAService {
                         .url(BASE_URL + "meetSign")
                         .addParams("value", response)
                         .addParams("tid", tid)
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
+
+    /**
+     * 公文催收
+     * @param oid 组织id
+     * @param did 公文id
+     * @param callback 回调
+     */
+    public static void docUrge(final String oid,final String did ,final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                callback.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "docUrge")
+                        .addParams("value", response)
+                        .addParams("oid", oid)
+                        .addParams("did", did)
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
+    /**
+     * 会议催收
+     * @param oid 组织id
+     * @param did 会议id
+     * @param callback 回调
+     */
+    public static void meetUrge(final String oid,final String did ,final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                callback.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "meetUrge")
+                        .addParams("value", response)
+                        .addParams("oid", oid)
+                        .addParams("did", did)
                         .build()
                         .execute(callback);
             }
