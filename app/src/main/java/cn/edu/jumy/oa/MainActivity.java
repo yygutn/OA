@@ -58,7 +58,6 @@ import cn.edu.jumy.oa.bean.User;
 import cn.edu.jumy.oa.fragment.MineFragment_;
 import cn.edu.jumy.oa.fragment.NotifyFragment_;
 import cn.edu.jumy.oa.fragment.TaskFragment;
-import cn.edu.jumy.oa.server.AlarmServer;
 import cn.edu.jumy.oa.widget.FragmentTabHost;
 
 /**
@@ -169,7 +168,6 @@ public class MainActivity extends BaseActivity {
 
         EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
 
-//        bind();
     }
 
     /**
@@ -387,7 +385,6 @@ public class MainActivity extends BaseActivity {
                 showDebugException(e);
             }
         }
-//        unbind();
     }
 
     /**
@@ -624,22 +621,4 @@ public class MainActivity extends BaseActivity {
 
         }
     }
-//    Intent service = new Intent(mContext,AlarmServer.class);
-//    class BackgroundTask extends AsyncTask<Application, Integer, String> {
-//
-//
-//        @Override
-//        protected String doInBackground(Application... params) {
-//            bindService(service,conn,BIND_ADJUST_WITH_ACTIVITY);
-//            return null;
-//        }
-//    }
-//    private MyConn conn = new MyConn();
-//    public void bind(){
-//        BackgroundTask task = new BackgroundTask();
-//        task.execute();
-//    }
-//    public void unbind(){
-//        stopService(service);
-//    }
 }
