@@ -81,23 +81,17 @@
                 android:text="所在单位:"
                 android:textColor="@color/black" />
 
-            <cn.edu.jumy.oa.widget.DropDownMenu
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/dropDownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/shape_normal_gray"
-                android:minHeight="30dp"
-                app:dddividerColor="@color/gray"
-                app:ddmaskColor="@color/mask_color"
-                app:ddmenuBackgroundColor="@color/white"
-                app:ddmenuSelectedIcon="@drawable/ic_expand_less"
-                app:ddmenuTextSize="16sp"
-                app:ddmenuUnselectedIcon="@drawable/ic_expand_more"
-                app:ddtextSelectedColor="@color/pressed"
-                app:ddtextUnselectedColor="@color/drop_down_unselected"
-                app:ddunderlineColor="@android:color/transparent" />
+                android:gravity="center"
+                android:hint="请选择所在单位"
+                android:minHeight="48dp"
+                android:textColor="@color/black" />
 
 
             <RelativeLayout

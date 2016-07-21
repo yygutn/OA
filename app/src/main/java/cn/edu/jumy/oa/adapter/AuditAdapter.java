@@ -41,13 +41,13 @@ public class AuditAdapter extends CommonAdapter<AuditUser> {
         holder.setOnClickListener(R.id.audit_item_pass, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                letGo(user,true,holder.getLayoutPosition());
+                letGo(user,true,holder.getLayoutPosition(),holder);
             }
         });
         holder.setOnClickListener(R.id.audit_item_back, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                letGo(user,false,holder.getLayoutPosition());
+                letGo(user,false,holder.getLayoutPosition(),holder);
             }
         });
 
@@ -58,8 +58,9 @@ public class AuditAdapter extends CommonAdapter<AuditUser> {
      * @param user
      * @param pass true 通过  false 退回
      * @param position
+     * @param holder
      */
-    private void letGo(AuditUser user, final boolean pass, final int position){
+    private void letGo(AuditUser user, final boolean pass, final int position, final ViewHolder holder){
         OAService.meetUserPass(user.id,String.valueOf(pass),"", new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -73,7 +74,7 @@ public class AuditAdapter extends CommonAdapter<AuditUser> {
                 if (baseResponse.code == 0){
                     //审核通过/退回
                     Toast.makeText(mContext, "审核通过", Toast.LENGTH_SHORT).show();
-
+//                    holder.setText(R.id.audit_item_pass,"已通过");
                     Intent intent = new Intent("POSITION");
                     intent.putExtra("passed_position",position);
                     intent.putExtra("passed_flag",pass);

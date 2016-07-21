@@ -12,5 +12,6 @@
         <!--<mapping class="cn.edu.jumy.oa.bean.User"/>-->
         <!--<mapping class="cn.edu.jumy.oa.bean.Node"/>-->
         <mapping class="cn.edu.jumy.oa.bean.Alarm"/>
+        <mapping class="cn.edu.jumy.oa.bean.Annex"/>
     </list>
 </litepal>

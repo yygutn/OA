@@ -11,13 +11,14 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hyphenate.chatuidemo.DemoApplication;
 
+import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
@@ -75,22 +76,40 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
     List<String> mMeetingList = new ArrayList<>();
     List<String> mMeetingListCopy = new ArrayList<>();
 
-    Calendar now;
+    ArrayList<Meet> mList = new ArrayList<>();
+
+    Calendar now = Calendar.getInstance();
+
+    @Extra("date")
+    long mTimeStamp;
+
+    @AfterExtras
+    void ex(){
+        getList();
+    }
 
     @AfterViews
     void start() {
-        now = Calendar.getInstance();
-        toolbar.setSubtitle(now.get(Calendar.YEAR) + "." + (now.get(Calendar.MONTH) + 1));
+        now.setTime(new Date());
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        toolbar.setSubtitle(now.get(Calendar.YEAR) + "." + (now.get(Calendar.MONTH) + 1));
 
         monthView.setDPMode(DPMode.SINGLE);
+        if (mTimeStamp > 100){
+            now.setTimeInMillis(mTimeStamp);
+        }
         monthView.setDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1);
         monthView.setFestivalDisplay(true);
         monthView.setTodayDisplay(true);
         monthView.setOnDateChangeListener(this);
         monthView.setOnDatePickedListener(this);
         //设置有背景标识物的日期 传入需要背景的日期列表
-        initMeettingList();
         monthView.mCManager.setDecorBG(mMeetingList);
         monthView.setDPDecor(new DPDecor() {
             @Override
@@ -107,19 +126,122 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
         weekView.setTodayDisplay(true);
         weekView.setOnDatePickedListener(this);
         initNotification();
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
+    }
+    private void initMeetingList() {
+        for (Meet meet : mList){
+            now.setTimeInMillis(meet.meetTime);
+            int y = now.get(Calendar.YEAR);
+            int m = now.get(Calendar.MONTH);
+            int d = now.get(Calendar.DAY_OF_MONTH);
+            String time = y+"-"+m+"-"+d;
+            String timeCopy = y+"-"+(m>9?m:("0"+m))+"-"+(d>9?d:("0"+d));
+            mMeetingList.add(time);
+            mMeetingListCopy.add(timeCopy);
+        }
+    }
+
+    /**
+     * 初始化当天有会议的情况
+     */
+    private void initNotification() {
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        String date = format1.format(new Date());
+        addCard(date);
+    }
+
+    private void addCard(String date) {
+        int len = mList.size();
+        for (int i = 0; i < mMeetingListCopy.size(); i++) {
+            if (mMeetingListCopy.get(i).equals(date)) {
+                Meet node = mList.get(i);
+                String message = "";
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                message += "发文单位: " + node.sendDepartmentInfo + "\n";
+                message += "发文时间: " + sdf.format(new Date(node.createTime)) + "\n";
+                message += "承办单位: " + node.meetCompanyName + "\n";
+                message += "会议时间: " + sdf.format(new Date(node.meetTime)) + "\n";
+                message += "会议地点: " + node.addr + "\n";
+                ContentItemViewAbs cia = new ContentItemViewAbs(this, "会议", "", message);
+                contentLayout.addView(cia);
+            }
+        }
+    }
+
+    @Override
+    public void onDateChange(int year, int month) {
+        ActionBar toolbar = getSupportActionBar();
+        if (null != toolbar)
+            toolbar.setSubtitle(year + "." + month);
+    }
+
+    @Override
+    public void onDatePicked(String date) {
+        try {
+            contentLayout.removeAllViews();
+            SimpleDateFormat format1 = new SimpleDateFormat("yyyy.MM.dd");
+            Date chooseDate = format1.parse(date);
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+            String now = sdf2.format(chooseDate);
+            addCard(now);
+        } catch (Exception e) {
+            showDebugException(e);
+        }
+    }
+    private void getList(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        int year, month, day;
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR) - 1900;
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        if ((month < 8 && (month & 1) == 1) || (month >= 8 && (month & 1) == 0)) {
+            if (day == 31) {
+                day--;
+            }
+            if (month == 2 && day > 28) {
+                day = 28;
+            }
+            if (month == 0) {
+                month = 11;
+                year--;
+            } else {
+                month--;
+            }
+        } else {
+            month--;
+        }
+        String before = sdf.format(new Date(year, month, day));
+        String now = sdf.format(date);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("page", "1");
+        params.put("size", "20");
+        params.put("startTime", before);
+        params.put("endTime", now);
+        params.put("level", "");
+        params.put("docNo", "");
+        params.put("docTitle", "");
+        params.put("meetCompany", "");
+        params.put("signStatus", "");
+        params.put("passStatus", "");
+
+        OAService.meetReceive(params, new MeetCallback() {
             @Override
-            public void onClick(View v) {
-                onBackPressed();
+            public void onResponse(MeetResponse response, int id) {
+                if (response.code == 1 || response.data == null) {
+                    showToast("获取会议列表失败");
+                    return;
+                }
+                mList = response.data.pageObject;
+                initMeetingList();
             }
         });
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        int y = calendar.get(Calendar.YEAR);
-        int m = calendar.get(Calendar.MONTH);
-        monthView.changeChooseDate(y,m);
     }
+
+
+
 
     @OptionsItem(R.id.action_add_alarm)
     void add_alarm() {
@@ -177,125 +299,4 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
         alertDialog.setCanceledOnTouchOutside(true);
     }
 
-    private void initMeettingList() {
-        mMeetingList.add("2016-5-31");
-
-        mMeetingListCopy.add("2016-05-31");
-    }
-
-    private void initNotification() {
-        try {
-            SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-            String date = format1.format(new Date());
-            if (date.contains("2016-05-31")) {
-                for (int i = 0; i < new Random().nextInt(10); i++) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                    String time = sdf.format(new Date());
-                    time = time + "在" + new Random().nextInt(1000) + "开会";
-                    String message = "";
-                    if (i != 0) {
-                        message = content1;
-                    } else if (i == 1) {
-                        message = content2;
-                    } else {
-                        message = content3;
-                    }
-                    ContentItemViewAbs cia = new ContentItemViewAbs(this, "会议", time, message);
-                    contentLayout.addView(cia);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onDateChange(int year, int month) {
-        ActionBar toolbar = getSupportActionBar();
-        if (null != toolbar)
-            toolbar.setSubtitle(year + "." + month);
-    }
-
-    @Override
-    public void onDatePicked(String date) {
-        try {
-            SimpleDateFormat format1 = new SimpleDateFormat("yyyy.MM.dd");
-            Date chooseDate = format1.parse(date);
-            contentLayout.removeAllViews();
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-            String time = sdf.format(new Date());
-            String now = sdf2.format(chooseDate);
-            for (String dates : mMeetingListCopy) {
-                if (dates.equals(now)) {
-                    for (int i = 0; i < new Random().nextInt(10); i++) {
-
-                        time = time + "在" + new Random().nextInt(1000) + "开会";
-                        String message = "";
-                        if (i != 0) {
-                            message = content1;
-                        } else if (i == 1) {
-                            message = content2;
-                        } else {
-                            message = content3;
-                        }
-                        ContentItemViewAbs cia = new ContentItemViewAbs(this, "会议", time, message);
-                        contentLayout.addView(cia);
-                    }
-                }
-            }
-            Toast.makeText(this, "" + date, Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    private void getList(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        int year, month, day;
-        Calendar calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR) - 1900;
-        month = calendar.get(Calendar.MONTH);
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-        if ((month < 8 && (month & 1) == 1) || (month >= 8 && (month & 1) == 0)) {
-            if (day == 31) {
-                day--;
-            }
-            if (month == 2 && day > 28) {
-                day = 28;
-            }
-            if (month == 0) {
-                month = 11;
-                year--;
-            } else {
-                month--;
-            }
-        } else {
-            month--;
-        }
-        String before = sdf.format(new Date(year, month, day));
-        String now = sdf.format(date);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("page", "1");
-        params.put("size", "20");
-        params.put("startTime", before);
-        params.put("endTime", now);
-        params.put("level", "");
-        params.put("docNo", "");
-        params.put("docTitle", "");
-        params.put("meetCompany", "");
-        params.put("signStatus", "");
-        params.put("passStatus", "");
-
-        OAService.meetReceive(params, new MeetCallback() {
-            @Override
-            public void onResponse(MeetResponse response, int id) {
-                if (response.code == 1 || response.data == null) {
-                    showToast("获取会议列表失败");
-                    return;
-                }
-            }
-        });
-    }
 }

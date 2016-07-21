@@ -319,6 +319,7 @@ public class FragmentTabHost extends TabHost
                             newTab.clss.getName(), newTab.args);
                     ft.add(mContainerId, newTab.fragment, newTab.tag);
                 } else {
+                    ft.attach(newTab.fragment);
                     ft.show(newTab.fragment);
                 }
             }

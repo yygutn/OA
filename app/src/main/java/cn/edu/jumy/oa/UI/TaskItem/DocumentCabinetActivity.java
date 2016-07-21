@@ -23,6 +23,7 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity{
 
     @Override
     protected void initData() {
+
         Resources resources = getResources();
         String [] test1 = resources.getStringArray(R.array.test1);
         String [] test2 = resources.getStringArray(R.array.test2);

@@ -204,7 +204,7 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         Node node = new Node((Meet) o);
-        DetailsActivity_.intent(mContext).start();
+        DetailsActivity_.intent(mContext).extra("details",node).start();
     }
 
     @Override

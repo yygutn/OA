@@ -8,13 +8,14 @@ import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.text.ClipboardManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.orhanobut.logger.Logger;
 import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -22,8 +23,9 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.res.StringRes;
+import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ import cn.edu.jumy.oa.Response.AttachResponse;
 import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.UI.SignUpActivity_;
 import cn.edu.jumy.oa.Utils.CallOtherOpenFile;
+import cn.edu.jumy.oa.bean.Annex;
 import cn.edu.jumy.oa.bean.Attachment;
 import cn.edu.jumy.oa.bean.Node;
 import okhttp3.Call;
@@ -71,14 +74,15 @@ public class DetailsActivity extends BaseActivity {
     @ViewById(R.id.document_details_sign_up)
     protected AppCompatTextView mDocumentDetailsSignUp;
 
-    protected Node mNode;
+    @Extra("details")
+    protected Node mNode = new Node();
+
+
+    ClipboardManager clipboardManager;
 
     @AfterViews
     void start() {
-        mNode = (Node) getIntent().getSerializableExtra("details");
-        if (mNode == null) {
-            mNode = new Node();
-        }
+        clipboardManager = (ClipboardManager) getSystemService(mContext.CLIPBOARD_SERVICE);
         mTitleBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,19 +92,19 @@ public class DetailsActivity extends BaseActivity {
         try {
             setUpViews();
         } catch (Exception e) {
-            Logger.e("Exception: ", e);
+            showDebugException(e);
         }
 
-        if (mNode.getType() == 1){
+        if (mNode.getType() == 1) {
             DocSignBackground();
             setResult(1025);
-        } else if (mNode.getType() == 0){
+        } else if (mNode.getType() == 0) {
             MeetSign();
         }
     }
 
     private void MeetSign() {
-        if (TextUtils.isEmpty(mNode.tid)){
+        if (TextUtils.isEmpty(mNode.tid) || mNode.signStatus == 0) {
             return;
         }
         OAService.meetSign(mNode.tid, new StringCallback() {
@@ -113,9 +117,9 @@ public class DetailsActivity extends BaseActivity {
             public void onResponse(String response, int id) {
                 Gson gson = new Gson();
                 BaseResponse baseResponse = gson.fromJson(response, BaseResponse.class);
-                if (baseResponse.code == 0){
+                if (baseResponse.code == 0) {
                     showToast("签收会议成功");
-                } else if (baseResponse.code == 1){
+                } else if (baseResponse.code == 1) {
                     showToast("签收会议失败");
                 }
             }
@@ -123,7 +127,7 @@ public class DetailsActivity extends BaseActivity {
     }
 
     private void DocSignBackground() {
-        if (TextUtils.isEmpty(mNode.tid)){
+        if (TextUtils.isEmpty(mNode.tid) || mNode.signStatus == 0) {
             return;
         }
         OAService.docSign(mNode.tid, new StringCallback() {
@@ -136,14 +140,13 @@ public class DetailsActivity extends BaseActivity {
             @Override
             public void onResponse(String response, int id) {
                 Gson gson = new Gson();
-                BaseResponse baseResponse = gson.fromJson(response,BaseResponse.class);
-                if (baseResponse.code == 0){
-                    showToast("已签收该公文");
+                BaseResponse baseResponse = gson.fromJson(response, BaseResponse.class);
+                if (baseResponse.code == 0) {
+                    showToast("签收公文成功");
                 } else {
                     if (!TextUtils.isEmpty(baseResponse.msg)) {
                         showToast(baseResponse.msg);
-                    }
-                    else {
+                    } else {
                         showToast("当前网络不可用,签收公文失败");
                     }
                 }
@@ -153,6 +156,7 @@ public class DetailsActivity extends BaseActivity {
 
 
     private void setUpViews() {
+        //标题处理
         switch (mNode.getType()) {
             case 0: {
                 mTitleBar.setTitle("会议详情");
@@ -171,21 +175,41 @@ public class DetailsActivity extends BaseActivity {
             default:
                 break;
         }
-        if (false) {
-            try {
-                // TODO: 16/7/12 根据LEVEL的等级ID设置不同的等级显示
-                mDocumentDetailsLevel.setText(mNode.getLevel() + "");
-                mDocumentDetailsTitle.setText(mNode.getTitle());
-                mDocumentDetailsNumber.setText(mNode.getDocumentNumber());
-                mDocumentDetailsContentHead.setText(mNode.getContentHead());
-                mDocumentDetailsTime.setText(mNode.getDispatchTime());
-                mDocumentDetailsOther.setText(mNode.getOther());
-            } catch (Exception e) {
-                Logger.e("setUpViews: ", e);
+        //文字信息处理
+        // TODO: 16/7/12 根据LEVEL的等级ID设置不同的等级显示
+        String level = "";
+        switch (mNode.getLevel()) {
+            case 0: {
+                level = "特提";
+                break;
             }
+            case 1: {
+                level = "特急";
+                break;
+            }
+            case 2: {
+                level = "加急";
+                break;
+            }
+            case 3: {
+                level = "平急";
+                break;
+            }
+            case 4: {
+                level = "特提";
+                break;
+            }
+            default:
+                break;
         }
-
         try {
+            mDocumentDetailsLevel.setText(level);
+            mDocumentDetailsTitle.setText(mNode.getTitle());
+            mDocumentDetailsNumber.setText(mNode.getDocumentNumber());
+            mDocumentDetailsContentHead.setText(mNode.getContentHead());
+            mDocumentDetailsTime.setText(mNode.getDispatchTime());
+            mDocumentDetailsOther.setText(mNode.getOther());
+
             switch (mNode.getType()) {
                 case 0: {//会议，特殊处理
                     mDocumentDetailsContent.setVisibility(View.GONE);
@@ -204,13 +228,10 @@ public class DetailsActivity extends BaseActivity {
                     break;
             }
         } catch (Exception e) {
-            Logger.e("Exception :", e);
+            showDebugException(e);
         }
 
     }
-
-    @StringRes(R.string.content2)
-    String strRes;
 
     private String autoSplitText(final TextView tv, final String indent) {
         final String rawText = tv.getText().toString(); //原始文本
@@ -278,15 +299,11 @@ public class DetailsActivity extends BaseActivity {
     void click(View view) {
         switch (view.getId()) {
             case R.id.document_details_download: {// TODO: 16/7/5 下载附件
-                try {
-                    doFileDownload();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                doFileDownload();
                 break;
             }
             case R.id.document_details_sign_up: {// TODO: 16/7/5 报名
-                SignUpActivity_.intent(mContext).start();
+                SignUpActivity_.intent(mContext).extra("pid",mNode.getID()).start();
                 break;
             }
             default:
@@ -310,23 +327,23 @@ public class DetailsActivity extends BaseActivity {
                 for (Attachment attachment : list) {
                     item_list.add(attachment.getFileName());
                 }
-                String[] items = item_list.toArray(new String[item_list.size()]);
+                final String[] items = item_list.toArray(new String[item_list.size()]);
                 alertDialog = new AlertDialog.Builder(mContext)
-                        .setTitle("附件下载")
+                        .setTitle("附件下载 (长按可复制文件名)")
                         .setPositiveButton("确认", null)
                         .setItems(items, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void onClick(DialogInterface dialog, final int which) {
                                 try {
                                     String id = list.get(which).getId();
                                     id = TextUtils.isEmpty(id) ? "" : id;
                                     String filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download";
-                                    String filename = "temp"+list.get(which).getFileName();
-                                    File file = new File(filepath,filename);
-                                    if (file.exists()){
-                                        CallOtherOpenFile.openFile(mContext,file);
+                                    String filename = list.get(which).getFileName();
+                                    File file = new File(filepath, filename);
+                                    if (file.exists()) {
+                                        CallOtherOpenFile.openFile(mContext, file);
                                         file.deleteOnExit();
-                                    }else {
+                                    } else {
                                         OAService.downloadAttachment(id, new FileCallBack(filepath, filename) {
                                             @Override
                                             public void onError(Call call, Exception e, int id) {
@@ -338,16 +355,42 @@ public class DetailsActivity extends BaseActivity {
                                                 CallOtherOpenFile.openFile(mContext, file);
                                                 file.deleteOnExit();
                                             }
+
+                                            @Override
+                                            public void syncSaveToSQL(File file) {
+                                                Attachment attachment = list.get(which);
+                                                ArrayList<Annex> annexArrayList = (ArrayList<Annex>) DataSupport.where("IDS = ?", attachment.getId()).find(Annex.class);
+                                                Annex annex;
+                                                if (annexArrayList != null && annexArrayList.size() > 0) {
+                                                    annex = annexArrayList.get(0);
+                                                } else {
+                                                    annex = null;
+                                                }
+                                                if (annex == null || TextUtils.isEmpty(annex.getID())) {
+                                                    annex = new Annex(attachment, file);
+                                                } else {
+                                                    annex.setAnnex(attachment, file);
+                                                }
+                                                annex.save();
+                                            }
                                         });
                                         alertDialog.cancel();
                                     }
                                 } catch (Exception e) {
-                                    e.printStackTrace();
+                                    showDebugException(e);
                                 }
                             }
                         })
                         .setNegativeButton("取消", null)
                         .create();
+                alertDialog.getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                        clipboardManager.setText(items[position]);
+                        showToast("标题已复制到剪贴板");
+                        return true;
+                    }
+                });
                 alertDialog.show();
                 alertDialog.setCanceledOnTouchOutside(true);
             }
@@ -386,4 +429,5 @@ public class DetailsActivity extends BaseActivity {
             showToast("获取附件列表失败");
         }
     }
+
 }

@@ -39,6 +39,7 @@ public class SignDetailsActivity extends BaseActivity{
     RecyclerView mListView;
     @ViewById(R.id.audit_pass)
     TextView mPass;
+    public static boolean flag = true;
 
     @Extra("id")
     String id = "";
@@ -49,22 +50,6 @@ public class SignDetailsActivity extends BaseActivity{
     ArrayList<AuditUser> list = new ArrayList<>();
     ArrayList<AuditUser> list_signed = new ArrayList<>();
     ArrayList<AuditUser> list_un_signed = new ArrayList<>();
-
-    BroadcastReceiver successBroadCastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("POSITION")) {
-                int position = intent.getIntExtra("passed_position", -1);
-                if (position != -1) {
-                    AuditUser user = list_un_signed.get(position);
-                    list_un_signed.remove(user);
-                    user.passStatus = 0;
-                    list_signed.add(user);
-                    dealStr();
-                }
-            }
-        }
-    };
 
     @AfterViews
     void go(){
@@ -78,10 +63,6 @@ public class SignDetailsActivity extends BaseActivity{
         adapter = new AuditAdapter2(mContext,R.layout.item_audit_meet,new ArrayList(list));
         mListView.setLayoutManager(new LinearLayoutManager(mContext));
         mListView.setAdapter(adapter);
-
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("POSITION");
-        mContext.registerReceiver(successBroadCastReceiver, filter);
     }
 
     @AfterExtras
@@ -119,11 +100,5 @@ public class SignDetailsActivity extends BaseActivity{
             }
         }
         mPass.setText(mPassed);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(successBroadCastReceiver);
     }
 }

@@ -282,7 +282,9 @@ public class DocumentReleaseActivity extends BaseActivity {
         if (mDropDownMenu2.isShowing()) {
             mDropDownMenu2.closeMenu();
         } else {
-            progressDialog.dismiss();
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
             super.onBackPressed();
         }
     }

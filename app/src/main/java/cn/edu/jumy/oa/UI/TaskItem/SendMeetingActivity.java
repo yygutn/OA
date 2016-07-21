@@ -186,7 +186,7 @@ public class SendMeetingActivity extends BaseActivity {
                 break;
             }
             case R.id.Undertaking_Unit: {
-                DepartmentSelectActivity_.intent(mContext).startForResult(0);
+                DepartmentSelectActivity_.intent(mContext).extra("requestCode",0).startForResult(0);
                 break;
             }
             case R.id.dropDownMenu_1: {
@@ -222,7 +222,9 @@ public class SendMeetingActivity extends BaseActivity {
         alertDialog.show();
         alertDialog.setCanceledOnTouchOutside(true);
     }
+
     ProgressDialog progressDialog;
+
     private void doSending() {
 
 
@@ -255,8 +257,8 @@ public class SendMeetingActivity extends BaseActivity {
         String location = mMeetingLoc.getText().toString();
         String time = mMeetingTime.getText().toString();
         Map<String, String> params = new HashMap<>();
-        params.put("department", receiveUnits);
-        params.put("meetCompany", UndertakingUnits);
+        params.put("department", receiveUnitsID);
+        params.put("meetCompany", UndertakingUnitsID);
         params.put("level", level);
         params.put("docNo", docNo);
         params.put("docTitle", docTitle);
@@ -269,6 +271,11 @@ public class SendMeetingActivity extends BaseActivity {
         OAService.meetSend(params, fileMap, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
                 progressDialog.dismiss();
                 showDebugException(e);
                 showToast("网络异常,发送失败");
@@ -276,6 +283,11 @@ public class SendMeetingActivity extends BaseActivity {
 
             @Override
             public void onResponse(String response, int id) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
                 progressDialog.dismiss();
                 if (response.contains("0")) {
                     showToast("发送成功");
@@ -334,6 +346,9 @@ public class SendMeetingActivity extends BaseActivity {
         if (mDropDownMenu2.isShowing()) {
             mDropDownMenu2.closeMenu();
         } else {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
             super.onBackPressed();
         }
     }

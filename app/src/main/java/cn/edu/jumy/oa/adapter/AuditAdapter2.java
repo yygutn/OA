@@ -11,12 +11,16 @@ import com.zhy.base.adapter.ViewHolder;
 import com.zhy.base.adapter.recyclerview.CommonAdapter;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.BaseResponse;
+import cn.edu.jumy.oa.UI.TaskItem.SignDetailsActivity;
 import cn.edu.jumy.oa.bean.AuditUser;
 import okhttp3.Call;
 
@@ -42,7 +46,7 @@ public class AuditAdapter2 extends CommonAdapter<AuditUser> {
         holder.setOnClickListener(R.id.audit_item_pass, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                letGo(user,true,holder.getLayoutPosition());
+                letGo(user,true,holder.getLayoutPosition(),holder);
             }
         });
         holder.setVisible(R.id.audit_item_back,false);
@@ -55,27 +59,44 @@ public class AuditAdapter2 extends CommonAdapter<AuditUser> {
      * @param pass true 通过  false 退回
      * @param position
      */
-    private void letGo(AuditUser user, final boolean pass, final int position){
-        OAService.meetUserPass(user.id,String.valueOf(pass),"", new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                Toast.makeText(mContext,"当前网络不可用,催收失败",Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                Gson gson = new Gson();
-                BaseResponse baseResponse = gson.fromJson(response,BaseResponse.class);
-                if (baseResponse.code == 0){
-                    //审核通过/退回
-                    Toast.makeText(mContext, "催收通过", Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent("POSITION");
-                    intent.putExtra("passed_position",position);
-                    mContext.sendBroadcast(intent);
+    private void letGo(AuditUser user, final boolean pass, final int position, final ViewHolder holder){
+        if (SignDetailsActivity.flag){
+            //公文
+            OAService.docUrge(user.oid, user.did, new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+                    Toast.makeText(mContext,"网络异常,催收失败",Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+
+                @Override
+                public void onResponse(String response, int id) {
+                    Gson gson = new Gson();
+                    BaseResponse baseResponse = gson.fromJson(response,BaseResponse.class);
+                    if (baseResponse.code == 0){
+                        holder.setText(R.id.audit_item_pass, "已催收");
+                        holder.getView(R.id.audit_item_pass).setClickable(false);
+                    }
+                }
+            });
+        } else {
+            //会议
+            OAService.meetUrge(user.oid, user.did, new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+                    Toast.makeText(mContext,"网络异常,催收失败",Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onResponse(String response, int id) {
+                    Gson gson = new Gson();
+                    BaseResponse baseResponse = gson.fromJson(response,BaseResponse.class);
+                    if (baseResponse.code == 0){
+                        holder.setText(R.id.audit_item_pass, "已催收");
+                        holder.getView(R.id.audit_item_pass).setClickable(false);
+                    }
+                }
+            });
+        }
     }
 
     public void setList(ArrayList<AuditUser> list) {

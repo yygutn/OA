@@ -15,6 +15,7 @@ import org.androidannotations.annotations.ViewById;
 
 import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.bean.AuditUser;
 import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.datepicker.calendar.utils.MeasureUtil;
 
@@ -25,13 +26,13 @@ import cn.edu.jumy.oa.widget.datepicker.calendar.utils.MeasureUtil;
 @EViewGroup(R.layout.item_tablerow)
 public class ItemTableRow extends TableRow {
     @ViewById
-    TextView text1;
+    TextView text1;//name
     @ViewById
-    TextView text2;
+    TextView text2;//SEX
     @ViewById
-    TextView text3;
+    TextView text3;//职业
     @ViewById
-    TextView text4;
+    TextView text4;//tel
 
 
     public ItemTableRow(Context context) {
@@ -42,8 +43,12 @@ public class ItemTableRow extends TableRow {
         super(context, attrs);
     }
 
-    public ItemTableRow(Context context, Node node) {
+    public ItemTableRow(Context context, AuditUser node) {
         super(context);
+        text1.setText(node.name);
+        text2.setText(node.sex);
+        text3.setText(node.post);
+        text4.setText(node.phone);
     }
 
     @Override
@@ -54,32 +59,27 @@ public class ItemTableRow extends TableRow {
 
 
     private void init() {
-        try {
-            setDividerDrawable(getResources().getDrawable(R.drawable.shape_divider_white));
-            setShowDividers(SHOW_DIVIDER_MIDDLE);
+        setDividerDrawable(getResources().getDrawable(R.drawable.shape_divider_white));
+        setShowDividers(SHOW_DIVIDER_MIDDLE);
 
-            addOnLayoutChangeListener(new OnLayoutChangeListener() {
-                @Override
-                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                    int oldWidth = oldRight - oldLeft;
-                    int oldHeight = oldBottom - oldTop;
-                    int newWidth = right - left;
-                    int newHeight = bottom - top;
-                    boolean sizeChanged = (newWidth != oldWidth) || (newHeight != oldHeight);
-                    if (v.getLayoutParams() != null && sizeChanged){
-                        int m = MeasureUtil.dp2px(MyApplication.getContext(), 1.0f);
-                        MarginLayoutParams marginLayoutParams = new MarginLayoutParams(getLayoutParams());
-                        marginLayoutParams.setMargins(0,0,0,m);
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(marginLayoutParams);
-                        layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
-                        setLayoutParams(layoutParams);
-                        removeOnLayoutChangeListener(this);
-                    }
+        addOnLayoutChangeListener(new OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                int oldWidth = oldRight - oldLeft;
+                int oldHeight = oldBottom - oldTop;
+                int newWidth = right - left;
+                int newHeight = bottom - top;
+                boolean sizeChanged = (newWidth != oldWidth) || (newHeight != oldHeight);
+                if (v.getLayoutParams() != null && sizeChanged) {
+                    int m = MeasureUtil.dp2px(MyApplication.getContext(), 1.0f);
+                    MarginLayoutParams marginLayoutParams = new MarginLayoutParams(getLayoutParams());
+                    marginLayoutParams.setMargins(0, 0, 0, m);
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(marginLayoutParams);
+                    layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+                    setLayoutParams(layoutParams);
+                    removeOnLayoutChangeListener(this);
                 }
-            });
-
-        } catch (Resources.NotFoundException e) {
-            e.printStackTrace();
-        }
+            }
+        });
     }
 }

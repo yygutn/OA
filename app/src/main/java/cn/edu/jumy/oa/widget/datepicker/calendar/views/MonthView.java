@@ -945,6 +945,12 @@ public class MonthView extends View {
 
 	}
 
+	public void onDateChange(int year,int month){
+		if (null != onDateChangeListener) {
+			onDateChangeListener.onDateChange(year, month);
+		}
+	}
+
 	public void changDateListener() {
 		if (null != onLineCountChangeListener) {
 			onLineCountChangeListener.onLineCountChange(lineCount);

@@ -10,6 +10,7 @@ import com.zhy.base.adapter.recyclerview.CommonAdapter;
 import java.util.List;
 
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.UI.TaskItem.SignDetailsActivity;
 import cn.edu.jumy.oa.UI.TaskItem.SignDetailsActivity_;
 import cn.edu.jumy.oa.bean.Doc;
 
@@ -31,6 +32,7 @@ public class SentDocAdapter extends CommonAdapter<Doc>{
                 if (TextUtils.isEmpty(doc.id)){
                     return;
                 }
+                SignDetailsActivity.flag = true;
                 SignDetailsActivity_.intent(mContext).extra("id",doc.id).start();
             }
         });

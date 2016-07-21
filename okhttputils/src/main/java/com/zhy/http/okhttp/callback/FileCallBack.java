@@ -34,9 +34,12 @@ public abstract class FileCallBack extends Callback<File>
     @Override
     public File parseNetworkResponse(Response response, int id) throws Exception
     {
-        return saveFile(response,id);
+        File file = saveFile(response,id);
+        syncSaveToSQL(file);
+        return file;
     }
 
+    public abstract void syncSaveToSQL(File file);
 
     public File saveFile(Response response,final int id) throws IOException
     {

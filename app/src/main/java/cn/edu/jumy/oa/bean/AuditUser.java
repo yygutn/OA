@@ -35,6 +35,9 @@ public class AuditUser {
     public String id;
     public String uid;
     public String did;
+    public String post;
+    public String sex;
+    public String phone;
     public int type;
     public int signStatus;
     public int passStatus;

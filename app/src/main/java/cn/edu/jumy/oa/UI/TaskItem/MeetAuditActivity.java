@@ -11,9 +11,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -45,7 +47,14 @@ public class MeetAuditActivity extends BaseActivity {
 
     AuditAdapter adapter;
 
-    Meet node;
+    //会议ID
+    @Extra("mid")
+    String mid = "";
+
+    @AfterExtras
+    void init() {
+        initList();
+    }
 
     String mPassed = "";
     String mNotPass = "";
@@ -105,9 +114,6 @@ public class MeetAuditActivity extends BaseActivity {
                 onBackPressed();
             }
         });
-        node = (Meet) getIntent().getSerializableExtra("audit");
-        initList();
-
 
         adapter = new AuditAdapter(mContext, R.layout.item_audit_meet, list);
 
@@ -121,10 +127,10 @@ public class MeetAuditActivity extends BaseActivity {
     }
 
     private void initList() {
-        if (node == null || TextUtils.isEmpty(node.id)) {
+        if (TextUtils.isEmpty(mid)) {
             return;
         }
-        OAService.getMEntryByPassStatus(node.id, new AuditCallback() {
+        OAService.getMEntryByPassStatus(mid, new AuditCallback() {
             @Override
             public void onResponse(AuditResponse response, int id) {
                 if (response.code == 0 && response.data != null) {

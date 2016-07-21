@@ -1,43 +1,39 @@
 package cn.edu.jumy.oa.UI;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.hyphenate.chat.EMClient;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.adapter.MultiDropDownAdapter;
-import cn.edu.jumy.oa.safe.PasswordUtil;
-import cn.edu.jumy.oa.widget.DropDownMenu;
-import cn.edu.jumy.oa.widget.customview.NoScrollGridView;
+import cn.edu.jumy.oa.Response.AccountResponse;
+import cn.edu.jumy.oa.Response.BaseResponse;
 import okhttp3.Call;
+import okhttp3.Request;
 
 /**
  * 报名
@@ -56,7 +52,7 @@ public class SignUpActivity extends BaseActivity {
     @ViewById(R.id.sign_up_phone)
     protected AppCompatEditText mSignUpPhone;
     @ViewById(R.id.dropDownMenu)
-    protected DropDownMenu mDropDownMenu;
+    protected AppCompatTextView mUnitTextView;
     @ViewById(R.id.sign_up_join_button)
     protected CheckBox mSignUpJoinButton;
     @ViewById(R.id.sign_up_listen_button)
@@ -67,12 +63,29 @@ public class SignUpActivity extends BaseActivity {
     protected AppCompatEditText mSignUpLeave;
     @ViewById(R.id.submit)
     protected TextView mSubmit;
+    //所在单位
+    String mUnit = "";
+    String mUnitID = "";
 
+    //基本信息
+    String name, position, tel, remark;
+    int status = -1;
 
-    private String[] mUnits = {"省委办公厅", "省信访局", "省档案局", "省委机要局", "省人大常委办公厅"};
-    private String headers[] = {"请选择"};
-    private List<View> popupView1 = new ArrayList<>();
-    private MultiDropDownAdapter mUnitAdapter;
+    @Extra("pid")
+    String pid = "";
+
+    String id = "";
+
+    @Extra("tid")
+    String tid = "";
+
+    @AfterExtras
+    void go() {
+        if (TextUtils.isEmpty(pid)){
+            return;
+        }
+        //获取个人报名信息,,,waiting
+    }
 
     /**
      * 初始化--控件绑定之后
@@ -86,92 +99,89 @@ public class SignUpActivity extends BaseActivity {
                 backToPreActivity();
             }
         });
-        initUnitView();
     }
 
-    private void initUnitView() {
-        final View view = getLayoutInflater().inflate(R.layout.layout_custom_release,null);
-        NoScrollGridView gridView = (NoScrollGridView) view.findViewById(R.id.gridView);
-        mUnitAdapter = new MultiDropDownAdapter(mContext, Arrays.asList(mUnits));
-        gridView.setAdapter(mUnitAdapter);
-
-        TextView textView = (TextView) view.findViewById(R.id.ok);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDropDownMenu.setTabText(mUnitAdapter.getNeedString());
-                mDropDownMenu.closeMenu();
-            }
-        });
-
-        popupView1.add(view);
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mUnitAdapter.setSingleCheckItem(position);
-            }
-        });
-
-        mDropDownMenu.setDropDownMenu(Arrays.asList(headers), popupView1, null);
-
-    }
     @OptionsItem(R.id.action_details)
-    void skipToDetails(){
-        // TODO: 16/7/4 跳转到详情
-        SignUpDetailsActivity_.intent(mContext).start();
+    void skipToDetails() {
+        SignUpDetailsActivity_.intent(mContext).extra("tid",tid).extra("pid",pid).start();
     }
 
     /**
      * 三个会议状态的点击事件
+     *
      * @param view
      */
-    @Click({R.id.sign_up_ll_join, R.id.sign_up_ll_leave, R.id.sign_up_ll_listen})
+    @Click({R.id.sign_up_ll_join, R.id.sign_up_ll_leave, R.id.sign_up_ll_listen, R.id.dropDownMenu})
     void click(View view) {
         switch (view.getId()) {
             case R.id.sign_up_ll_join: {//参会
                 resetButton();
                 mSignUpJoinButton.setChecked(true);
+                status = 0;
                 break;
             }
             case R.id.sign_up_ll_leave: {//请假
                 resetButton();
                 mSignUpLeaveButton.setChecked(true);
-                mSignUpLeave.setFocusable(true);
+                status = 2;
                 break;
             }
             case R.id.sign_up_ll_listen: {//听会
                 resetButton();
                 mSignUpListenButton.setChecked(true);
+                status = 1;
                 break;
             }
-            default:break;
+            case R.id.dropDownMenu: {
+                DepartmentSelectActivity_.intent(mContext).startForResult(0);
+                break;
+            }
+            default:
+                break;
         }
     }
-    @Click(R.id.submit)
-    void submit(){
-        // TODO: 16/7/1 确认报名
-        doMsgUpload();
-    }
+
+    AlertDialog alertDialog;
 
     /**
      * 上传（个人/单位）会议报名信息
      */
-    AlertDialog alertDialog;
-    private void doMsgUpload() {
+    @Click(R.id.submit)
+    void submit() {
+        clearFocus();
         alertDialog = new AlertDialog.Builder(mContext)
                 .setTitle("确认报名")
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        showToast("报名成功");
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        backToPreActivity();
+                        dealPreWork();
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("editType", "add");//(add:添加   edit:修改)
+                        params.put("id", id);//报名表人员id(修改必填项)
+                        params.put("pid", pid);//会议id(添加必填项，修改无效)
+                        params.put("name", name);//姓名(添加必填项，修改不必填，下同)
+                        params.put("post", position);//职位
+                        params.put("sex", "");//性别(0:男  1:女)
+                        params.put("phone", tel);//电话(不必填)
+                        params.put("type", status+"");//状态(0:参会 1:听会 2:请假)
+                        params.put("remark", remark);//备注
+                        OAService.updateMEntry(params, new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+                                showToast("报名失败");
+                            }
 
+                            @Override
+                            public void onResponse(String response, int id) {
+                                Gson gson = new Gson();
+                                BaseResponse baseResponse = gson.fromJson(response,BaseResponse.class);
+                                if (baseResponse.code == 0){
+                                    showToast("报名成功");
+                                } else {
+                                    showToast("报名失败");
+                                }
+                            }
+                        });
                     }
                 }).setNegativeButton("取消", null)
                 .create();
@@ -179,24 +189,53 @@ public class SignUpActivity extends BaseActivity {
         alertDialog.setCanceledOnTouchOutside(true);
     }
 
+    private void dealPreWork() {
+        name = mSignUpName.getText().toString();
+        position = mSignUpPosition.getText().toString();
+        tel = mSignUpPhone.getText().toString();
+        remark = mSignUpLeave.getText().toString();
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(position) || status == -1) {
+            showToast("报名信息不完善,请再次确认");
+            return;
+        }
+    }
+
+
     /**
      * 重置按钮和文本焦点
      */
-    private void resetButton(){
+    private void resetButton() {
         mSignUpLeaveButton.setChecked(false);
         mSignUpJoinButton.setChecked(false);
         mSignUpListenButton.setChecked(false);
         mSignUpLeave.clearFocus();
-        mSignUpLeave.setFocusable(false);
     }
 
     /**
      * 清除焦点
      */
-    private void clearFocus(){
+    private void clearFocus() {
         mSignUpName.clearFocus();
         mSignUpPosition.clearFocus();
         mSignUpPhone.clearFocus();
         mSignUpLeave.clearFocus();
+    }
+
+    /**
+     * 承办单位
+     *
+     * @param resultCode
+     * @param data
+     */
+    @OnActivityResult(0)
+    void result1(int resultCode, Intent data) {
+        if (resultCode == 0) {
+            mUnitID = data.getStringExtra("ids");
+            mUnit = data.getStringExtra("str");
+            mUnitTextView.setText(mUnit);
+        } else if (resultCode == 1) {
+            //没有选择接收单位
+            mUnit = mUnitID = "";
+        }
     }
 }

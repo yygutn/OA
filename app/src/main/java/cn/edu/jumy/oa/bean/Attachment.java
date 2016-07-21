@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by Jumy on 16/6/29 13:17.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-public class Attachment extends DataSupport implements Serializable{
+public class Attachment implements Serializable{
     private String id;
     /**
      * 父id 当PID为UID的时候，他是用户头像

@@ -84,23 +84,15 @@ public class BaseActivity extends AppCompatActivity {
         backToPreActivity();
     }
 
-    private Toast toast;
-
     public void showToast(String message) {
         if (!TextUtils.isEmpty(message)) {
-            if (toast == null) {
-                toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
-            }  else {
-                toast.cancel();
-                toast.setText(message);
-            }
-            toast.show();
+            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
         }
     }
 
     public void showDebugToast(String message) {
         if (!TextUtils.isEmpty(message) && BuildConfig.DEBUG) {
-            toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -156,8 +148,5 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-        if (toast != null){
-            toast.cancel();
-        }
     }
 }

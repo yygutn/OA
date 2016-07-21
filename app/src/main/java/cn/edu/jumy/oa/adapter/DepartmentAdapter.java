@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cn.edu.jumy.oa.R;
@@ -41,16 +42,18 @@ public class DepartmentAdapter extends IndexableAdapter<Account> {
             DViewHolder viewHolder = (DViewHolder) holder;
             viewHolder.tvName.setText(item.name);
             viewHolder.checkBox.setChecked(item.checked);
+            viewHolder.root.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    item.checked = !item.checked;
+                    notifyDataSetChanged();
+                }
+            });
             viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     item.checked = isChecked;
-                    for (Account a : getSourceItems()){
-                        if (a.id.equals(item.id)){
-                            a.checked = item.checked;
-                            notifyDataSetChanged();
-                        }
-                    }
+                    notifyDataSetChanged();
                 }
             });
         } catch (Exception e) {
@@ -61,10 +64,12 @@ public class DepartmentAdapter extends IndexableAdapter<Account> {
     class DViewHolder extends IndexableAdapter.ViewHolder{
         TextView tvName;
         CheckBox checkBox;
+        RelativeLayout root;
         public DViewHolder(View view) {
             super(view);
             tvName = (TextView) view.findViewById(R.id.tv_name);
             checkBox = (CheckBox) view.findViewById(R.id.radioButton);
+            root = (RelativeLayout) view.findViewById(R.id.root_layout);
         }
     }
 }

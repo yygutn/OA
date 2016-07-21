@@ -14,6 +14,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
@@ -176,18 +177,17 @@ public class DepartmentSelectActivity extends BaseActivity {
                 }
             }
         }
+        int requestCode = getIntent().getIntExtra("requestCode",-1);
+        if (requestCode == 0 && mDepartments!= null && mDepartments.size()>0){
+            if (ids.contains(",")){
+                showToast("只能选择一个承办单位,请重新选择");
+            }
+        }
         Intent data = new Intent();
         if (!TextUtils.isEmpty(ids) && !TextUtils.isEmpty(str)) {
             data.putExtra("str",str);
             data.putExtra("ids",ids);
             setResult(0, data);
-//            try {
-//                ACache.get(mContext, EMClient.getInstance().getCurrentUser()).clear();
-//                mSelectDepartment = (ArrayList<Account>) mSelectDepartment.subList(0, 10);
-//                ACache.get(mContext, EMClient.getInstance().getCurrentUser()).put(DEPARTMENT, mSelectDepartment);
-//            } catch (Exception e) {
-//                showDebugException(e);
-//            }
         } else {
             setResult(1);
         }

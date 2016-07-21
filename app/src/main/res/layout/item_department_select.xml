@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="16dp"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="8dp"
-    android:focusableInTouchMode="true"
-    android:focusable="true">
+    android:paddingRight="16dp">
 
     <CheckBox
+        android:focusable="false"
+        android:checked="false"
         android:id="@+id/radioButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -25,5 +24,10 @@
         android:layout_centerVertical="true"
         android:textColor="#373737"
         android:textSize="19sp"/>
+    <ImageView
+        android:background="#f1f1f1"
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

@@ -502,7 +502,73 @@ public class OAService {
                         .url(BASE_URL + "meetUrge")
                         .addParams("value", response)
                         .addParams("oid", oid)
-                        .addParams("did", did)
+                        .addParams("mid", did)
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
+    /**
+     * 添加修改报名人员
+     */
+    public static void updateMEntry(final Map<String, String> params, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                callback.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                params.put("value", response);
+                OkHttpUtils.post()
+                        .url(BASE_URL + "updateMEntry")
+                        .params(params)
+                        .build().execute(callback);
+            }
+        });
+    }
+
+    /**
+     * 获取单个报名人员信息
+     * @param id
+     * @param callback
+     */
+    public static void getMEntry(final String id, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ids) {
+                callback.onError(call, e, ids);
+            }
+
+            @Override
+            public void onResponse(String response, int ids) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "getMEntry")
+                        .addParams("value", response)
+                        .addParams("id", id)
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
+
+    /**
+     *获取接收单位会议的报名表
+     */
+    public static void getMEntryByPid(final String pid, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ids) {
+                callback.onError(call, e, ids);
+            }
+
+            @Override
+            public void onResponse(String response, int ids) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "getMEntryByPid")
+                        .addParams("value", response)
+                        .addParams("pid", pid)
                         .build()
                         .execute(callback);
             }
