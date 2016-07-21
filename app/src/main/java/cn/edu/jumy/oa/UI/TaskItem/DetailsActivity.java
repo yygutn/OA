@@ -321,7 +321,8 @@ public class DetailsActivity extends BaseActivity {
             public void onResponse(AttachResponse response, int id) {
                 final ArrayList<Attachment> list = response.data;
                 if (list == null || list.size() == 0 || response.code == 1) {
-                    onError(null, null, 0);
+                    showToast("无附件");
+                    return;
                 }
                 ArrayList<String> item_list = new ArrayList<String>();
                 for (Attachment attachment : list) {
