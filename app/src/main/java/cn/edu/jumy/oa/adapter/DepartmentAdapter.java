@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.bean.Account;
-import me.yokeyword.indexablelistview.IndexableAdapter;
+import cn.edu.jumy.oa.widget.IndexableStickyListView.IndexableAdapter;
 
 /**
  * Created by Jumy on 16/7/15 09:52.

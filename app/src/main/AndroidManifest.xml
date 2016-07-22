@@ -114,6 +114,20 @@
         <activity android:name=".UI.TaskItem.SentMeetingActivity_" />
         <activity android:name=".UI.TaskItem.SignDetailsActivity_" />
         <activity android:name=".UI.DepartmentSelectActivity_" />
+        <activity android:name=".UI.DepartmentAddActivity_" />
+        <activity android:name=".UI.DepartmentRedoActivity_" />
+        <activity android:name=".UI.DepartmentOftenUseFixActivity_" />
+
+
+
+
+
+
+
+
+
+
+
 
 
         //环信 SDK

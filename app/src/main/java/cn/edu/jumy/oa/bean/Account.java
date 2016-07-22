@@ -7,7 +7,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.yokeyword.indexablelistview.IndexEntity;
+import cn.edu.jumy.oa.widget.IndexableStickyListView.IndexEntity;
+
 
 /**
  * Created by Jumy on 16/7/6 16:23.
@@ -55,6 +56,11 @@ public class Account extends IndexEntity implements Serializable, Parcelable {
     public List<Attachment> organizationList;
 
     public boolean checked = false;
+
+    public Account(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
 
     @Override

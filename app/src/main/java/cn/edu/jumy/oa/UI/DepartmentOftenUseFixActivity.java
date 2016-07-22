@@ -1,10 +1,10 @@
 package cn.edu.jumy.oa.UI;
 
-import android.content.Intent;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -12,19 +12,21 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.CallBack.OrganizationOftenCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.AccountResponse;
+import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.Response.OrganizationOftenResponse;
 import cn.edu.jumy.oa.adapter.DepartmentAdapter;
 import cn.edu.jumy.oa.bean.Account;
@@ -38,13 +40,16 @@ import okhttp3.Request;
  * Created by Jumy on 16/7/15 09:35.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-@EActivity(R.layout.activity_pick_department)
-@OptionsMenu(R.menu.confirm)
-public class DepartmentSelectActivity extends BaseActivity {
+@EActivity(R.layout.activity_add_department)
+@OptionsMenu(R.menu.ok)
+public class DepartmentOftenUseFixActivity extends BaseActivity {
     @ViewById(R.id.searchview)
     SearchView mSearchView;
     @ViewById(R.id.indexListView)
     IndexableStickyListView mIndexListView;
+
+    @ViewById(R.id.edit_often)
+    EditText mOftenEt;
 
     DepartmentAdapter adapter;
     @ViewById(R.id.title_bar)
@@ -53,26 +58,11 @@ public class DepartmentSelectActivity extends BaseActivity {
     //初始化数据
     ArrayList<Account> mDepartments = new ArrayList<>();
 
-
-    ArrayList<OrganizationOften> mList = new ArrayList<>();
-
-    ArrayList<IndexHeaderEntity<Account>> mHeaderList = new ArrayList<>();
-
+    @Extra("org")
+    OrganizationOften mOrg;
 
     @AfterExtras
     void getData() {
-        OAService.getMagroupAll(new OrganizationOftenCallback() {
-            @Override
-            public void onResponse(OrganizationOftenResponse response, int id) {
-                if (response.code == 0) {
-                    mList = response.data;
-                    initOftenData();
-                } else {
-                    showToast("获取常用单位列表失败" + response.msg);
-                }
-            }
-        });
-
         OAService.getOrganizationData(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -95,6 +85,15 @@ public class DepartmentSelectActivity extends BaseActivity {
                         showToast("获取可发送单位失败");
                     } else {
                         mDepartments = account.data;
+                        String[] ids = mOrg.value.split(",");
+                        int len = ids.length;
+                        for (int i = 0; i < len; i++) {
+                            for (Account account1 : mDepartments) {
+                                if (account1.id.equals(ids[i])) {
+                                    account1.checked = true;
+                                }
+                            }
+                        }
                         updateView();
                     }
                 } catch (Exception e) {
@@ -104,32 +103,10 @@ public class DepartmentSelectActivity extends BaseActivity {
         });
     }
 
-    private void initOftenData() {
-        int len;
-        String[] ids;
-        String[] names;
-        ArrayList<Account> temp;
-        for (OrganizationOften often : mList) {
-            temp = new ArrayList<>();
-            ids = often.value.split(",");
-            names = often.departmentName.split(",");
-            len = ids.length;
-            for (int i = 0; i < len; i++) {
-                temp.add(new Account(ids[i],names[i]));
-            }
-
-            IndexHeaderEntity<Account> hotHeader = new IndexHeaderEntity<>();
-            hotHeader.setHeaderTitle(often.name);
-            hotHeader.setIndex(often.name.charAt(0) + " ");
-            hotHeader.setHeaderList(temp);
-            mHeaderList.add(hotHeader);
-        }
-        updateView();
-    }
-
     @AfterViews
     void go() {
         setSupportActionBar(mTitleBar);
+        mTitleBar.setTitle("修改常用单位");
         mTitleBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,94 +133,53 @@ public class DepartmentSelectActivity extends BaseActivity {
                 return true;
             }
         });
-
+        mOftenEt.setText(mOrg.name);
     }
 
     private void updateView() {
-        try {
-            if (!mHeaderList.isEmpty()) {
-                //bind data
-                mIndexListView.bindDatas(mDepartments, mHeaderList);
-            } else {
-                //bind data
-                mIndexListView.bindDatas(mDepartments);
-            }
-        } catch (Exception e) {
-            showDebugException(e);
-        }
+        //bind data
+        mIndexListView.bindDatas(mDepartments);
     }
 
     /**
-     * 确认选择单位，提交到上一级页面
+     * 确认修改单位，提交到服务器
      */
-    @OptionsItem(R.id.action_submit)
+    @OptionsItem(R.id.action_ok)
     void submit() {
         String str = "";
         String ids = "";
-        Map<String,Integer> idMap = new HashMap<>();
         for (Account account : mDepartments) {
             if (account.checked) {
                 if (TextUtils.isEmpty(str)) {
                     str = account.name;
-                } else if (str.contains(",")) {
-                    str += "等";
                 } else {
                     str += "," + account.name;
                 }
-                idMap.put(account.id,0);
-            }
-        }
-        for (IndexHeaderEntity<Account> entity : mHeaderList){
-            for (Account account : entity.getHeaderList()){
-                if (account.checked){
-                    idMap.put(account.name,0);
+                if (TextUtils.isEmpty(ids)) {
+                    ids = account.id;
+                } else {
+                    ids += "," + account.id;
                 }
             }
         }
-        for (String id: idMap.keySet()){
-            if (TextUtils.isEmpty(ids)) {
-                ids = id;
-            } else {
-                ids += "," + id;
+        String name = mOftenEt.getText().toString();
+        OAService.updateMagroup(mOrg.id, ids, name, 0, new StringCallback() {
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                showToast("服务器连接失败,修改失败");
             }
-        }
-        int requestCode = getIntent().getIntExtra("requestCode", -1);
-        if (requestCode == 0 && mDepartments != null && mDepartments.size() > 0) {
-            if (ids.contains(",")) {
-                showToast("只能选择一个承办单位,请重新选择");
+
+            @Override
+            public void onResponse(String response, int id) {
+                Gson gson = new Gson();
+                BaseResponse baseResponse = gson.fromJson(response, BaseResponse.class);
+                if (baseResponse.code == 0) {
+                    showToast("修改成功");
+                } else {
+                    showToast("修改失败:" + baseResponse.msg);
+                }
             }
-        }
-        Intent data = new Intent();
-        if (!TextUtils.isEmpty(ids) && !TextUtils.isEmpty(str)) {
-            data.putExtra("str", str);
-            data.putExtra("ids", ids);
-            setResult(0, data);
-        } else {
-            setResult(1);
-        }
-        backToPreActivity();
-    }
-
-    /**
-     * 添加常用单位
-     */
-    @OptionsItem(R.id.action_add)
-    void addOrganization() {
-        DepartmentAddActivity_.intent(mContext).start();
-    }
-
-    /**
-     * 修改常用单位
-     */
-    @OptionsItem(R.id.action_redo)
-    void redoOrganization() {
-        DepartmentRedoActivity_.intent(mContext).start();
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        setResult(1);
-        backToPreActivity();
+        });
     }
 }

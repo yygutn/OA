@@ -574,4 +574,74 @@ public class OAService {
             }
         });
     }
+    /**
+     *添加常用单位组
+     */
+    public static void insertMagroup(final String ids,final String name,final int sort, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                callback.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "insertMagroup")
+                        .addParams("value", response)
+                        .addParams("ids", ids)
+                        .addParams("name", name)
+                        .addParams("sort", sort+"")
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
+   /**
+     *获取常用单位组
+     */
+    public static void getMagroupAll(final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                callback.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "getMagroupAll")
+                        .addParams("value", response)
+                        .addParams("select", "all")
+                        .addParams("id", "")
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
+    /**
+     *修改常用单位组
+     */
+    public static void updateMagroup(final String Id,final String ids,final String name,final int sort,final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                callback.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "updateMagroup")
+                        .addParams("value", response)
+                        .addParams("id", Id)
+                        .addParams("ids", ids)
+                        .addParams("name", name)
+                        .addParams("sort", sort+"")
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
+
 }
