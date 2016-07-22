@@ -11,9 +11,9 @@ import com.bumptech.glide.Glide;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.DemoApplication;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.ui.LoginActivity;
+import com.hyphenate.chatui.DemoApplication;
+import com.hyphenate.chatui.DemoHelper;
+import com.hyphenate.chatui.ui.LoginActivity;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 
@@ -24,10 +24,8 @@ import org.androidannotations.annotations.ViewById;
 
 import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseFragment;
-import cn.edu.jumy.oa.OaPreference;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.SettingActivity_;
-import cn.edu.jumy.oa.bean.User;
 import cn.edu.jumy.oa.widget.customview.CircleImageView;
 import cn.edu.jumy.oa.widget.customview.LineControllerView;
 
@@ -99,7 +97,6 @@ public class MineFragment extends BaseFragment {
                     public void run() {
                         pd.dismiss();
                         // 重新显示登陆页面
-                        OaPreference.setLoginStatus(false);
                         startActivity(new Intent(getActivity(), LoginActivity.class));
                         AppManager.getInstance().finishCurActivity();
 
@@ -136,7 +133,6 @@ public class MineFragment extends BaseFragment {
             public void onSuccess(EaseUser user) {
                 if (user != null) {
                     DemoHelper.getInstance().saveContact(user);
-                    User.saveUserInfo(null, user);
                     mSettingText.setText(user.getNick());
                     if (!TextUtils.isEmpty(user.getAvatar())) {
                         Glide.with(mContext).load(user.getAvatar()).placeholder(R.drawable.em_default_avatar).into(mSettingAvatar);

@@ -1,6 +1,6 @@
 package cn.edu.jumy.oa.UI;
 
-import com.hyphenate.chatuidemo.ui.SettingsFragment;
+import com.hyphenate.chatui.ui.SettingsFragment;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;

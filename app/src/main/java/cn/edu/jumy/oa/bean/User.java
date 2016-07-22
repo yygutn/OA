@@ -1,19 +1,10 @@
 package cn.edu.jumy.oa.bean;
 
-import android.support.annotation.Nullable;
-import android.text.TextUtils;
-
-import com.hyphenate.easeui.domain.EaseUser;
-
 import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import cn.edu.jumy.oa.MyApplication;
-import cn.edu.jumy.oa.OaPreference;
-import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 
 /**
  * Created by Jumy on 16/6/14 15:24.
@@ -113,14 +104,6 @@ public class User extends DataSupport implements Serializable {
         this.level = level;
     }
 
-    public static boolean isFlag() {
-        return flag;
-    }
-
-    public static void setFlag(boolean flag) {
-        User.flag = flag;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -131,56 +114,5 @@ public class User extends DataSupport implements Serializable {
                 ", device_token='" + device_token + '\'' +
                 ", oid='" + oid + '\'' +
                 '}';
-    }
-
-    private static User mUser = null;
-    private static boolean flag = true;
-
-    public static final boolean saveUserInfo(@Nullable User user, @Nullable final EaseUser easeUser) {
-        if (user != null) {
-            try {
-                mUser = user;
-                mUser.setDevice_token(MyApplication.DEVICE_ID);
-                ACache.get(MyApplication.getContext()).put("user", mUser);
-            } catch (Exception e) {
-                flag = false;
-                e.printStackTrace();
-            }
-        }
-        if (easeUser != null) {
-            try {
-                mUser = (User) ACache.get(MyApplication.getContext()).getAsObject("user");
-                if (mUser == null){
-                    mUser = new User();
-                }
-                if (!TextUtils.isEmpty(easeUser.getAvatar())){
-                    mUser.setAvatar(easeUser.getAvatar());
-                }
-                if (!TextUtils.isEmpty(easeUser.getUsername())){
-                    mUser.setUsername(easeUser.getUsername());
-                }
-                if (!TextUtils.isEmpty(easeUser.getNick())) {
-                    mUser.setNickname(easeUser.getNick());
-                }
-                ACache.get(MyApplication.getContext()).put("user", mUser);
-            } catch (Exception e) {
-                flag = false;
-                e.printStackTrace();
-            }
-        }
-
-        try {
-            OaPreference preference = OaPreference.getInstance();
-            preference.set("username", mUser.getUsername()==null?"":mUser.getUsername());
-            preference.set("avatar", mUser.getAvatar()==null?"": mUser.getAvatar());
-            preference.set("device", MyApplication.DEVICE_ID);
-            preference.set("nickname", mUser.getNickname()==null?"":mUser.getNickname());
-            preference.set("oid", mUser.getOid()==null?"":mUser.getOid());
-            preference.set("id", mUser.getId()==null?"":mUser.getId());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return flag;
     }
 }

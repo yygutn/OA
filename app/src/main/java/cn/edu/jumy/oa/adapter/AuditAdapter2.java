@@ -75,6 +75,7 @@ public class AuditAdapter2 extends CommonAdapter<AuditUser> {
                     if (baseResponse.code == 0){
                         holder.setText(R.id.audit_item_pass, "已催收");
                         holder.getView(R.id.audit_item_pass).setClickable(false);
+                        notifyItemChanged(position);
                     }
                 }
             });
@@ -93,6 +94,7 @@ public class AuditAdapter2 extends CommonAdapter<AuditUser> {
                     if (baseResponse.code == 0){
                         holder.setText(R.id.audit_item_pass, "已催收");
                         holder.getView(R.id.audit_item_pass).setClickable(false);
+                        notifyItemChanged(position);
                     }
                 }
             });

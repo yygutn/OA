@@ -26,21 +26,20 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chatuidemo.Constant;
-import com.hyphenate.chatuidemo.DemoApplication;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.db.InviteMessgeDao;
-import com.hyphenate.chatuidemo.db.UserDao;
-import com.hyphenate.chatuidemo.domain.InviteMessage;
-import com.hyphenate.chatuidemo.runtimepermissions.PermissionsManager;
-import com.hyphenate.chatuidemo.runtimepermissions.PermissionsResultAction;
-import com.hyphenate.chatuidemo.ui.ChatActivity;
-import com.hyphenate.chatuidemo.ui.ContactListFragment;
-import com.hyphenate.chatuidemo.ui.ConversationListFragment;
-import com.hyphenate.chatuidemo.ui.GroupsActivity;
-import com.hyphenate.chatuidemo.ui.LoginActivity;
+import com.hyphenate.chatui.Constant;
+import com.hyphenate.chatui.DemoApplication;
+import com.hyphenate.chatui.DemoHelper;
+import com.hyphenate.chatui.db.InviteMessgeDao;
+import com.hyphenate.chatui.db.UserDao;
+import com.hyphenate.chatui.domain.InviteMessage;
+import com.hyphenate.chatui.runtimepermissions.PermissionsManager;
+import com.hyphenate.chatui.runtimepermissions.PermissionsResultAction;
+import com.hyphenate.chatui.ui.ChatActivity;
+import com.hyphenate.chatui.ui.ContactListFragment;
+import com.hyphenate.chatui.ui.ConversationListFragment;
+import com.hyphenate.chatui.ui.GroupsActivity;
+import com.hyphenate.chatui.ui.LoginActivity;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.util.EMLog;
 
 import java.util.List;
@@ -48,7 +47,6 @@ import java.util.List;
 import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.BroadCastReceiver.AlarmBroadCastReceiver;
-import cn.edu.jumy.oa.bean.User;
 import cn.edu.jumy.oa.fragment.MineFragment_;
 import cn.edu.jumy.oa.fragment.NotifyFragment_;
 import cn.edu.jumy.oa.fragment.TaskFragment;
@@ -167,7 +165,6 @@ public class MainActivity extends BaseActivity {
      */
     private void saveUserInfo() {
         DemoApplication.currentUserName = EMClient.getInstance().getCurrentUser();
-        User.saveUserInfo(null, EaseUserUtils.getUserInfo(DemoApplication.currentUserName));
     }
 
     private void initView() {
@@ -334,7 +331,7 @@ public class MainActivity extends BaseActivity {
                 public void run() {
                     if (ChatActivity.activityInstance != null && ChatActivity.activityInstance.toChatUsername != null &&
                             username.equals(ChatActivity.activityInstance.toChatUsername)) {
-                        String st10 = getResources().getString(com.hyphenate.chatuidemo.R.string.have_you_removed);
+                        String st10 = getResources().getString(com.hyphenate.chatui.R.string.have_you_removed);
                         Toast.makeText(MainActivity.this, ChatActivity.activityInstance.getToChatUsername() + st10, Toast.LENGTH_LONG)
                                 .show();
                         ChatActivity.activityInstance.backToPreActivity();
@@ -512,21 +509,21 @@ public class MainActivity extends BaseActivity {
     private void showConflictDialog() {
         isConflictDialogShow = true;
         DemoHelper.getInstance().logout(false, null);
-        String st = getResources().getString(com.hyphenate.chatuidemo.R.string.Logoff_notification);
+        String st = getResources().getString(com.hyphenate.chatui.R.string.Logoff_notification);
         if (!MainActivity.this.isFinishing()) {
             // clear up global variables
             try {
                 if (conflictBuilder == null)
                     conflictBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
                 conflictBuilder.setTitle(st);
-                conflictBuilder.setMessage(com.hyphenate.chatuidemo.R.string.connect_conflict);
-                conflictBuilder.setPositiveButton(com.hyphenate.chatuidemo.R.string.ok, new DialogInterface.OnClickListener() {
+                conflictBuilder.setMessage(com.hyphenate.chatui.R.string.connect_conflict);
+                conflictBuilder.setPositiveButton(com.hyphenate.chatui.R.string.ok, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         conflictBuilder = null;
-                        AppManager.getInstance().finishActivity(instance);
+                        AppManager.getInstance().finishActivity(getInstance());
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
@@ -549,15 +546,15 @@ public class MainActivity extends BaseActivity {
     private void showAccountRemovedDialog() {
         isAccountRemovedDialogShow = true;
         DemoHelper.getInstance().logout(false, null);
-        String st5 = getResources().getString(com.hyphenate.chatuidemo.R.string.Remove_the_notification);
+        String st5 = getResources().getString(com.hyphenate.chatui.R.string.Remove_the_notification);
         if (!MainActivity.this.isFinishing()) {
             // clear up global variables
             try {
                 if (accountRemovedBuilder == null)
                     accountRemovedBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
                 accountRemovedBuilder.setTitle(st5);
-                accountRemovedBuilder.setMessage(com.hyphenate.chatuidemo.R.string.em_user_remove);
-                accountRemovedBuilder.setPositiveButton(com.hyphenate.chatuidemo.R.string.ok, new DialogInterface.OnClickListener() {
+                accountRemovedBuilder.setMessage(com.hyphenate.chatui.R.string.em_user_remove);
+                accountRemovedBuilder.setPositiveButton(com.hyphenate.chatui.R.string.ok, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

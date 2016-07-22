@@ -64,48 +64,6 @@ public class MeetAuditActivity extends BaseActivity {
     ArrayList<AuditUser> list_passed = new ArrayList<>();
     ArrayList<AuditUser> list_un_pass = new ArrayList<>();
 
-    BroadcastReceiver successBroadCastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("POSITION")) {
-                int position = intent.getIntExtra("passed_position", -1);
-                boolean flag = intent.getBooleanExtra("passed_flag", true);
-                if (position != -1) {
-                    AuditUser user = list_signed.get(position);
-                    list_signed.remove(user);
-                    if (flag) {
-                        user.passStatus = 0;
-                    } else {
-                        user.passStatus = 1;
-                    }
-                    switch (user.passStatus) {
-                        case 0: {
-                            list_passed.add(user);
-                            if (TextUtils.isEmpty(mPassed)) {
-                                mPassed = user.name;
-                            } else {
-                                mPassed += "、" + user.name;
-                            }
-                            break;
-                        }
-                        case 1: {
-                            list_un_pass.add(user);
-                            if (TextUtils.isEmpty(mNotPass)) {
-                                mNotPass = user.name;
-                            } else {
-                                mNotPass += "、" + user.name;
-                            }
-                            break;
-                        }
-                    }
-                    adapter.setList(list_signed);
-                    mAuditPass.setText(mPassed);
-                    mAuditNotPass.setText(mNotPass);
-                }
-            }
-        }
-    };
-
     @AfterViews
     void go() {
         mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -120,10 +78,6 @@ public class MeetAuditActivity extends BaseActivity {
         mAuditListView.setLayoutManager(new LinearLayoutManager(mContext));
         mAuditListView.setAdapter(adapter);
 
-
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("POSITION");
-        mContext.registerReceiver(successBroadCastReceiver, filter);
     }
 
     private void initList() {
@@ -172,11 +126,5 @@ public class MeetAuditActivity extends BaseActivity {
     @Click(R.id.out)
     void click() {
         showToast("导出...");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(successBroadCastReceiver);
     }
 }

@@ -3,7 +3,7 @@ package cn.edu.jumy.oa.CallBack;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.hyphenate.chatuidemo.ui.BaseActivity;
+import com.hyphenate.chatui.ui.BaseActivity;
 import com.zhy.http.okhttp.callback.Callback;
 
 import cn.edu.jumy.oa.MyApplication;

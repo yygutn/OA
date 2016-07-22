@@ -118,7 +118,7 @@
 
         //环信 SDK
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.MainActivity"
+            android:name="com.hyphenate.chatui.ui.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
@@ -126,7 +126,7 @@
 
         <!-- 开屏页 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.SplashActivity"
+            android:name="com.hyphenate.chatui.ui.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide">
             <!--<intent-filter>-->
@@ -138,73 +138,73 @@
 
         <!-- 登陆 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.LoginActivity"
+            android:name="com.hyphenate.chatui.ui.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustResize|stateVisible"></activity>
 
         <!-- 注册 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.RegisterActivity"
+            android:name="com.hyphenate.chatui.ui.RegisterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustResize|stateVisible"></activity>
         <!-- 聊天页面 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.ChatActivity"
+            android:name="com.hyphenate.chatui.ui.ChatActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustResize"></activity>
         <!-- 添加好友 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.AddContactActivity"
+            android:name="com.hyphenate.chatui.ui.AddContactActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateVisible"></activity>
         <!-- 群组详情 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.GroupDetailsActivity"
+            android:name="com.hyphenate.chatui.ui.GroupDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"></activity>
         <!-- 群组列表 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.GroupsActivity"
+            android:name="com.hyphenate.chatui.ui.GroupsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan"></activity>
 
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.ChatRoomActivity"
+            android:name="com.hyphenate.chatui.ui.ChatRoomActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan"></activity>
         <!-- 聊天室详情 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.ChatRoomDetailsActivity"
+            android:name="com.hyphenate.chatui.ui.ChatRoomDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"></activity>
 
         <!-- 新建群组 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.NewGroupActivity"
+            android:name="com.hyphenate.chatui.ui.NewGroupActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan"></activity>
         <!-- 退出群组提示框 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.ExitGroupDialog"
+            android:name="com.hyphenate.chatui.ui.ExitGroupDialog"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyleBottom"></activity>
         <!-- 群组选人 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.GroupPickContactsActivity"
+            android:name="com.hyphenate.chatui.ui.GroupPickContactsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan"></activity>
 
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.PickAtUserActivity"
+            android:name="com.hyphenate.chatui.ui.PickAtUserActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"></activity>
         <!-- 地图 -->
@@ -215,18 +215,18 @@
 
         <!-- 新的朋友邀请消息页面 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.NewFriendsMsgActivity"
+            android:name="com.hyphenate.chatui.ui.NewFriendsMsgActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"></activity>
         <!-- 转发消息用户列表页面 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.ForwardMessageActivity"
+            android:name="com.hyphenate.chatui.ui.ForwardMessageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan"></activity>
         <!-- 自定义的contextmenu -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.ContextMenuActivity"
+            android:name="com.hyphenate.chatui.ui.ContextMenuActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyle"></activity>
         <!-- 显示下载大图页面 -->
@@ -241,58 +241,58 @@
             android:theme="@style/horizontal_slide"></activity>
         <!-- 黑名单 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.BlacklistActivity"
+            android:name="com.hyphenate.chatui.ui.BlacklistActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"></activity>
 
         <!-- 公开的群聊列表 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.PublicGroupsActivity"
+            android:name="com.hyphenate.chatui.ui.PublicGroupsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan"></activity>
 
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.PublicChatRoomsActivity"
+            android:name="com.hyphenate.chatui.ui.PublicChatRoomsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan"></activity>
 
         <!-- 语音通话 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.VoiceCallActivity"
+            android:name="com.hyphenate.chatui.ui.VoiceCallActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/normal_style"></activity>
         <!-- 视频通话 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.VideoCallActivity"
+            android:name="com.hyphenate.chatui.ui.VideoCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"></activity>
         <!-- 群聊简单信息 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.GroupSimpleDetailActivity"
+            android:name="com.hyphenate.chatui.ui.GroupSimpleDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"></activity>
         <!-- 群组黑名单用户列表 -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.GroupBlacklistActivity"
+            android:name="com.hyphenate.chatui.ui.GroupBlacklistActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"></activity>
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.GroupSearchMessageActivity"
+            android:name="com.hyphenate.chatui.ui.GroupSearchMessageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateVisible"></activity>
 
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.PublicGroupsSeachActivity"
+            android:name="com.hyphenate.chatui.ui.PublicGroupsSeachActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"></activity>
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.EditActivity"
+            android:name="com.hyphenate.chatui.ui.EditActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateVisible"></activity>
@@ -303,43 +303,43 @@
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <!-- choose video -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.ImageGridActivity"
+            android:name="com.hyphenate.chatui.ui.ImageGridActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.RecorderVideoActivity"
+            android:name="com.hyphenate.chatui.ui.RecorderVideoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <!-- upload error log -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.DiagnoseActivity"
+            android:name="com.hyphenate.chatui.ui.DiagnoseActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
 
         <!-- iOS offline push nick -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.OfflinePushNickActivity"
+            android:name="com.hyphenate.chatui.ui.OfflinePushNickActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <!-- robots list -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.RobotsActivity"
+            android:name="com.hyphenate.chatui.ui.RobotsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <!-- user profile -->
         <activity
-            android:name="com.hyphenate.chatuidemo.ui.UserProfileActivity"
+            android:name="com.hyphenate.chatui.ui.UserProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"></activity>
 
 
         <!-- 开机自启动服务 -->
-        <receiver android:name="com.hyphenate.chatuidemo.receiver.StartServiceReceiver">
+        <receiver android:name="com.hyphenate.chatui.receiver.StartServiceReceiver">
             <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />

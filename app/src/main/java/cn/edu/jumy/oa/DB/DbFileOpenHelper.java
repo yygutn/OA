@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatui.DemoHelper;
 
 import cn.edu.jumy.oa.MyApplication;
 

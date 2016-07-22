@@ -39,8 +39,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.hyphenate.chatuidemo.ui.LoginActivity;
-import com.hyphenate.chatuidemo.ui.SplashActivity;
+import com.hyphenate.chatui.ui.LoginActivity;
+import com.hyphenate.chatui.ui.SplashActivity;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;

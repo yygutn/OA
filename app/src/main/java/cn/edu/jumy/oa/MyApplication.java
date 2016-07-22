@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
 import com.fsck.k9.K9;
-import com.hyphenate.chatuidemo.DemoApplication;
+import com.hyphenate.chatui.DemoApplication;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.zhy.http.okhttp.OkHttpUtils;

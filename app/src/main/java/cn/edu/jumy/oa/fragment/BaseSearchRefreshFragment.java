@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.hyphenate.chatuidemo.DemoHelper;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 
@@ -19,13 +18,11 @@ import java.util.List;
 
 import cn.edu.jumy.jumyframework.BaseFragment;
 import cn.edu.jumy.oa.BroadCastReceiver.DocumentBroadcastReceiver;
-import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
 import cn.edu.jumy.oa.adapter.DocumentAdapter;
 import cn.edu.jumy.oa.bean.Doc;
 import cn.edu.jumy.oa.bean.Node;
-import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 
 /**
  * Created by Jumy on 16/6/22 18:18.

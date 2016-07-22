@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
-import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatui.DemoHelper;
 
 import java.util.List;
 

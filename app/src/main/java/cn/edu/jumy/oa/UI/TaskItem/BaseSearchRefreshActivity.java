@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatui.DemoHelper;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
@@ -31,7 +31,6 @@ import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.adapter.BaseSearchRefreshAdapter;
-import cn.edu.jumy.oa.bean.Meet;
 import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 
