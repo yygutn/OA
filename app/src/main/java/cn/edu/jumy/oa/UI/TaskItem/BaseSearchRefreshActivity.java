@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.hyphenate.chatui.DemoHelper;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
@@ -28,11 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
-import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.adapter.BaseSearchRefreshAdapter;
 import cn.edu.jumy.oa.bean.Node;
-import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 
 /**
  * Created by Jumy on 16/6/27 16:14.
@@ -59,10 +56,6 @@ public class BaseSearchRefreshActivity extends BaseActivity implements OnItemCli
     @AfterViews
     void start(){
         try {
-//            LoadMoreView loadMoreView = new LoadMoreView(this, mListView.getRecyclerView());
-//            loadMoreView.setLoadmoreString("加载中...");
-//            loadMoreView.setLoadMorePadding(100);
-//            mListView.setLoadMoreFooter(loadMoreView);
 
             mListView.setLoadmoreString("加载中...");
 
@@ -143,11 +136,6 @@ public class BaseSearchRefreshActivity extends BaseActivity implements OnItemCli
         return false;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ACache.get(MyApplication.getContext()).put(DemoHelper.getInstance().getCurrentUsernName(), mList);
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.document,menu);

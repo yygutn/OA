@@ -22,7 +22,7 @@ public class DepartmentListAdapter extends CommonAdapter<OrganizationOften>{
 
     @Override
     public void convert(ViewHolder holder, OrganizationOften organizationOften) {
-        holder.setText(R.id.tv_name,organizationOften.name);
+        holder.setText(R.id.subtitle,organizationOften.name);
     }
 
     public void setList(ArrayList<OrganizationOften> list){

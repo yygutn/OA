@@ -110,6 +110,7 @@ public class Node implements Serializable {
      */
     public String uuid = "";
     public String tid = "";
+    public String summary = "";
 
     public Node(String title, String content, int type) {
         this.title = title;
@@ -120,7 +121,17 @@ public class Node implements Serializable {
     public Node() {
 
     }
-
+    public Node(Notify notify){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        this.type = 2;
+        this.id = notify.id;
+        this.title = notify.title;
+        this.department = notify.department;
+        this.summary = notify.summary;
+        this.cuid = notify.cuid;
+        this.tid = notify.tid;
+        this.dispatchTime = sdf.format(new Date(notify.createTime));
+    }
     public Node(Doc doc) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         this.type = 1;

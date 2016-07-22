@@ -73,7 +73,7 @@ public class DepartmentRedoActivity extends BaseActivity {
 
     private void initAdapter() {
         //bind data
-        adapter = new DepartmentListAdapter(mContext, R.layout.item_department_list, mList);
+        adapter = new DepartmentListAdapter(mContext, R.layout.item_notify_notification, mList);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {

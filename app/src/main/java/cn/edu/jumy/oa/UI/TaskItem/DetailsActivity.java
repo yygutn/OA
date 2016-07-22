@@ -372,7 +372,10 @@ public class DetailsActivity extends BaseActivity {
                                                 } else {
                                                     annex.setAnnex(attachment, file);
                                                 }
-                                                annex.save();
+                                                if (annex.save()){
+                                                    showDebugLoge(annex.getFileName()+"：保存成功");
+                                                }
+
                                             }
                                         });
                                         alertDialog.cancel();

@@ -644,4 +644,25 @@ public class OAService {
         });
     }
 
+    /**
+     * 获取所有公告
+     * @param callback 回调
+     */
+    public static void getNoticeList(final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                callback.onError(call, e, id);
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "getNoticeList")
+                        .addParams("value", response)
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
 }
