@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -100,7 +101,8 @@ public class IndexableStickyListView extends FrameLayout implements AdapterView.
         mListView = new ListView(context);
         mListView.setVerticalScrollBarEnabled(false);
         mListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        mListView.setDivider(null);
+        mListView.setDivider(getResources().getDrawable(R.drawable.divider_default_color));
+        mListView.setDividerHeight(2);
         addView(mListView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         mIndexBar = new IndexBar(context, mBarTextColor, mBarSelectedTextColor, mBarTextSize);

@@ -134,6 +134,7 @@ public class DepartmentOftenUseFixActivity extends BaseActivity {
             }
         });
         mOftenEt.setText(mOrg.name);
+        setResult(RESULT_OK);
     }
 
     private void updateView() {

@@ -11,6 +11,7 @@ import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ public class DepartmentRedoActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                DepartmentOftenUseFixActivity_.intent(mContext).extra("org", ((OrganizationOften) o)).start();
+                DepartmentOftenUseFixActivity_.intent(mContext).extra("org", ((OrganizationOften) o)).startForResult(0);
             }
 
             @Override
@@ -85,5 +86,11 @@ public class DepartmentRedoActivity extends BaseActivity {
                 return false;
             }
         });
+    }
+    @OnActivityResult(0)
+    void result(int resultCode){
+        if (resultCode == RESULT_OK){
+            getData();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package cn.edu.jumy.oa.UI;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -54,6 +55,7 @@ public class SignUpDetailsActivity extends BaseActivity {
      * 进度框
      */
     private LoadingDialog mLoadingDialog;
+    Handler mHandler = new Handler();
 
     @AfterExtras
     void aVoid() {
@@ -68,14 +70,14 @@ public class SignUpDetailsActivity extends BaseActivity {
                         mListSigned.add(auditUser);
                     }
                 }
-                try {
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                mLoadingDialog.dismiss();
-                setContentView(R.layout.activity_sign_up_details);
-                updateView();
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mLoadingDialog.dismiss();
+                        setContentView(R.layout.activity_sign_up_details);
+                        updateView();
+                    }
+                }, 1500);
             }
         });
     }

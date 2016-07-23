@@ -13,7 +13,7 @@ public class AuditUser {
     /**
      * 姓名
      */
-    public String name;
+    public String name = "";
     /**
      * 所在单位
      */
@@ -35,9 +35,9 @@ public class AuditUser {
     public String id;
     public String uid;
     public String did;
-    public String post;
-    public String sex;
-    public String phone;
+    public String post = "";
+    public String sex = "";
+    public String phone = "";
     public int type;
     public int signStatus;
     public int passStatus;

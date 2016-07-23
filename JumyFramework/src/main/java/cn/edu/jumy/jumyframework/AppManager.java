@@ -91,7 +91,7 @@ public class AppManager {
     /**
      * 结束除了当前Activity（堆栈中最后一个压入的）所有的Activity
      */
-    public void finishAllBesideTop() {
+    public synchronized void finishAllBesideTop() {
         BaseActivity activity = mActivityStack.lastElement();
         if (activity == null){
             return;

@@ -15,4 +15,7 @@
     <color name="mask_color">#88888888</color>
     <color name="check_bg">#f2f2f2</color>
     <color name="un_press_color">#9C27B0</color>
+    
+    <color name="divider_default_color">#F1F1F1</color>
+    <color name="dialog_bg">#252525</color>
 </resources>

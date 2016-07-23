@@ -13,7 +13,6 @@
         app:title="选择单位"
         app:titleTextColor="@color/white"
         android:background="@color/pressed"
-        app:theme="@style/ToolbarTheme"
         app:navigationIcon="@drawable/ic_arrow_back_white"/>
 
     <android.support.v7.widget.SearchView

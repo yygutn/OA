@@ -24,10 +24,5 @@
         android:layout_centerVertical="true"
         android:textColor="#373737"
         android:textSize="19sp"/>
-    <ImageView
-        android:background="#f1f1f1"
-        android:layout_width="match_parent"
-        android:layout_height="0.8dp"
-        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
