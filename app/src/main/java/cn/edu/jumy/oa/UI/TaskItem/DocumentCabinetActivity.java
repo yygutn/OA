@@ -60,12 +60,11 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
         final File file = Annex.getFileByByte(annex);
         if (file == null) {
             String id = mList.get(position).getID();
-            String filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download";
+            String filepath = mContext.getExternalCacheDir().getAbsolutePath();
             String filename = mList.get(position).getFileName();
             File newFile = new File(filepath, filename);
-            if (file != null && file.exists()) {
+            if (newFile != null && newFile.exists()) {
                 CallOtherOpenFile.openFile(mContext, file);
-                file.deleteOnExit();
             } else {
                 OAService.downloadAttachment(id, new FileCallBack(filepath, filename) {
                     @Override
@@ -82,14 +81,12 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
                     public void onResponse(File response, int id) {
                         if (response != null) {
                             CallOtherOpenFile.openFile(mContext, response);
-                            response.deleteOnExit();
                         }
                     }
                 });
             }
         } else {
             CallOtherOpenFile.openFile(mContext, file);
-            file.deleteOnExit();
         }
     }
 

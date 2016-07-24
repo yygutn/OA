@@ -341,9 +341,8 @@ public class DetailsActivity extends BaseActivity {
                                     String filepath = mContext.getExternalCacheDir().getAbsolutePath();
                                     String filename = list.get(which).getFileName();
                                     File file = new File(filepath, filename);
-                                    if (file.exists()) {
+                                    if (file!= null && file.exists()) {
                                         CallOtherOpenFile.openFile(mContext, file);
-                                        file.deleteOnExit();
                                     } else {
                                         OAService.downloadAttachment(id, new FileCallBack(filepath, filename) {
                                             @Override
@@ -354,7 +353,6 @@ public class DetailsActivity extends BaseActivity {
                                             @Override
                                             public void onResponse(File file, int id) {
                                                 CallOtherOpenFile.openFile(mContext, file);
-                                                file.deleteOnExit();
                                             }
 
                                             @Override
