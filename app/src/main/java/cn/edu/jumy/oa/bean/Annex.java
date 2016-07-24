@@ -1,14 +1,21 @@
 package cn.edu.jumy.oa.bean;
 
+import org.apache.commons.io.FileUtils;
+import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import cn.edu.jumy.oa.MyApplication;
 
 /**
  * Created by Jumy on 16/7/21 14:15.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-public class Annex extends DataSupport{
+public class Annex extends DataSupport {
     private String IDS;
     /**
      * 父id 当PID为UID的时候，他是用户头像
@@ -30,16 +37,22 @@ public class Annex extends DataSupport{
      * 文件后缀名
      */
     private String suffix;
+    @Column(ignore = true)
     private File file;
+    private byte byteFile[];
 
-    public Annex(Attachment attachment,File file) {
+    public Annex(Attachment attachment, File file) {
         this.IDS = attachment.getId();
         this.pid = attachment.getPid();
         this.cuid = attachment.getPid();
         this.type = attachment.getType();
         this.fileName = attachment.getFileName();
         this.suffix = attachment.getSuffix();
-        this.file = file;
+        try {
+            this.byteFile = FileUtils.readFileToByteArray(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Annex() {
@@ -102,14 +115,51 @@ public class Annex extends DataSupport{
         this.file = file;
     }
 
-    public void setAnnex(Attachment attachment,File file) {
+    public byte[] getByteFile() {
+        return byteFile;
+    }
+
+    public void setByteFile(byte[] byteFile) {
+        this.byteFile = byteFile;
+    }
+
+    public void setAnnex(Attachment attachment, File file) {
         this.IDS = attachment.getId();
         this.pid = attachment.getPid();
         this.cuid = attachment.getPid();
         this.type = attachment.getType();
         this.fileName = attachment.getFileName();
         this.suffix = attachment.getSuffix();
-        this.file = file;
+        try {
+            this.byteFile = FileUtils.readFileToByteArray(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    public static File getFileByByte(Annex annex) {
+        BufferedOutputStream bufferedOutputStream = null;
+        FileOutputStream fileOutputStream = null;
+        File file = null;
+        try {
+            file = new File(MyApplication.getContext().getExternalCacheDir(),annex.fileName);
+            fileOutputStream = new FileOutputStream(file);
+            bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+            bufferedOutputStream.write(annex.getByteFile());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bufferedOutputStream != null) {
+                    bufferedOutputStream.close();
+                }
+                if (fileOutputStream != null) {
+                    fileOutputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return file;
+    }
 }

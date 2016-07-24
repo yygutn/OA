@@ -330,15 +330,15 @@ public class DetailsActivity extends BaseActivity {
                 }
                 final String[] items = item_list.toArray(new String[item_list.size()]);
                 alertDialog = new AlertDialog.Builder(mContext)
-                        .setTitle("附件下载 (长按可复制文件名)")
-                        .setPositiveButton("确认", null)
+                        .setTitle("附件下载 " +
+                                "\n(点击下载,长按可复制文件名)")
                         .setItems(items, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, final int which) {
                                 try {
                                     String id = list.get(which).getId();
                                     id = TextUtils.isEmpty(id) ? "" : id;
-                                    String filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download";
+                                    String filepath = mContext.getExternalCacheDir().getAbsolutePath();
                                     String filename = list.get(which).getFileName();
                                     File file = new File(filepath, filename);
                                     if (file.exists()) {

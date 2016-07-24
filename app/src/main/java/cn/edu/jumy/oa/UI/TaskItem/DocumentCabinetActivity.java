@@ -56,7 +56,8 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-        final File file = mList.get(position).getFile();
+        Annex annex = mList.get(position);
+        final File file = Annex.getFileByByte(annex);
         if (file == null) {
             String id = mList.get(position).getID();
             String filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download";
@@ -81,12 +82,14 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
                     public void onResponse(File response, int id) {
                         if (response != null) {
                             CallOtherOpenFile.openFile(mContext, response);
+                            response.deleteOnExit();
                         }
                     }
                 });
             }
         } else {
-            CallOtherOpenFile.openFile(mContext, mList.get(position).getFile());
+            CallOtherOpenFile.openFile(mContext, file);
+            file.deleteOnExit();
         }
     }
 
