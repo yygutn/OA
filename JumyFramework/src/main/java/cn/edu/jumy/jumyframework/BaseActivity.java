@@ -17,6 +17,7 @@ import com.orhanobut.logger.Logger;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 
 
@@ -70,6 +71,7 @@ public class BaseActivity extends AppCompatActivity {
             } else {
                 //结束所有activity并清空堆栈
                 Log.w("JumyXx", "退出程序");
+                deleteFilesByDirectory(getExternalCacheDir());
                 AppManager.getInstance().AppExit(this);
             }
         } else if (size > 1) {
@@ -111,19 +113,21 @@ public class BaseActivity extends AppCompatActivity {
             Logger.w(message.toString());
         }
     }
-    public static void showDebugLogw(String tag,CharSequence message) {
+
+    public static void showDebugLogw(String tag, CharSequence message) {
         if (DEBUG) {
             Logger.t(tag).w(message.toString());
         }
     }
-    public static void showDebugLogd(String tag,CharSequence message) {
+
+    public static void showDebugLogd(String tag, CharSequence message) {
         if (DEBUG) {
             Logger.t(tag).d(message.toString());
         }
     }
 
-    public static void showDebugException(Exception e){
-        if (DEBUG){
+    public static void showDebugException(Exception e) {
+        if (DEBUG) {
             e.printStackTrace();
         }
     }
@@ -148,5 +152,18 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
+    }
+
+    /**
+     * 删除方法 这里只会删除某个文件夹下的文件，
+     * 如果传入的directory是个文件，将不做处理
+     * @param directory 文件夹
+     */
+    private static void deleteFilesByDirectory(File directory) {
+        if (directory != null && directory.exists() && directory.isDirectory()) {
+            for (File item : directory.listFiles()) {
+                item.delete();
+            }
+        }
     }
 }
