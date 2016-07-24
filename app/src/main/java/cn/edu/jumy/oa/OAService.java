@@ -36,10 +36,11 @@ public class OAService {
     public static final String BASE_URL_TEST = "http://192.168.3.124:8090/OA_console/phone/";
 
     public static final String BASE_URL = BASE_URL_ONLINE;
+
     public abstract static class DateCallBack extends Callback<String> {
 
         @Override
-        public String parseNetworkResponse(Response response, int id) throws Exception {
+        public String parseNetworkResponse(Response response, int ID) throws Exception {
             Gson gson = new Gson();
             DateResponse dateResponse = gson.fromJson(response.body().string(), DateResponse.class);
             if (dateResponse.code == 0) {
@@ -53,11 +54,11 @@ public class OAService {
     }
     /**
      getTime(new DateCallBack() {
-    @Override public void onError(Call call, Exception e, int id) {
+    @Override public void onError(Call call, Exception e, int ID) {
     callback.onError(call,e,id);
     }
 
-    @Override public void onResponse(String response, int id) {
+    @Override public void onResponse(String response, int ID) {
 
     }
     });
@@ -71,7 +72,7 @@ public class OAService {
     public static void getTime(Callback callback) {
         OkHttpUtils.post()
                 .url(BASE_URL + "getTime")
-                .addParams("","")
+                .addParams("", "")
                 .build()
                 .execute(callback);
     }
@@ -85,12 +86,12 @@ public class OAService {
     public static void docReceive(final Map<String, String> params, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
 
                 params.put("value", response);
 
@@ -113,12 +114,12 @@ public class OAService {
     public static void docSend(final Map<String, String> params, final Map<String, File> fileMap, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
 
                 params.put("value", response);
 
@@ -140,12 +141,12 @@ public class OAService {
     public static void getOrganizationData(final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
 
                 OkHttpUtils.post()
                         .url(BASE_URL + "getOrganizationData")
@@ -166,12 +167,12 @@ public class OAService {
 
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
                         .url(BASE_URL + "getAttach")
@@ -193,12 +194,12 @@ public class OAService {
         try {
             getTime(new DateCallBack() {
                 @Override
-                public void onError(Call call, Exception e, int id) {
-                    callback.onError(call, e, id);
+                public void onError(Call call, Exception e, int ID) {
+                    callback.onError(call, e, ID);
                 }
 
                 @Override
-                public void onResponse(String response, int id) {
+                public void onResponse(String response, int ID) {
                     OkHttpUtils.get()
                             .url(BASE_URL + "download")
                             .addParams("value", response)
@@ -221,12 +222,12 @@ public class OAService {
     public static void meetReceive(final Map<String, String> params, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
                         .url(BASE_URL + "meetReceive")
@@ -247,12 +248,12 @@ public class OAService {
     public static void meetSend(final Map<String, String> params, final Map<String, File> fileMap, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
                         .url(BASE_URL + "meetSend")
@@ -272,12 +273,12 @@ public class OAService {
     public static void docUser(final Map<String, String> params, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
                         .url(BASE_URL + "docUser")
@@ -296,12 +297,12 @@ public class OAService {
     public static void meetUser(final Map<String, String> params, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
                         .url(BASE_URL + "meetUser")
@@ -320,12 +321,12 @@ public class OAService {
     public static void docSign(final String tid, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
                         .url(BASE_URL + "docSign")
                         .addParams("value", response)
@@ -345,12 +346,12 @@ public class OAService {
     public static void getCheckInfo(final String pid, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
                         .url(BASE_URL + "getCheckInfo")
                         .addParams("value", response)
@@ -370,12 +371,12 @@ public class OAService {
     public static void meetCompany(final Map<String, String> params, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
                         .url(BASE_URL + "meetCompany")
@@ -394,12 +395,12 @@ public class OAService {
     public static void getMEntryByPassStatus(final String mid, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
                         .url(BASE_URL + "getMEntryByPassStatus")
                         .addParams("value", response)
@@ -412,20 +413,21 @@ public class OAService {
 
     /**
      * 会议承办方审核人员报名，通过/退回
-     * @param id 报名人员id
-     * @param pass (true:通过  false:不通过)
+     *
+     * @param id         报名人员id
+     * @param pass       (true:通过  false:不通过)
      * @param passRemark 审批反馈(不通过时)
      * @param callback
      */
-    public static void meetUserPass(final String id,final String pass,final String passRemark, final Callback callback) {
+    public static void meetUserPass(final String id, final String pass, final String passRemark, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int sid) {
+            public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
                         .url(BASE_URL + "meetUserPass")
                         .addParams("value", response)
@@ -442,12 +444,12 @@ public class OAService {
     public static void meetSign(final String tid, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
                         .url(BASE_URL + "meetSign")
                         .addParams("value", response)
@@ -460,19 +462,20 @@ public class OAService {
 
     /**
      * 公文催收
-     * @param oid 组织id
-     * @param did 公文id
+     *
+     * @param oid      组织id
+     * @param did      公文id
      * @param callback 回调
      */
-    public static void docUrge(final String oid,final String did ,final Callback callback) {
+    public static void docUrge(final String oid, final String did, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
                         .url(BASE_URL + "docUrge")
                         .addParams("value", response)
@@ -483,21 +486,23 @@ public class OAService {
             }
         });
     }
+
     /**
      * 会议催收
-     * @param oid 组织id
-     * @param did 会议id
+     *
+     * @param oid      组织id
+     * @param did      会议id
      * @param callback 回调
      */
-    public static void meetUrge(final String oid,final String did ,final Callback callback) {
+    public static void meetUrge(final String oid, final String did, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
                         .url(BASE_URL + "meetUrge")
                         .addParams("value", response)
@@ -508,18 +513,19 @@ public class OAService {
             }
         });
     }
+
     /**
      * 添加修改报名人员
      */
     public static void updateMEntry(final Map<String, String> params, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
                         .url(BASE_URL + "updateMEntry")
@@ -531,18 +537,19 @@ public class OAService {
 
     /**
      * 获取单个报名人员信息
+     *
      * @param id
      * @param callback
      */
     public static void getMEntry(final String id, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int ids) {
-                callback.onError(call, e, ids);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int ids) {
+            public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
                         .url(BASE_URL + "getMEntry")
                         .addParams("value", response)
@@ -554,17 +561,17 @@ public class OAService {
     }
 
     /**
-     *获取接收单位会议的报名表
+     * 获取接收单位会议的报名表
      */
     public static void getMEntryByPid(final String pid, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int ids) {
-                callback.onError(call, e, ids);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int ids) {
+            public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
                         .url(BASE_URL + "getMEntryByPid")
                         .addParams("value", response)
@@ -574,41 +581,43 @@ public class OAService {
             }
         });
     }
+
     /**
-     *添加常用单位组
+     * 添加常用单位组
      */
-    public static void insertMagroup(final String ids,final String name,final int sort, final Callback callback) {
+    public static void insertMagroup(final String ids, final String name, final int sort, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
                         .url(BASE_URL + "insertMagroup")
                         .addParams("value", response)
                         .addParams("ids", ids)
                         .addParams("name", name)
-                        .addParams("sort", sort+"")
+                        .addParams("sort", sort + "")
                         .build()
                         .execute(callback);
             }
         });
     }
-   /**
-     *获取常用单位组
+
+    /**
+     * 获取常用单位组
      */
     public static void getMagroupAll(final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
                         .url(BASE_URL + "getMagroupAll")
                         .addParams("value", response)
@@ -619,25 +628,26 @@ public class OAService {
             }
         });
     }
+
     /**
-     *修改常用单位组
+     * 修改常用单位组
      */
-    public static void updateMagroup(final String Id,final String ids,final String name,final int sort,final Callback callback) {
+    public static void updateMagroup(final String Id, final String ids, final String name, final int sort, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
                         .url(BASE_URL + "updateMagroup")
                         .addParams("value", response)
                         .addParams("id", Id)
                         .addParams("ids", ids)
                         .addParams("name", name)
-                        .addParams("sort", sort+"")
+                        .addParams("sort", sort + "")
                         .build()
                         .execute(callback);
             }
@@ -646,20 +656,71 @@ public class OAService {
 
     /**
      * 获取所有公告
+     *
      * @param callback 回调
      */
     public static void getNoticeList(final Callback callback) {
         getTime(new DateCallBack() {
             @Override
-            public void onError(Call call, Exception e, int id) {
-                callback.onError(call, e, id);
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
             }
 
             @Override
-            public void onResponse(String response, int id) {
+            public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
                         .url(BASE_URL + "getNoticeList")
                         .addParams("value", response)
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
+
+    /**
+     * 会议承办会议报名重开
+     *
+     * @param callback 回调
+     * @param mid      会议ID
+     */
+    public static void meetUnpass(final String mid, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "meetUnpass")
+                        .addParams("value", response)
+                        .addParams("mid", mid)
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
+
+    /**
+     * 会议承办会议审批通过
+     *
+     * @param callback 回调
+     * @param mid      会议ID
+     */
+    public static void meetPass(final String mid, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "meetPass")
+                        .addParams("value", response)
+                        .addParams("mid", mid)
                         .build()
                         .execute(callback);
             }

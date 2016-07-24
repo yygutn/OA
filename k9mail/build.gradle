@@ -71,6 +71,7 @@ android {
 
     buildTypes {
         release {
+            minifyEnabled false
             if (project.hasProperty('storeFile')) {
                 signingConfig signingConfigs.release
             }

@@ -15,26 +15,39 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
--keep class com.tencent.**{*;}
--dontwarn com.tencent.**
-
--keep class tencent.**{*;}
--dontwarn tencent.**
-
--keep class qalsdk.**{*;}
--dontwarn qalsdk.**
 
 -optimizationpasses 5
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
 -dontpreverify
--keepattributes InnerClasses
--dontoptimize
 -dontwarn org.htmlcleaner.HtmlCleanerForAnt
 -dontwarn org.htmlcleaner.JDomSerializer
--dontwarn android.webkit.WebView
--dontwarn org.apache.http.params.HttpConnectionParams
+-dontwarn org.**
+-dontwarn com.hyphenate.**
+-dontwarn com.fsck.k9.**
+-dontwarn com.baidu.**
+-dontwarn android.**
+-dontwarn com.**
+-dontwarn
+-verbose
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.app.backup.BackupAgentHelper
+-keep public class * extends android.preference.Preference
+-keep public class com.android.vending.licensing.ILicensingService
+-keep public class org.**{*;}
+-keep public class com.hyphenate.**{*;}
+-keep public class com.fsck.k9.**{*;}
+-keep public class com.baidu.**{*;}
+-keep public class com.**{*;}
+-keep public class android.**{*;}
+-keep public class org.apache.http.params.HttpParams
+#but not the descriptor class
 
 #如果有引用v4包可以添加下面这行
 -keep class android.support.v4.** { *; }
@@ -79,18 +92,6 @@
     public void init*(...);
 }
 
--keepclasseswithmembers class * {
-    public <init>(android.content.Context, android.util.AttributeSet);
-}
-
--keepclasseswithmembers class * {
-    public <init>(android.content.Context, android.util.AttributeSet, int);
-}
-
--keepclassmembers class * extends android.app.Activity {
-   public void *(android.view.View);
-}
-
 -keepclassmembers enum * {
     public static **[] values();
     public static ** valueOf(java.lang.String);
@@ -101,18 +102,15 @@
 }
 
 ##混淆保护自己项目的部分代码以及引用的第三方jar包library（想混淆去掉"#"）
--libraryjars libs/HoloColorPicker-debug.aar
--libraryjars libs/openpgp-api-debug.aar
--libraryjars libs/k9mail-library-debug.aar
-#-libraryjars libs/BaiduLBS_Android.jar
-#-libraryjars libs/hyphenatechat_3.1.3.jar
-#-libraryjars libs/MiPush_SDK_Client_2_2_19.jar
-#-libraryjars libs/org.apache.http.legacy.jar
-#-libraryjars libs/parse-android-1.13.0.jar
-#-libraryjars libs/umeng-analytics-v5.2.4.jar
-#-libraryjars libs/umeng-update-v2.6.0.1.jar
-#-libraryjars libs/ViewpagerIndicator_1.0.6.jar
-#-libraryjars libs/com.umeng.message_v2.8.1.jar
+-libraryjars ../k9mail/libs/HoloColorPicker-debug.aar
+-libraryjars ../k9mail/libs/openpgp-api-debug.aar
+-libraryjars ../k9mail/libs/k9mail-library-debug.aar
+-libraryjars ../easeUI/libs/BaiduLBS_Android.jar
+-libraryjars ../easeUI/libs/hyphenatechat_3.1.3.jar
+-libraryjars ../easeUI/libs/org.apache.http.legacy.jar
+-libraryjars ../JumyFramework/libs/ViewpagerIndicator_1.0.6.jar
+-libraryjars ../easeUIDemo/libs/bolts-tasks-1.4.0.jar
+-libraryjars ../easeUIDemo/libs/parse-android-1.13.0.jar
 
 ###-------- pulltorefresh 相关的混淆配置---------
 -dontwarn com.handmark.pulltorefresh.library.**

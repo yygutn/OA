@@ -227,7 +227,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 			 {
 				 holder=new ViewHolder();
 				 convertView=LayoutInflater.from(mContext).inflate(R.layout.em_choose_griditem, container,false);
-				 holder.imageView=(RecyclingImageView) convertView.findViewById(R.id.imageView);
+				 holder.imageView=(ImageView) convertView.findViewById(R.id.imageView);
 				 holder.icon=(ImageView) convertView.findViewById(R.id.video_icon);
 				 holder.tvDur=(TextView)convertView.findViewById(R.id.chatting_length_iv);
 				 holder.tvSize=(TextView)convertView.findViewById(R.id.chatting_size_iv);
@@ -287,8 +287,8 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 		
 		
 		class ViewHolder{
-			
-			RecyclingImageView imageView;
+
+			ImageView imageView;
 			ImageView icon;
 			TextView tvDur;
 			TextView tvSize;

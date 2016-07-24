@@ -11,7 +11,7 @@ public abstract class Callback<T>
      *
      * @param request
      */
-    public void onBefore(Request request, int id)
+    public void onBefore(Request request, int ID)
     {
     }
 
@@ -20,7 +20,7 @@ public abstract class Callback<T>
      *
      * @param
      */
-    public void onAfter(int id)
+    public void onAfter(int ID)
     {
     }
 
@@ -29,7 +29,7 @@ public abstract class Callback<T>
      *
      * @param progress
      */
-    public void inProgress(float progress, long total , int id)
+    public void inProgress(float progress, long total , int ID)
     {
 
     }
@@ -40,7 +40,7 @@ public abstract class Callback<T>
      * @param response
      * @return
      */
-    public boolean validateReponse(Response response, int id)
+    public boolean validateReponse(Response response, int ID)
     {
         return response.isSuccessful();
     }
@@ -50,30 +50,30 @@ public abstract class Callback<T>
      *
      * @param response
      */
-    public abstract T parseNetworkResponse(Response response, int id) throws Exception;
+    public abstract T parseNetworkResponse(Response response, int ID) throws Exception;
 
-    public abstract void onError(Call call, Exception e, int id);
+    public abstract void onError(Call call, Exception e, int ID);
 
-    public abstract void onResponse(T response, int id);
+    public abstract void onResponse(T response, int ID);
 
 
     public static Callback CALLBACK_DEFAULT = new Callback()
     {
 
         @Override
-        public Object parseNetworkResponse(Response response, int id) throws Exception
+        public Object parseNetworkResponse(Response response, int ID) throws Exception
         {
             return null;
         }
 
         @Override
-        public void onError(Call call, Exception e, int id)
+        public void onError(Call call, Exception e, int ID)
         {
 
         }
 
         @Override
-        public void onResponse(Object response, int id)
+        public void onResponse(Object response, int ID)
         {
 
         }
