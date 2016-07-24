@@ -94,6 +94,7 @@ public class SentDocumentActivity extends BaseSearchRefreshActivity {
     protected void onTextSubmit(String str) {
         if (TextUtils.isEmpty(str)){
             showToast("请输入有效关键字");
+            return;
         }
         ArrayList<Doc> list = new ArrayList<>();
         for (Doc doc : mListDoc){

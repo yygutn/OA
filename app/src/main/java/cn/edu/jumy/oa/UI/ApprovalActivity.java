@@ -1,14 +1,8 @@
 package cn.edu.jumy.oa.UI;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -20,15 +14,10 @@ import java.util.List;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.UI.TaskItem.ApprovalFqActivity_;
+import cn.edu.jumy.oa.UI.TaskItem.ApprovalSpActivity_;
 import cn.edu.jumy.oa.UI.web.FromMeActivity_;
-import cn.edu.jumy.oa.UI.web.WaitingForApprovalActivity_;
-import cn.edu.jumy.oa.widget.dragrecyclerview.adapter.RecyclerAdapter;
-import cn.edu.jumy.oa.widget.dragrecyclerview.common.DividerGridItemDecoration;
 import cn.edu.jumy.oa.widget.dragrecyclerview.entity.Item;
-import cn.edu.jumy.oa.widget.dragrecyclerview.helper.MyItemTouchCallback;
-import cn.edu.jumy.oa.widget.dragrecyclerview.helper.OnRecyclerItemClickListener;
-import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
-import cn.edu.jumy.oa.widget.dragrecyclerview.utils.VibratorUtil;
 
 /**
  * Created by Jumy on 16/5/23 09:38.
@@ -90,12 +79,14 @@ public class ApprovalActivity extends BaseActivity{
         switch (view.getId()) {
             case R.id.approval_mine: {
                 showToast("我发起的");
-                FromMeActivity_.intent(this).start();
+                ApprovalFqActivity_.intent(mContext).start();
+//                FromMeActivity_.intent(this).start();
                 break;
             }
             case R.id.approval_wait: {
                 showToast("待我审批");
-                WaitingForApprovalActivity_.intent(this).start();
+                ApprovalSpActivity_.intent(mContext).start();
+//                WaitingForApprovalActivity_.intent(this).start();
                 break;
             }
             case R.id.approval_sick_leave: {

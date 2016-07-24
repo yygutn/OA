@@ -1,9 +1,11 @@
 package cn.edu.jumy.oa.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +13,7 @@ import java.util.List;
  * Created by Jumy on 16/6/29 15:24.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-public class Meet extends DataSupport implements Serializable{
+public class Meet extends DataSupport implements Parcelable {
     
     public String id;
     /**
@@ -135,4 +137,97 @@ public class Meet extends DataSupport implements Serializable{
      * didtask
      */
     public String didtask;
+    /**
+     * passStatus : 3
+     * updataTime : null
+     */
+
+    public int passStatus;
+    public long updataTime;
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.name);
+        dest.writeLong(this.meetTime);
+        dest.writeString(this.meetCompany);
+        dest.writeString(this.department);
+        dest.writeValue(this.level);
+        dest.writeString(this.docNo);
+        dest.writeString(this.docTitle);
+        dest.writeString(this.docSummary);
+        dest.writeString(this.contactName);
+        dest.writeString(this.contactPhone);
+        dest.writeString(this.addr);
+        dest.writeValue(this.signNum);
+        dest.writeValue(this.signStatus);
+        dest.writeValue(this.isuse);
+        dest.writeString(this.remark);
+        dest.writeString(this.cuid);
+        dest.writeString(this.uuid);
+        dest.writeString(this.orderBy);
+        dest.writeLong(this.createTime);
+        dest.writeList(this.attachmentList);
+        dest.writeString(this.meetTimeString);
+        dest.writeString(this.sendDepartmentInfo);
+        dest.writeString(this.departmentInfo);
+        dest.writeString(this.meetCompanyName);
+        dest.writeString(this.tid);
+        dest.writeString(this.didtask);
+        dest.writeInt(this.passStatus);
+        dest.writeLong(this.updataTime);
+    }
+
+    public Meet() {
+    }
+
+    protected Meet(Parcel in) {
+        this.id = in.readString();
+        this.name = in.readString();
+        this.meetTime = in.readLong();
+        this.meetCompany = in.readString();
+        this.department = in.readString();
+        this.level = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.docNo = in.readString();
+        this.docTitle = in.readString();
+        this.docSummary = in.readString();
+        this.contactName = in.readString();
+        this.contactPhone = in.readString();
+        this.addr = in.readString();
+        this.signNum = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.signStatus = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.isuse = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.remark = in.readString();
+        this.cuid = in.readString();
+        this.uuid = in.readString();
+        this.orderBy = in.readString();
+        this.createTime = in.readLong();
+        this.attachmentList = new ArrayList<Attachment>();
+        in.readList(this.attachmentList, Attachment.class.getClassLoader());
+        this.meetTimeString = in.readString();
+        this.sendDepartmentInfo = in.readString();
+        this.departmentInfo = in.readString();
+        this.meetCompanyName = in.readString();
+        this.tid = in.readString();
+        this.didtask = in.readString();
+        this.passStatus = in.readInt();
+        this.updataTime = in.readLong();
+    }
+
+    public static final Parcelable.Creator<Meet> CREATOR = new Parcelable.Creator<Meet>() {
+        @Override
+        public Meet createFromParcel(Parcel source) {
+            return new Meet(source);
+        }
+
+        @Override
+        public Meet[] newArray(int size) {
+            return new Meet[size];
+        }
+    };
 }

@@ -117,6 +117,8 @@
         <activity android:name=".UI.DepartmentAddActivity_" />
         <activity android:name=".UI.DepartmentRedoActivity_" />
         <activity android:name=".UI.DepartmentOftenUseFixActivity_" />
+        <activity android:name=".UI.TaskItem.ApprovalFqActivity_" />
+        <activity android:name=".UI.TaskItem.ApprovalSpActivity_" />
 
 
 

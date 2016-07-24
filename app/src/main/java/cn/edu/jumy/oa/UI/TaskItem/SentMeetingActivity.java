@@ -1,5 +1,6 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import org.androidannotations.annotations.EActivity;
@@ -36,6 +37,19 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
     @Override
     protected void initData() {
         mList = null;
+        OAService.meetUser(getParams(), new MeetCallback() {
+            @Override
+            public void onResponse(MeetResponse response, int id) {
+                if (response != null && response.code == 0 && response.data != null){
+                    mListMeet = response.data.pageObject;
+                    adapter.setList(response.data.pageObject);
+                }
+            }
+        });
+    }
+
+    @NonNull
+    private Map<String, String> getParams() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
         int year, month, day;
@@ -71,18 +85,9 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
         params.put("startTime", before);
         params.put("endTime", now);
         params.put("signStatus", "");
-        params.put("passStatus", "");
+        params.put("passStatus", "0");
         params.put("meetCompany", "");
-
-        OAService.meetUser(params, new MeetCallback() {
-            @Override
-            public void onResponse(MeetResponse response, int id) {
-                if (response != null && response.code == 0 && response.data != null){
-                    mListMeet = response.data.pageObject;
-                    adapter.setList(response.data.pageObject);
-                }
-            }
-        });
+        return params;
     }
 
     @Override
@@ -96,6 +101,7 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
     protected void onTextSubmit(String str) {
         if (TextUtils.isEmpty(str)){
             showToast("请输入有效关键字");
+            return;
         }
         ArrayList<Meet> list = new ArrayList<>();
         for (Meet meet : mListMeet){
