@@ -230,4 +230,39 @@ public class Meet extends DataSupport implements Parcelable {
             return new Meet[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "Meet{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", meetTime=" + meetTime +
+                ", meetCompany='" + meetCompany + '\'' +
+                ", department='" + department + '\'' +
+                ", level=" + level +
+                ", docNo='" + docNo + '\'' +
+                ", docTitle='" + docTitle + '\'' +
+                ", docSummary='" + docSummary + '\'' +
+                ", contactName='" + contactName + '\'' +
+                ", contactPhone='" + contactPhone + '\'' +
+                ", addr='" + addr + '\'' +
+                ", signNum=" + signNum +
+                ", signStatus=" + signStatus +
+                ", isuse=" + isuse +
+                ", remark='" + remark + '\'' +
+                ", cuid='" + cuid + '\'' +
+                ", uuid='" + uuid + '\'' +
+                ", orderBy='" + orderBy + '\'' +
+                ", createTime=" + createTime +
+                ", attachmentList=" + attachmentList +
+                ", meetTimeString='" + meetTimeString + '\'' +
+                ", sendDepartmentInfo='" + sendDepartmentInfo + '\'' +
+                ", departmentInfo='" + departmentInfo + '\'' +
+                ", meetCompanyName='" + meetCompanyName + '\'' +
+                ", tid='" + tid + '\'' +
+                ", didtask='" + didtask + '\'' +
+                ", passStatus=" + passStatus +
+                ", updataTime=" + updataTime +
+                '}';
+    }
 }

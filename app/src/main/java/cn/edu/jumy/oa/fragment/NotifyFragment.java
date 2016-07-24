@@ -144,12 +144,6 @@ public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.O
         adapter.setOnItemClickListener(this);
     }
 
-    @Override
-    public void onDestroy() {
-        //存入缓存
-        ACache.get(getActivity()).put("notify_items", (ArrayList<Node>) cardList);
-        super.onDestroy();
-    }
 
     @Override
     public void onRefresh() {

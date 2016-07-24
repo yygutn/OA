@@ -1,6 +1,7 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -32,15 +33,18 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
     ArrayList<Meet> mList = new ArrayList<>();
 
     int index = 1;
+    int pages = 20;
 
     @AfterExtras
     void getData() {
-        OAService.meetUser(getParams(index++), new MeetCallback() {
+        OAService.meetUser(getParams(index), new MeetCallback() {
             @Override
             public void onResponse(MeetResponse response, int id) {
                 if (response != null && response.code == 0 && response.data != null) {
+                    mListView.setLoadMoreCount(index*pages);
+                    index++;
                     mList.addAll(response.data.pageObject);
-                    adapter.setList(mList);
+                    adapter.setList(new ArrayList(mList));
                 }
             }
         });
@@ -98,7 +102,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void initListView() {
-        adapter = new MeetingCardAdapter(mContext,R.layout.item_notify_notification,mList);
+        adapter = new MeetingCardAdapter(mContext,R.layout.item_card_notification,new ArrayList(mList));
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
     }
@@ -115,15 +119,17 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
             @Override
             public void onResponse(MeetResponse response, int id) {
                 if (response != null && response.code == 0 && response.data != null) {
+                    mListView.setLoadMoreCount(index*pages);
+                    index++;
                     mList.addAll(response.data.pageObject);
-                    adapter.setList(mList);
+                    adapter.setList(new ArrayList(mList));
                 }
             }
         });
     }
 
     @Override
-    public void onRefresh() {
+    public void doRefresh() {
         //下拉刷新
         OAService.meetUser(getParams(1), new MeetCallback() {
             @Override
@@ -142,13 +148,24 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
                         mList.add(0, response.data.pageObject.get(i));
                     }
                 }
+                adapter.setList(new ArrayList(mList));
             }
         });
     }
 
     @Override
     protected void onTextSubmit(String str) {
-
+        if (TextUtils.isEmpty(str)){
+            showToast("请输入关键字");
+            return;
+        }
+        ArrayList<Meet> list = new ArrayList<>();
+        for (Meet node : mList){
+            if (node.docTitle.contains(str)){
+                list.add(node);
+            }
+        }
+        adapter.setList(list);
     }
 
     @Override

@@ -65,6 +65,7 @@ public class BaseSearchRefreshActivity extends BaseActivity implements OnItemCli
             mListView.setLayoutManager(new LinearLayoutManager(this));
             mListView.setOnRefreshListener(this);
             mListView.setPagingableListener(this);
+            mListView.setLoadMoreCount(20);
 
             mListView.getRecyclerView().addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
@@ -155,6 +156,7 @@ public class BaseSearchRefreshActivity extends BaseActivity implements OnItemCli
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
+                    onTextChange(newText);
                     return false;
                 }
             });
@@ -178,6 +180,11 @@ public class BaseSearchRefreshActivity extends BaseActivity implements OnItemCli
             e.printStackTrace();
         }
     }
+
+    protected void onTextChange(String text) {
+
+    }
+
     @DrawableRes(R.drawable.ic_arrow_back_white)
     Drawable back;
     @DrawableRes(R.drawable.ic_clear_white)
