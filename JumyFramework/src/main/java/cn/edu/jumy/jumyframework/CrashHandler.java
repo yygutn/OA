@@ -1,6 +1,6 @@
 package cn.edu.jumy.jumyframework;
 
-import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -22,16 +22,13 @@ import java.util.Date;
 import java.util.Properties;
 
 /**
- * 异常处理
- */
-/**
  * 捕捉App全局异常,并由用户决定是否发送到服务器
  */
-public class CrashHandler implements Thread.UncaughtExceptionHandler {
+public class CrashHandler implements UncaughtExceptionHandler {
     public static final String TAG = CrashHandler.class.getSimpleName();
-    private volatile static CrashHandler instance;
+    private static CrashHandler instance;
     private Context mContext;
-    private Thread.UncaughtExceptionHandler mDefaultHandler;
+    private UncaughtExceptionHandler mDefaultHandler;
 
     /** 使用Properties来保存设备的信息和错误堆栈信息 */
     private Properties mCrashInfo = new Properties();
@@ -47,41 +44,20 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     public static CrashHandler getInstance() {
         if (instance == null) {
-            synchronized (CrashHandler.class) {
-                if (instance == null) {
-                    instance = new CrashHandler();
-                }
-            }
+            instance = new CrashHandler();
         }
+
         return instance;
     }
 
     /**
      * @param ctx
-     * +param 用户自行实现的发送服务
      */
     public void init(Context ctx) {
         mContext = ctx;
         mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
-
-//        sendLastReport(sendService);
     }
-
-    /**
-     * 发送上次的报告
-     *
-     * @param sendService
-     */
-//    private void sendLastReport(Class<? extends AbsSendFileService> sendService) {
-//        if (sendService == null)
-//            return;
-//        Intent intent = new Intent(mContext, sendService);
-//        intent.putExtra(AbsSendFileService.INTENT_DIR, mContext.getFilesDir()
-//                .getAbsolutePath());
-//        intent.putExtra(AbsSendFileService.INTENT_EXTENSION, CRASH_REPORTER_EXTENSION);
-//        mContext.startService(intent);
-//    }
 
     /**
      * 当UncaughtException发生时会转入该函数来处理
@@ -112,16 +88,17 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     /**
      * 强制关闭程序<br>
-     * todo 并不能退出所有Activity,目前尚未找到比较优雅的做法
+     * FIXME 并不能退出所有Activity,目前尚未找到比较优雅的做法
      */
     private void exitCurrentApp() {
-        AppManager.getInstance().AppExit(mContext);
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
     }
 
     /**
      * 弹出异常说明对话框<br>
      * 使用系统级别的对话框
-     * 需要权限 {@link WindowManager.LayoutParams}
+     * 需要权限 {@link WindowManager.LayoutParams.TYPE_SYSTEM_ALERT}
      * <p>
      * See <a href="http://android.35g.tw/?p=191">http://android.35g.tw/?p=191</a>
      */

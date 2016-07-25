@@ -127,25 +127,7 @@ public class MineFragment extends BaseFragment {
     }
 
     public void asyncFetchUserInfo(String username) {
-        DemoHelper.getInstance().getUserProfileManager().asyncGetUserInfo(username, new EMValueCallBack<EaseUser>() {
-
-            @Override
-            public void onSuccess(EaseUser user) {
-                if (user != null) {
-                    DemoHelper.getInstance().saveContact(user);
-                    mSettingText.setText(user.getNick());
-                    if (!TextUtils.isEmpty(user.getAvatar())) {
-                        Glide.with(mContext).load(user.getAvatar()).placeholder(R.drawable.em_default_avatar).into(mSettingAvatar);
-                    } else {
-                        Glide.with(mContext).load(R.drawable.em_default_avatar).into(mSettingAvatar);
-                    }
-                }
-            }
-
-            @Override
-            public void onError(int error, String errorMsg) {
-            }
-        });
+        EaseUserUtils.setUserAvatar(mContext,username,mSettingAvatar);
     }
 
 }
