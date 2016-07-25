@@ -28,9 +28,6 @@ import cn.edu.jumy.oa.UI.TaskItem.SendMeetingActivity_;
 import cn.edu.jumy.oa.UI.TaskItem.SentDocumentActivity_;
 import cn.edu.jumy.oa.UI.TaskItem.SentMeetingActivity_;
 import cn.edu.jumy.oa.UI.VerifyActivity_;
-import cn.edu.jumy.oa.UI.VideoPlayerActivity_;
-import cn.edu.jumy.oa.UI.web.FileSentActivity_;
-import cn.edu.jumy.oa.UI.web.MeetingSentActivity_;
 import cn.edu.jumy.oa.UI.web.StudyOnlineActivity_;
 import cn.edu.jumy.oa.widget.dragrecyclerview.adapter.RecyclerAdapter;
 import cn.edu.jumy.oa.widget.dragrecyclerview.common.DividerGridItemDecoration;
@@ -98,7 +95,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
             results.add(new Item(12, "公告", R.drawable.task_notice));
             results.add(new Item(7, "在线学习", R.drawable.task_learn_online));
             results.add(new Item(13, "已发送公文", R.drawable.task_file_send));
-            results.add(new Item(14,"已发布会议",R.drawable.task_meet_sent));
+            results.add(new Item(14, "已发布会议", R.drawable.task_meet_sent));
 //            results.add(new Item(1, "签到", R.drawable.task_location));
             results.add(new Item(2, "加密邮件", R.drawable.task_mail));
         }
@@ -206,12 +203,12 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                         NotifyActivity_.intent(mContext).start();
                         break;
                     }
-                    case 13:{//已发送公文
+                    case 13: {//已发送公文
 //                        FileSentActivity_.intent(mContext).start();
                         SentDocumentActivity_.intent(mContext).start();
                         break;
                     }
-                    case 14:{
+                    case 14: {
 //                        MeetingSentActivity_.intent(mContext).start();
                         SentMeetingActivity_.intent(mContext).start();
                         break;

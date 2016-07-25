@@ -16,7 +16,6 @@ import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.TaskItem.ApprovalFqActivity_;
 import cn.edu.jumy.oa.UI.TaskItem.ApprovalSpActivity_;
-import cn.edu.jumy.oa.UI.web.FromMeActivity_;
 import cn.edu.jumy.oa.widget.dragrecyclerview.entity.Item;
 
 /**
@@ -49,7 +48,7 @@ import cn.edu.jumy.oa.widget.dragrecyclerview.entity.Item;
  * *****************************************************
  */
 @EActivity(R.layout.activity_approval)
-public class ApprovalActivity extends BaseActivity{
+public class ApprovalActivity extends BaseActivity {
     private List<Item> results = new ArrayList<Item>();
 
     @ViewById(R.id.toolbar)

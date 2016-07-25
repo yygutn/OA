@@ -119,6 +119,7 @@
         <activity android:name=".UI.DepartmentOftenUseFixActivity_" />
         <activity android:name=".UI.TaskItem.ApprovalFqActivity_" />
         <activity android:name=".UI.TaskItem.ApprovalSpActivity_" />
+        <activity android:name=".UI.TaskItem.VideoListActivity_" />
 
 
 
