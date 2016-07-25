@@ -115,10 +115,13 @@ public class DepartmentSelectActivity extends BaseActivity {
             names = often.departmentName.split(",");
             len = ids.length;
             for (int i = 0; i < len; i++) {
-                temp.add(new Account(ids[i],names[i]));
+                temp.add(new Account(ids[i], names[i]));
             }
 
             IndexHeaderEntity<Account> hotHeader = new IndexHeaderEntity<>();
+            if (TextUtils.isEmpty(often.name)) {
+                often.name = "#";
+            }
             hotHeader.setHeaderTitle(often.name);
             hotHeader.setIndex(often.name.charAt(0) + " ");
             hotHeader.setHeaderList(temp);
@@ -180,7 +183,7 @@ public class DepartmentSelectActivity extends BaseActivity {
     void submit() {
         String str = "";
         String ids = "";
-        Map<String,Integer> idMap = new HashMap<>();
+        Map<String, Integer> idMap = new HashMap<>();
         for (Account account : mDepartments) {
             if (account.checked) {
                 if (TextUtils.isEmpty(str)) {
@@ -190,17 +193,17 @@ public class DepartmentSelectActivity extends BaseActivity {
                 } else {
                     str += "," + account.name;
                 }
-                idMap.put(account.id,0);
+                idMap.put(account.id, 0);
             }
         }
-        for (IndexHeaderEntity<Account> entity : mHeaderList){
-            for (Account account : entity.getHeaderList()){
-                if (account.checked){
-                    idMap.put(account.name,0);
+        for (IndexHeaderEntity<Account> entity : mHeaderList) {
+            for (Account account : entity.getHeaderList()) {
+                if (account.checked) {
+                    idMap.put(account.name, 0);
                 }
             }
         }
-        for (String id: idMap.keySet()){
+        for (String id : idMap.keySet()) {
             if (TextUtils.isEmpty(ids)) {
                 ids = id;
             } else {
