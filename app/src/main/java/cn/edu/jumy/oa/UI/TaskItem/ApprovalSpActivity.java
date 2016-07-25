@@ -59,7 +59,6 @@ import cn.edu.jumy.oa.fragment.WaitingForApprovalFragment_;
  */
 @EActivity(R.layout.activity_shen_pi)
 public class ApprovalSpActivity extends BaseActivity {
-    private final Class fragmentArray[] = {null,null};
 
     @ViewById(R.id.title_bar)
     protected Toolbar mToolBar;

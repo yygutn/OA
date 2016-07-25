@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.BroadCastReceiver.UploadBroadcastReceiver;
 import cn.edu.jumy.oa.OAService;
@@ -214,7 +215,7 @@ public class DocumentReleaseActivity extends BaseActivity {
                             public void onResponse(String response, int id) {
                                 progressDialog.dismiss();
                                 if (response.contains("0")) {
-                                    showToast("发送成功");
+                                    afterSent();
                                 } else {
                                     JSONObject object = new Gson().fromJson(response, JSONObject.class);
                                     try {
@@ -235,6 +236,54 @@ public class DocumentReleaseActivity extends BaseActivity {
                 .create();
         alertDialog.show();
         alertDialog.setCanceledOnTouchOutside(true);
+    }
+
+    private void afterSent() {
+        AlertDialog alertDialog = new AlertDialog.Builder(mContext)
+                .setTitle("发送成功")
+                .setMessage("是否继续发布公文")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //continue
+                        clearContent();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        AlertDialog dialog = new AlertDialog.Builder(mContext)
+                                .setMessage("是否进入已发布公文界面")
+                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        backToPreActivity();
+                                    }
+                                })
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //ok
+                                        SentDocumentActivity_.intent(mContext).start();
+                                        AppManager.getInstance().finishCurActivity();
+                                    }
+                                })
+                                .create();
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.show();
+                    }
+                })
+                .create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
+    private void clearContent() {
+        mDropDownMenu1.setText("");
+        mDropDownMenu2.setTabText(mLevel.get(0));
+        mEt1.setText("");
+        mEt2.setText("");
+        mEt3.setText("");
     }
 
     private void dealZipFile() {

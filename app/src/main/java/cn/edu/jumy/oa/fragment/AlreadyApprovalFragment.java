@@ -40,7 +40,7 @@ public class AlreadyApprovalFragment extends BaseSearchRefreshFragment{
     protected void initList() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(MeetBroadcastReceiver.MEET);
-        mContext.registerReceiver(documentBroadcastReceiver, filter);
+        mContext.registerReceiver(meetBroadcastReceiver, filter);
     }
     @Override
     protected void updateListView() {
@@ -76,8 +76,12 @@ public class AlreadyApprovalFragment extends BaseSearchRefreshFragment{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (meetBroadcastReceiver != null) {
-            mContext.unregisterReceiver(meetBroadcastReceiver);
+        try {
+            if (meetBroadcastReceiver != null) {
+                mContext.unregisterReceiver(meetBroadcastReceiver);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -51,8 +51,6 @@ public class SignUpActivity extends BaseActivity {
     protected AppCompatEditText mSignUpPosition;
     @ViewById(R.id.sign_up_phone)
     protected AppCompatEditText mSignUpPhone;
-    @ViewById(R.id.dropDownMenu)
-    protected AppCompatTextView mUnitTextView;
     @ViewById(R.id.sign_up_join_button)
     protected CheckBox mSignUpJoinButton;
     @ViewById(R.id.sign_up_listen_button)
@@ -111,7 +109,7 @@ public class SignUpActivity extends BaseActivity {
      *
      * @param view
      */
-    @Click({R.id.sign_up_ll_join, R.id.sign_up_ll_leave, R.id.sign_up_ll_listen, R.id.dropDownMenu})
+    @Click({R.id.sign_up_ll_join, R.id.sign_up_ll_leave, R.id.sign_up_ll_listen})
     void click(View view) {
         switch (view.getId()) {
             case R.id.sign_up_ll_join: {//参会
@@ -130,10 +128,6 @@ public class SignUpActivity extends BaseActivity {
                 resetButton();
                 mSignUpListenButton.setChecked(true);
                 status = 1;
-                break;
-            }
-            case R.id.dropDownMenu: {
-                DepartmentSelectActivity_.intent(mContext).startForResult(0);
                 break;
             }
             default:
@@ -160,7 +154,7 @@ public class SignUpActivity extends BaseActivity {
                         params.put("id", id);//报名表人员id(修改必填项)
                         params.put("pid", pid);//会议id(添加必填项，修改无效)
                         params.put("name", name);//姓名(添加必填项，修改不必填，下同)
-                        params.put("post", position);//职位
+//                        params.put("post", position);//职位
                         params.put("sex", "");//性别(0:男  1:女)
                         params.put("phone", tel);//电话(不必填)
                         params.put("type", status+"");//状态(0:参会 1:听会 2:请假)
@@ -219,23 +213,5 @@ public class SignUpActivity extends BaseActivity {
         mSignUpPosition.clearFocus();
         mSignUpPhone.clearFocus();
         mSignUpLeave.clearFocus();
-    }
-
-    /**
-     * 承办单位
-     *
-     * @param resultCode
-     * @param data
-     */
-    @OnActivityResult(0)
-    void result1(int resultCode, Intent data) {
-        if (resultCode == 0) {
-            mUnitID = data.getStringExtra("ids");
-            mUnit = data.getStringExtra("str");
-            mUnitTextView.setText(mUnit);
-        } else if (resultCode == 1) {
-            //没有选择接收单位
-            mUnit = mUnitID = "";
-        }
     }
 }

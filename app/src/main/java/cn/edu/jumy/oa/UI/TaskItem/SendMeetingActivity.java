@@ -36,10 +36,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.BroadCastReceiver.UploadBroadcastReceiver;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.UI.DepartmentSelectActivity_;
 import cn.edu.jumy.oa.Utils.OpenApp;
 import cn.edu.jumy.oa.adapter.ListDropDownAdapter;
@@ -271,11 +273,6 @@ public class SendMeetingActivity extends BaseActivity {
         OAService.meetSend(params, fileMap, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
                 progressDialog.dismiss();
                 showDebugException(e);
                 showToast("网络异常,发送失败");
@@ -283,29 +280,73 @@ public class SendMeetingActivity extends BaseActivity {
 
             @Override
             public void onResponse(String response, int id) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
                 progressDialog.dismiss();
-                if (response.contains("0")) {
-                    showToast("发送成功");
+                Gson gson = new Gson();
+                BaseResponse baseResponse = gson.fromJson(response,BaseResponse.class);
+                if (baseResponse.code == 0){
+                    afterSent();
                 } else {
-                    JSONObject object = new Gson().fromJson(response, JSONObject.class);
-                    try {
-                        if (TextUtils.isEmpty(object.get("data").toString())) {
-                            showToast("服务器异常,发送失败");
-                        } else {
-                            showToast(object.get("data").toString());
-                        }
-                    } catch (JSONException e) {
-                        showToast("服务器异常,发送失败");
-                        showDebugException(e);
-                    }
+                    showToast("发送失败"+(TextUtils.isEmpty(baseResponse.msg)?"":(","+baseResponse.msg)));
                 }
             }
         });
+    }
+
+    private void afterSent() {
+        AlertDialog alertDialog = new AlertDialog.Builder(mContext)
+                .setTitle("发送成功")
+                .setMessage("是否继续发布会议")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //continue
+                        clearContent();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        AlertDialog dialog = new AlertDialog.Builder(mContext)
+                                .setMessage("是否进入已发布会议界面")
+                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        backToPreActivity();
+                                    }
+                                })
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //ok
+                                        SentMeetingActivity_.intent(mContext).start();
+                                        AppManager.getInstance().finishCurActivity();
+                                    }
+                                })
+                                .create();
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.show();
+                    }
+                })
+                .create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
+    private void clearContent() {
+        mDropDownMenu1.setText("");
+        mDropDownMenuUnit.setText("");
+        mDropDownMenu2.setTabText(mLevel.get(0));
+        mMeetingNumber.setText("");
+        mMeetingTitle.setText("");
+        mMeetingName.setText("");
+        mMeetingDetails.setText("");
+        mMeetingTime.setText("");
+        mMeetingPeople.setText("");
+        mMeetingPhone.setText("");
+        mMeetingLoc.setText("");
+        mAddUpload.setText("");
+        mUploadView.removeAllViews();
+        index = 0;
     }
 
 

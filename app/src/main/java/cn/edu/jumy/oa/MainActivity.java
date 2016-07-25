@@ -485,6 +485,8 @@ public class MainActivity extends BaseActivity {
         sdkHelper.pushActivity(this);
 
         EMClient.getInstance().chatManager().addMessageListener(messageListener);
+
+        System.gc();
     }
 
     @Override

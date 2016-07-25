@@ -36,31 +36,6 @@ public class SentDocumentActivity extends BaseSearchRefreshActivity {
     @Override
     protected void initData() {
         mList = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        int year, month, day;
-        Calendar calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR) - 1900;
-        month = calendar.get(Calendar.MONTH);
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-        if ((month < 8 && (month & 1) == 1) || (month >= 8 && (month & 1) == 0)) {
-            if (day == 31) {
-                day--;
-            }
-            if (month == 2 && day > 28) {
-                day = 28;
-            }
-            if (month == 0) {
-                month = 11;
-                year--;
-            } else {
-                month--;
-            }
-        } else {
-            month--;
-        }
-        String before = sdf.format(new Date(year, month, day));
-        String now = sdf.format(date);
 
         final Map<String, String> params = new HashMap<>();
         params.put("page", "1");
@@ -68,8 +43,6 @@ public class SentDocumentActivity extends BaseSearchRefreshActivity {
         params.put("level", "");
         params.put("docNo", "");
         params.put("docTitle", "");
-        params.put("startTime", before);
-        params.put("endTime", now);
         params.put("signStatus", "");
 
         OAService.docUser(params, new DocCallback() {
@@ -78,6 +51,7 @@ public class SentDocumentActivity extends BaseSearchRefreshActivity {
                 if (response != null && response.code == 0 && response.data != null){
                     mListDoc = response.data.pageObject;
                     adapter.setList(response.data.pageObject);
+                    mListView.setLoadMoreCount(20);
                 }
             }
         });

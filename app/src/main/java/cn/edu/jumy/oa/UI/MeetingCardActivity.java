@@ -184,7 +184,7 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
         params.put("docTitle", "");
         params.put("meetCompany", "");
         params.put("signStatus", "");
-        params.put("passStatus", "0");
+        params.put("passStatus", "");
 
         OAService.meetReceive(params, new MeetCallback() {
             @Override

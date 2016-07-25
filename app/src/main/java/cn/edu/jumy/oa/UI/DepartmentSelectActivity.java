@@ -184,22 +184,18 @@ public class DepartmentSelectActivity extends BaseActivity {
         String str = "";
         String ids = "";
         Map<String, Integer> idMap = new HashMap<>();
+        Map<String, Integer> nameMap = new HashMap<>();
         for (Account account : mDepartments) {
             if (account.checked) {
-                if (TextUtils.isEmpty(str)) {
-                    str = account.name;
-                } else if (str.contains(",")) {
-                    str += "等";
-                } else {
-                    str += "," + account.name;
-                }
+                nameMap.put(account.name,0);
                 idMap.put(account.id, 0);
             }
         }
         for (IndexHeaderEntity<Account> entity : mHeaderList) {
             for (Account account : entity.getHeaderList()) {
                 if (account.checked) {
-                    idMap.put(account.name, 0);
+                    idMap.put(account.id, 0);
+                    nameMap.put(account.name,0);
                 }
             }
         }
@@ -210,10 +206,20 @@ public class DepartmentSelectActivity extends BaseActivity {
                 ids += "," + id;
             }
         }
+        for (String name : nameMap.keySet()){
+            if (TextUtils.isEmpty(str)) {
+                str = name;
+            } else if (str.contains(",")) {
+                str += "等";
+            } else {
+                str += "," + name;
+            }
+        }
         int requestCode = getIntent().getIntExtra("requestCode", -1);
         if (requestCode == 0 && mDepartments != null && mDepartments.size() > 0) {
             if (ids.contains(",")) {
                 showToast("只能选择一个承办单位,请重新选择");
+                return;
             }
         }
         Intent data = new Intent();

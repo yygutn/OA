@@ -74,25 +74,6 @@
                 android:background="@drawable/shape_normal_gray"
                 android:minHeight="30dp" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="所在单位:"
-                android:textColor="@color/black" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/dropDownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/shape_normal_gray"
-                android:gravity="center"
-                android:hint="请选择所在单位"
-                android:minHeight="48dp"
-                android:textColor="@color/black" />
-
 
             <RelativeLayout
                 android:layout_width="match_parent"

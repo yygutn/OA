@@ -57,8 +57,6 @@ import okhttp3.Response;
 @EActivity(R.layout.activity_document_read)
 public class DocumentReadActivity extends BaseActivity {
     private static final String TAG = DocumentReadActivity.class.getSimpleName();
-    private LayoutInflater layoutInflater;
-    private final Class fragmentArray[] = {DocumentUnreadFragment_.class, DocumentReadFragment_.class, DocumentAllFragment_.class};
 
     @ViewById(R.id.title_bar)
     protected Toolbar mToolBar;
