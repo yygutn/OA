@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Environment;
+import android.os.FileObserver;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
@@ -25,8 +27,6 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.ColorRes;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -129,6 +129,16 @@ public class SendMeetingActivity extends BaseActivity {
         }
     };
 
+    String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/Office Lens";
+
+    Map<String, Boolean> picMap = new HashMap<>();//扫描件
+    FileObserver listener = new FileObserver(dir, FileObserver.CREATE) {
+        @Override
+        public void onEvent(int event, String path) {
+            picMap.put(path, true);
+        }
+    };
+
     private void dealZipFile() {
         fileMap = new HashMap<>();
         for (String path : mFilePath) {
@@ -150,6 +160,10 @@ public class SendMeetingActivity extends BaseActivity {
         filter.addAction(UploadBroadcastReceiver.UPLOAD_BR_RESULT);
         filter.addAction(UploadBroadcastReceiver.UPLOAD_BR_RESULT_DELETE);
         registerReceiver(uploadBroadcastReceiver, filter);
+        File dirs = new File(dir);
+        if (!dirs.exists()) {
+            dirs.mkdir();
+        }
     }
 
     @Click({R.id.submit, R.id.addUpload, R.id.meeting_time, R.id.addUpload_2, R.id.Undertaking_Unit, R.id.dropDownMenu_1})
@@ -184,11 +198,15 @@ public class SendMeetingActivity extends BaseActivity {
                 break;
             }
             case R.id.addUpload_2: {
-                OpenApp.doStartApplicationWithPackageName(OpenApp.OFFICE_LENS, mContext, "请先安装Office Lens");
+                Intent app = OpenApp.getApplicationWithPackageName(OpenApp.OFFICE_LENS, mContext, "请先安装Office Lens");
+                if (app != null) {
+                    listener.startWatching();
+                    startActivityForResult(app, 110);
+                }
                 break;
             }
             case R.id.Undertaking_Unit: {
-                DepartmentSelectActivity_.intent(mContext).extra("requestCode",0).startForResult(0);
+                DepartmentSelectActivity_.intent(mContext).extra("requestCode", 0).startForResult(0);
                 break;
             }
             case R.id.dropDownMenu_1: {
@@ -282,11 +300,11 @@ public class SendMeetingActivity extends BaseActivity {
             public void onResponse(String response, int id) {
                 progressDialog.dismiss();
                 Gson gson = new Gson();
-                BaseResponse baseResponse = gson.fromJson(response,BaseResponse.class);
-                if (baseResponse.code == 0){
+                BaseResponse baseResponse = gson.fromJson(response, BaseResponse.class);
+                if (baseResponse.code == 0) {
                     afterSent();
                 } else {
-                    showToast("发送失败"+(TextUtils.isEmpty(baseResponse.msg)?"":(","+baseResponse.msg)));
+                    showToast("发送失败" + (TextUtils.isEmpty(baseResponse.msg) ? "" : ("," + baseResponse.msg)));
                 }
             }
         });
@@ -428,5 +446,23 @@ public class SendMeetingActivity extends BaseActivity {
             //没有选择接收单位
             receiveUnits = receiveUnitsID = "";
         }
+    }
+
+    /**
+     * 扫描文件，图片附件在这里添加到页面显示
+     */
+    @OnActivityResult(110)
+    void onPic() {
+        listener.stopWatching();
+        for (String name : picMap.keySet()) {
+            File file = new File(dir, name);
+            if (file != null && file.exists()) {
+                UploadItem item = UploadItem_.build(mContext, this);
+                item.setPathForShow(name);
+                uploadView.addView(item, index++);
+                mFilePath.add(file.getAbsolutePath());
+            }
+        }
+        picMap.clear();
     }
 }
