@@ -25,8 +25,8 @@ public class BaseSearchRefreshAdapter extends CommonAdapter<Node> {
     public void convert(ViewHolder holder, final Node node) {
         try {
             ((CardView) holder.getView(R.id.cardView)).setCardBackgroundColor(Color.parseColor("#30DDDDDD"));
-            holder.setText(R.id.subtitle, node.getTitle());
-            holder.setText(R.id.supportingText, node.getContent());
+            holder.setText(R.id.subtitle, node.title);
+            holder.setText(R.id.supportingText, node.content);
         } catch (Exception e) {
             e.printStackTrace();
         }

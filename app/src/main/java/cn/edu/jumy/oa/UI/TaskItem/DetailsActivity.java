@@ -95,10 +95,10 @@ public class DetailsActivity extends BaseActivity {
             showDebugException(e);
         }
 
-        if (mNode.getType() == 1) {
+        if (mNode.type == 1) {
             DocSignBackground();
             setResult(1025);
-        } else if (mNode.getType() == 0) {
+        } else if (mNode.type == 0) {
             MeetSign();
         }
     }
@@ -157,7 +157,7 @@ public class DetailsActivity extends BaseActivity {
 
     private void setUpViews() {
         //标题处理
-        switch (mNode.getType()) {
+        switch (mNode.type) {
             case 0: {
                 mTitleBar.setTitle("会议详情");
                 mDocumentDetailsLevel.setVisibility(View.GONE);
@@ -178,7 +178,7 @@ public class DetailsActivity extends BaseActivity {
         //文字信息处理
         // TODO: 16/7/12 根据LEVEL的等级ID设置不同的等级显示
         String level = "";
-        switch (mNode.getLevel()) {
+        switch (mNode.level) {
             case 0: {
                 level = "特提";
                 break;
@@ -204,17 +204,17 @@ public class DetailsActivity extends BaseActivity {
         }
         try {
             mDocumentDetailsLevel.setText(level);
-            mDocumentDetailsTitle.setText(mNode.getTitle());
-            mDocumentDetailsNumber.setText(mNode.getDocumentNumber());
-            mDocumentDetailsContentHead.setText(mNode.getContentHead());
-            mDocumentDetailsTime.setText(mNode.getDispatchTime());
-            mDocumentDetailsOther.setText(mNode.getOther());
+            mDocumentDetailsTitle.setText(mNode.title);
+            mDocumentDetailsNumber.setText(mNode.documentNumber);
+            mDocumentDetailsContentHead.setText(mNode.contentHead);
+            mDocumentDetailsTime.setText(mNode.dispatchTime);
+            mDocumentDetailsOther.setText(mNode.other);
 
-            switch (mNode.getType()) {
+            switch (mNode.type) {
                 case 0: {//会议，特殊处理
                     mDocumentDetailsContent.setVisibility(View.GONE);
                     mDocumentDetailsContent_meet.setVisibility(View.VISIBLE);
-                    mDocumentDetailsContent_meet.setText(mNode.getContent());
+                    mDocumentDetailsContent_meet.setText(mNode.content);
                     mDocumentDetailsContent_meet.getViewTreeObserver().addOnGlobalLayoutListener(new OnTvGlobalLayoutListener());
                     break;
                 }
@@ -222,7 +222,7 @@ public class DetailsActivity extends BaseActivity {
                 case 2: {
                     mDocumentDetailsContent.setVisibility(View.VISIBLE);
                     mDocumentDetailsContent_meet.setVisibility(View.GONE);
-                    mDocumentDetailsContent.setText(mNode.getContent());
+                    mDocumentDetailsContent.setText(mNode.content);
                 }
                 default:
                     break;
@@ -303,7 +303,7 @@ public class DetailsActivity extends BaseActivity {
                 break;
             }
             case R.id.document_details_sign_up: {// TODO: 16/7/5 报名
-                SignUpActivity_.intent(mContext).extra("pid",mNode.getID()).start();
+                SignUpActivity_.intent(mContext).extra("pid",mNode.id).start();
                 break;
             }
             default:
@@ -315,7 +315,7 @@ public class DetailsActivity extends BaseActivity {
 
     private void doFileDownload() {
         Map<String, String> params = new HashMap<>();
-        params.put("pid", TextUtils.isEmpty(mNode.getID()) ? "" : mNode.getID());
+        params.put("pid", TextUtils.isEmpty(mNode.id) ? "" : mNode.id);
         OAService.getAttachmentList(params, new AttachListCallBack() {
             @Override
             public void onResponse(AttachResponse response, int id) {

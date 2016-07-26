@@ -747,5 +747,27 @@ public class OAService {
                         .execute(callback);
             }
         });
+    }    /**
+     * 获取当前用户以及其组织名称
+     *
+     * @param callback 回调
+     */
+    public static void getNotice(final String id, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "getNotice")
+                        .addParams("value", response)
+                        .addParams("id",id)
+                        .build()
+                        .execute(callback);
+            }
+        });
     }
 }

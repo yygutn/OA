@@ -54,7 +54,7 @@ public class NotifyCardAdapter extends CommonAdapter<Node>{
     @Override
     public void convert(ViewHolder holder, Node node) {
         ((CardView)holder.getView(R.id.cardView)).setCardBackgroundColor(Color.parseColor("#30DDDDDD"));
-        holder.setText(R.id.subtitle,node.getTitle());
+        holder.setText(R.id.subtitle,node.title);
         String message = CardGenerator.getContentString(node);
         holder.setText(R.id.supportingText,message);
     }

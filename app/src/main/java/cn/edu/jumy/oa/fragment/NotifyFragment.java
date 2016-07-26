@@ -3,6 +3,7 @@ package cn.edu.jumy.oa.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,14 @@ import android.widget.ImageView;
 import com.google.gson.Gson;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
+import com.zhy.http.okhttp.callback.Callback;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,16 +32,21 @@ import cn.edu.jumy.oa.CallBack.MeetCallback;
 import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.Response.DocResponse;
 import cn.edu.jumy.oa.Response.MeetResponse;
 import cn.edu.jumy.oa.Response.NotifyBroadCastResponse;
+import cn.edu.jumy.oa.Response.SingleNotifyResponse;
 import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
 import cn.edu.jumy.oa.Utils.NotifyUtils;
 import cn.edu.jumy.oa.adapter.NotifyCardAdapter;
 import cn.edu.jumy.oa.bean.Doc;
 import cn.edu.jumy.oa.bean.Meet;
 import cn.edu.jumy.oa.bean.Node;
+import cn.edu.jumy.oa.bean.NotifyCard;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
+import okhttp3.Call;
+import okhttp3.Response;
 
 /**
  * Created by Jumy on 16/5/19 12:07.
@@ -78,6 +87,8 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
     ImageView mEmptyImageView;
     private ArrayList<Node> mList;
     NotifyCardAdapter adapter;
+
+    Handler mHandler = new Handler();
 
     Gson gson = new Gson();
     NotifyReceiveBroadCastReceiver notifyReceiveBroadCastReceiver = new NotifyReceiveBroadCastReceiver(){
@@ -147,7 +158,14 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         Node node = (Node) o;
+        mList.remove(position);
         DetailsActivity_.intent(mContext).extra("details",node).start();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        },1000);
     }
 
     @Override
@@ -216,6 +234,32 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
         });
     }
     private void getNotify(String id){
+        OAService.getNotice(id, new NotifyCallBack() {
+            @Override
+            public void onResponse(SingleNotifyResponse response, int ID) {
+                if (response.code != 0 || response.data == null){
+                    return;
+                }
+                mList.add(0,new Node(response.data));
+            }
+        });
+    }
+    abstract class NotifyCallBack extends Callback<SingleNotifyResponse>{
+        @Override
+        public SingleNotifyResponse parseNetworkResponse(Response response, int ID) throws Exception {
+            String data = response.body().string();
+            Gson gson = new Gson();
+            BaseResponse baseResponse = gson.fromJson(data,BaseResponse.class);
+            if (baseResponse.code == 0){
+                return gson.fromJson(data,SingleNotifyResponse.class);
+            } else {
+                return new SingleNotifyResponse(baseResponse);
+            }
+        }
 
+        @Override
+        public void onError(Call call, Exception e, int ID) {
+
+        }
     }
 }
