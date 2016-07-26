@@ -3,15 +3,19 @@ package cn.edu.jumy.oa.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 
 import com.zhy.base.adapter.ViewHolder;
 import com.zhy.base.adapter.recyclerview.CommonAdapter;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.Utils.CardGenerator;
 import cn.edu.jumy.oa.bean.Node;
 
 /**
@@ -48,9 +52,11 @@ public class NotifyCardAdapter extends CommonAdapter<Node>{
     }
 
     @Override
-    public void convert(ViewHolder holder, Node cardData) {
-        holder.setText(R.id.subtitle,cardData.getTitle());
-        holder.setText(R.id.supportingText,cardData.getContent());
+    public void convert(ViewHolder holder, Node node) {
         ((CardView)holder.getView(R.id.cardView)).setCardBackgroundColor(Color.parseColor("#30DDDDDD"));
+        holder.setText(R.id.subtitle,node.getTitle());
+        String message = CardGenerator.getContentString(node);
+        holder.setText(R.id.supportingText,message);
     }
+
 }

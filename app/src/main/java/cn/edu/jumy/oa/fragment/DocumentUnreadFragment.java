@@ -3,16 +3,11 @@ package cn.edu.jumy.oa.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
 
 import org.androidannotations.annotations.EFragment;
 
-import java.util.Arrays;
-
 import cn.edu.jumy.oa.BroadCastReceiver.DocumentBroadcastReceiver;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.Utils.CardGenerator;
-import cn.edu.jumy.oa.bean.Node;
 
 /**
  * Created by Jumy on 16/6/22 10:17.

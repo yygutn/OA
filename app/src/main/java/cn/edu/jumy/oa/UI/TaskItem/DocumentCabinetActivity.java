@@ -1,7 +1,5 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
-import android.content.res.Resources;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +11,10 @@ import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Utils.CallOtherOpenFile;
-import cn.edu.jumy.oa.Utils.CardGenerator;
 import cn.edu.jumy.oa.adapter.AnnexAdapter;
 import cn.edu.jumy.oa.bean.Annex;
 import okhttp3.Call;

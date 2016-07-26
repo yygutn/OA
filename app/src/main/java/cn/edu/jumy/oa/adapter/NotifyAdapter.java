@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.Utils.CardGenerator;
+import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.bean.Notify;
 
 /**
@@ -26,7 +28,7 @@ public class NotifyAdapter extends CommonAdapter<Notify>{
     public void convert(ViewHolder holder, Notify node) {
         ((CardView)holder.getView(R.id.cardView)).setCardBackgroundColor(Color.parseColor("#30DDDDDD"));
         holder.setText(R.id.subtitle,node.title);
-        holder.setText(R.id.supportingText, node.summary);
+        holder.setText(R.id.supportingText, CardGenerator.getContentString(new Node(node)));
     }
     public void setList(ArrayList<Notify> list){
         mDatas.clear();

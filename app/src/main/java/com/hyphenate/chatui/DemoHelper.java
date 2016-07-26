@@ -60,6 +60,8 @@ import java.util.UUID;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.MainActivity;
+import cn.edu.jumy.oa.MyApplication;
+import cn.edu.jumy.oa.Utils.NotifyUtils;
 
 public class DemoHelper {
     /**
@@ -767,6 +769,7 @@ public class DemoHelper {
 
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");
+                    NotifyUtils.sendNotifyBroadCast(MyApplication.getContext(),action);
                     BaseActivity.showDebugLogd(TAG,String.format("透传消息：action:%s,message:%s", action,message.toString()));
                 }
 			}

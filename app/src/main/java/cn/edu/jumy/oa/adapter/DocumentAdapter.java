@@ -3,7 +3,6 @@ package cn.edu.jumy.oa.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
-import android.util.SparseArray;
 
 import com.zhy.base.adapter.ViewHolder;
 import com.zhy.base.adapter.recyclerview.CommonAdapter;
@@ -14,8 +13,6 @@ import java.util.List;
 
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.bean.Doc;
-import cn.edu.jumy.oa.bean.Node;
-import cn.edu.jumy.oa.Utils.CardGenerator;
 
 /**
  * Created by Jumy on 16/6/20 16:22.
@@ -31,9 +28,9 @@ public class DocumentAdapter extends CommonAdapter<Doc> {
         try {
             holder.setTextColor(R.id.subtitle, Color.BLACK);
             holder.setTextColor(R.id.supportingText, Color.BLACK);
-            ((CardView)holder.getView(R.id.cardView)).setCardBackgroundColor(Color.parseColor("#30DDDDDD"));
+            ((CardView) holder.getView(R.id.cardView)).setCardBackgroundColor(Color.parseColor("#30DDDDDD"));
 
-            holder.setText(R.id.subtitle,node.docTitle);
+            holder.setText(R.id.subtitle, node.docTitle);
 
             String message = "";
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -45,8 +42,8 @@ public class DocumentAdapter extends CommonAdapter<Doc> {
         }
     }
 
-    public void setList(List<Doc> list){
-        if (list != null){
+    public void setList(List<Doc> list) {
+        if (list != null) {
             super.mDatas.clear();
             super.mDatas = list;
             notifyDataSetChanged();

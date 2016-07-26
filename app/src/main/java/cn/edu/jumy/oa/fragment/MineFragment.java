@@ -2,19 +2,15 @@ package cn.edu.jumy.oa.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.hyphenate.EMCallBack;
-import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatui.DemoApplication;
 import com.hyphenate.chatui.DemoHelper;
 import com.hyphenate.chatui.ui.LoginActivity;
-import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 
 import org.androidannotations.annotations.AfterViews;
@@ -24,7 +20,10 @@ import org.androidannotations.annotations.ViewById;
 
 import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseFragment;
+import cn.edu.jumy.oa.CallBack.UserCallback;
+import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.Response.UserResponse;
 import cn.edu.jumy.oa.UI.SettingActivity_;
 import cn.edu.jumy.oa.widget.customview.CircleImageView;
 import cn.edu.jumy.oa.widget.customview.LineControllerView;
@@ -52,20 +51,31 @@ public class MineFragment extends BaseFragment {
 
     @AfterViews
     void start() {
-        try {
-            mContext = getActivity();
-            EaseUserUtils.setUserAvatar(mContext, DemoApplication.currentUserName, mSettingAvatar);
-            EaseUserUtils.setUserNick(DemoApplication.currentUserName, mSettingText);
-            mSettingName.setText(DemoApplication.currentUserName);
-            //设置所属单位
-            //mSettingDescription.setName("所属单位:"+user.getLevel());
-            if (!DemoApplication.currentUserName.equals(EMClient.getInstance().getCurrentUser())) {
-                asyncFetchUserInfo(EMClient.getInstance().getCurrentUser());
-                DemoApplication.currentUserName = EMClient.getInstance().getCurrentUser();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        EaseUserUtils.setUserAvatar(mContext, DemoApplication.currentUserName, mSettingAvatar);
+        mSettingName.setText(DemoApplication.currentUserName);
+        //设置所属单位
+        //mSettingDescription.setName("所属单位:"+user.getLevel());
+        if (!DemoApplication.currentUserName.equals(EMClient.getInstance().getCurrentUser())) {
+            asyncFetchUserInfo(EMClient.getInstance().getCurrentUser());
+            DemoApplication.currentUserName = EMClient.getInstance().getCurrentUser();
         }
+        OAService.getMyUser(new UserCallback() {
+            @Override
+            public void onResponse(UserResponse response, int ID) {
+                String orgname[] = response.data.orgname.split(",");
+                mSettingText.setText(response.data.name);
+                String ans = "";
+                int len = orgname.length;
+                for (int i = 0; i < len; i++) {
+                    if (i == 0) {
+                        ans = orgname[i];
+                    } else {
+                        ans += "//" + orgname[i];
+                    }
+                }
+                mSettingDescription.setName("所属单位:" + ans);
+            }
+        });
     }
 
     @Click({R.id.setting_nav, R.id.setting_logout})
@@ -127,7 +137,7 @@ public class MineFragment extends BaseFragment {
     }
 
     public void asyncFetchUserInfo(String username) {
-        EaseUserUtils.setUserAvatar(mContext,username,mSettingAvatar);
+        EaseUserUtils.setUserAvatar(mContext, username, mSettingAvatar);
     }
 
 }

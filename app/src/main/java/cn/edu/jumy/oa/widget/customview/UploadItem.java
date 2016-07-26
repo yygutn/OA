@@ -3,6 +3,7 @@ package cn.edu.jumy.oa.widget.customview;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
@@ -43,6 +44,12 @@ public class UploadItem extends LinearLayout{
 
     public void setPath(String path) {
         this.filePath = path;
+    }
+
+    public void setPathForShow(@NonNull String name){
+        selectName.setText(name);
+        setPath(StorageUtils.getRootPath(mContext) + "Pictures/" + name);
+        fileName = name;
     }
 
     public UploadItem(Context context) {

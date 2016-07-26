@@ -3,7 +3,6 @@ package cn.edu.jumy.oa.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
-import android.util.SparseArray;
 
 import com.zhy.base.adapter.ViewHolder;
 import com.zhy.base.adapter.recyclerview.CommonAdapter;
@@ -12,7 +11,6 @@ import java.util.List;
 
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.bean.Node;
-import cn.edu.jumy.oa.Utils.CardGenerator;
 
 /**
  * Created by Jumy on 16/6/20 16:22.
@@ -26,16 +24,16 @@ public class BaseSearchRefreshAdapter extends CommonAdapter<Node> {
     @Override
     public void convert(ViewHolder holder, final Node node) {
         try {
-            ((CardView)holder.getView(R.id.cardView)).setCardBackgroundColor(Color.parseColor("#30DDDDDD"));
-            holder.setText(R.id.subtitle,node.getTitle());
+            ((CardView) holder.getView(R.id.cardView)).setCardBackgroundColor(Color.parseColor("#30DDDDDD"));
+            holder.setText(R.id.subtitle, node.getTitle());
             holder.setText(R.id.supportingText, node.getContent());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void setList(List<Node> list){
-        if (list != null){
+    public void setList(List<Node> list) {
+        if (list != null) {
             super.mDatas.clear();
             super.mDatas = list;
             notifyDataSetChanged();

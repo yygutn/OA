@@ -1,33 +1,41 @@
 package cn.edu.jumy.oa.fragment;
 
 import android.content.Context;
-import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 
+import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseFragment;
+import cn.edu.jumy.oa.BroadCastReceiver.NotifyReceiveBroadCastReceiver;
+import cn.edu.jumy.oa.CallBack.DocCallback;
+import cn.edu.jumy.oa.CallBack.MeetCallback;
+import cn.edu.jumy.oa.MyApplication;
+import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.Response.DocResponse;
+import cn.edu.jumy.oa.Response.MeetResponse;
+import cn.edu.jumy.oa.Response.NotifyBroadCastResponse;
 import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
-import cn.edu.jumy.oa.Utils.CardGenerator;
+import cn.edu.jumy.oa.Utils.NotifyUtils;
 import cn.edu.jumy.oa.adapter.NotifyCardAdapter;
+import cn.edu.jumy.oa.bean.Doc;
+import cn.edu.jumy.oa.bean.Meet;
 import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 
@@ -60,18 +68,56 @@ import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
  * *****************************************************
  */
 @EFragment(R.layout.fragment_notify)
-public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, PullToRefreshRecyclerView.PagingableListener, OnItemClickListener {
+public class NotifyFragment extends BaseFragment implements OnItemClickListener {
+    public static final String TAG = "NotifyFragment_Cache";
+    public static final String KEY = "NotifyFragment";
     private Context mContext;
     @ViewById(R.id.notify_listView)
     PullToRefreshRecyclerView mListView;
 
     ImageView mEmptyImageView;
-    private List<Node> cardList = new ArrayList<>();
-    public boolean isCache = false;
+    private ArrayList<Node> mList;
+    NotifyCardAdapter adapter;
 
-    Handler handler = new Handler();
+    Gson gson = new Gson();
+    NotifyReceiveBroadCastReceiver notifyReceiveBroadCastReceiver = new NotifyReceiveBroadCastReceiver(){
+        @Override
+        public void onNotifyReceive(Context context, Intent intent) {
+            final String action = intent.getStringExtra(NotifyUtils.ACTION);
+            showDebugLogd("onNotifyReceive",action);
+            NotifyBroadCastResponse response = gson.fromJson(action,NotifyBroadCastResponse.class);
+            switch (response.action){
+                case "docReceive":
+                case "docUrge":{
+                    getDoc(response.id);
+                    break;
+                }
+                case "meetReceive":
+                case "meetUrge":{
+                    getMeet(response.id);
+                    break;
+                }
+                case "getNoticeList":{
+                    getNotify(response.id);
+                    break;
+                }
+                default:break;
+            }
+        }
+    };
 
-    int lastVisiblePosition = 0;
+    @AfterInject
+    void initList(){
+        try {
+            mList = (ArrayList<Node>) ACache.get(MyApplication.getContext()).getAsObject(KEY);
+        } catch (Exception e) {
+            showDebugException(e);
+        }
+        if (mList == null){
+            mList = new ArrayList<>();
+        }
+    }
+
     @AfterViews
     void start() {
         mContext = getActivity();
@@ -79,92 +125,24 @@ public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.O
         mListView.setLoadmoreString("加载中...");
 
         mEmptyImageView = (ImageView) View.inflate(mContext, R.layout.item_empty_view, null);
-        Glide.with(mContext).load("https://www.skyverge.com/wp-content/uploads/2012/05/github-logo.png").into(mEmptyImageView);
-        mListView.setEmptyView(mEmptyImageView);
 
-        mListView.setSwipeEnable(true);
+        mListView.setEmptyView(mEmptyImageView);
 
         mListView.setLayoutManager(new LinearLayoutManager(mContext));
 
-        mListView.setOnRefreshListener(this);
-        mListView.setPagingableListener(this);
-
-        //这句话是为了，第一次进入页面的时候显示加载进度条
-        mListView.setProgressViewOffset(false, 0, (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
-                        .getDisplayMetrics()));
-        mListView.getRecyclerView().addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisiblePosition + 1 == mListView.getRecyclerView().getAdapter().getItemCount()) {
-                    mListView.onFinishLoading(true, false);
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                lastVisiblePosition = ((LinearLayoutManager) mListView.getLayoutManager()).findLastVisibleItemPosition();
-            }
-        });
-
-        // Fill the array withProvider mock content
-        fillArray();
+        initListView();
+        //注册接收透传消息的广播
+        IntentFilter filter = new IntentFilter(NotifyReceiveBroadCastReceiver.ACTION_NOTIFY);
+        mContext.registerReceiver(notifyReceiveBroadCastReceiver,filter);
     }
 
 
-    private void fillArray() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        SparseArray<String> array;
-        cardList = new ArrayList<>();
-        String title = "";
-        for (int i = 0; i < 10; i++) {
-            array = new SparseArray<String>();
-            int tag = i%3;
-            switch (tag){
-                case 0:{
-                    title = "(会议)" + "召开传达中央文件精神会议";
-                    break;
-                }
-                case 1:{
-                    title = "(公文)" + "省人大常委会公告(第25号)";
-                    break;
-                }
-                case 2:{
-                    title = "(公告)" + "浙江省人民政府关于建立江山仙霞岭省级自然保护区的批复";
-                    break;
-                }
-            }
-            String message = CardGenerator.generateNotifyString(tag, array);
-            cardList.add(new Node(title, message,tag));
-        }
-        NotifyCardAdapter adapter = new NotifyCardAdapter(mContext, R.layout.item_card_notification, cardList);
+    private void initListView() {
+        adapter = new NotifyCardAdapter(mContext, R.layout.item_card_notification, mList);
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
     }
 
-
-    @Override
-    public void onRefresh() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mListView.setOnRefreshComplete();
-            }
-        }, 2500);
-    }
-
-    @Override
-    public void onLoadMoreItems() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //coding something before finish loading
-                mListView.setOnLoadMoreComplete();
-            }
-        }, 2500);
-    }
 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
@@ -175,5 +153,69 @@ public class NotifyFragment extends BaseFragment implements SwipeRefreshLayout.O
     @Override
     public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
         return false;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (notifyReceiveBroadCastReceiver != null){
+            mContext.unregisterReceiver(notifyReceiveBroadCastReceiver);
+        }
+        try {
+            ACache.get(MyApplication.getContext()).put(KEY,mList);
+        } catch (Exception e) {
+            showDebugException(e);
+        }
+    }
+
+    private Map<String, String> getParams(String id) {
+        Map<String, String> params = new HashMap<>();
+        params.put("id",id);
+        return params;
+    }
+
+    private void getDoc(String id){
+        OAService.docReceive(getParams(id), new DocCallback() {
+            @Override
+            public void onResponse(DocResponse response, int id) {
+                if (response.code != 0){
+                    return;
+                }
+                if (response.data.pageObject.size() > 0) {
+                    Doc doc = response.data.pageObject.get(0);
+                    for (Node node : mList){
+                        if (doc.id.equals(node.id)){
+                            mList.remove(node);
+                        }
+                    }
+                    mList.add(0, new Node(doc));
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    private void getMeet(String id){
+        OAService.meetReceive(getParams(id), new MeetCallback() {
+            @Override
+            public void onResponse(MeetResponse response, int ID) {
+                if (response.code != 0){
+                    return;
+                }
+                if (response.data.pageObject.size() > 0) {
+                    Meet meet = response.data.pageObject.get(0);
+                    for (Node node : mList){
+                        if (meet.id.equals(node.id)){
+                            mList.remove(node);
+                        }
+                    }
+                    mList.add(0, new Node(response.data.pageObject.get(0)));
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+    private void getNotify(String id){
+
     }
 }

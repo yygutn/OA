@@ -57,6 +57,7 @@ import com.hyphenate.util.EMLog;
 import java.util.List;
 
 import cn.edu.jumy.jumyframework.AppManager;
+import cn.edu.jumy.oa.Utils.NotifyUtils;
 
 //import com.easemob.redpacketui.RedPacketConstant;
 //import com.easemob.redpacketui.utils.RedPacketUtil;
@@ -238,9 +239,7 @@ public class MainActivity extends BaseActivity {
 			for (EMMessage message : messages) {
 				EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
 				final String action = cmdMsgBody.action();//获取自定义action
-//				if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION) && message.getChatType() == EMMessage.ChatType.GroupChat) {
-//					RedPacketUtil.receiveRedPacketAckMessage(message);
-//				}
+				NotifyUtils.sendNotifyBroadCast(mContext,action);
 			}
 			refreshUIWithMessage();
 		}

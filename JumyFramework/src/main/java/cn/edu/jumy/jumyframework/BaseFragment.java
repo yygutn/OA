@@ -42,25 +42,30 @@ public class BaseFragment extends Fragment {
     protected Context mContext;
     private static boolean DEBUG = BaseActivity.DEBUG;
 
-    public void showDebugLoge(CharSequence message) {
+    public static void showDebugLoge(CharSequence message) {
         if (DEBUG) {
             Logger.e(message.toString());
         }
     }
 
-    public void showDebugLogw(CharSequence message) {
+    public static void showDebugLogw(CharSequence message) {
         if (DEBUG) {
             Logger.w(message.toString());
         }
     }
-    public void showDebugLogv(CharSequence message) {
+    public static void showDebugLogv(CharSequence message) {
         if (DEBUG) {
             Logger.v(message.toString());
         }
     }
-    public void showDebugLogd(CharSequence message) {
+    public static void showDebugLogd(CharSequence message) {
         if (DEBUG) {
             Logger.d(message.toString());
+        }
+    }
+    public static void showDebugLogd(String tag,CharSequence message) {
+        if (DEBUG) {
+            Logger.t(tag).d(message.toString());
         }
     }
 
@@ -75,9 +80,14 @@ public class BaseFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        mContext = getActivity();
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         StatusBarCompat.compat(getActivity(), getResources().getColor(R.color.pressed));
-        mContext = getActivity();
     }
 }

@@ -47,6 +47,7 @@ import java.util.List;
 import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.BroadCastReceiver.AlarmBroadCastReceiver;
+import cn.edu.jumy.oa.Utils.NotifyUtils;
 import cn.edu.jumy.oa.fragment.MineFragment_;
 import cn.edu.jumy.oa.fragment.NotifyFragment_;
 import cn.edu.jumy.oa.fragment.TaskFragment;
@@ -247,6 +248,7 @@ public class MainActivity extends BaseActivity {
                 EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                 final String action = cmdMsgBody.action();//获取自定义action
                 showDebugLogd(TAG, "action:" + action);
+                NotifyUtils.sendNotifyBroadCast(mContext,action);
             }
             refreshUIWithMessage();
         }

@@ -42,40 +42,10 @@
         <activity
             android:name=".UI.SettingActivity_"
             android:theme="@style/JumyTheme" />
-        <activity
-            android:name=".UI.web.SendFileWebActivity_"
-            android:theme="@style/JumyTheme" />
-        <activity
-            android:name=".UI.web.MyFileActivity_"
-            android:theme="@style/JumyTheme" />
-        <activity
-            android:name=".UI.web.ReceiveFileActivity_"
-            android:theme="@style/JumyTheme" />
-        <activity
-            android:name=".UI.web.AuditActivity_"
-            android:theme="@style/JumyTheme" />
-        <activity
-            android:name=".UI.web.FromMeActivity_"
-            android:theme="@style/JumyTheme" />
-        <activity
-            android:name=".UI.web.MeetingSendActivity_"
-            android:theme="@style/JumyTheme" />
+
         <activity
             android:name=".UI.web.StudyOnlineActivity_"
             android:theme="@style/JumyTheme" />
-        <activity
-            android:name=".UI.web.WaitingForApprovalActivity_"
-            android:theme="@style/JumyTheme" />
-        <activity
-            android:name=".UI.web.FileSentActivity_"
-            android:theme="@style/JumyTheme" />
-        <activity
-            android:name=".UI.web.MeetingSentActivity_"
-            android:theme="@style/JumyTheme" />
-        <activity
-            android:name=".UI.web.SignUpActivity_"
-            android:theme="@style/JumyTheme" />
-
         <activity
             android:name=".UI.TaskItem.BaseSearchRefreshActivity_"
             android:theme="@style/JumyTheme" />

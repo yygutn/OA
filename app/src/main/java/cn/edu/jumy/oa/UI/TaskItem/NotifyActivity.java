@@ -1,22 +1,16 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
-import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.baidu.platform.comapi.map.A;
 
 import org.androidannotations.annotations.EActivity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import cn.edu.jumy.oa.CallBack.NotifyCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.NotifyResponse;
-import cn.edu.jumy.oa.Utils.CardGenerator;
 import cn.edu.jumy.oa.adapter.NotifyAdapter;
 import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.bean.Notify;

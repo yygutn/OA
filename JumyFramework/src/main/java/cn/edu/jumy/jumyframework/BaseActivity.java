@@ -102,9 +102,15 @@ public class BaseActivity extends AppCompatActivity {
         Toast.makeText(this, getResources().getText(resId), Toast.LENGTH_SHORT).show();
     }
 
-    public void showDebugLoge(CharSequence message) {
+    public static void showDebugLoge(CharSequence message) {
         if (DEBUG) {
             Logger.e(message.toString());
+        }
+    }
+
+    public static void showDebugLoge(String tag, CharSequence message) {
+        if (DEBUG) {
+            Logger.t(tag).e(message.toString());
         }
     }
 
@@ -157,6 +163,7 @@ public class BaseActivity extends AppCompatActivity {
     /**
      * 删除方法 这里只会删除某个文件夹下的文件，
      * 如果传入的directory是个文件，将不做处理
+     *
      * @param directory 文件夹
      */
     private static void deleteFilesByDirectory(File directory) {
