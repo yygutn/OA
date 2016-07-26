@@ -39,6 +39,7 @@ import cn.edu.jumy.oa.Response.AttachResponse;
 import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.UI.SignUpActivity_;
 import cn.edu.jumy.oa.Utils.CallOtherOpenFile;
+import cn.edu.jumy.oa.Utils.CardGenerator;
 import cn.edu.jumy.oa.bean.Annex;
 import cn.edu.jumy.oa.bean.Attachment;
 import cn.edu.jumy.oa.bean.Node;
@@ -76,7 +77,8 @@ public class DetailsActivity extends BaseActivity {
 
     @Extra("details")
     protected Node mNode = new Node();
-
+    @Extra("from_sent_meet")
+    boolean fromSentMeet = false;
 
     ClipboardManager clipboardManager;
 
@@ -161,7 +163,7 @@ public class DetailsActivity extends BaseActivity {
             case 0: {
                 mTitleBar.setTitle("会议详情");
                 mDocumentDetailsLevel.setVisibility(View.GONE);
-                mDocumentDetailsSignUp.setVisibility(View.VISIBLE);
+                mDocumentDetailsSignUp.setVisibility(fromSentMeet?View.GONE:View.VISIBLE);
                 break;
             }
             case 1: {
@@ -206,15 +208,16 @@ public class DetailsActivity extends BaseActivity {
             mDocumentDetailsLevel.setText(level);
             mDocumentDetailsTitle.setText(mNode.title);
             mDocumentDetailsNumber.setText(mNode.documentNumber);
-            mDocumentDetailsContentHead.setText(mNode.contentHead);
-            mDocumentDetailsTime.setText(mNode.dispatchTime);
-            mDocumentDetailsOther.setText(mNode.other);
-
+            if (TextUtils.isEmpty(mNode.dispatchUnit)){
+                mDocumentDetailsContentHead.setVisibility(View.GONE);
+            } else {
+                mDocumentDetailsContentHead.setText(mNode.dispatchUnit + ":");
+            }
             switch (mNode.type) {
                 case 0: {//会议，特殊处理
                     mDocumentDetailsContent.setVisibility(View.GONE);
                     mDocumentDetailsContent_meet.setVisibility(View.VISIBLE);
-                    mDocumentDetailsContent_meet.setText(mNode.content);
+                    mDocumentDetailsContent_meet.setText(CardGenerator.getContentString(mNode));
                     mDocumentDetailsContent_meet.getViewTreeObserver().addOnGlobalLayoutListener(new OnTvGlobalLayoutListener());
                     break;
                 }
@@ -222,10 +225,16 @@ public class DetailsActivity extends BaseActivity {
                 case 2: {
                     mDocumentDetailsContent.setVisibility(View.VISIBLE);
                     mDocumentDetailsContent_meet.setVisibility(View.GONE);
-                    mDocumentDetailsContent.setText(mNode.content);
+                    mDocumentDetailsContent.setText("\t\t\t\t"+mNode.content);
                 }
                 default:
                     break;
+            }
+            mDocumentDetailsTime.setText(mNode.dispatchTime);
+            if (!TextUtils.isEmpty(mNode.other)) {
+                mDocumentDetailsOther.setText(mNode.other);
+            } else {
+                mDocumentDetailsOther.setVisibility(View.GONE);
             }
         } catch (Exception e) {
             showDebugException(e);
@@ -303,7 +312,7 @@ public class DetailsActivity extends BaseActivity {
                 break;
             }
             case R.id.document_details_sign_up: {// TODO: 16/7/5 报名
-                SignUpActivity_.intent(mContext).extra("pid",mNode.id).start();
+                SignUpActivity_.intent(mContext).extra("pid", mNode.id).start();
                 break;
             }
             default:
@@ -341,7 +350,7 @@ public class DetailsActivity extends BaseActivity {
                                     String filepath = mContext.getExternalCacheDir().getAbsolutePath();
                                     String filename = list.get(which).getFileName();
                                     File file = new File(filepath, filename);
-                                    if (file!= null && file.exists()) {
+                                    if (file != null && file.exists()) {
                                         CallOtherOpenFile.openFile(mContext, file);
                                     } else {
                                         OAService.downloadAttachment(id, new FileCallBack(filepath, filename) {
@@ -370,8 +379,8 @@ public class DetailsActivity extends BaseActivity {
                                                 } else {
                                                     annex.setAnnex(attachment, file);
                                                 }
-                                                if (annex.save()){
-                                                    showDebugLoge(annex.getFileName()+"：保存成功");
+                                                if (annex.save()) {
+                                                    showDebugLoge(annex.getFileName() + "：保存成功");
                                                 }
 
                                             }

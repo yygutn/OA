@@ -1,6 +1,8 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
 import android.text.TextUtils;
+import android.view.View;
+import android.view.ViewGroup;
 
 import org.androidannotations.annotations.EActivity;
 
@@ -17,6 +19,7 @@ import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.DocResponse;
 import cn.edu.jumy.oa.adapter.SentDocAdapter;
 import cn.edu.jumy.oa.bean.Doc;
+import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.customview.SimpleDividerItemDecoration;
 
 /**
@@ -62,6 +65,13 @@ public class SentDocumentActivity extends BaseSearchRefreshActivity {
         adapter = new SentDocAdapter(mContext, R.layout.item_sent_xx, new ArrayList<>(mListDoc));
         mListView.setAdapter(adapter);
         mListView.getRecyclerView().addItemDecoration(new SimpleDividerItemDecoration(mContext));
+        adapter.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+        Node node = new Node((Doc)o);
+        DetailsActivity_.intent(mContext).extra("details", node).start();
     }
 
     @Override

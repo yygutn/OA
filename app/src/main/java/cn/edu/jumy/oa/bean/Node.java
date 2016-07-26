@@ -138,12 +138,6 @@ public class Node implements Serializable {
         this.summary = node.getSummary();
     }
 
-    public Node(String title, String content, int type) {
-        this.title = title;
-        this.content = content;
-        this.type = type;
-    }
-
     public Node() {
 
     }
@@ -153,6 +147,7 @@ public class Node implements Serializable {
         this.id = notify.id;
         this.title = notify.title;
         this.department = notify.department;
+        this.content = notify.summary;
         this.summary = notify.summary;
         this.cuid = notify.cuid;
         this.tid = notify.tid;
@@ -174,6 +169,7 @@ public class Node implements Serializable {
         this.signStatus = doc.signStatus;
         this.cuid = doc.cuid;
         this.uuid = doc.uuid;
+        this.dispatchUnit = doc.sendDepartmentInfo;
     }
 
     public Node(Meet meet) {

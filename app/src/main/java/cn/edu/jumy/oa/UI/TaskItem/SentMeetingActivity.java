@@ -2,13 +2,12 @@ package cn.edu.jumy.oa.UI.TaskItem;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.ViewGroup;
 
 import org.androidannotations.annotations.EActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +17,7 @@ import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.MeetResponse;
 import cn.edu.jumy.oa.adapter.SentMeetAdapter;
 import cn.edu.jumy.oa.bean.Meet;
+import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.customview.SimpleDividerItemDecoration;
 
 /**
@@ -29,6 +29,7 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
 
     private ArrayList<Meet> mListMeet = new ArrayList<>();
     SentMeetAdapter adapter;
+
     @Override
     protected void setTile() {
         mTitleBar.setTitle("已发布会议");
@@ -40,7 +41,7 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
         OAService.meetUser(getParams(), new MeetCallback() {
             @Override
             public void onResponse(MeetResponse response, int id) {
-                if (response != null && response.code == 0 && response.data != null){
+                if (response != null && response.code == 0 && response.data != null) {
                     mListMeet = response.data.pageObject;
                     adapter.setList(response.data.pageObject);
                 }
@@ -65,20 +66,27 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void initListView() {
-        adapter = new SentMeetAdapter(mContext,R.layout.item_sent_xx,new ArrayList<>(mListMeet));
+        adapter = new SentMeetAdapter(mContext, R.layout.item_sent_xx, new ArrayList<>(mListMeet));
         mListView.setAdapter(adapter);
         mListView.getRecyclerView().addItemDecoration(new SimpleDividerItemDecoration(mContext));
+        adapter.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+        Node node = new Node((Meet) o);
+        DetailsActivity_.intent(mContext).extra("details", node).extra("from_sent_meet",true).start();
     }
 
     @Override
     protected void onTextSubmit(String str) {
-        if (TextUtils.isEmpty(str)){
+        if (TextUtils.isEmpty(str)) {
             showToast("请输入有效关键字");
             return;
         }
         ArrayList<Meet> list = new ArrayList<>();
-        for (Meet meet : mListMeet){
-            if (meet.docTitle.contains(str)){
+        for (Meet meet : mListMeet) {
+            if (meet.docTitle.contains(str)) {
                 list.add(meet);
             }
         }
