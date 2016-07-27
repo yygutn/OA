@@ -1,196 +1,155 @@
 package cn.edu.jumy.jumyframework;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
+import android.os.Environment;
+import android.os.Process;
 import android.util.Log;
-import android.view.WindowManager;
-import android.widget.ProgressBar;
+import android.widget.Toast;
 
-
-import java.io.FileOutputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.lang.Thread.UncaughtExceptionHandler;
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
 
 /**
  * 捕捉App全局异常,并由用户决定是否发送到服务器
  */
 public class CrashHandler implements UncaughtExceptionHandler {
-    public static final String TAG = CrashHandler.class.getSimpleName();
-    private static CrashHandler instance;
+    private static final String TAG = "CrashHandler";
+    private static final boolean DEBUG = true;
+
+    private static final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/jumy/log/";
+    private static final String FILE_NAME = "crash";
+
+    //log文件的后缀名
+    private static final String FILE_NAME_SUFFIX = ".trace";
+
+    private static CrashHandler sInstance = new CrashHandler();
+
+    //系统默认的异常处理（默认情况下，系统会终止当前的异常程序）
+    private UncaughtExceptionHandler mDefaultCrashHandler;
+
     private Context mContext;
-    private UncaughtExceptionHandler mDefaultHandler;
 
-    /** 使用Properties来保存设备的信息和错误堆栈信息 */
-    private Properties mCrashInfo = new Properties();
-    private static final String VERSION_NAME = "versionName";
-    private static final String VERSION_CODE = "versionCode";
-    /** 错误报告文件的扩展名 */
-    public static final String CRASH_REPORTER_EXTENSION = ".crash";
-    /** 错误报告文件名中的日期格式 */
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_hh:mm:ss");
-
+    //构造方法私有，防止外部构造多个实例，即采用单例模式
     private CrashHandler() {
     }
 
     public static CrashHandler getInstance() {
-        if (instance == null) {
-            instance = new CrashHandler();
-        }
-
-        return instance;
+        return sInstance;
     }
 
-    /**
-     * @param ctx
-     */
-    public void init(Context ctx) {
-        mContext = ctx;
-        mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+    //这里主要完成初始化工作
+    public void init(Context context) {
+        //获取系统默认的异常处理器
+        mDefaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
+        //将当前实例设为系统默认的异常处理器
         Thread.setDefaultUncaughtExceptionHandler(this);
+        //获取Context，方便内部使用
+        mContext = context.getApplicationContext();
     }
 
     /**
-     * 当UncaughtException发生时会转入该函数来处理
+     * 这个是最关键的函数，当程序中有未被捕获的异常，系统将会自动调用#uncaughtException方法
+     * thread为出现未捕获异常的线程，ex为未捕获的异常，有了这个ex，我们就可以得到异常信息。
      */
     @Override
-    public void uncaughtException(final Thread thread, final Throwable ex) {
-        if (mDefaultHandler == null || ex == null) {
-            exitCurrentApp();
+    public void uncaughtException(Thread thread, Throwable ex) {
+        try {
+            Toast.makeText(mContext,"crash test",Toast.LENGTH_SHORT).show();
+            //导出异常信息到SD卡中
+            dumpExceptionToSDCard(ex);
+            //这里可以通过网络上传异常信息到服务器，便于开发人员分析日志从而解决bug
+            uploadExceptionToServer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //打印出当前调用栈信息
+        ex.printStackTrace();
+
+        //如果系统提供了默认的异常处理器，则交给系统去结束我们的程序，否则就由我们自己结束自己
+        if (mDefaultCrashHandler != null) {
+            mDefaultCrashHandler.uncaughtException(thread, ex);
         } else {
-            ex.printStackTrace();
-            new Thread() {
-                @Override
-                public void run() {
-                    // 在当前线程创建消息队列(对话框的显示需要消息队列)
-                    Looper.prepare();
-
-                    AlertDialog dialog = showExceptionDialog();
-                    collectDeviceInfo(mContext);
-                    saveCrashInfoToFile(ex);
-                    dismissExceptionDialog(dialog);
-
-                    // 启动消息队列(在队列推出前,后面的代码不会被执行,在这里,后面没有代码了.)
-                    Looper.loop();
-                }
-            }.start();
-        }
-    }
-
-    /**
-     * 强制关闭程序<br>
-     * FIXME 并不能退出所有Activity,目前尚未找到比较优雅的做法
-     */
-    private void exitCurrentApp() {
-        android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(0);
-    }
-
-    /**
-     * 弹出异常说明对话框<br>
-     * 使用系统级别的对话框
-     * 需要权限 {@link WindowManager.LayoutParams.TYPE_SYSTEM_ALERT}
-     * <p>
-     * See <a href="http://android.35g.tw/?p=191">http://android.35g.tw/?p=191</a>
-     */
-    private AlertDialog showExceptionDialog() {
-        ProgressBar pb = new ProgressBar(mContext, null,
-                android.R.attr.progressBarStyleInverse);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setView(pb);
-        builder.setCancelable(false);
-        builder.setTitle("程序出错了,即将退出");
-        builder.setMessage("正在收集错误信息...");
-        builder.setIcon(android.R.drawable.ic_dialog_alert);
-        AlertDialog dialog = builder.create();
-
-        // <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        dialog.show();
-        return dialog;
-    }
-
-    private void dismissExceptionDialog(final AlertDialog dialog) {
-        // 使用postDelayed让用户能有足够时间看清提示信息
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                dialog.setMessage("正在退出...");
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        dialog.dismiss();
-                        exitCurrentApp();
-
-                    }
-                }, 2 * 1000);
-            }
-        }, 2 * 1000);
-    }
-
-    private void collectDeviceInfo(Context ctx) {
-        PackageHelper packageHelper = new PackageHelper(mContext);
-        mCrashInfo.put(VERSION_NAME, packageHelper.getLocalVersionName());
-        mCrashInfo.put(VERSION_CODE, packageHelper.getLocalVersionCode() + "");
-        // 使用反射来收集设备信息.在Build类中包含各种设备信息,
-        Field[] fields = Build.class.getDeclaredFields();
-        for (Field field : fields) {
-            try {
-                field.setAccessible(true);
-                String fieldStr = "";
-                try {
-                    fieldStr = field.get(null).toString();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                mCrashInfo.put(field.getName(), fieldStr);
-            } catch (Exception e) {
-                Log.e(TAG, "Error while collecting device info", e);
-            }
-        }
-    }
-
-    private void saveCrashInfoToFile(Throwable ex) {
-        Writer info = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(info);
-
-        printWriter.write("\n=========printStackTrace()==========\n");
-        ex.printStackTrace(printWriter);
-
-        printWriter.write("\n\n=========getCause()==========\n");
-        Throwable cause = ex.getCause();
-        while (cause != null) {
-            cause.printStackTrace(printWriter);
-            cause = cause.getCause();
+            Process.killProcess(Process.myPid());
         }
 
-        String stackTrace = info.toString();
-        printWriter.close();
+    }
+
+    private void dumpExceptionToSDCard(Throwable ex) throws IOException {
+        //如果SD卡不存在或无法使用，则无法把异常信息写入SD卡
+//        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+//            if (DEBUG) {
+//                Log.w(TAG, "sdcard unmounted,skip dump exception");
+//                return;
+//            }
+//        }
+
+        File dir = new File(PATH);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        long current = System.currentTimeMillis();
+        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(current));
+        //以当前时间创建log文件
+        File file = new File(PATH + FILE_NAME + time + FILE_NAME_SUFFIX);
 
         try {
-            String fileName = dateFormat.format(new Date(System.currentTimeMillis()))
-                    + CRASH_REPORTER_EXTENSION;
-            // 保存文件
-            FileOutputStream trace = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
-            mCrashInfo.store(trace, "");
-            trace.write(stackTrace.getBytes());
-            trace.flush();
-            trace.close();
+            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+            //导出发生异常的时间
+            pw.println(time);
+
+            //导出手机信息
+            dumpPhoneInfo(pw);
+
+            pw.println();
+            //导出异常的调用栈信息
+            ex.printStackTrace(pw);
+
+            pw.close();
         } catch (Exception e) {
-            Log.e(TAG, "an error occured while writing report file", e);
+            Log.e(TAG, "dump crash info failed");
         }
     }
+
+    private void dumpPhoneInfo(PrintWriter pw) throws PackageManager.NameNotFoundException {
+        //应用的版本名称和版本号
+        PackageManager pm = mContext.getPackageManager();
+        PackageInfo pi = pm.getPackageInfo(mContext.getPackageName(), PackageManager.GET_ACTIVITIES);
+        pw.print("App Version: ");
+        pw.print(pi.versionName);
+        pw.print('_');
+        pw.println(pi.versionCode);
+
+        //android版本号
+        pw.print("OS Version: ");
+        pw.print(Build.VERSION.RELEASE);
+        pw.print("_");
+        pw.println(Build.VERSION.SDK_INT);
+
+        //手机制造商
+        pw.print("Vendor: ");
+        pw.println(Build.MANUFACTURER);
+
+        //手机型号
+        pw.print("Model: ");
+        pw.println(Build.MODEL);
+
+        //cpu架构
+        pw.print("CPU ABI: ");
+        pw.println(Build.CPU_ABI);
+    }
+
+    private void uploadExceptionToServer() {
+        //TODO Upload Exception Message To Your Web Server
+    }
+
 }

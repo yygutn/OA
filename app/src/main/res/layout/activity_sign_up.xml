@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/pressed"
         app:navigationIcon="@drawable/ic_arrow_back_white"
-        app:title="报名"
+        app:title="添加报名人员信息"
         app:titleTextColor="@color/white" />
 
     <ScrollView
@@ -167,7 +167,7 @@
                 android:background="@drawable/shape_logout"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="确认报名"
+                android:text="确认"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 

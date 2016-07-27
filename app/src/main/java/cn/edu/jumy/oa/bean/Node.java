@@ -189,5 +189,6 @@ public class Node implements Serializable {
         this.signStatus = meet.signStatus;
         this.cuid = meet.cuid;
         this.uuid = meet.uuid;
+        this.title = meet.docTitle;
     }
 }

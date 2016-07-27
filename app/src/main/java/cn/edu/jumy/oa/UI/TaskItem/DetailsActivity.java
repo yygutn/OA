@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.os.Build;
-import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
@@ -37,7 +36,8 @@ import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.AttachResponse;
 import cn.edu.jumy.oa.Response.BaseResponse;
-import cn.edu.jumy.oa.UI.SignUpActivity_;
+import cn.edu.jumy.oa.UI.SignUpAddActivity_;
+import cn.edu.jumy.oa.UI.SignUpMultiAbleActivity_;
 import cn.edu.jumy.oa.Utils.CallOtherOpenFile;
 import cn.edu.jumy.oa.Utils.CardGenerator;
 import cn.edu.jumy.oa.bean.Annex;
@@ -162,8 +162,8 @@ public class DetailsActivity extends BaseActivity {
         switch (mNode.type) {
             case 0: {
                 mTitleBar.setTitle("会议详情");
-                mDocumentDetailsLevel.setVisibility(View.GONE);
-                mDocumentDetailsSignUp.setVisibility(fromSentMeet?View.GONE:View.VISIBLE);
+//                mDocumentDetailsLevel.setVisibility(View.GONE);
+                mDocumentDetailsSignUp.setVisibility(fromSentMeet ? View.GONE : View.VISIBLE);
                 break;
             }
             case 1: {
@@ -182,7 +182,7 @@ public class DetailsActivity extends BaseActivity {
         String level = "";
         switch (mNode.level) {
             case 0: {
-                level = "特提";
+                mDocumentDetailsLevel.setVisibility(View.GONE);
                 break;
             }
             case 1: {
@@ -206,9 +206,17 @@ public class DetailsActivity extends BaseActivity {
         }
         try {
             mDocumentDetailsLevel.setText(level);
-            mDocumentDetailsTitle.setText(mNode.title);
-            mDocumentDetailsNumber.setText(mNode.documentNumber);
-            if (TextUtils.isEmpty(mNode.dispatchUnit)){
+            if (!TextUtils.isEmpty(mNode.title)) {
+                mDocumentDetailsTitle.setText(mNode.title);
+            } else {
+                mDocumentDetailsTitle.setVisibility(View.GONE);
+            }
+            if (!TextUtils.isEmpty(mNode.documentNumber)) {
+                mDocumentDetailsNumber.setText(mNode.documentNumber);
+            } else {
+                mDocumentDetailsNumber.setVisibility(View.GONE);
+            }
+            if (TextUtils.isEmpty(mNode.dispatchUnit)) {
                 mDocumentDetailsContentHead.setVisibility(View.GONE);
             } else {
                 mDocumentDetailsContentHead.setText(mNode.dispatchUnit + ":");
@@ -225,7 +233,7 @@ public class DetailsActivity extends BaseActivity {
                 case 2: {
                     mDocumentDetailsContent.setVisibility(View.VISIBLE);
                     mDocumentDetailsContent_meet.setVisibility(View.GONE);
-                    mDocumentDetailsContent.setText("\t\t\t\t"+mNode.content);
+                    mDocumentDetailsContent.setText("\t\t\t\t" + mNode.content);
                 }
                 default:
                     break;
@@ -312,7 +320,7 @@ public class DetailsActivity extends BaseActivity {
                 break;
             }
             case R.id.document_details_sign_up: {// TODO: 16/7/5 报名
-                SignUpActivity_.intent(mContext).extra("pid", mNode.id).start();
+                SignUpMultiAbleActivity_.intent(mContext).extra("tid",mNode.tid).extra("pid", mNode.id).start();
                 break;
             }
             default:

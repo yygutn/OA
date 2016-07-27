@@ -534,6 +534,26 @@ public class OAService {
             }
         });
     }
+    /**
+     * 批量添加报名人员
+     */
+    public static void insertListMEntry(final String json, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "insertListMEntry")
+                        .addParams("value",response)
+                        .addParams("json",json)
+                        .build().execute(callback);
+            }
+        });
+    }
 
     /**
      * 获取单个报名人员信息

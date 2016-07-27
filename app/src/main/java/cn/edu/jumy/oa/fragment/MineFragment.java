@@ -70,7 +70,7 @@ public class MineFragment extends BaseFragment {
                     if (i == 0) {
                         ans = orgname[i];
                     } else {
-                        ans += "//" + orgname[i];
+                        ans += "/" + orgname[i];
                     }
                 }
                 mSettingDescription.setName("所属单位:" + ans);

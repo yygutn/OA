@@ -98,17 +98,20 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
             showDebugLogd("onNotifyReceive",action);
             NotifyBroadCastResponse response = gson.fromJson(action,NotifyBroadCastResponse.class);
             switch (response.action){
+                case "docSend":
                 case "docReceive":
                 case "docUrge":{
                     getDoc(response.id);
                     break;
                 }
                 case "meetReceive":
+                case "meetSend":
                 case "meetUrge":{
                     getMeet(response.id);
                     break;
                 }
-                case "getNoticeList":{
+                case "noticeSend":
+                case "getNotice":{
                     getNotify(response.id);
                     break;
                 }

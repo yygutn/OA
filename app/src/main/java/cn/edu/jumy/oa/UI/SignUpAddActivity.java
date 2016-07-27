@@ -32,6 +32,7 @@ import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.AccountResponse;
 import cn.edu.jumy.oa.Response.BaseResponse;
+import cn.edu.jumy.oa.bean.Sign;
 import okhttp3.Call;
 import okhttp3.Request;
 
@@ -42,7 +43,7 @@ import okhttp3.Request;
  */
 @EActivity(R.layout.activity_sign_up)
 @OptionsMenu(R.menu.sign_up_details)
-public class SignUpActivity extends BaseActivity {
+public class SignUpAddActivity extends BaseActivity {
     @ViewById(R.id.title_bar)
     protected Toolbar mToolBar;
     @ViewById(R.id.sign_up_name)
@@ -59,11 +60,6 @@ public class SignUpActivity extends BaseActivity {
     protected CheckBox mSignUpLeaveButton;
     @ViewById(R.id.sign_up_leave)
     protected AppCompatEditText mSignUpLeave;
-    @ViewById(R.id.submit)
-    protected TextView mSubmit;
-    //所在单位
-    String mUnit = "";
-    String mUnitID = "";
 
     //基本信息
     String name, position, tel, remark;
@@ -77,9 +73,17 @@ public class SignUpActivity extends BaseActivity {
     @Extra("tid")
     String tid = "";
 
+    @Extra("position")
+    int _position = -1;
+
+    @Extra("old")
+    Sign node = null;
+
+    String editType = "add";
+
     @AfterExtras
     void go() {
-        if (TextUtils.isEmpty(pid)){
+        if (TextUtils.isEmpty(pid)) {
             return;
         }
         //获取个人报名信息,,,waiting
@@ -97,11 +101,40 @@ public class SignUpActivity extends BaseActivity {
                 backToPreActivity();
             }
         });
+
+        if (node != null) {
+            //来自修改信息界面
+            editType = "edit";
+            mSignUpName.setText(node.name);
+            mSignUpPosition.setText(node.post);
+            mSignUpPhone.setText(node.phone);
+            mSignUpLeave.setText(node.remark);
+            status = node.type;
+            clickCheckBox(status);
+        }
+    }
+
+    private void clickCheckBox(int type) {
+        switch (type){
+            case 0:{
+                mSignUpJoinButton.setChecked(true);
+                break;
+            }
+            case 1:{
+                mSignUpListenButton.setChecked(true);
+                break;
+            }
+            case 2:{
+                mSignUpLeaveButton.setChecked(true);
+                break;
+            }
+
+        }
     }
 
     @OptionsItem(R.id.action_details)
     void skipToDetails() {
-        SignUpDetailsActivity_.intent(mContext).extra("tid",tid).extra("pid",pid).start();
+        SignUpDetailsActivity_.intent(mContext).extra("tid", tid).extra("pid", pid).start();
     }
 
     /**
@@ -114,20 +147,20 @@ public class SignUpActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.sign_up_ll_join: {//参会
                 resetButton();
-                mSignUpJoinButton.setChecked(true);
                 status = 0;
+                clickCheckBox(0);
                 break;
             }
             case R.id.sign_up_ll_leave: {//请假
                 resetButton();
-                mSignUpLeaveButton.setChecked(true);
                 status = 2;
+                clickCheckBox(2);
                 break;
             }
             case R.id.sign_up_ll_listen: {//听会
                 resetButton();
-                mSignUpListenButton.setChecked(true);
                 status = 1;
+                clickCheckBox(1);
                 break;
             }
             default:
@@ -149,33 +182,6 @@ public class SignUpActivity extends BaseActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dealPreWork();
-                        Map<String, String> params = new HashMap<String, String>();
-                        params.put("editType", "add");//(add:添加   edit:修改)
-                        params.put("id", id);//报名表人员id(修改必填项)
-                        params.put("pid", pid);//会议id(添加必填项，修改无效)
-                        params.put("name", name);//姓名(添加必填项，修改不必填，下同)
-//                        params.put("post", position);//职位
-                        params.put("sex", "");//性别(0:男  1:女)
-                        params.put("phone", tel);//电话(不必填)
-                        params.put("type", status+"");//状态(0:参会 1:听会 2:请假)
-                        params.put("remark", remark);//备注
-                        OAService.updateMEntry(params, new StringCallback() {
-                            @Override
-                            public void onError(Call call, Exception e, int id) {
-                                showToast("报名失败");
-                            }
-
-                            @Override
-                            public void onResponse(String response, int id) {
-                                Gson gson = new Gson();
-                                BaseResponse baseResponse = gson.fromJson(response,BaseResponse.class);
-                                if (baseResponse.code == 0){
-                                    showToast("报名成功");
-                                } else {
-                                    showToast("报名失败");
-                                }
-                            }
-                        });
                     }
                 }).setNegativeButton("取消", null)
                 .create();
@@ -192,6 +198,24 @@ public class SignUpActivity extends BaseActivity {
             showToast("报名信息不完善,请再次确认");
             return;
         }
+
+
+        if (node == null){
+            node = new Sign();
+        }
+        node.pid = pid;
+        node.name = name;
+        node.phone = tel;
+        node.post = position;
+        node.type = status;
+        node.remark = remark;
+
+        Intent intent = new Intent();
+        intent.putExtra("node",node);
+        intent.putExtra("position",_position);
+        setResult(RESULT_OK,intent);
+
+        backToPreActivity();
     }
 
 
