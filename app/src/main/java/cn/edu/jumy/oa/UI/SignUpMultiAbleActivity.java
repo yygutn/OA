@@ -42,7 +42,7 @@ import okhttp3.Call;
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EActivity(R.layout.activity_sign_multi)
-@OptionsMenu(R.menu.add)
+@OptionsMenu(R.menu.add_submit)
 public class SignUpMultiAbleActivity extends BaseActivity {
     @ViewById(R.id.title_bar)
     protected Toolbar mTitleBar;
