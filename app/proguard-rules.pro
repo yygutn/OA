@@ -26,37 +26,64 @@
 -dontwarn com.hyphenate.**
 -dontwarn com.fsck.k9.**
 -dontwarn com.baidu.**
--dontwarn android.**
--dontwarn com.**
+-dontwarn android.webkit.WebView
+-dontwarn android.webkit.WebViewClient
+#-dontwarn android.**
+#-dontwarn com.**
+-dontwarn com.helger.**
+-dontwarn com.parse.**
+-dontwarn com.lhh.ptrrv.library.PullToRefreshRecyclerView$InterOnScrollListener
 -dontwarn
+
+-dontnote org.apache.**
+-dontnote internal.org.apache.**
+-dontnote com.hyphenate.**
+-dontnote com.baidu.**
+#-dontnote com.fsck.k9.**
+-dontnote org.openintents.**
+-dontnote com.android.**
+-dontnote android.net.http.**
+-dontnote com.shizhefei.**
+-dontnote bolts.**
+-dontnote com.parse.**
+-dontnote com.larswerkman.**
+-dontnote com.fsck.k9.**
+-dontnote android.net.compatibility.WebAddress
+-dontnote vi.com.gdi.bgl.android.java.EnvDrawText
+-dontnote vi.com.gdi.bgl.android.java.a
 -verbose
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 
--keep public class * extends android.app.Activity
--keep public class * extends android.app.Application
--keep public class * extends android.app.Service
--keep public class * extends android.content.BroadcastReceiver
--keep public class * extends android.content.ContentProvider
--keep public class * extends android.app.backup.BackupAgentHelper
--keep public class * extends android.preference.Preference
--keep public class com.android.vending.licensing.ILicensingService
+#-keep public class * extends android.app.Activity
+#-keep public class * extends android.app.Application
+#-keep public class * extends android.app.Service
+#-keep public class * extends android.content.BroadcastReceiver
+#-keep public class * extends android.content.ContentProvider
+#-keep public class * extends android.app.backup.BackupAgentHelper
+#-keep public class * extends android.preference.Preference
+#-keep public class com.android.vending.licensing.ILicensingService
 -keep public class org.**{*;}
 -keep public class com.hyphenate.**{*;}
--keep public class com.fsck.k9.**{*;}
+#-keep public class com.fsck.k9.**{*;}
 -keep public class com.baidu.**{*;}
--keep public class com.**{*;}
--keep public class android.**{*;}
+-keep public class com.helger.**{*;}
+-keep public class com.parse.**{*;}
+-keep public class com.nineoldandroids.view.ViewHelper
+#-keep public class com.**{*;}
+#-keep public class android.**{*;}
+-keep public class android.net.http.SslCertificate
+-keep public class android.net.http.SslError
 -keep public class org.apache.http.params.HttpParams
 #but not the descriptor class
 
-#如果有引用v4包可以添加下面这行
--keep class android.support.v4.** { *; }
--keep public class * extends android.support.v4.**
--keep public class * extends android.app.Fragment
-
-
-#如果引用了v4或者v7包，可以忽略警告，因为用不到android.support
--dontwarn android.support.**
+##如果有引用v4包可以添加下面这行
+#-keep class android.support.v4.** { *; }
+#-keep public class * extends android.support.v4.**
+#-keep public class * extends android.app.Fragment
+#
+#
+##如果引用了v4或者v7包，可以忽略警告，因为用不到android.support
+#-dontwarn android.support.**
 
 #不混淆资源类
 -keepclassmembers class **.R$* {
@@ -125,3 +152,4 @@
 -keep class com.umeng.analytics.** { *; }
 -keep class com.umeng.common.** { *; }
 -keep class com.umeng.newxp.** { *; }
+

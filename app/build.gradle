@@ -90,6 +90,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:cardview-v7:23.2.1'
     compile project(':k9mail')
+//    compile(name: 'k9mail-debug', ext: 'aar')
 //    compile(name: 'k9mail-library-debug', ext: 'aar')
 //    compile(name: 'openpgp-api-debug', ext: 'aar')
 //    compile(name: 'HoloColorPicker-debug', ext: 'aar')
@@ -97,7 +98,9 @@ dependencies {
     compile 'homhomlin.lib:ptrrv-library:1.3.1'
 //    compile 'com.squareup.picasso:picasso:2.5.2'
 //    compile project(':PushSDK')
-    compile project(':easeUIDemo')
+//    compile project(':easeUIDemo')
+    compile(name: 'easeUIDemo-debug', ext: 'aar')
+    compile(name: 'easeUI-debug', ext: 'aar')
 
     //内存泄漏检测
 //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
@@ -109,28 +112,4 @@ dependencies {
 //    compile 'com.bluelinelabs:logansquare:1.3.6'
 //    compile 'com.github.aurae.retrofit2:converter-logansquare:1.4.1'
 }
-
-android.applicationVariants.all { variant ->
-    task "fix${variant.name.capitalize()}MainDexClassList" << {
-        logger.info "Fixing main dex keep file for $variant.name"
-        File keepFile = new File("$buildDir/intermediates/multi-dex/$variant.buildType.name/maindexlist.txt")
-        keepFile.withWriterAppend { w ->
-            // Get a reader for the input file
-            w.append('\n')
-            new File("${projectDir}/multidex.keep").withReader { r ->
-                // And write data from the input into the output
-                w << r << '\n'
-            }
-            logger.info "Updated main dex keep file for ${keepFile.getAbsolutePath()}\n$keepFile.text"
-        }
-    }
-}
-tasks.whenTaskAdded { task ->
-    android.applicationVariants.all { variant ->
-        if (task.name == "create${variant.name.capitalize()}MainDexClassList") {
-            task.finalizedBy "fix${variant.name.capitalize()}MainDexClassList"
-        }
-    }
-}
-
 
