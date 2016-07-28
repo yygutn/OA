@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hyphenate.chat.EMClient;
 import com.zhy.http.okhttp.callback.FileCallBack;
 
 import org.androidannotations.annotations.EActivity;
@@ -37,7 +38,7 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void initData() {
-        mList = (ArrayList<Annex>) DataSupport.findAll(Annex.class);
+        mList = (ArrayList<Annex>) DataSupport.where("username = ?", EMClient.getInstance().getCurrentUser()).find(Annex.class);
         if (mList == null) {
             mList = new ArrayList<>();
         }

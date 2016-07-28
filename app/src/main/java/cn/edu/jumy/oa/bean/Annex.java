@@ -1,5 +1,7 @@
 package cn.edu.jumy.oa.bean;
 
+import com.hyphenate.chat.EMClient;
+
 import org.apache.commons.io.FileUtils;
 import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
@@ -41,6 +43,8 @@ public class Annex extends DataSupport {
     private File file;
     private byte byteFile[];
 
+    private String username;
+
     public Annex(Attachment attachment, File file) {
         this.IDS = attachment.getId();
         this.pid = attachment.getPid();
@@ -48,6 +52,7 @@ public class Annex extends DataSupport {
         this.type = attachment.getType();
         this.fileName = attachment.getFileName();
         this.suffix = attachment.getSuffix();
+        this.username = EMClient.getInstance().getCurrentUser();
         try {
             this.byteFile = FileUtils.readFileToByteArray(file);
         } catch (Exception e) {
@@ -123,6 +128,14 @@ public class Annex extends DataSupport {
         this.byteFile = byteFile;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public void setAnnex(Attachment attachment, File file) {
         this.IDS = attachment.getId();
         this.pid = attachment.getPid();
@@ -130,6 +143,7 @@ public class Annex extends DataSupport {
         this.type = attachment.getType();
         this.fileName = attachment.getFileName();
         this.suffix = attachment.getSuffix();
+        this.username = EMClient.getInstance().getCurrentUser();
         try {
             this.byteFile = FileUtils.readFileToByteArray(file);
         } catch (Exception e) {
