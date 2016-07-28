@@ -129,6 +129,7 @@ public class DepartmentAddActivity extends BaseActivity {
         String name = mOftenEt.getText().toString();
         if (TextUtils.isEmpty(name)) {
             showToast("常用单位组名不能为空");
+            return;
         }
         String str = "";
         String ids = "";
