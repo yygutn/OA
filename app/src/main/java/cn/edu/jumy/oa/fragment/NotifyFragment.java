@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.hyphenate.chatui.DemoApplication;
+import com.hyphenate.chatui.DemoHelper;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 import com.zhy.http.okhttp.callback.Callback;
@@ -76,7 +77,7 @@ import okhttp3.Response;
  */
 @EFragment(R.layout.fragment_notify)
 public class NotifyFragment extends BaseFragment implements OnItemClickListener {
-    public static final String KEY = NotifyFragment.class.getSimpleName() + "_" + DemoApplication.currentUserName;
+    public final String KEY = NotifyFragment.class.getSimpleName() + "_" + DemoHelper.getInstance().getCurrentUsernName();
     private Context mContext;
     @ViewById(R.id.notify_listView)
     PullToRefreshRecyclerView mListView;

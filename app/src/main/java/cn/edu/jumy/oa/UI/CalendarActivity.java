@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatui.DemoApplication;
 
 import org.androidannotations.annotations.AfterExtras;
@@ -285,7 +286,7 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
                     public void onClick(DialogInterface dialog, int which) {
                         String str = edit.getText().toString();
                         Date date = new Date(year-1900, monthOfYear-1, dayOfMonth, hour, minute, 0);
-                        Alarm alarm = new Alarm(str, date, DemoApplication.currentUserName);
+                        Alarm alarm = new Alarm(str, date, EMClient.getInstance().getCurrentUser());
                         boolean flag = alarm.save();
                         String message = flag ? "创建日程提醒成功" : "创建日程提醒失败,请重新创建";
                         showToast(message);

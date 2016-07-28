@@ -51,8 +51,8 @@ public class MineFragment extends BaseFragment {
 
     @AfterViews
     void start() {
-        EaseUserUtils.setUserAvatar(mContext, DemoApplication.currentUserName, mSettingAvatar);
-        mSettingName.setText(DemoApplication.currentUserName);
+        EaseUserUtils.setUserAvatar(mContext, EMClient.getInstance().getCurrentUser(), mSettingAvatar);
+        mSettingName.setText(EMClient.getInstance().getCurrentUser());
         //设置所属单位
         //mSettingDescription.setName("所属单位:"+user.getLevel());
         if (!DemoApplication.currentUserName.equals(EMClient.getInstance().getCurrentUser())) {

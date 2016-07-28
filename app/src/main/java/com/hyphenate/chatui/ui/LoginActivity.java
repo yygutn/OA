@@ -36,6 +36,7 @@ import com.hyphenate.chatui.db.DemoDBManager;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import cn.edu.jumy.jumyframework.AppManager;
+import cn.edu.jumy.oa.OAService;
 
 /**
  * 登陆页面
@@ -58,12 +59,11 @@ public class LoginActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 
 		// 如果登录成功过，直接进入主页面
-//		if (DemoHelper.getInstance().isLoggedIn()) {
-//			autoLogin = true;
-//			startActivity(new Intent(LoginActivity.this, cn.edu.jumy.oa.MainActivity.class));
-//
-//			return;
-//		}
+		if (DemoHelper.getInstance().isLoggedIn()) {
+			autoLogin = true;
+			startActivity(new Intent(LoginActivity.this, cn.edu.jumy.oa.MainActivity.class));
+			return;
+		}
 		try {
 			AppManager.getInstance().finishAllBesideTop();
 			setContentView(R.layout.em_activity_login);
@@ -147,7 +147,8 @@ public class LoginActivity extends BaseActivity {
 			@Override
 			public void onSuccess() {
 				Log.d(TAG, "login: onSuccess");
-
+				DemoApplication.currentUserName = currentUsername;
+				OAService.username = EMClient.getInstance().getCurrentUser() + "_";
 				if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
 					pd.dismiss();
 				}
