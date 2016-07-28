@@ -1,15 +1,13 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.androidannotations.annotations.EActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,30 +27,26 @@ import cn.edu.jumy.oa.widget.customview.SimpleDividerItemDecoration;
 @EActivity(R.layout.activity_document_cabinet)
 public class SentDocumentActivity extends BaseSearchRefreshActivity {
 
-    private ArrayList<Doc> mListDoc = new ArrayList<>();
+    private ArrayList<Doc> mList = new ArrayList<>();
     SentDocAdapter adapter;
+
     @Override
     protected void setTile() {
         mTitleBar.setTitle("已发送公文");
     }
 
+    int index = 0;
+    static final int basePages = 50;
+
     @Override
     protected void initData() {
-        mList = null;
-
-        final Map<String, String> params = new HashMap<>();
-        params.put("page", "1");
-        params.put("size", "20");
-        params.put("level", "");
-        params.put("docNo", "");
-        params.put("docTitle", "");
-        params.put("signStatus", "");
+        final Map<String, String> params = getParams(index);
 
         OAService.docUser(params, new DocCallback() {
             @Override
             public void onResponse(DocResponse response, int id) {
-                if (response != null && response.code == 0 && response.data != null){
-                    mListDoc = response.data.pageObject;
+                if (response != null && response.code == 0 && response.data != null) {
+                    mList = response.data.pageObject;
                     adapter.setList(response.data.pageObject);
                     mListView.setLoadMoreCount(20);
                 }
@@ -60,9 +54,21 @@ public class SentDocumentActivity extends BaseSearchRefreshActivity {
         });
     }
 
+    @NonNull
+    private Map<String, String> getParams(int Index) {
+        final Map<String, String> params = new HashMap<>();
+        params.put("page", Index + "");
+        params.put("size", basePages + "");
+        params.put("level", "");
+        params.put("docNo", "");
+        params.put("docTitle", "");
+        params.put("signStatus", "");
+        return params;
+    }
+
     @Override
     protected void initListView() {
-        adapter = new SentDocAdapter(mContext, R.layout.item_sent_xx, new ArrayList<>(mListDoc));
+        adapter = new SentDocAdapter(mContext, R.layout.item_sent_xx, new ArrayList<>(mList));
         mListView.setAdapter(adapter);
         mListView.getRecyclerView().addItemDecoration(new SimpleDividerItemDecoration(mContext));
         adapter.setOnItemClickListener(this);
@@ -70,19 +76,58 @@ public class SentDocumentActivity extends BaseSearchRefreshActivity {
 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-        Node node = new Node((Doc)o);
+        Node node = new Node((Doc) o);
         DetailsActivity_.intent(mContext).extra("details", node).start();
     }
 
     @Override
+    protected void doRefresh() {
+        OAService.docUser(getParams(1), new DocCallback() {
+            @Override
+            public void onResponse(DocResponse response, int id) {
+                if (response != null && response.code == 0 && response.data != null) {
+                    int size = response.data.pageObject.size();
+                    Doc node = mList.get(0);
+                    int position = 0;
+                    for (int i = size - 1; i >= 0; i--) {
+                        if (response.data.pageObject.get(i).id.equals(node.id)) {
+                            position = i;
+                            break;
+                        }
+                    }
+                    for (int i = position - 1; i >= 0; i--) {
+                        mList.add(0, response.data.pageObject.get(i));
+                    }
+                    mListView.setLoadMoreCount((index - 1) * basePages + position);
+                    adapter.setList(new ArrayList(mList));
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void doLoadMore() {
+        OAService.docUser(getParams(index), new DocCallback() {
+            @Override
+            public void onResponse(DocResponse response, int id) {
+                if (response != null && response.code == 0 && response.data != null) {
+                    mList.addAll(response.data.pageObject);
+                    adapter.setList(new ArrayList<>(mList));
+                    mListView.setLoadMoreCount(index++ * basePages);
+                }
+            }
+        });
+    }
+
+    @Override
     protected void onTextSubmit(String str) {
-        if (TextUtils.isEmpty(str)){
+        if (TextUtils.isEmpty(str)) {
             showToast("请输入有效关键字");
             return;
         }
         ArrayList<Doc> list = new ArrayList<>();
-        for (Doc doc : mListDoc){
-            if (doc.docTitle.contains(str)){
+        for (Doc doc : mList) {
+            if (doc.docTitle.contains(str)) {
                 list.add(doc);
             }
         }
@@ -91,6 +136,6 @@ public class SentDocumentActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void onSearchClose() {
-        adapter.setList(new ArrayList<>(mListDoc));
+        adapter.setList(new ArrayList<>(mList));
     }
 }

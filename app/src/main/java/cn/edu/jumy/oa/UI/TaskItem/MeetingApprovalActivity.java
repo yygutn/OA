@@ -1,5 +1,7 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -32,6 +34,9 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity {
     MeetingCardAdapter adapter;
     ArrayList<Meet> mList = new ArrayList<>();
 
+    int index = 1;
+    static final int basePages = 50;
+
     @Override
     protected void setTile() {
         mTitleBar.setTitle("会议审核");
@@ -39,6 +44,24 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void initData() {
+        Map<String, String> params = getParams(index);
+
+        OAService.meetCompany(params, new MeetCallback() {
+
+            @Override
+            public void onResponse(MeetResponse response, int id) {
+                if (response != null && response.data != null && response.code == 0) {
+                    mList = response.data.pageObject;
+                    adapter.setList(new ArrayList<>(mList));
+                    mListView.setLoadMoreCount(basePages * index);
+                    index++;
+                }
+            }
+        });
+    }
+
+    @NonNull
+    private Map<String, String> getParams(int Index) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
         int year, month, day;
@@ -65,8 +88,8 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity {
         String before = sdf.format(new Date(year, month, day));
         String now = sdf.format(date);
         Map<String, String> params = new HashMap<>();
-        params.put("page", "1");
-        params.put("size", "20");
+        params.put("page", Index + "");
+        params.put("size", basePages + "");
         params.put("level", "");
         params.put("docNo", "");
         params.put("docTitle", "");
@@ -74,43 +97,80 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity {
         params.put("endTime", now);
         params.put("signStatus", "");
         params.put("passStatus", "");
-
-        OAService.meetCompany(params, new MeetCallback() {
-
-            @Override
-            public void onResponse(MeetResponse response, int id) {
-                if (response != null && response.data != null && response.code == 0) {
-                    mList = response.data.pageObject;
-                    adapter.setList(response.data.pageObject);
-                }
-            }
-        });
+        return params;
     }
 
     @Override
     protected void initListView() {
-        adapter = new MeetingCardAdapter(mContext,R.layout.item_card_notification,new ArrayList(mList));
+        adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification, new ArrayList(mList));
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
     }
 
     @Override
     protected void onTextSubmit(String str) {
-        super.onTextSubmit(str);
+        if (TextUtils.isEmpty(str)) {
+            showToast("请输入有效关键字");
+            return;
+        }
+        ArrayList<Meet> list = new ArrayList<>();
+        for (Meet meet : mList) {
+            if (meet.docTitle.contains(str) || meet.sendDepartmentInfo.contains(str) || meet.department.contains(str) || meet.addr.contains(str)) {
+                list.add(meet);
+            }
+        }
+        adapter.setList(list);
     }
 
     @Override
     protected void doRefresh() {
+        OAService.meetCompany(getParams(1), new MeetCallback() {
 
+            @Override
+            public void onResponse(MeetResponse response, int id) {
+                if (response != null && response.code == 0 && response.data != null) {
+                    int size = response.data.pageObject.size();
+                    Meet node = mList.get(0);
+                    int position = 0;
+                    for (int i = size - 1; i >= 0; i--) {
+                        if (response.data.pageObject.get(i).id.equals(node.id)) {
+                            position = i;
+                            break;
+                        }
+                    }
+                    for (int i = position - 1; i >= 0; i--) {
+                        mList.add(0, response.data.pageObject.get(i));
+                    }
+                    mListView.setLoadMoreCount((index-1)*basePages+position);
+                    adapter.setList(new ArrayList(mList));
+                }
+            }
+        });
     }
 
     @Override
     protected void doLoadMore() {
+        OAService.meetCompany(getParams(index), new MeetCallback() {
 
+            @Override
+            public void onResponse(MeetResponse response, int id) {
+                if (response != null && response.data != null && response.code == 0) {
+                    mList.addAll(response.data.pageObject);
+                    adapter.setList(new ArrayList<>(mList));
+                    mListView.setLoadMoreCount(basePages * index);
+                    index++;
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onSearchClose() {
+        adapter.setList(new ArrayList<>(mList));
     }
 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-        MeetAuditActivity_.intent(mContext).extra("mid",((Meet)o).id).start();
+        MeetAuditActivity_.intent(mContext).extra("mid", ((Meet) o).id).start();
     }
 }

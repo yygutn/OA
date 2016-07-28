@@ -33,7 +33,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
     ArrayList<Meet> mList = new ArrayList<>();
 
     int index = 1;
-    int pages = 20;
+    static final int basePages = 20;
 
     @AfterExtras
     void getData() {
@@ -41,16 +41,17 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
             @Override
             public void onResponse(MeetResponse response, int id) {
                 if (response != null && response.code == 0 && response.data != null) {
-                    mListView.setLoadMoreCount(index*pages);
-                    index++;
                     mList.addAll(response.data.pageObject);
                     adapter.setList(new ArrayList(mList));
+                    mListView.setLoadMoreCount(index * basePages);
+                    index++;
                 }
             }
         });
     }
+
     @NonNull
-    private Map<String, String> getParams(int page) {
+    private Map<String, String> getParams(int Index) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
         int year, month, day;
@@ -78,8 +79,8 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
         String now = sdf.format(date);
 
         Map<String, String> params = new HashMap<>();
-        params.put("page", page + "");
-        params.put("size", "20");
+        params.put("page", Index + "");
+        params.put("size", basePages + "");
         params.put("level", "");
         params.put("docNo", "");
         params.put("docTitle", "");
@@ -102,7 +103,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void initListView() {
-        adapter = new MeetingCardAdapter(mContext,R.layout.item_card_notification,new ArrayList(mList));
+        adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification, new ArrayList(mList));
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
     }
@@ -119,10 +120,10 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
             @Override
             public void onResponse(MeetResponse response, int id) {
                 if (response != null && response.code == 0 && response.data != null) {
-                    mListView.setLoadMoreCount(index*pages);
-                    index++;
                     mList.addAll(response.data.pageObject);
                     adapter.setList(new ArrayList(mList));
+                    mListView.setLoadMoreCount(index * basePages);
+                    index++;
                 }
             }
         });
@@ -147,21 +148,22 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
                     for (int i = position - 1; i >= 0; i--) {
                         mList.add(0, response.data.pageObject.get(i));
                     }
+                    mListView.setLoadMoreCount((index-1)*basePages+position);
+                    adapter.setList(new ArrayList(mList));
                 }
-                adapter.setList(new ArrayList(mList));
             }
         });
     }
 
     @Override
     protected void onTextSubmit(String str) {
-        if (TextUtils.isEmpty(str)){
+        if (TextUtils.isEmpty(str)) {
             showToast("请输入关键字");
             return;
         }
         ArrayList<Meet> list = new ArrayList<>();
-        for (Meet node : mList){
-            if (node.docTitle.contains(str)){
+        for (Meet node : mList) {
+            if (node.docTitle.contains(str)) {
                 list.add(node);
             }
         }
@@ -170,6 +172,6 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void onSearchClose() {
-
+        adapter.setList(new ArrayList<>(mList));
     }
 }

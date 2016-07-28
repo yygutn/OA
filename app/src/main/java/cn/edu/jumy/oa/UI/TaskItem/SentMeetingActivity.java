@@ -27,7 +27,7 @@ import cn.edu.jumy.oa.widget.customview.SimpleDividerItemDecoration;
 @EActivity(R.layout.activity_document_cabinet)
 public class SentMeetingActivity extends BaseSearchRefreshActivity {
 
-    private ArrayList<Meet> mListMeet = new ArrayList<>();
+    private ArrayList<Meet> mList = new ArrayList<>();
     SentMeetAdapter adapter;
 
     @Override
@@ -35,26 +35,29 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
         mTitleBar.setTitle("已发布会议");
     }
 
+    int index = 0;
+    static final int basePages = 50;
+
     @Override
     protected void initData() {
-        mList = null;
-        OAService.meetUser(getParams(), new MeetCallback() {
+        OAService.meetUser(getParams(index), new MeetCallback() {
             @Override
             public void onResponse(MeetResponse response, int id) {
                 if (response != null && response.code == 0 && response.data != null) {
-                    mListMeet = response.data.pageObject;
+                    mList = response.data.pageObject;
                     adapter.setList(response.data.pageObject);
+                    mListView.setLoadMoreCount(index++ * basePages);
                 }
             }
         });
     }
 
     @NonNull
-    private Map<String, String> getParams() {
+    private Map<String, String> getParams(int Index) {
 
         final Map<String, String> params = new HashMap<>();
-        params.put("page", "1");
-        params.put("size", "20");
+        params.put("page", Index + "");
+        params.put("size", basePages + "");
         params.put("level", "");
         params.put("docNo", "");
         params.put("docTitle", "");
@@ -66,7 +69,7 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void initListView() {
-        adapter = new SentMeetAdapter(mContext, R.layout.item_sent_xx, new ArrayList<>(mListMeet));
+        adapter = new SentMeetAdapter(mContext, R.layout.item_sent_xx, new ArrayList<>(mList));
         mListView.setAdapter(adapter);
         mListView.getRecyclerView().addItemDecoration(new SimpleDividerItemDecoration(mContext));
         adapter.setOnItemClickListener(this);
@@ -75,7 +78,7 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         Node node = new Node((Meet) o);
-        DetailsActivity_.intent(mContext).extra("details", node).extra("from_sent_meet",true).start();
+        DetailsActivity_.intent(mContext).extra("details", node).extra("from_sent_meet", true).start();
     }
 
     @Override
@@ -85,7 +88,7 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
             return;
         }
         ArrayList<Meet> list = new ArrayList<>();
-        for (Meet meet : mListMeet) {
+        for (Meet meet : mList) {
             if (meet.docTitle.contains(str)) {
                 list.add(meet);
             }
@@ -94,7 +97,46 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
     }
 
     @Override
+    protected void doRefresh() {
+        OAService.meetUser(getParams(1), new MeetCallback() {
+            @Override
+            public void onResponse(MeetResponse response, int id) {
+                if (response != null && response.code == 0 && response.data != null) {
+                    int size = response.data.pageObject.size();
+                    Meet node = mList.get(0);
+                    int position = 0;
+                    for (int i = size - 1; i >= 0; i--) {
+                        if (response.data.pageObject.get(i).id.equals(node.id)) {
+                            position = i;
+                            break;
+                        }
+                    }
+                    for (int i = position - 1; i >= 0; i--) {
+                        mList.add(0, response.data.pageObject.get(i));
+                    }
+                    mListView.setLoadMoreCount((index-1)*basePages+position);
+                    adapter.setList(new ArrayList(mList));
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void doLoadMore() {
+        OAService.meetUser(getParams(index), new MeetCallback() {
+            @Override
+            public void onResponse(MeetResponse response, int id) {
+                if (response != null && response.code == 0 && response.data != null) {
+                    mList.addAll(response.data.pageObject);
+                    adapter.setList(new ArrayList<>(mList));
+                    mListView.setLoadMoreCount(index++ * basePages);
+                }
+            }
+        });
+    }
+
+    @Override
     protected void onSearchClose() {
-        adapter.setList(new ArrayList<>(mListMeet));
+        adapter.setList(new ArrayList<>(mList));
     }
 }

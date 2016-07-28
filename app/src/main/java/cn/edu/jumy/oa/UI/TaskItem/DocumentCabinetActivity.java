@@ -108,11 +108,13 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void doRefresh() {
-
+        initData();
+        adapter.setList(mList);
     }
 
     @Override
     protected void doLoadMore() {
-
+        initData();
+        adapter.setList(mList);
     }
 }
