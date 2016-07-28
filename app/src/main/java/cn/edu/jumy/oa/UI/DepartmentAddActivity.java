@@ -149,6 +149,7 @@ public class DepartmentAddActivity extends BaseActivity {
         }
         if (TextUtils.isEmpty(ids) || TextUtils.isEmpty(str)) {
             showToast("请选择常用单位");
+            return;
         }
         OAService.insertMagroup(ids, name, 0, new StringCallback() {
             @Override
