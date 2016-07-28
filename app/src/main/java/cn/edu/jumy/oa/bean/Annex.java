@@ -2,12 +2,15 @@ package cn.edu.jumy.oa.bean;
 
 import com.hyphenate.chat.EMClient;
 
-import org.apache.commons.io.FileUtils;
+//import org.apache.commons.io.FileUtils;
 import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -54,7 +57,7 @@ public class Annex extends DataSupport {
         this.suffix = attachment.getSuffix();
         this.username = EMClient.getInstance().getCurrentUser();
         try {
-            this.byteFile = FileUtils.readFileToByteArray(file);
+            this.byteFile = File2byte(file);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -145,7 +148,7 @@ public class Annex extends DataSupport {
         this.suffix = attachment.getSuffix();
         this.username = EMClient.getInstance().getCurrentUser();
         try {
-            this.byteFile = FileUtils.readFileToByteArray(file);
+            this.byteFile = File2byte(file);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,5 +178,33 @@ public class Annex extends DataSupport {
             }
         }
         return file;
+    }
+
+    public static byte[] File2byte(File file)
+    {
+        byte[] buffer = null;
+        try
+        {
+            FileInputStream fis = new FileInputStream(file);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            byte[] b = new byte[1024];
+            int n;
+            while ((n = fis.read(b)) != -1)
+            {
+                bos.write(b, 0, n);
+            }
+            fis.close();
+            bos.close();
+            buffer = bos.toByteArray();
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return buffer;
     }
 }

@@ -51,11 +51,6 @@ android {
     buildToolsVersion '23.0.2'
 
     defaultConfig {
-//        applicationId "com.fsck.k9"
-//        testApplicationId "com.fsck.k9.tests"
-
-        versionCode 23090
-        versionName '5.109'
 
         minSdkVersion 15
         targetSdkVersion 23

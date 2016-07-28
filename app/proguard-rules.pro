@@ -15,30 +15,30 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
-
+# keep住源文件以及行号
+-keepattributes SourceFile,LineNumberTable
 -optimizationpasses 5
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
 -dontpreverify
--dontwarn org.htmlcleaner.HtmlCleanerForAnt
--dontwarn org.htmlcleaner.JDomSerializer
--dontwarn org.**
--dontwarn com.fsck.k9.**
--dontwarn com.baidu.**
--dontwarn android.webkit.WebView
--dontwarn android.webkit.WebViewClient
--dontwarn android.**
-#-dontwarn com.**
--dontwarn com.helger.**
--dontwarn com.parse.**
--dontwarn com.lhh.ptrrv.library.PullToRefreshRecyclerView$InterOnScrollListener
--dontwarn
+-verbose
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+#四大组件&&相关
+-keep class * extends android.app.Application
+-keep class * extends android.app.Service
+-keep class * extends android.content.BroadcastReceiver
+-keep class * extends android.content.ContentProvider
+-keep class * extends android.app.backup.BackupAgentHelper
+-keep class * extends android.preference.Preference
+-keep class com.android.vending.licensing.ILicensingService
+#but not the descriptor class
+
 
 -dontnote org.apache.**
 -dontnote internal.org.apache.**
 -dontnote com.hyphenate.**
 -dontnote com.baidu.**
-#-dontnote com.fsck.k9.**
+-dontnote com.fsck.k9.**
 -dontnote org.openintents.**
 -dontnote com.android.**
 -dontnote android.net.http.**
@@ -50,34 +50,12 @@
 -dontnote android.net.compatibility.WebAddress
 -dontnote vi.com.gdi.bgl.android.java.EnvDrawText
 -dontnote vi.com.gdi.bgl.android.java.a
--verbose
--optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 
--keep class * extends android.app.Activity
--keep class * extends android.app.Application
--keep class * extends android.app.Service
--keep class * extends android.content.BroadcastReceiver
--keep class * extends android.content.ContentProvider
--keep class * extends android.app.backup.BackupAgentHelper
--keep class * extends android.preference.Preference
--keep class com.android.vending.licensing.ILicensingService
--keep class org.**{*;}
-#-keep class com.fsck.k9.**{*;}
--keep class com.baidu.**{*;}
--keep class com.helger.**{*;}
--keep class com.parse.**{*;}
--keep class com.nineoldandroids.view.ViewHelper
-#-keep class com.**{*;}
--keep class android.**{*;}
--keep class android.net.http.SslCertificate
--keep class android.net.http.SslError
--keep class org.apache.http.params.HttpParams
-#but not the descriptor class
-
-#如果有引用v4包可以添加下面这行
+#如果有引用v4&&v7包可以添加下面这行
 -keep class android.support.v4.** { *; }
--keep public class * extends android.support.v4.**
--keep public class * extends android.app.Fragment
+-keep class * extends android.support.v4.**
+-keep class * extends android.app.Fragment
+-keep class * extends android.app.Activity
 
 
 #如果引用了v4或者v7包，可以忽略警告，因为用不到android.support
@@ -155,3 +133,53 @@
 -keep class com.hyphenate.**{*;}
 -dontwarn com.hyphenate.**
 
+###---自己的代码
+-keep class cn.edu.jumy.oa.bean.**{*;}
+-keep class cn.edu.jumy.oa.widget.**{*;}
+
+###---org
+-keep class org.apache.http.** {*;}
+-dontwarn org.apache.http.**
+
+###---parse
+-keep class com.parse.**{*;}
+-dontwarn com.parse.**
+
+###---百度地图
+-keep class com.baidu.**{*;}
+-dontwarn com.baidu.**
+
+###---k9-mail
+-keep class com.fsck.k9.**{*;}
+-dontwarn com.fsck.k9.**
+
+###---拉动刷新的RecyclerView
+#-keep com.lhh.ptrrv.**{*;}
+#-dontwarn com.lhh.ptrrv.**
+
+###---com.helper
+-keep class com.helger.**{*;}
+-dontwarn com.helger.**
+
+###---ssl
+-keep class android.net.http.SslCertificate
+-keep class android.net.http.SslError
+
+###---webview
+-dontwarn android.webkit.WebView
+-dontwarn android.webkit.WebViewClient
+-dontwarn org.htmlcleaner.HtmlCleanerForAnt
+-dontwarn org.htmlcleaner.JDomSerializer
+
+###---AA注解
+-keep class org.androidannotations.** {*;}
+-dontwarn org.androidannotations.**
+
+###---org.jdom2 --xml解析
+-keep class org.jdom2.**{*;}
+-dontwarn org.jdom2.**
+
+###---nineoldandroid --因为不用，所以忽略提醒
+-dontwarn com.nineoldandroids.view.ViewHelper
+
+###---
