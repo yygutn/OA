@@ -10,16 +10,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
+import com.hyphenate.chatui.DemoApplication;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 import com.zhy.http.okhttp.callback.Callback;
-import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
-import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +42,6 @@ import cn.edu.jumy.oa.adapter.NotifyCardAdapter;
 import cn.edu.jumy.oa.bean.Doc;
 import cn.edu.jumy.oa.bean.Meet;
 import cn.edu.jumy.oa.bean.Node;
-import cn.edu.jumy.oa.bean.NotifyCard;
 import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
 import okhttp3.Call;
 import okhttp3.Response;
@@ -78,8 +76,7 @@ import okhttp3.Response;
  */
 @EFragment(R.layout.fragment_notify)
 public class NotifyFragment extends BaseFragment implements OnItemClickListener {
-    public static final String TAG = "NotifyFragment_Cache";
-    public static final String KEY = "NotifyFragment";
+    public static final String KEY = NotifyFragment.class.getSimpleName() + "_" + DemoApplication.currentUserName;
     private Context mContext;
     @ViewById(R.id.notify_listView)
     PullToRefreshRecyclerView mListView;
@@ -91,43 +88,44 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
     Handler mHandler = new Handler();
 
     Gson gson = new Gson();
-    NotifyReceiveBroadCastReceiver notifyReceiveBroadCastReceiver = new NotifyReceiveBroadCastReceiver(){
+    NotifyReceiveBroadCastReceiver notifyReceiveBroadCastReceiver = new NotifyReceiveBroadCastReceiver() {
         @Override
         public void onNotifyReceive(Context context, Intent intent) {
             final String action = intent.getStringExtra(NotifyUtils.ACTION);
-            showDebugLogd("onNotifyReceive",action);
-            NotifyBroadCastResponse response = gson.fromJson(action,NotifyBroadCastResponse.class);
-            switch (response.action){
+            showDebugLogd("onNotifyReceive", action);
+            NotifyBroadCastResponse response = gson.fromJson(action, NotifyBroadCastResponse.class);
+            switch (response.action) {
                 case "docSend":
                 case "docReceive":
-                case "docUrge":{
+                case "docUrge": {
                     getDoc(response.id);
                     break;
                 }
                 case "meetReceive":
                 case "meetSend":
-                case "meetUrge":{
+                case "meetUrge": {
                     getMeet(response.id);
                     break;
                 }
                 case "noticeSend":
-                case "getNotice":{
+                case "getNotice": {
                     getNotify(response.id);
                     break;
                 }
-                default:break;
+                default:
+                    break;
             }
         }
     };
 
     @AfterInject
-    void initList(){
+    void initList() {
         try {
             mList = (ArrayList<Node>) ACache.get(MyApplication.getContext()).getAsObject(KEY);
         } catch (Exception e) {
             showDebugException(e);
         }
-        if (mList == null){
+        if (mList == null) {
             mList = new ArrayList<>();
         }
     }
@@ -147,7 +145,7 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
         initListView();
         //注册接收透传消息的广播
         IntentFilter filter = new IntentFilter(NotifyReceiveBroadCastReceiver.ACTION_NOTIFY);
-        mContext.registerReceiver(notifyReceiveBroadCastReceiver,filter);
+        mContext.registerReceiver(notifyReceiveBroadCastReceiver, filter);
     }
 
 
@@ -162,13 +160,13 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         Node node = (Node) o;
         mList.remove(position);
-        DetailsActivity_.intent(mContext).extra("details",node).start();
+        DetailsActivity_.intent(mContext).extra("details", node).start();
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 adapter.notifyDataSetChanged();
             }
-        },1000);
+        }, 1000);
     }
 
     @Override
@@ -179,11 +177,11 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (notifyReceiveBroadCastReceiver != null){
+        if (notifyReceiveBroadCastReceiver != null) {
             mContext.unregisterReceiver(notifyReceiveBroadCastReceiver);
         }
         try {
-            ACache.get(MyApplication.getContext()).put(KEY,mList);
+            ACache.get(MyApplication.getContext()).put(KEY, mList);
         } catch (Exception e) {
             showDebugException(e);
         }
@@ -191,21 +189,21 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
 
     private Map<String, String> getParams(String id) {
         Map<String, String> params = new HashMap<>();
-        params.put("id",id);
+        params.put("id", id);
         return params;
     }
 
-    private void getDoc(String id){
+    private synchronized void getDoc(String id) {
         OAService.docReceive(getParams(id), new DocCallback() {
             @Override
             public void onResponse(DocResponse response, int id) {
-                if (response.code != 0){
+                if (response.code != 0) {
                     return;
                 }
                 if (response.data.pageObject.size() > 0) {
                     Doc doc = response.data.pageObject.get(0);
-                    for (Node node : mList){
-                        if (doc.id.equals(node.id)){
+                    for (Node node : mList) {
+                        if (doc.id.equals(node.id)) {
                             mList.remove(node);
                         }
                     }
@@ -216,45 +214,51 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
         });
     }
 
-    private void getMeet(String id){
+    private synchronized void getMeet(String id) {
         OAService.meetReceive(getParams(id), new MeetCallback() {
             @Override
             public void onResponse(MeetResponse response, int ID) {
-                if (response.code != 0){
+                if (response.code != 0) {
                     return;
                 }
                 if (response.data.pageObject.size() > 0) {
-                    Meet meet = response.data.pageObject.get(0);
-                    for (Node node : mList){
-                        if (meet.id.equals(node.id)){
-                            mList.remove(node);
+                    try {
+                        Meet meet = response.data.pageObject.get(0);
+                        for (Node node : mList) {
+                            if (meet.id.equals(node.id)) {
+                                mList.remove(node);
+                            }
                         }
+                        mList.add(0, new Node(response.data.pageObject.get(0)));
+                        adapter.notifyDataSetChanged();
+                    } catch (Exception e) {
+                        showDebugException(e);
                     }
-                    mList.add(0, new Node(response.data.pageObject.get(0)));
-                    adapter.notifyDataSetChanged();
                 }
             }
         });
     }
-    private void getNotify(String id){
+
+    private synchronized void getNotify(String id) {
         OAService.getNotice(id, new NotifyCallBack() {
             @Override
             public void onResponse(SingleNotifyResponse response, int ID) {
-                if (response.code != 0 || response.data == null){
+                if (response.code != 0 || response.data == null) {
                     return;
                 }
-                mList.add(0,new Node(response.data));
+                mList.add(0, new Node(response.data));
             }
         });
     }
-    abstract class NotifyCallBack extends Callback<SingleNotifyResponse>{
+
+    abstract class NotifyCallBack extends Callback<SingleNotifyResponse> {
         @Override
         public SingleNotifyResponse parseNetworkResponse(Response response, int ID) throws Exception {
             String data = response.body().string();
             Gson gson = new Gson();
-            BaseResponse baseResponse = gson.fromJson(data,BaseResponse.class);
-            if (baseResponse.code == 0){
-                return gson.fromJson(data,SingleNotifyResponse.class);
+            BaseResponse baseResponse = gson.fromJson(data, BaseResponse.class);
+            if (baseResponse.code == 0) {
+                return gson.fromJson(data, SingleNotifyResponse.class);
             } else {
                 return new SingleNotifyResponse(baseResponse);
             }

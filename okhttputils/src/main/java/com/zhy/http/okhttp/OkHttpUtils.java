@@ -160,7 +160,7 @@ public class OkHttpUtils
     }
 
 
-    public void sendFailResultCallback(final Call call, final Exception e, final Callback callback, final int id)
+    synchronized public void sendFailResultCallback(final Call call, final Exception e, final Callback callback, final int id)
     {
         if (callback == null) return;
 
@@ -175,7 +175,7 @@ public class OkHttpUtils
         });
     }
 
-    public void sendSuccessResultCallback(final Object object, final Callback callback, final int id)
+    synchronized public void sendSuccessResultCallback(final Object object, final Callback callback, final int id)
     {
         if (callback == null) return;
         mPlatform.execute(new Runnable()
