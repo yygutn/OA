@@ -25,7 +25,7 @@ import okhttp3.OkHttpClient;
 /**
  * 全局Application
  */
-public class MyApplication extends Application {
+public class MyApplication extends MultiDexApplication {
 
     private static final String TAG = "Application";
 
