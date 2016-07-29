@@ -2,6 +2,7 @@ package cn.edu.jumy.oa.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
@@ -32,24 +33,28 @@ public class AuditAdapter extends CommonAdapter<AuditUser> {
     @Override
     public void convert(final ViewHolder holder, final AuditUser user) {
         int position = holder.getLayoutPosition();
-        Logger.d(position + "," + user.oid + "," + (position == 0 ? "" : mDatas.get(position - 1).oid));
-        if (position == 0 || !user.oid.equals(mDatas.get(position - 1).oid)) {
-            holder.setVisible(R.id.audit_meet_header, true);
-            holder.setText(R.id.audit_meet_header_tv, user.organame);
+        Logger.d(position + "," + user.organame + "," + (position == 0 ? "" : mDatas.get(position - 1).organame));
+        try {
+            if (position == 0 || !user.organame.equals(mDatas.get(position - 1).organame)) {
+                holder.setVisible(R.id.audit_meet_header, true);
+                holder.setText(R.id.audit_meet_header_tv, user.organame);
+            }
+            holder.setText(R.id.audit_item_name, user.name);
+            holder.setOnClickListener(R.id.audit_item_pass, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    letGo(user, true, holder.getLayoutPosition(), holder);
+                }
+            });
+            holder.setOnClickListener(R.id.audit_item_back, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    letGo(user, false, holder.getLayoutPosition(), holder);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        holder.setText(R.id.audit_item_name, user.uname);
-        holder.setOnClickListener(R.id.audit_item_pass, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                letGo(user, true, holder.getLayoutPosition(), holder);
-            }
-        });
-        holder.setOnClickListener(R.id.audit_item_back, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                letGo(user, false, holder.getLayoutPosition(), holder);
-            }
-        });
 
     }
 

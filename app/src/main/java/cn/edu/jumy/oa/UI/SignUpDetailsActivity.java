@@ -46,7 +46,7 @@ public class SignUpDetailsActivity extends BaseActivity {
     String tid = "";
 
     @Extra("pid")
-    String meetId = "";
+    String pid = "";
 
     ArrayList<AuditUser> mListLeaved = new ArrayList<>();
     ArrayList<AuditUser> mListSigned = new ArrayList<>();
@@ -112,6 +112,6 @@ public class SignUpDetailsActivity extends BaseActivity {
 
     @Click(R.id.sign_details_skip_approval)
     void click() {
-        MeetAuditActivity_.intent(mContext).extra("mid",meetId).start();
+        MeetAuditActivity_.intent(mContext).extra("mid",pid).start();
     }
 }

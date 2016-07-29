@@ -41,7 +41,7 @@ public class AuditAdapter2 extends CommonAdapter<AuditUser> {
             holder.setVisible(R.id.audit_meet_header, true);
             holder.setText(R.id.audit_meet_header_tv, user.organame);
         }
-        holder.setText(R.id.audit_item_name, user.uname);
+        holder.setText(R.id.audit_item_name, user.name);
         holder.setText(R.id.audit_item_pass, "催收");
         holder.setOnClickListener(R.id.audit_item_pass, new View.OnClickListener() {
             @Override

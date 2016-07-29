@@ -58,12 +58,12 @@ public class LoginActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// 如果登录成功过，直接进入主页面
-		if (DemoHelper.getInstance().isLoggedIn()) {
-			autoLogin = true;
-			startActivity(new Intent(LoginActivity.this, cn.edu.jumy.oa.MainActivity.class));
-			return;
-		}
+//		// 如果登录成功过，直接进入主页面
+//		if (DemoHelper.getInstance().isLoggedIn()) {
+//			autoLogin = true;
+//			startActivity(new Intent(LoginActivity.this, cn.edu.jumy.oa.MainActivity.class));
+//			return;
+//		}
 		try {
 			AppManager.getInstance().finishAllBesideTop();
 			setContentView(R.layout.em_activity_login);

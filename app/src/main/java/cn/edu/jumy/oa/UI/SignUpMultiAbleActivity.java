@@ -198,7 +198,7 @@ public class SignUpMultiAbleActivity extends BaseActivity {
         }
         Map<String,String> params = new HashMap<>();
         params.put("editType",editType);
-        params.put("pid",pid);
+        params.put("pid",tid);
         params.put("name",name);
         params.put("post",position);
         params.put("type",status+"");

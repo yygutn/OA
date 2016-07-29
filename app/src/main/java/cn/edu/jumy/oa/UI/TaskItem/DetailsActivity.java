@@ -124,7 +124,9 @@ public class DetailsActivity extends BaseActivity {
                 if (baseResponse.code == 0) {
                     showToast("签收会议成功");
                 } else if (baseResponse.code == 1) {
-                    showToast("签收会议失败");
+                    if (!TextUtils.isEmpty(baseResponse.msg)) {
+                        showToast(baseResponse.msg);
+                    }
                 }
             }
         });

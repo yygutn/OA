@@ -196,7 +196,7 @@ public class SignUpAddActivity extends BaseActivity {
         if (node == null){
             node = new Sign();
         }
-        node.pid = pid;
+        node.pid = tid;
         node.name = name;
         node.phone = tel;
         node.post = position;

@@ -123,8 +123,8 @@ public class AppManager {
         message += "Before finish, the Stack size is :" + AppManager.getStackSize() +"\n";
         finishActivity(activity.getClass());
         if (activity != null) {
+//            activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
             activity.finish();
-            activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
             activity = null;
         }
         message += ("After finished, the Stack size is :" + AppManager.getStackSize()) + "\n";
