@@ -201,15 +201,21 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                 if (response.code != 0) {
                     return;
                 }
-                if (response.data.pageObject.size() > 0) {
-                    Doc doc = response.data.pageObject.get(0);
-                    for (Node node : mList) {
-                        if (doc.id.equals(node.id)) {
-                            mList.remove(node);
+                synchronized (mList){
+                    try {
+                        if (response.data.pageObject.size() > 0) {
+                            Doc doc = response.data.pageObject.get(0);
+                            for (Node node : mList) {
+                                if (doc.id.equals(node.id)) {
+                                    mList.remove(node);
+                                }
+                            }
+                            mList.add(0, new Node(doc));
+                            adapter.notifyDataSetChanged();
                         }
+                    } catch (Exception e) {
+                        showDebugException(e);
                     }
-                    mList.add(0, new Node(doc));
-                    adapter.notifyDataSetChanged();
                 }
             }
         });
@@ -222,18 +228,20 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                 if (response.code != 0) {
                     return;
                 }
-                if (response.data.pageObject.size() > 0) {
-                    try {
-                        Meet meet = response.data.pageObject.get(0);
-                        for (Node node : mList) {
-                            if (meet.id.equals(node.id)) {
-                                mList.remove(node);
+                synchronized (mList){
+                    if (response.data.pageObject.size() > 0) {
+                        try {
+                            Meet meet = response.data.pageObject.get(0);
+                            for (Node node : mList) {
+                                if (meet.id.equals(node.id)) {
+                                    mList.remove(node);
+                                }
                             }
+                            mList.add(0, new Node(response.data.pageObject.get(0)));
+                            adapter.notifyDataSetChanged();
+                        } catch (Exception e) {
+                            showDebugException(e);
                         }
-                        mList.add(0, new Node(response.data.pageObject.get(0)));
-                        adapter.notifyDataSetChanged();
-                    } catch (Exception e) {
-                        showDebugException(e);
                     }
                 }
             }
@@ -247,7 +255,20 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                 if (response.code != 0 || response.data == null) {
                     return;
                 }
-                mList.add(0, new Node(response.data));
+                synchronized (mList){
+                    try {
+                        Node temp = new Node(response.data);
+                        for (Node node : mList) {
+                            if (node.id.equals(temp.id)){
+                                mList.remove(node);
+                            }
+                        }
+                        mList.add(0,temp);
+                        adapter.notifyDataSetChanged();
+                    } catch (Exception e) {
+                        showDebugException(e);
+                    }
+                }
             }
         });
     }
