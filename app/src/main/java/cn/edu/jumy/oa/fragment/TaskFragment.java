@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-//import com.fsck.k9.activity.Accounts;
+import com.fsck.k9.activity.Accounts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,7 +152,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                         break;
                     }
                     case 2: {//邮件
-//                        startActivity(new Intent(mContext, Accounts.class));
+                        startActivity(new Intent(mContext, Accounts.class));
                         break;
                     }
                     case 3: {//会议

@@ -35,7 +35,7 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
         mTitleBar.setTitle("已发布会议");
     }
 
-    int index = 0;
+    int index = 1;
     static final int basePages = 50;
 
     @Override
@@ -69,15 +69,15 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void initListView() {
-        adapter = new SentMeetAdapter(mContext, R.layout.item_sent_xx, new ArrayList<>(mList));
+        adapter = new SentMeetAdapter(mContext, R.layout.item_notify_notification, new ArrayList<>(mList));
         mListView.setAdapter(adapter);
-        mListView.getRecyclerView().addItemDecoration(new SimpleDividerItemDecoration(mContext));
         adapter.setOnItemClickListener(this);
     }
 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         Node node = new Node((Meet) o);
+        SignDetailsActivity.flag = false;
         DetailsActivity_.intent(mContext).extra("details", node).extra("from_sent_meet", true).start();
     }
 

@@ -6,4 +6,9 @@
         android:orderInCategory="100"
         android:title="报名详情"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_multi"
+        android:orderInCategory="100"
+        android:title="批量报名"
+        app:showAsAction="always" />
 </menu>

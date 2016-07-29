@@ -1,6 +1,7 @@
 package cn.edu.jumy.oa.UI;
 
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -63,6 +64,10 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
 
     int lastVisiblePosition = 0;
 
+
+    int index = 1;
+    static final int basePages = 50;
+
     @AfterViews
     void start() {
         mContext = this;
@@ -106,7 +111,7 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
                     lastVisiblePosition = ((LinearLayoutManager) mListView.getLayoutManager()).findLastVisibleItemPosition();
                 }
             });
-            adapter = new MeetingCardAdapter(mContext,R.layout.item_card_notification,mList);
+            adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification, mList);
             mListView.setAdapter(adapter);
             adapter.setOnItemClickListener(this);
 
@@ -148,43 +153,7 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
      * 更新会议卡片
      */
     private void updateList() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        int year, month, day;
-        Calendar calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR) - 1900;
-        month = calendar.get(Calendar.MONTH);
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-        if ((month < 8 && (month & 1) == 1) || (month >= 8 && (month & 1) == 0)) {
-            if (day == 31) {
-                day--;
-            }
-            if (month == 2 && day > 28) {
-                day = 28;
-            }
-            if (month == 0) {
-                month = 11;
-                year--;
-            } else {
-                month--;
-            }
-        } else {
-            month--;
-        }
-        String before = sdf.format(new Date(year, month, day));
-        String now = sdf.format(date);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("page", "1");
-        params.put("size", "20");
-        params.put("startTime", before);
-        params.put("endTime", now);
-        params.put("level", "");
-        params.put("docNo", "");
-        params.put("docTitle", "");
-        params.put("meetCompany", "");
-        params.put("signStatus", "");
-        params.put("passStatus", "");
+        Map<String, String> params = getParams(index);
 
         OAService.meetReceive(params, new MeetCallback() {
             @Override
@@ -195,16 +164,34 @@ public class MeetingCardActivity extends BaseActivity implements SwipeRefreshLay
                     return;
                 }
                 adapter.setList(response.data.pageObject);
+                mListView.setLoadMoreCount(index++ * basePages);
             }
         });
 
 
     }
 
+    @NonNull
+    private Map<String, String> getParams(int Index) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("page", Index + "");
+        params.put("size", basePages + "");
+        params.put("startTime", "");
+        params.put("endTime", "");
+        params.put("level", "");
+        params.put("docNo", "");
+        params.put("docTitle", "");
+        params.put("meetCompany", "");
+        params.put("signStatus", "");
+        params.put("passStatus", "");
+        return params;
+    }
+
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         Node node = new Node((Meet) o);
-        DetailsActivity_.intent(mContext).extra("details",node).start();
+        DetailsActivity_.intent(mContext).extra("details", node).start();
     }
 
     @Override

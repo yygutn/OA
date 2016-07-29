@@ -42,7 +42,6 @@ import okhttp3.Request;
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EActivity(R.layout.activity_sign_up)
-@OptionsMenu(R.menu.sign_up_details)
 public class SignUpAddActivity extends BaseActivity {
     @ViewById(R.id.title_bar)
     protected Toolbar mToolBar;
@@ -131,12 +130,6 @@ public class SignUpAddActivity extends BaseActivity {
 
         }
     }
-
-    @OptionsItem(R.id.action_details)
-    void skipToDetails() {
-        SignUpDetailsActivity_.intent(mContext).extra("tid", tid).extra("pid", pid).start();
-    }
-
     /**
      * 三个会议状态的点击事件
      *

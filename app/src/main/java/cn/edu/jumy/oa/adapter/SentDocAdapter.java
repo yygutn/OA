@@ -25,17 +25,17 @@ public class SentDocAdapter extends CommonAdapter<Doc>{
 
     @Override
     public void convert(ViewHolder holder, final Doc doc) {
-        holder.setText(R.id.item_text,doc.docTitle);
-        holder.setOnClickListener(R.id.item_text_button, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(doc.id)){
-                    return;
-                }
-                SignDetailsActivity.flag = true;
-                SignDetailsActivity_.intent(mContext).extra("id",doc.id).start();
-            }
-        });
+        holder.setText(R.id.subtitle,doc.docTitle);
+//        holder.setOnClickListener(R.id.item_text_button, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (TextUtils.isEmpty(doc.id)){
+//                    return;
+//                }
+//                SignDetailsActivity.flag = true;
+//                SignDetailsActivity_.intent(mContext).extra("id",doc.id).start();
+//            }
+//        });
     }
 
 

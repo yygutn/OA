@@ -35,7 +35,7 @@ public class SentDocumentActivity extends BaseSearchRefreshActivity {
         mTitleBar.setTitle("已发送公文");
     }
 
-    int index = 0;
+    int index = 1;
     static final int basePages = 50;
 
     @Override
@@ -68,16 +68,16 @@ public class SentDocumentActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void initListView() {
-        adapter = new SentDocAdapter(mContext, R.layout.item_sent_xx, new ArrayList<>(mList));
+        adapter = new SentDocAdapter(mContext, R.layout.item_notify_notification, new ArrayList<>(mList));
         mListView.setAdapter(adapter);
-        mListView.getRecyclerView().addItemDecoration(new SimpleDividerItemDecoration(mContext));
         adapter.setOnItemClickListener(this);
     }
 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         Node node = new Node((Doc) o);
-        DetailsActivity_.intent(mContext).extra("details", node).start();
+        SignDetailsActivity.flag = true;
+        DetailsActivity_.intent(mContext).extra("details", node).extra("from_sent_meet", true).start();
     }
 
     @Override

@@ -37,6 +37,7 @@
         <activity android:name=".UI.TaskItem.StudyOnlineActivity_" />
         <activity android:name=".UI.SignUpAddActivity_" />
         <activity android:name=".UI.SignUpMultiAbleActivity_" />
+        <activity android:name=".UI.SignUpMultiActivity_" />
         <activity android:name=".UI.DepartmentSelectActivity_" />
         <activity android:name=".UI.DepartmentAddActivity_" />
         <activity android:name=".UI.DepartmentRedoActivity_" />

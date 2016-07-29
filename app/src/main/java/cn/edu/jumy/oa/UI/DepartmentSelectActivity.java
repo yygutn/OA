@@ -12,6 +12,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
@@ -61,18 +62,11 @@ public class DepartmentSelectActivity extends BaseActivity {
 
     @AfterExtras
     void getData() {
-        OAService.getMagroupAll(new OrganizationOftenCallback() {
-            @Override
-            public void onResponse(OrganizationOftenResponse response, int id) {
-                if (response.code == 0) {
-                    mList = response.data;
-                    initOftenData();
-                } else {
-                    showToast("获取常用单位列表失败" + response.msg);
-                }
-            }
-        });
+        getHeader();
+        getMainList();
+    }
 
+    private void getMainList() {
         OAService.getOrganizationData(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -104,28 +98,53 @@ public class DepartmentSelectActivity extends BaseActivity {
         });
     }
 
+    private void getHeader() {
+        OAService.getMagroupAll(new OrganizationOftenCallback() {
+            @Override
+            public void onResponse(OrganizationOftenResponse response, int id) {
+                if (response.code == 0) {
+                    mList = response.data;
+                    initOftenData();
+                } else {
+                    showToast("获取常用单位列表失败" + response.msg);
+                }
+            }
+        });
+    }
+
     private void initOftenData() {
         int len;
         String[] ids;
         String[] names;
         ArrayList<Account> temp;
-        for (OrganizationOften often : mList) {
-            temp = new ArrayList<>();
-            ids = often.value.split(",");
-            names = often.departmentName.split(",");
-            len = ids.length;
-            for (int i = 0; i < len; i++) {
-                temp.add(new Account(ids[i], names[i]));
-            }
+        mHeaderList.clear();
+        try {
+            for (OrganizationOften often : mList) {
+                temp = new ArrayList<>();
+                if (TextUtils.isEmpty(often.value)) {
+                    often.value = "";
+                }
+                if (TextUtils.isEmpty(often.departmentName)) {
+                    often.departmentName = "";
+                }
+                ids = often.value.split(",");
+                names = often.departmentName.split(",");
+                len = ids.length;
+                for (int i = 0; i < len; i++) {
+                    temp.add(new Account(ids[i], names[i]));
+                }
 
-            IndexHeaderEntity<Account> hotHeader = new IndexHeaderEntity<>();
-            if (TextUtils.isEmpty(often.name)) {
-                often.name = "#";
+                IndexHeaderEntity<Account> hotHeader = new IndexHeaderEntity<>();
+                if (TextUtils.isEmpty(often.name)) {
+                    often.name = "#";
+                }
+                hotHeader.setHeaderTitle(often.name);
+                hotHeader.setIndex(often.name.charAt(0) + " ");
+                hotHeader.setHeaderList(temp);
+                mHeaderList.add(hotHeader);
             }
-            hotHeader.setHeaderTitle(often.name);
-            hotHeader.setIndex(often.name.charAt(0) + " ");
-            hotHeader.setHeaderList(temp);
-            mHeaderList.add(hotHeader);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         updateView();
     }
@@ -187,7 +206,7 @@ public class DepartmentSelectActivity extends BaseActivity {
         Map<String, Integer> nameMap = new HashMap<>();
         for (Account account : mDepartments) {
             if (account.checked) {
-                nameMap.put(account.name,0);
+                nameMap.put(account.name, 0);
                 idMap.put(account.id, 0);
             }
         }
@@ -195,7 +214,7 @@ public class DepartmentSelectActivity extends BaseActivity {
             for (Account account : entity.getHeaderList()) {
                 if (account.checked) {
                     idMap.put(account.id, 0);
-                    nameMap.put(account.name,0);
+                    nameMap.put(account.name, 0);
                 }
             }
         }
@@ -206,7 +225,7 @@ public class DepartmentSelectActivity extends BaseActivity {
                 ids += "," + id;
             }
         }
-        for (String name : nameMap.keySet()){
+        for (String name : nameMap.keySet()) {
             if (TextUtils.isEmpty(str)) {
                 str = name;
             } else if (str.contains(",")) {
@@ -238,7 +257,7 @@ public class DepartmentSelectActivity extends BaseActivity {
      */
     @OptionsItem(R.id.action_add)
     void addOrganization() {
-        DepartmentAddActivity_.intent(mContext).start();
+        DepartmentAddActivity_.intent(mContext).startForResult(16);
     }
 
     /**
@@ -254,5 +273,10 @@ public class DepartmentSelectActivity extends BaseActivity {
     public void onBackPressed() {
         setResult(1);
         backToPreActivity();
+    }
+
+    @OnActivityResult(16)
+    void fix() {
+        getHeader();
     }
 }

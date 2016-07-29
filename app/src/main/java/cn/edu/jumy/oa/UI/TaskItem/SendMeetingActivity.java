@@ -314,35 +314,19 @@ public class SendMeetingActivity extends BaseActivity {
         AlertDialog alertDialog = new AlertDialog.Builder(mContext)
                 .setTitle("发送成功")
                 .setMessage("是否继续发布会议")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                .setPositiveButton("是", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //continue
                         clearContent();
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton("否", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
-                        AlertDialog dialog = new AlertDialog.Builder(mContext)
-                                .setMessage("是否进入已发布会议界面")
-                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        backToPreActivity();
-                                    }
-                                })
-                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        //ok
-                                        SentMeetingActivity_.intent(mContext).start();
-                                        AppManager.getInstance().finishCurActivity();
-                                    }
-                                })
-                                .create();
-                        dialog.setCanceledOnTouchOutside(false);
-                        dialog.show();
+                        //ok
+                        SentMeetingActivity_.intent(mContext).start();
+                        AppManager.getInstance().finishCurActivity();
                     }
                 })
                 .create();
@@ -362,7 +346,6 @@ public class SendMeetingActivity extends BaseActivity {
         mMeetingPeople.setText("");
         mMeetingPhone.setText("");
         mMeetingLoc.setText("");
-        mAddUpload.setText("");
         mUploadView.removeAllViews();
         index = 0;
     }

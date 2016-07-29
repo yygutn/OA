@@ -37,17 +37,17 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
 
     @AfterExtras
     void getData() {
-        OAService.meetUser(getParams(index), new MeetCallback() {
-            @Override
-            public void onResponse(MeetResponse response, int id) {
-                if (response != null && response.code == 0 && response.data != null) {
-                    mList.addAll(response.data.pageObject);
-                    adapter.setList(new ArrayList(mList));
-                    mListView.setLoadMoreCount(index * basePages);
-                    index++;
-                }
-            }
-        });
+//        OAService.meetUser(getParams(index), new MeetCallback() {
+//            @Override
+//            public void onResponse(MeetResponse response, int id) {
+//                if (response != null && response.code == 0 && response.data != null) {
+//                    mList.addAll(response.data.pageObject);
+//                    adapter.setList(new ArrayList(mList));
+//                    mListView.setLoadMoreCount(index * basePages);
+//                    index++;
+//                }
+//            }
+//        });
     }
 
     @NonNull

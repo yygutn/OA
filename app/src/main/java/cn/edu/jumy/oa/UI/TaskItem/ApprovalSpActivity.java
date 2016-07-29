@@ -78,38 +78,38 @@ public class ApprovalSpActivity extends BaseActivity {
     void extras(){
         //getData from internet
 
-        OAService.meetReceive(getParams(), new MeetCallback() {
-            @Override
-            public void onResponse(MeetResponse response, int id) {
-                if (response.code == 1 || response.data == null) {
-                    showToast("获取会议列表失败");
-                    return;
-                }
-                ArrayList<Meet> list = response.data.pageObject;
-                //未审批-list
-                ArrayList<Meet> list0 = new ArrayList<>();
-                //已审批-list
-                ArrayList<Meet> list1 = new ArrayList<>();
-
-                for (Meet meet : list){
-                    if (meet.passStatus == 3){
-                        list0.add(meet);
-                    } else if (meet.passStatus != 2){
-                        list1.add(meet);
-                    }
-                }
-                //已签收
-                Intent intent = new Intent(MeetBroadcastReceiver.MEET);
-                intent.putParcelableArrayListExtra(MeetBroadcastReceiver.MEET_LIST, list0);
-                intent.putExtra(MeetBroadcastReceiver.TYPE, 0);
-                sendBroadcast(intent);
-                //未签收
-                intent = new Intent(MeetBroadcastReceiver.MEET);
-                intent.putParcelableArrayListExtra(MeetBroadcastReceiver.MEET_LIST, list1);
-                intent.putExtra(MeetBroadcastReceiver.TYPE, 1);
-                sendBroadcast(intent);
-            }
-        });
+//        OAService.meetReceive(getParams(), new MeetCallback() {
+//            @Override
+//            public void onResponse(MeetResponse response, int id) {
+//                if (response.code == 1 || response.data == null) {
+//                    showToast("获取会议列表失败");
+//                    return;
+//                }
+//                ArrayList<Meet> list = response.data.pageObject;
+//                //未审批-list
+//                ArrayList<Meet> list0 = new ArrayList<>();
+//                //已审批-list
+//                ArrayList<Meet> list1 = new ArrayList<>();
+//
+//                for (Meet meet : list){
+//                    if (meet.passStatus == 3){
+//                        list0.add(meet);
+//                    } else if (meet.passStatus != 2){
+//                        list1.add(meet);
+//                    }
+//                }
+//                //已签收
+//                Intent intent = new Intent(MeetBroadcastReceiver.MEET);
+//                intent.putParcelableArrayListExtra(MeetBroadcastReceiver.MEET_LIST, list0);
+//                intent.putExtra(MeetBroadcastReceiver.TYPE, 0);
+//                sendBroadcast(intent);
+//                //未签收
+//                intent = new Intent(MeetBroadcastReceiver.MEET);
+//                intent.putParcelableArrayListExtra(MeetBroadcastReceiver.MEET_LIST, list1);
+//                intent.putExtra(MeetBroadcastReceiver.TYPE, 1);
+//                sendBroadcast(intent);
+//            }
+//        });
     }
 
     private Map<String,String> getParams() {

@@ -26,17 +26,17 @@ public class SentMeetAdapter extends CommonAdapter<Meet>{
 
     @Override
     public void convert(ViewHolder holder, final Meet meet) {
-        holder.setText(R.id.item_text,meet.docTitle);
-        holder.setOnClickListener(R.id.item_text_button, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(meet.id)){
-                    return;
-                }
-                SignDetailsActivity.flag = false;
-                SignDetailsActivity_.intent(mContext).extra("id",meet.id).start();
-            }
-        });
+        holder.setText(R.id.subtitle,meet.docTitle);
+//        holder.setOnClickListener(R.id.item_text_button, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (TextUtils.isEmpty(meet.id)){
+//                    return;
+//                }
+//                SignDetailsActivity.flag = false;
+//                SignDetailsActivity_.intent(mContext).extra("id",meet.id).start();
+//            }
+//        });
     }
     public void setList(List<Meet> list){
         if (list != null){

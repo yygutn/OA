@@ -19,12 +19,12 @@ public class OrganizationOften implements Parcelable{
      * departmentName : 省委机要局,省信访局
      */
 
-    public String id;
-    public String uid;
-    public String value;
-    public String name;
+    public String id = "";
+    public String uid = "";
+    public String value = "";
+    public String name = "";
     public int sort;
-    public String departmentName;
+    public String departmentName = "";
 
     @Override
     public int describeContents() {

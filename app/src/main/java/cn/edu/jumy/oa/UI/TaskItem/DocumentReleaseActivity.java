@@ -262,35 +262,18 @@ public class DocumentReleaseActivity extends BaseActivity {
         AlertDialog alertDialog = new AlertDialog.Builder(mContext)
                 .setTitle("发送成功")
                 .setMessage("是否继续发布公文")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                .setPositiveButton("是", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //continue
                         clearContent();
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton("否", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
-                        AlertDialog dialog = new AlertDialog.Builder(mContext)
-                                .setMessage("是否进入已发布公文界面")
-                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        backToPreActivity();
-                                    }
-                                })
-                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        //ok
-                                        SentDocumentActivity_.intent(mContext).start();
-                                        AppManager.getInstance().finishCurActivity();
-                                    }
-                                })
-                                .create();
-                        dialog.setCanceledOnTouchOutside(false);
-                        dialog.show();
+                        SentDocumentActivity_.intent(mContext).start();
+                        AppManager.getInstance().finishCurActivity();
                     }
                 })
                 .create();

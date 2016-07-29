@@ -74,6 +74,8 @@ public class DetailsActivity extends BaseActivity {
     protected AppCompatTextView mDocumentDetailsDownload;
     @ViewById(R.id.document_details_sign_up)
     protected AppCompatTextView mDocumentDetailsSignUp;
+    @ViewById(R.id.document_details_cui)
+    protected AppCompatTextView mCuiS;
 
     @Extra("details")
     protected Node mNode = new Node();
@@ -158,6 +160,8 @@ public class DetailsActivity extends BaseActivity {
 
 
     private void setUpViews() {
+        //催收按钮
+        mCuiS.setVisibility(fromSentMeet ? View.VISIBLE : View.GONE);
         //标题处理
         switch (mNode.type) {
             case 0: {
@@ -312,7 +316,7 @@ public class DetailsActivity extends BaseActivity {
         return sbNewText.toString();
     }
 
-    @Click({R.id.document_details_download, R.id.document_details_sign_up})
+    @Click({R.id.document_details_download, R.id.document_details_sign_up,R.id.document_details_cui})
     void click(View view) {
         switch (view.getId()) {
             case R.id.document_details_download: {// TODO: 16/7/5 下载附件
@@ -320,7 +324,11 @@ public class DetailsActivity extends BaseActivity {
                 break;
             }
             case R.id.document_details_sign_up: {// TODO: 16/7/5 报名
-                SignUpMultiAbleActivity_.intent(mContext).extra("tid",mNode.tid).extra("pid", mNode.id).start();
+                SignUpMultiAbleActivity_.intent(mContext).extra("tid", mNode.tid).extra("pid", mNode.id).start();
+                break;
+            }
+            case R.id.document_details_cui:{
+                SignDetailsActivity_.intent(mContext).extra("id",mNode.id).start();
                 break;
             }
             default:

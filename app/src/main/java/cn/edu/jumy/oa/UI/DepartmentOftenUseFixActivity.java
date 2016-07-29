@@ -85,6 +85,9 @@ public class DepartmentOftenUseFixActivity extends BaseActivity {
                         showToast("获取可发送单位失败");
                     } else {
                         mDepartments = account.data;
+                        if (TextUtils.isEmpty(mOrg.value)){
+                            mOrg.value = "";
+                        }
                         String[] ids = mOrg.value.split(",");
                         int len = ids.length;
                         for (int i = 0; i < len; i++) {

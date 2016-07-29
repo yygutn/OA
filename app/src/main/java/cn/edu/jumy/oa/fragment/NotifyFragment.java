@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
+import com.hyphenate.chatui.DemoApplication;
 import com.hyphenate.chatui.DemoHelper;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
@@ -21,7 +22,6 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,7 +83,7 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
     PullToRefreshRecyclerView mListView;
 
     ImageView mEmptyImageView;
-    private ArrayList<Node> mList = (ArrayList<Node>) Collections.synchronizedList(new ArrayList<Node>());
+    private ArrayList<Node> mList;
     NotifyCardAdapter adapter;
 
     Handler mHandler = new Handler();
@@ -122,14 +122,13 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
     @AfterInject
     void initList() {
         try {
-            ArrayList<Node> temp = (ArrayList<Node>) ACache.get(MyApplication.getContext()).getAsObject(KEY);
-            if (temp != null) {
-                mList.addAll(temp);
-            }
+            mList = (ArrayList<Node>) ACache.get(MyApplication.getContext()).getAsObject(KEY);
         } catch (Exception e) {
             showDebugException(e);
         }
-
+        if (mList == null) {
+            mList = new ArrayList<>();
+        }
     }
 
     @AfterViews

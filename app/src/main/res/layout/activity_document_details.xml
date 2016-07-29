@@ -129,6 +129,18 @@
                 android:text="报名"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
+            <android.support.v7.widget.AppCompatTextView
+                android:visibility="gone"
+                android:id="@+id/document_details_cui"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:background="@drawable/shape_logout"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="催收"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
         </LinearLayout>
     </ScrollView>

@@ -63,13 +63,14 @@ public class SignUpDetailsActivity extends BaseActivity {
         OAService.getMEntryByPid(tid, new AuditCallback() {
             @Override
             public void onResponse(AuditResponse response, int id) {
+                mListLeaved.clear();
+                mListSigned.clear();
                 for (AuditUser auditUser : response.data) {
-                    if (auditUser.passStatus == 3) {
+                    if (auditUser.type == 2) {
                         mListLeaved.add(auditUser);
-                    } else if (auditUser.passStatus == 0) {
-                        mListSigned.add(auditUser);
                     }
                 }
+                mListSigned.addAll(response.data);
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -98,7 +99,6 @@ public class SignUpDetailsActivity extends BaseActivity {
                 onBackPressed();
             }
         });
-        updateView();
     }
 
     private void updateView() {
