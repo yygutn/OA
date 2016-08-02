@@ -25,6 +25,8 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 import org.litepal.crud.DataSupport;
 
@@ -52,6 +54,7 @@ import okhttp3.Response;
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EActivity(R.layout.activity_document_details)
+@OptionsMenu(R.menu.details_share)
 public class DetailsActivity extends BaseActivity {
     @ViewById(R.id.title_bar)
     protected Toolbar mTitleBar;
@@ -87,6 +90,7 @@ public class DetailsActivity extends BaseActivity {
 
     @AfterViews
     void start() {
+        setSupportActionBar(mTitleBar);
         clipboardManager = (ClipboardManager) getSystemService(mContext.CLIPBOARD_SERVICE);
         mTitleBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -484,5 +488,8 @@ public class DetailsActivity extends BaseActivity {
             showToast("获取附件列表失败");
         }
     }
-
+    @OptionsItem(R.id.action_share)
+    void share(){
+        showToast("转发...待完善");
+    }
 }
