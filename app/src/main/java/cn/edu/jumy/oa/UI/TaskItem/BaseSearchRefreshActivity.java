@@ -54,7 +54,7 @@ public class BaseSearchRefreshActivity extends BaseActivity implements OnItemCli
     protected ArrayList<Node> mList = new ArrayList<>();
 
     @AfterViews
-    void start(){
+    protected void start(){
         try {
 
             mListView.setLoadmoreString("加载中...");
