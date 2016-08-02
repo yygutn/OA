@@ -35,12 +35,12 @@ import cn.edu.jumy.oa.widget.customview.ItemTableRow_;
 public class SignUpDetailsActivity extends BaseActivity {
     @ViewById(R.id.tool_bar)
     Toolbar mToolBar;
-    @ViewById(R.id.sign_details_table_signed)
-    TableLayout mTableSigned;
+    @ViewById(R.id.sign_details_table_join)
+    TableLayout mTableJoin;
     @ViewById(R.id.sign_details_table_unsigned)
     TableLayout mTableUnsigned;
-    @ViewById(R.id.sign_details_skip_approval)
-    Button mSignApproval;
+    @ViewById(R.id.sign_details_table_listen)
+    TableLayout mTableListen;
 
     @Extra("tid")
     String tid = "";
@@ -49,7 +49,8 @@ public class SignUpDetailsActivity extends BaseActivity {
     String pid = "";
 
     ArrayList<AuditUser> mListLeaved = new ArrayList<>();
-    ArrayList<AuditUser> mListSigned = new ArrayList<>();
+    ArrayList<AuditUser> mListJoined = new ArrayList<>();
+    ArrayList<AuditUser> mListListen = new ArrayList<>();
 
     /**
      * 进度框
@@ -64,13 +65,17 @@ public class SignUpDetailsActivity extends BaseActivity {
             @Override
             public void onResponse(AuditResponse response, int id) {
                 mListLeaved.clear();
-                mListSigned.clear();
+                mListJoined.clear();
+                mListListen.clear();
                 for (AuditUser auditUser : response.data) {
                     if (auditUser.type == 2) {
                         mListLeaved.add(auditUser);
+                    } else if (auditUser.type == 1){
+                        mListListen.add(auditUser);
+                    } else if (auditUser.type == 0){
+                        mListJoined.add(auditUser);
                     }
                 }
-                mListSigned.addAll(response.data);
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -78,7 +83,7 @@ public class SignUpDetailsActivity extends BaseActivity {
                         setContentView(R.layout.activity_sign_up_details);
                         updateView();
                     }
-                }, 1500);
+                }, 1000);
             }
         });
     }
@@ -102,16 +107,14 @@ public class SignUpDetailsActivity extends BaseActivity {
     }
 
     private void updateView() {
-        for (AuditUser auditUser : mListSigned) {
-            mTableSigned.addView(ItemTableRow_.build(mContext,auditUser));
+        for (AuditUser auditUser : mListJoined) {
+            mTableJoin.addView(ItemTableRow_.build(mContext,auditUser));
+        }
+        for (AuditUser auditUser : mListListen) {
+            mTableListen.addView(ItemTableRow_.build(mContext,auditUser));
         }
         for (AuditUser auditUser : mListLeaved) {
             mTableUnsigned.addView(ItemTableRow_.build(mContext,auditUser));
         }
-    }
-
-    @Click(R.id.sign_details_skip_approval)
-    void click() {
-        MeetAuditActivity_.intent(mContext).extra("mid",pid).start();
     }
 }

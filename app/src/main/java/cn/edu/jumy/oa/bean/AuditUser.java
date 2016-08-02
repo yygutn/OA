@@ -36,9 +36,9 @@ public class AuditUser {
     public int type;
     public int signStatus;
     public int passStatus;
-    public Object remark = "";
-    public Object passRemark = "";
-    public Object orderBy = "";
+    public String remark = "";
+    public String passRemark = "";
+    public String orderBy = "";
     public String organame = "";
     public String uname = "";
 

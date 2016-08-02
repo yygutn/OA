@@ -22,15 +22,21 @@ import cn.edu.jumy.oa.widget.datepicker.calendar.utils.MeasureUtil;
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EViewGroup(R.layout.item_tablerow)
-public class ItemTableRow extends TableRow {
+public class ItemTableRow extends TableRow implements View.OnClickListener {
     @ViewById
     TextView text1;//name
     @ViewById
     TextView text2;//职务
     @ViewById
-    TextView text3;//SEX
+    TextView text3;//审批状态
     @ViewById
-    TextView text4;//tel
+    TextView text4;//审批反馈
+    @ViewById
+    TextView text5;//操作-重新报名
+    @ViewById
+    TextView text6;//操作-修改
+    @ViewById
+    TextView text7;//操作-删除
 
     private AuditUser user;
 
@@ -60,12 +66,60 @@ public class ItemTableRow extends TableRow {
     @AfterViews
     void bindData() {
         text1.setText(TextUtils.isEmpty(user.name) ? "" : user.name);
-        text3.setText(TextUtils.isEmpty(user.sex) ? "男" : user.sex);
         text2.setText(TextUtils.isEmpty(user.post) ? "" : user.post);
-        text4.setText(TextUtils.isEmpty(user.phone) ? "" : user.phone);
+        switch (user.passStatus){
+            case 0:{//审批通过
+                text3.setText("审批通过");
+                text5.setVisibility(GONE);
+                text6.setVisibility(GONE);
+                text7.setVisibility(GONE);
+                break;
+            }
+            case 1:{//审批未通过
+                text3.setText("审批未通过");
+                text6.setVisibility(GONE);
+                text7.setVisibility(GONE);
+                break;
+            }
+            case 2:{//正在审批
+                text3.setText("正在审批");
+                text5.setVisibility(GONE);
+                text6.setVisibility(GONE);
+                text7.setVisibility(GONE);
+                break;
+            }
+            case 3:{//未审批
+                text3.setText("未审批");
+                text5.setVisibility(GONE);
+                break;
+            }
+            default:break;
+        }
+        text4.setText(TextUtils.isEmpty(user.passRemark) ? "" : user.passRemark);
+        setButtonClickListener();
     }
 
+    private void setButtonClickListener() {
+        text5.setOnClickListener(this);
+        text6.setOnClickListener(this);
+        text7.setOnClickListener(this);
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.text5:{//重新报名
+                break;
+            }
+            case R.id.text6:{//修改
+                break;
+            }
+            case R.id.text7:{//删除
+                break;
+            }
+            default:break;
+        }
+    }
     private void init() {
         setDividerDrawable(getResources().getDrawable(R.drawable.shape_divider_white));
         setShowDividers(SHOW_DIVIDER_MIDDLE);

@@ -29,16 +29,16 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="已报名人员:"
+                android:text="参会人员:"
                 android:textColor="@color/black"
                 android:padding="15dp"/>
             <TableLayout
-                android:id="@+id/sign_details_table_signed"
+                android:id="@+id/sign_details_table_join"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:stretchColumns="0,1,2,3">
+                android:stretchColumns="0,1,2,3,4">
 
                 <TableRow
                     android:layout_marginBottom="1dp"
@@ -70,7 +70,7 @@
                         android:background="@color/colorMask"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="性别"
+                        android:text="审批状态"
                         android:textColor="@color/white" />
 
                     <TextView
@@ -79,7 +79,83 @@
                         android:background="@color/colorMask"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="电话"
+                        android:text="审批反馈"
+                        android:textColor="@color/white" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorMask"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="操作"
+                        android:textColor="@color/white" />
+                </TableRow>
+                <!--第二行与第三行布局参考第一行-->
+            </TableLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="听会人员:"
+                android:textColor="@color/black" />
+
+            <TableLayout
+                android:id="@+id/sign_details_table_listen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:stretchColumns="0,1,2,3,4">
+
+                <TableRow
+                    android:layout_marginBottom="1dp"
+                    android:background="#eaeaea"
+                    android:divider="@drawable/shape_divider_white"
+                    android:showDividers="middle">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorMask"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="姓名"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorMask"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="职务"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorMask"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="审批状态"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorMask"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="审批反馈"
+                        android:textColor="@color/white" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorMask"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="操作"
                         android:textColor="@color/white" />
                 </TableRow>
                 <!--第二行与第三行布局参考第一行-->
@@ -96,7 +172,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:stretchColumns="0,1,2,3">
+                android:stretchColumns="0,1,2,3,4">
 
                 <TableRow
                     android:layout_marginBottom="1dp"
@@ -128,7 +204,7 @@
                         android:background="@color/colorMask"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="性别"
+                        android:text="审批状态"
                         android:textColor="@color/white" />
 
                     <TextView
@@ -137,24 +213,19 @@
                         android:background="@color/colorMask"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="电话"
+                        android:text="审批反馈"
+                        android:textColor="@color/white" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorMask"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="操作"
                         android:textColor="@color/white" />
                 </TableRow>
                 <!--第二行与第三行布局参考第一行-->
             </TableLayout>
-
-            <Button
-                android:visibility="gone"
-                android:id="@+id/sign_details_skip_approval"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@color/pressed"
-                android:text="进入审核"
-                android:textColor="@color/white"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"/>
         </LinearLayout>
     </ScrollView>
 
