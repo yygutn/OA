@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.hyphenate.chat.EMClient;
 import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -36,7 +38,6 @@ import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.AttachResponse;
 import cn.edu.jumy.oa.Response.BaseResponse;
-import cn.edu.jumy.oa.UI.SignUpAddActivity_;
 import cn.edu.jumy.oa.UI.SignUpMultiAbleActivity_;
 import cn.edu.jumy.oa.Utils.CallOtherOpenFile;
 import cn.edu.jumy.oa.Utils.CardGenerator;
@@ -318,7 +319,7 @@ public class DetailsActivity extends BaseActivity {
         return sbNewText.toString();
     }
 
-    @Click({R.id.document_details_download, R.id.document_details_sign_up,R.id.document_details_cui})
+    @Click({R.id.document_details_download, R.id.document_details_sign_up, R.id.document_details_cui})
     void click(View view) {
         switch (view.getId()) {
             case R.id.document_details_download: {// TODO: 16/7/5 下载附件
@@ -329,8 +330,8 @@ public class DetailsActivity extends BaseActivity {
                 SignUpMultiAbleActivity_.intent(mContext).extra("tid", mNode.tid).extra("pid", mNode.id).start();
                 break;
             }
-            case R.id.document_details_cui:{
-                SignDetailsActivity_.intent(mContext).extra("id",mNode.id).start();
+            case R.id.document_details_cui: {
+                SignDetailsActivity_.intent(mContext).extra("id", mNode.id).start();
                 break;
             }
             default:
@@ -357,8 +358,9 @@ public class DetailsActivity extends BaseActivity {
                 }
                 final String[] items = item_list.toArray(new String[item_list.size()]);
                 alertDialog = new AlertDialog.Builder(mContext)
-                        .setTitle("附件下载 " +
-                                "\n(点击下载,长按可复制文件名)")
+                        .setTitle("附件查看 " +
+                                "\n(请点击文件名查看附件内容," +
+                                "\n查看后保存至文件柜)")
                         .setItems(items, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, final int which) {
@@ -366,10 +368,25 @@ public class DetailsActivity extends BaseActivity {
                                     String id = list.get(which).getId();
                                     id = TextUtils.isEmpty(id) ? "" : id;
                                     String filepath = mContext.getExternalCacheDir().getAbsolutePath();
-                                    String filename = list.get(which).getFileName();
-                                    File file = new File(filepath, filename);
-                                    if (file != null && file.exists()) {
-                                        CallOtherOpenFile.openFile(mContext, file);
+                                    final String filename = list.get(which).getFileName();
+                                    //检索数据库，获取文件，否则下载
+                                    final String newFileName = getRealFileName(filename);
+
+                                    final Attachment attachment = list.get(which);
+                                    ArrayList<Annex> annexArrayList = (ArrayList<Annex>) DataSupport
+                                            .where("username = ?", EMClient.getInstance().getCurrentUser()).find(Annex.class);
+
+                                    Annex annex = null;
+
+                                    for (Annex node : annexArrayList) {
+                                        if (node.getFileName().equals(newFileName) && node.getPid().equals(attachment.getPid())) {
+                                            annex = node;
+                                        }
+                                    }
+                                    final Annex tempNode = annex;
+                                    if (annex != null && annex.getFile() != null){
+                                        CallOtherOpenFile.openFile(mContext,annex.getFile());
+                                        alertDialog.cancel();
                                     } else {
                                         OAService.downloadAttachment(id, new FileCallBack(filepath, filename) {
                                             @Override
@@ -384,19 +401,16 @@ public class DetailsActivity extends BaseActivity {
 
                                             @Override
                                             public void syncSaveToSQL(File file) {
-                                                Attachment attachment = list.get(which);
-                                                ArrayList<Annex> annexArrayList = (ArrayList<Annex>) DataSupport.where("IDS = ?", attachment.getId()).find(Annex.class);
-                                                Annex annex;
-                                                if (annexArrayList != null && annexArrayList.size() > 0) {
-                                                    annex = annexArrayList.get(0);
-                                                } else {
-                                                    annex = null;
+                                                if (tempNode != null){
+                                                    tempNode.setFileName(newFileName);
+                                                    tempNode.setFile(file);
+                                                    if (tempNode.save()) {
+                                                        showDebugLoge(tempNode.getFileName() + "：保存成功");
+                                                    }
+                                                    return;
                                                 }
-                                                if (annex == null || TextUtils.isEmpty(annex.getID())) {
-                                                    annex = new Annex(attachment, file);
-                                                } else {
-                                                    annex.setAnnex(attachment, file);
-                                                }
+                                                Annex annex = new Annex(attachment, file);
+                                                annex.setFileName(newFileName);
                                                 if (annex.save()) {
                                                     showDebugLoge(annex.getFileName() + "：保存成功");
                                                 }
@@ -425,6 +439,18 @@ public class DetailsActivity extends BaseActivity {
             }
         });
 
+    }
+
+    @NonNull
+    private String getRealFileName(String filename) {
+        String[] str = filename.split("\\.");
+        String tempFileName = str[0];
+        int length = str.length;
+        for (int i = 1; i < length - 1; i++) {
+            tempFileName += "." + str[i];
+        }
+        tempFileName = tempFileName + "_" + mNode.dispatchTime + "." +str[length - 1];
+        return tempFileName;
     }
 
     private class OnTvGlobalLayoutListener implements ViewTreeObserver.OnGlobalLayoutListener {

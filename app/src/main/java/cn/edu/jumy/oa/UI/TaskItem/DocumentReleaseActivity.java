@@ -288,6 +288,7 @@ public class DocumentReleaseActivity extends BaseActivity {
         mEt2.setText("");
         mEt3.setText("");
         uploadView.removeAllViews();
+        mFilePath.clear();
         index = 0;
     }
 

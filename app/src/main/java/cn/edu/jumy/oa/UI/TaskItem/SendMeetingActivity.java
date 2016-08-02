@@ -347,6 +347,7 @@ public class SendMeetingActivity extends BaseActivity {
         mMeetingPhone.setText("");
         mMeetingLoc.setText("");
         mUploadView.removeAllViews();
+        mFilePath.clear();
         index = 0;
     }
 
