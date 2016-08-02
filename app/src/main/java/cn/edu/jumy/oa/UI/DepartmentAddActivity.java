@@ -13,6 +13,7 @@ import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
@@ -50,6 +51,9 @@ public class DepartmentAddActivity extends BaseActivity {
 
     //初始化数据
     ArrayList<Account> mDepartments = new ArrayList<>();
+
+    @Extra("titleList")
+    ArrayList<String> mTitleList = new ArrayList<>();
 
     @AfterExtras
     void getData() {
@@ -131,6 +135,12 @@ public class DepartmentAddActivity extends BaseActivity {
             showToast("常用单位组名不能为空");
             return;
         }
+
+        for (String title : mTitleList) {
+            if (title.equals(name)){
+                showToast("该组名已存在");
+            }
+        }
         String str = "";
         String ids = "";
         for (Account account : mDepartments) {
@@ -163,6 +173,7 @@ public class DepartmentAddActivity extends BaseActivity {
                 BaseResponse baseResponse = gson.fromJson(response, BaseResponse.class);
                 if (baseResponse.code == 0) {
                     showToast("添加常用单位组成功");
+                    onBackPressed();
                 }
             }
         });

@@ -58,6 +58,7 @@ public class DepartmentSelectActivity extends BaseActivity {
     ArrayList<OrganizationOften> mList = new ArrayList<>();
 
     ArrayList<IndexHeaderEntity<Account>> mHeaderList = new ArrayList<>();
+    ArrayList<String> mHeaderTitleList = new ArrayList<>();
 
 
     @AfterExtras
@@ -99,6 +100,9 @@ public class DepartmentSelectActivity extends BaseActivity {
     }
 
     private void getHeader() {
+        mList.clear();
+        mHeaderList.clear();
+        mHeaderTitleList.clear();
         OAService.getMagroupAll(new OrganizationOftenCallback() {
             @Override
             public void onResponse(OrganizationOftenResponse response, int id) {
@@ -142,6 +146,7 @@ public class DepartmentSelectActivity extends BaseActivity {
                 hotHeader.setIndex(often.name.charAt(0) + " ");
                 hotHeader.setHeaderList(temp);
                 mHeaderList.add(hotHeader);
+                mHeaderTitleList.add(often.name);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -179,6 +184,20 @@ public class DepartmentSelectActivity extends BaseActivity {
             }
         });
 
+        mIndexListView.setOnItemTitleClickListener(new IndexableStickyListView.OnItemTitleClickListener() {
+            @Override
+            public void onItemClick(View v, String title) {
+                for (IndexHeaderEntity<Account> headerEntity : mHeaderList) {
+                    if (headerEntity.getHeaderTitle().equals(title)){
+                        for (Account account : headerEntity.getHeaderList()) {
+                            account.checked = !(account.checked);
+                        }
+                        adapter.notifyDataSetChanged();
+                        return;
+                    }
+                }
+            }
+        });
     }
 
     private void updateView() {
@@ -257,7 +276,7 @@ public class DepartmentSelectActivity extends BaseActivity {
      */
     @OptionsItem(R.id.action_add)
     void addOrganization() {
-        DepartmentAddActivity_.intent(mContext).startForResult(16);
+        DepartmentAddActivity_.intent(mContext).extra("titleList",mHeaderTitleList).startForResult(16);
     }
 
     /**
@@ -265,7 +284,7 @@ public class DepartmentSelectActivity extends BaseActivity {
      */
     @OptionsItem(R.id.action_redo)
     void redoOrganization() {
-        DepartmentRedoActivity_.intent(mContext).start();
+        DepartmentRedoActivity_.intent(mContext).startForResult(16);
     }
 
 

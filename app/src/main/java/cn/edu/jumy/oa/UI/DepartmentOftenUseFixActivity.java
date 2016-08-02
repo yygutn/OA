@@ -61,6 +61,9 @@ public class DepartmentOftenUseFixActivity extends BaseActivity {
     @Extra("org")
     OrganizationOften mOrg;
 
+    @Extra("titleList")
+    ArrayList<String> mTitleList = new ArrayList<>();
+
     @AfterExtras
     void getData() {
         OAService.getOrganizationData(new StringCallback() {
@@ -150,6 +153,16 @@ public class DepartmentOftenUseFixActivity extends BaseActivity {
      */
     @OptionsItem(R.id.action_ok)
     void submit() {
+        String name = mOftenEt.getText().toString();
+        if (TextUtils.isEmpty(name)) {
+            showToast("常用单位组名不能为空");
+            return;
+        }
+        for (String title : mTitleList) {
+            if (title.equals(name) && !title.equals(mOrg.name)){
+                showToast("该组名已存在");
+            }
+        }
         String str = "";
         String ids = "";
         for (Account account : mDepartments) {
@@ -166,12 +179,11 @@ public class DepartmentOftenUseFixActivity extends BaseActivity {
                 }
             }
         }
-        String name = mOftenEt.getText().toString();
         OAService.updateMagroup(mOrg.id, ids, name, 0, new StringCallback() {
 
             @Override
             public void onError(Call call, Exception e, int id) {
-                showToast("服务器连接失败,修改失败");
+                showToast("服务器错误,修改失败");
             }
 
             @Override
@@ -180,6 +192,7 @@ public class DepartmentOftenUseFixActivity extends BaseActivity {
                 BaseResponse baseResponse = gson.fromJson(response, BaseResponse.class);
                 if (baseResponse.code == 0) {
                     showToast("修改成功");
+                    onBackPressed();
                 } else {
                     showToast("修改失败:" + baseResponse.msg);
                 }

@@ -40,6 +40,8 @@ public class DepartmentRedoActivity extends BaseActivity {
 
     ArrayList<OrganizationOften> mList = new ArrayList<>();
 
+    ArrayList<String> mTitleList = new ArrayList<>();
+
     @AfterExtras
     void getData() {
         OAService.getMagroupAll(new OrganizationOftenCallback() {
@@ -48,6 +50,11 @@ public class DepartmentRedoActivity extends BaseActivity {
                 if (response.code == 0) {
                     mList = response.data;
                     adapter.setList(mList);
+
+                    mTitleList.clear();
+                    for (OrganizationOften often : mList) {
+                        mTitleList.add(often.name);
+                    }
                 } else {
                     showToast("获取常用单位列表失败" + response.msg);
                 }
@@ -78,7 +85,7 @@ public class DepartmentRedoActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-                DepartmentOftenUseFixActivity_.intent(mContext).extra("org", ((OrganizationOften) o)).startForResult(0);
+                DepartmentOftenUseFixActivity_.intent(mContext).extra("org", ((OrganizationOften) o)).extra("titleList",mTitleList).startForResult(0);
             }
 
             @Override

@@ -201,16 +201,22 @@ public class IndexBar extends View {
         }
     }
 
-    private String getIndexTitle(int position) {
+    /**
+     * 修改相同title，StickIndex出现的title显示异常，
+     * @param position 根据IndexBar索引字体获取的title位置，当title重复时候，会默认获取第一个title，而不是真实的title
+     * @param firstVisibleItem 顶部显示元素的位置
+     * @return
+     */
+    private String getIndexTitle(int position, int firstVisibleItem) {
         if (mAdapter == null) return "";
-        int size = mAdapter.getHeaderSize();
-
-        if (position >= size) {
-            return mIndex.get(position);
-        } else {
-            SparseArray<String> map = mAdapter.getTitleMap();
-            return map.get(map.keyAt(position));
+        SparseArray<String> map = mAdapter.getTitleMap();
+        int len = map.size();
+        for (int i = 0; i < len - 1; i++) {
+            if (firstVisibleItem >= map.keyAt(i) && firstVisibleItem < map.keyAt(i + 1)) {
+                return map.get(map.keyAt(i));
+            }
         }
+        return map.get(map.keyAt(len - 1));
     }
 
     void setListView(ListView indexListView) {
@@ -403,7 +409,7 @@ public class IndexBar extends View {
         if (mScrollState != -1) {
             mSelectionPos = i;
 
-            String indexTitle = getIndexTitle(i);
+            String indexTitle = getIndexTitle(i, firstVisibleItem);
             mOnIndexSelectedListener.onSelection(mSelectionPos, indexTitle);
         }
 
