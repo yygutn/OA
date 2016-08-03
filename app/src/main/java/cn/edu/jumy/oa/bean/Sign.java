@@ -76,6 +76,17 @@ public class Sign implements Parcelable {
 
     public Sign() {
     }
+    public Sign(AuditUser auditUser) {
+        this.name = auditUser.name;
+        this.post = auditUser.post;
+        this.id = auditUser.id;
+        this.remark = auditUser.remark;
+        this.phone = auditUser.phone;
+        this.passRemark = auditUser.passRemark;
+        this.passStatus = auditUser.passStatus;
+        this.organame = auditUser.organame;
+        this.type = auditUser.type;
+    }
 
     protected Sign(Parcel in) {
         this.id = in.readString();

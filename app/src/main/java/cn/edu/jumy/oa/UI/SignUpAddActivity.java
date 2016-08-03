@@ -78,15 +78,13 @@ public class SignUpAddActivity extends BaseActivity {
     @Extra("old")
     Sign node = null;
 
-    String editType = "add";
+    @Extra("title")
+    String title = "";
 
-    @AfterExtras
-    void go() {
-        if (TextUtils.isEmpty(pid)) {
-            return;
-        }
-        //获取个人报名信息,,,waiting
-    }
+    @Extra("fromItem")
+    boolean flag = false;
+
+    String editType = "add";
 
     /**
      * 初始化--控件绑定之后
@@ -111,25 +109,29 @@ public class SignUpAddActivity extends BaseActivity {
             status = node.type;
             clickCheckBox(status);
         }
+        if (flag && !TextUtils.isEmpty(title)){
+            mToolBar.setTitle(title);
+        }
     }
 
     private void clickCheckBox(int type) {
-        switch (type){
-            case 0:{
+        switch (type) {
+            case 0: {
                 mSignUpJoinButton.setChecked(true);
                 break;
             }
-            case 1:{
+            case 1: {
                 mSignUpListenButton.setChecked(true);
                 break;
             }
-            case 2:{
+            case 2: {
                 mSignUpLeaveButton.setChecked(true);
                 break;
             }
 
         }
     }
+
     /**
      * 三个会议状态的点击事件
      *
@@ -193,7 +195,7 @@ public class SignUpAddActivity extends BaseActivity {
         }
 
 
-        if (node == null){
+        if (node == null) {
             node = new Sign();
         }
         node.pid = tid;
@@ -203,10 +205,39 @@ public class SignUpAddActivity extends BaseActivity {
         node.type = status;
         node.remark = remark;
 
+        if (flag){
+            Map<String,String> params = new HashMap<>();
+            params.put("editType","edit");
+            params.put("pid",node.pid);
+            params.put("name",name);
+            params.put("post",position);
+            params.put("type",status+"");
+            params.put("sex","");
+            params.put("phone",tel);
+            params.put("remark",remark);
+            OAService.updateMEntry(params, new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int ID) {
+                    showToast("报名失败");
+                }
+
+                @Override
+                public void onResponse(String response, int ID) {
+                    BaseResponse baseResponse = new Gson().fromJson(response,BaseResponse.class);
+                    if (baseResponse.code == 0){
+                        showToast("报名成功");
+                    } else {
+                        showToast("报名失败"+(TextUtils.isEmpty(baseResponse.msg)?"":(","+baseResponse.msg)));
+                    }
+                }
+            });
+            backToPreActivity();
+            return;
+        }
         Intent intent = new Intent();
-        intent.putExtra("node",node);
-        intent.putExtra("position",_position);
-        setResult(RESULT_OK,intent);
+        intent.putExtra("node", node);
+        intent.putExtra("position", _position);
+        setResult(RESULT_OK, intent);
 
         backToPreActivity();
     }

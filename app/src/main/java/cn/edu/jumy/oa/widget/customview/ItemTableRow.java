@@ -1,6 +1,7 @@
 package cn.edu.jumy.oa.widget.customview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -8,14 +9,24 @@ import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.callback.StringCallback;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
 
+import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.MyApplication;
+import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.Response.BaseResponse;
+import cn.edu.jumy.oa.UI.SignUpAddActivity_;
+import cn.edu.jumy.oa.UI.SignUpDetailsActivity;
 import cn.edu.jumy.oa.bean.AuditUser;
+import cn.edu.jumy.oa.bean.Sign;
 import cn.edu.jumy.oa.widget.datepicker.calendar.utils.MeasureUtil;
+import okhttp3.Call;
 
 /**
  * Created by Jumy on 16/7/5 17:28.
@@ -39,6 +50,7 @@ public class ItemTableRow extends TableRow implements View.OnClickListener {
     TextView text7;//操作-删除
 
     private AuditUser user;
+    private BaseActivity mActivity;
 
 
     public ItemTableRow(Context context) {
@@ -49,11 +61,12 @@ public class ItemTableRow extends TableRow implements View.OnClickListener {
         super(context, attrs);
     }
 
-    public ItemTableRow(Context context, AuditUser node) {
+    public ItemTableRow(Context context, AuditUser node, BaseActivity activity) {
         super(context);
         if (node == null) {
             node = new AuditUser("", "");
         }
+        this.mActivity = activity;
         this.user = node;
     }
 
@@ -107,19 +120,43 @@ public class ItemTableRow extends TableRow implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        String title = "";
         switch (v.getId()){
             case R.id.text5:{//重新报名
+                title = "重新报名";
+                skip2edit(title);
                 break;
             }
             case R.id.text6:{//修改
+                title = "修改";
+                skip2edit(title);
                 break;
             }
             case R.id.text7:{//删除
+                OAService.delMEntry(user.id, new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int ID) {
+                        mActivity.showToast("删除失败,请重新尝试");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int ID) {
+                        Intent data = new Intent(SignUpDetailsActivity.DELETE);
+                        mActivity.getApplicationContext().sendBroadcast(data);
+                    }
+                });
                 break;
             }
             default:break;
         }
     }
+
+    private void skip2edit(String title) {
+        Sign node = new Sign(user);
+        node.pid = ((SignUpDetailsActivity)mActivity).tid;
+        SignUpAddActivity_.intent(mActivity).extra("old",node).extra("fromItem",true).extra("title",title).start();
+    }
+
     private void init() {
         setDividerDrawable(getResources().getDrawable(R.drawable.shape_divider_white));
         setShowDividers(SHOW_DIVIDER_MIDDLE);
