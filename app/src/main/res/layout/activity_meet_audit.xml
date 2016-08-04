@@ -12,84 +12,80 @@
         android:layout_height="wrap_content"
         android:background="@color/pressed"
         app:navigationIcon="@drawable/ic_arrow_back_white"
-        app:title="详情"
+        app:title="会议报名详情"
         app:titleTextColor="@color/white" />
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="15dp"
-        android:text="参会报名人员"
-        android:textColor="@color/black"
-        android:textStyle="bold" />
+        android:layout_height="wrap_content">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:background="@color/background_gray1" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="参会报名人员:"
+                android:textColor="@color/black"
+                android:padding="15dp"/>
+            <TableLayout
+                android:id="@+id/sign_details_table_join"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:stretchColumns="0,1,2,3">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/audit_listView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+                <include layout="@layout/layout_item_table_row_audit" />
+                <!--第二行与第三行布局参考第一行-->
+            </TableLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:gravity="center"
-        android:text="已通过人员"
-        android:textColor="@color/black"
-        android:textStyle="bold" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="已通过人员:"
+                android:textColor="@color/black" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:background="@color/background_gray1" />
+            <TableLayout
+                android:id="@+id/sign_details_table_listen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:stretchColumns="0,1,2,3">
 
-    <TextView
-        android:id="@+id/audit_pass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:textColor="@color/black" />
+                <include layout="@layout/layout_item_table_row_audit" />
+                <!--第二行与第三行布局参考第一行-->
+            </TableLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="未通过人员:"
+                android:textColor="@color/black"
+                android:padding="15dp"/>
+            <TableLayout
+                android:id="@+id/sign_details_table_unsigned"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:stretchColumns="0,1,2,3">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:gravity="center"
-        android:text="未通过人员"
-        android:textColor="@color/black"
-        android:textStyle="bold" />
+                <include layout="@layout/layout_item_table_row_audit" />
+                <!--第二行与第三行布局参考第一行-->
+            </TableLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:background="@color/background_gray1" />
-
-    <TextView
-        android:id="@+id/audit_not_pass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:textColor="@color/black" />
-
-    <Button
-        android:id="@+id/out"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:background="@drawable/shape_logout"
-        android:gravity="center"
-        android:text="导出参会人员信息"
-        android:textColor="@color/white" />
+            <Button
+                android:id="@+id/out"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="15dp"
+                android:background="@drawable/shape_logout"
+                android:gravity="center"
+                android:text="导出参会人员信息"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

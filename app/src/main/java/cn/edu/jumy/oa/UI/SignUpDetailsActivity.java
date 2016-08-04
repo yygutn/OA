@@ -4,17 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TableLayout;
 
 import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
@@ -26,9 +22,7 @@ import cn.edu.jumy.oa.CallBack.AuditCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.AuditResponse;
-import cn.edu.jumy.oa.UI.TaskItem.MeetAuditActivity_;
 import cn.edu.jumy.oa.bean.AuditUser;
-import cn.edu.jumy.oa.fragment.LoadingDialog;
 import cn.edu.jumy.oa.widget.customview.ItemTableRow;
 import cn.edu.jumy.oa.widget.customview.ItemTableRow_;
 
@@ -120,9 +114,11 @@ public class SignUpDetailsActivity extends BaseActivity {
     }
 
     private void removeItemViews(TableLayout tableLayout) {
-        int len = tableLayout.getChildCount();
-        for (int i = 1; i < len; i++) {
-            tableLayout.removeViewAt(i);
+        try {
+            tableLayout.removeAllViews();
+            tableLayout.addView(LayoutInflater.from(mContext).inflate(R.layout.layout_item_table_row_sign_up,null));
+        } catch (Exception e) {
+            showDebugException(e);
         }
     }
 
@@ -134,4 +130,12 @@ public class SignUpDetailsActivity extends BaseActivity {
             }
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (deleteReceiver != null){
+            unregisterReceiver(deleteReceiver);
+        }
+    }
 }

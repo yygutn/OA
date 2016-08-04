@@ -4,12 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.TableLayout;
 
 import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
@@ -27,7 +26,7 @@ import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.AuditResponse;
 import cn.edu.jumy.oa.adapter.AuditAdapter;
 import cn.edu.jumy.oa.bean.AuditUser;
-import cn.edu.jumy.oa.bean.Meet;
+import cn.edu.jumy.oa.widget.customview.ItemTableRowAudit_;
 
 /**
  * Created by Jumy on 16/7/6 11:37.
@@ -36,33 +35,66 @@ import cn.edu.jumy.oa.bean.Meet;
  */
 @EActivity(R.layout.activity_meet_audit)
 public class MeetAuditActivity extends BaseActivity {
-    @ViewById(R.id.audit_listView)
-    RecyclerView mAuditListView;
-    @ViewById(R.id.audit_pass)
-    TextView mAuditPass;
-    @ViewById(R.id.audit_not_pass)
-    TextView mAuditNotPass;
     @ViewById(R.id.tool_bar)
     Toolbar mToolBar;
+    @ViewById(R.id.sign_details_table_join)
+    TableLayout mTableSigned;
+    @ViewById(R.id.sign_details_table_unsigned)
+    TableLayout mTableUnPass;
+    @ViewById(R.id.sign_details_table_listen)
+    TableLayout mTablePassed;
 
     AuditAdapter adapter;
+
+    public static final String DELETE = "TABLE_AUDIT_ITEM";
 
     //会议ID
     @Extra("mid")
     String mid = "";
 
+
+    ArrayList<AuditUser> mListSigned = new ArrayList<>();
+    ArrayList<AuditUser> mListPassed = new ArrayList<>();
+    ArrayList<AuditUser> mListUnPass = new ArrayList<>();
+
     @AfterExtras
-    void init() {
-        initList();
+    protected void initList() {
+        if (TextUtils.isEmpty(mid)) {
+            backToPreActivity();
+            return;
+        }
+        OAService.getMEntryByPassStatus(mid, new AuditCallback() {
+            @Override
+            public void onResponse(AuditResponse response, int id) {
+                if (response.code == 0 && response.data != null) {
+                    removeItemViews(mTableUnPass);
+                    removeItemViews(mTableSigned);
+                    removeItemViews(mTablePassed);
+                    mListSigned.clear();
+                    mListPassed.clear();
+                    mListUnPass.clear();
+                    for (AuditUser auditUser : response.data) {
+                        switch (auditUser.passStatus) {
+                            case 0: {
+                                mListPassed.add(auditUser);
+                                break;
+                            }
+                            case 1: {
+                                mListUnPass.add(auditUser);
+                                break;
+                            }
+                            default: {
+                                mListSigned.add(auditUser);
+                                break;
+                            }
+                        }
+                    }
+                    updateView();
+                }
+            }
+        });
     }
 
-    String mPassed = "";
-    String mNotPass = "";
-
-    ArrayList<AuditUser> list = new ArrayList<>();
-    ArrayList<AuditUser> list_signed = new ArrayList<>();
-    ArrayList<AuditUser> list_passed = new ArrayList<>();
-    ArrayList<AuditUser> list_un_pass = new ArrayList<>();
 
     @AfterViews
     void go() {
@@ -73,58 +105,49 @@ public class MeetAuditActivity extends BaseActivity {
             }
         });
 
-        adapter = new AuditAdapter(mContext, R.layout.item_audit_meet, list);
-
-        mAuditListView.setLayoutManager(new LinearLayoutManager(mContext));
-        mAuditListView.setAdapter(adapter);
-
+        registerReceiver(deleteReceiver,new IntentFilter(DELETE));
     }
 
-    private void initList() {
-        if (TextUtils.isEmpty(mid)) {
-            return;
+    private void removeItemViews(TableLayout tableLayout) {
+        try {
+            tableLayout.removeAllViews();
+            tableLayout.addView(LayoutInflater.from(mContext).inflate(R.layout.layout_item_table_row_audit, null));
+        } catch (Exception e) {
+            showDebugException(e);
         }
-        OAService.getMEntryByPassStatus(mid, new AuditCallback() {
-            @Override
-            public void onResponse(AuditResponse response, int id) {
-                if (response.code == 0 && response.data != null) {
-                    list = response.data;
-                    for (AuditUser auditUser : list) {
-                        switch (auditUser.passStatus) {
-                            case 0: {
-                                list_passed.add(auditUser);
-                                if (TextUtils.isEmpty(mPassed)) {
-                                    mPassed = auditUser.name;
-                                } else {
-                                    mPassed += "、" + auditUser.name;
-                                }
-                                break;
-                            }
-                            case 1: {
-                                list_un_pass.add(auditUser);
-                                if (TextUtils.isEmpty(mNotPass)) {
-                                    mNotPass = auditUser.name;
-                                } else {
-                                    mNotPass += "、" + auditUser.name;
-                                }
-                                break;
-                            }
-                            default: {
-                                list_signed.add(auditUser);
-                                break;
-                            }
-                        }
-                    }
-                    adapter.setList(list_signed);
-                    mAuditPass.setText(mPassed);
-                    mAuditNotPass.setText(mNotPass);
-                }
-            }
-        });
+    }
+
+    private void updateView() {
+        for (AuditUser auditUser : mListSigned) {
+            mTableSigned.addView(ItemTableRowAudit_.build(mContext, auditUser, this));
+        }
+        for (AuditUser auditUser : mListPassed) {
+            mTablePassed.addView(ItemTableRowAudit_.build(mContext, auditUser, this));
+        }
+        for (AuditUser auditUser : mListUnPass) {
+            mTableUnPass.addView(ItemTableRowAudit_.build(mContext, auditUser, this));
+        }
     }
 
     @Click(R.id.out)
     void click() {
         showToast("导出...");
+    }
+
+    BroadcastReceiver deleteReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(DELETE)) {
+                initList();
+            }
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (deleteReceiver != null) {
+            unregisterReceiver(deleteReceiver);
+        }
     }
 }
