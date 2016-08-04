@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
@@ -39,9 +40,11 @@ import java.util.Map;
 import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.BroadCastReceiver.UploadBroadcastReceiver;
+import cn.edu.jumy.oa.CallBack.UserCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.BaseResponse;
+import cn.edu.jumy.oa.Response.UserResponse;
 import cn.edu.jumy.oa.UI.DepartmentSelectActivity_;
 import cn.edu.jumy.oa.Utils.OpenApp;
 import cn.edu.jumy.oa.adapter.ListDropDownAdapter;
@@ -104,7 +107,6 @@ public class SendMeetingActivity extends BaseActivity {
 
     private ListDropDownAdapter mLevelAdapter;
 
-    private ArrayList<String> mUnits = new ArrayList<>(Arrays.asList(new String[]{"省委办公厅", "省信访局", "省档案局", "省委机要局", "省人大常委办公厅"}));
     private ArrayList<String> mLevel = new ArrayList<>(Arrays.asList(new String[]{"请选择", "特急", "加急", "平急", "特提"}));
     private String headers[] = {"请选择"};
 
@@ -164,6 +166,25 @@ public class SendMeetingActivity extends BaseActivity {
         if (!dirs.exists()) {
             dirs.mkdir();
         }
+        OAService.getMyUser(new UserCallback() {
+            @Override
+            public void onResponse(UserResponse response, int ID) {
+                String orgname[] = response.data.orgname.split(",");
+                UndertakingUnits = "";
+                int len = orgname.length;
+                for (int i = 0; i < len; i++) {
+                    if (i == 0) {
+                        UndertakingUnits = orgname[i];
+                    } else {
+                        UndertakingUnits += "/" + orgname[i];
+                    }
+                }
+
+                UndertakingUnitsID = response.data.oid;
+                showDebugLogd(response.data.toString());
+                mDropDownMenuUnit.setText(UndertakingUnits);
+            }
+        });
     }
 
     @Click({R.id.submit, R.id.addUpload, R.id.meeting_time, R.id.addUpload_2, R.id.Undertaking_Unit, R.id.dropDownMenu_1})

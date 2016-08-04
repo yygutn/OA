@@ -56,4 +56,30 @@ public class User implements Serializable {
     public Object objList;
     public String orgname;
     public Object orgid;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", account='" + account + '\'' +
+                ", name='" + name + '\'' +
+                ", oid='" + oid + '\'' +
+                ", code='" + code + '\'' +
+                ", phone='" + phone + '\'' +
+                ", phone2='" + phone2 + '\'' +
+                ", phone3='" + phone3 + '\'' +
+                ", level=" + level +
+                ", ismain=" + ismain +
+                ", isuse=" + isuse +
+                ", remark='" + remark + '\'' +
+                ", cuid='" + cuid + '\'' +
+                ", uuid='" + uuid + '\'' +
+                ", createTime=" + createTime +
+                ", updataTime=" + updataTime +
+                ", orderBy=" + orderBy +
+                ", objList=" + objList +
+                ", orgname='" + orgname + '\'' +
+                ", orgid=" + orgid +
+                '}';
+    }
 }
