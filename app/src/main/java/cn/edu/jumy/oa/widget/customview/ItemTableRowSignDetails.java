@@ -76,7 +76,7 @@ public class ItemTableRowSignDetails extends TableRow{
     @AfterViews
     void bindData() {
         text1.setText(TextUtils.isEmpty(user.organame) ? "" : user.organame);
-        text2.setText(TextUtils.isEmpty(user.name) ? "" : user.name);
+        text2.setText(TextUtils.isEmpty(user.uname) ? "" : user.uname);
         if (user.signStatus == 0){
             text3.setText("");
         } else {
