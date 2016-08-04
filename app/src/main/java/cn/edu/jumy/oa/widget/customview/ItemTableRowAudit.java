@@ -20,6 +20,8 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
 
+import java.lang.ref.WeakReference;
+
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.OAService;
@@ -51,7 +53,7 @@ public class ItemTableRowAudit extends TableRow implements View.OnClickListener 
     TextView text5;//操作-退回
 
     private AuditUser user;
-    private BaseActivity mActivity;
+    private WeakReference<BaseActivity> mActivityRef;
 
 
     public ItemTableRowAudit(Context context) {
@@ -67,7 +69,7 @@ public class ItemTableRowAudit extends TableRow implements View.OnClickListener 
         if (node == null) {
             node = new AuditUser("", "");
         }
-        this.mActivity = activity;
+        this.mActivityRef = new WeakReference<BaseActivity>(activity);
         this.user = node;
     }
 
@@ -79,8 +81,8 @@ public class ItemTableRowAudit extends TableRow implements View.OnClickListener 
 
     @AfterViews
     void bindData() {
-        text1.setText(TextUtils.isEmpty(user.name) ? "" : user.organame);
-        text2.setText(TextUtils.isEmpty(user.post) ? "" : user.name);
+        text1.setText(TextUtils.isEmpty(user.organame) ? "" : user.organame);
+        text2.setText(TextUtils.isEmpty(user.name) ? "" : user.name);
         switch (user.passStatus) {
             case 0: {//审批通过
                 text3.setText("审批通过");
@@ -130,9 +132,9 @@ public class ItemTableRowAudit extends TableRow implements View.OnClickListener 
     }
 
     private void skip2edit(final boolean pass) {
-        final EditText editText = new EditText(mActivity);
+        final EditText editText = new EditText(mActivityRef.get());
         final String title = pass ? "通过意见":"退回意见";
-        AlertDialog alertDialog = new AlertDialog.Builder(mActivity)
+        AlertDialog alertDialog = new AlertDialog.Builder(mActivityRef.get())
                 .setTitle(title)
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
@@ -141,7 +143,7 @@ public class ItemTableRowAudit extends TableRow implements View.OnClickListener 
                         OAService.meetUserPass(user.id, String.valueOf(pass), passRemark, new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
-                                Toast.makeText(mActivity, "当前网络不可用,审核报名失败", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mActivityRef.get(), "当前网络不可用,审核报名失败", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -151,7 +153,7 @@ public class ItemTableRowAudit extends TableRow implements View.OnClickListener 
                                 if (baseResponse.code == 0) {
                                     //审核通过/退回
                                     Intent data = new Intent(MeetAuditActivity.DELETE);
-                                    mActivity.sendBroadcast(data);
+                                    mActivityRef.get().sendBroadcast(data);
                                 }
                             }
                         });

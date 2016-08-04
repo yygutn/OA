@@ -16,6 +16,8 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
 
+import java.lang.ref.WeakReference;
+
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.OAService;
@@ -50,7 +52,7 @@ public class ItemTableRow extends TableRow implements View.OnClickListener {
     TextView text7;//操作-删除
 
     private AuditUser user;
-    private BaseActivity mActivity;
+    private WeakReference<BaseActivity> mActivityRef;
 
 
     public ItemTableRow(Context context) {
@@ -66,7 +68,7 @@ public class ItemTableRow extends TableRow implements View.OnClickListener {
         if (node == null) {
             node = new AuditUser("", "");
         }
-        this.mActivity = activity;
+        this.mActivityRef = new WeakReference<BaseActivity>(activity);
         this.user = node;
     }
 
@@ -136,13 +138,13 @@ public class ItemTableRow extends TableRow implements View.OnClickListener {
                 OAService.delMEntry(user.id, new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int ID) {
-                        mActivity.showToast("删除失败,请重新尝试");
+                        mActivityRef.get().showToast("删除失败,请重新尝试");
                     }
 
                     @Override
                     public void onResponse(String response, int ID) {
                         Intent data = new Intent(SignUpDetailsActivity.DELETE);
-                        mActivity.getApplicationContext().sendBroadcast(data);
+                        mActivityRef.get().getApplicationContext().sendBroadcast(data);
                     }
                 });
                 break;
@@ -153,8 +155,8 @@ public class ItemTableRow extends TableRow implements View.OnClickListener {
 
     private void skip2edit(String title) {
         Sign node = new Sign(user);
-        node.pid = ((SignUpDetailsActivity)mActivity).tid;
-        SignUpAddActivity_.intent(mActivity).extra("old",node).extra("fromItem",true).extra("title",title).startForResult(2048);
+        node.pid = ((SignUpDetailsActivity)mActivityRef.get()).tid;
+        SignUpAddActivity_.intent(mActivityRef.get()).extra("old",node).extra("fromItem",true).extra("title",title).startForResult(2048);
     }
 
     private void init() {

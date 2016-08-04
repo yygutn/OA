@@ -232,23 +232,12 @@ public class DetailsActivity extends BaseActivity {
             } else {
                 mDocumentDetailsContentHead.setText(mNode.dispatchUnit + ":");
             }
-            switch (mNode.type) {
-                case 0: {//会议，特殊处理
-                    mDocumentDetailsContent.setVisibility(View.GONE);
-                    mDocumentDetailsContent_meet.setVisibility(View.VISIBLE);
-                    mDocumentDetailsContent_meet.setText(CardGenerator.getContentString(mNode));
-                    mDocumentDetailsContent_meet.getViewTreeObserver().addOnGlobalLayoutListener(new OnTvGlobalLayoutListener());
-                    break;
-                }
-                case 1:
-                case 2: {
-                    mDocumentDetailsContent.setVisibility(View.VISIBLE);
-                    mDocumentDetailsContent_meet.setVisibility(View.GONE);
-                    mDocumentDetailsContent.setText("\t\t\t\t" + mNode.content);
-                }
-                default:
-                    break;
-            }
+
+            mDocumentDetailsContent.setVisibility(View.GONE);
+            mDocumentDetailsContent_meet.setVisibility(View.VISIBLE);
+            mDocumentDetailsContent_meet.setText(CardGenerator.getContentString(mNode));
+            mDocumentDetailsContent_meet.getViewTreeObserver().addOnGlobalLayoutListener(new OnTvGlobalLayoutListener());
+
             mDocumentDetailsTime.setText(mNode.dispatchTime);
             if (!TextUtils.isEmpty(mNode.other)) {
                 mDocumentDetailsOther.setText(mNode.other);

@@ -4,12 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.TableLayout;
 
 import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
@@ -24,65 +23,64 @@ import cn.edu.jumy.oa.CallBack.AuditCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.AuditResponse;
-import cn.edu.jumy.oa.adapter.AuditAdapter2;
 import cn.edu.jumy.oa.bean.AuditUser;
+import cn.edu.jumy.oa.widget.customview.ItemTableRowSignDetails_;
 
 /**
  * Created by Jumy on 16/7/14 15:46.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-@EActivity(R.layout.activity_audit)
-public class SignDetailsActivity extends BaseActivity{
+@EActivity(R.layout.activity_sign_details)
+public class SignDetailsActivity extends BaseActivity {
+
+    public static final String UPDATE = "SignDetailsActivity.UPDATE";
+
     @ViewById(R.id.tool_bar)
     Toolbar mToolBar;
-    @ViewById(R.id.audit_listView)
-    RecyclerView mListView;
-    @ViewById(R.id.audit_pass)
-    TextView mPass;
+    @ViewById(R.id.sign_details_table_signed)
+    TableLayout mTableSigned;
+    @ViewById(R.id.sign_details_table_unsigned)
+    TableLayout mTableUnSign;
+
     public static boolean flag = true;
 
     @Extra("id")
     String id = "";
 
-    String mPassed = "";
+    ArrayList<AuditUser> mListSigned = new ArrayList<>();
+    ArrayList<AuditUser> mListUnSign = new ArrayList<>();
 
-    AuditAdapter2 adapter;
-    ArrayList<AuditUser> list = new ArrayList<>();
-    ArrayList<AuditUser> list_signed = new ArrayList<>();
-    ArrayList<AuditUser> list_un_signed = new ArrayList<>();
 
     @AfterViews
-    void go(){
+    void go() {
+        getData();
         mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 backToPreActivity();
             }
         });
-
-        adapter = new AuditAdapter2(mContext,R.layout.item_audit_meet,new ArrayList(list));
-        mListView.setLayoutManager(new LinearLayoutManager(mContext));
-        mListView.setAdapter(adapter);
     }
 
-    @AfterExtras
-    void after(){
+    private void getData() {
+        removeItemViews(mTableSigned);
+        removeItemViews(mTableUnSign);
+        mListUnSign.clear();
+        mListSigned.clear();
         OAService.getCheckInfo(id, new AuditCallback() {
             @Override
             public void onResponse(AuditResponse response, int id) {
-                if (response.code == 0){
-                    list = response.data;
-                    for (AuditUser user : list){
-                        if (user.signStatus == 0){
-                            list_signed.add(user);
+                if (response.code == 0) {
+                    for (AuditUser user : response.data) {
+                        if (user.signStatus == 0) {
+                            mListSigned.add(user);
                         } else {
-                            list_un_signed.add(user);
+                            mListUnSign.add(user);
                         }
                     }
-                    adapter.setList(new ArrayList<>(list_un_signed));
-                    dealStr();
+                    updateView();
                 } else {
-                    if (!TextUtils.isEmpty(response.msg)){
+                    if (!TextUtils.isEmpty(response.msg)) {
                         showToast(response.msg);
                     }
                 }
@@ -90,15 +88,21 @@ public class SignDetailsActivity extends BaseActivity{
         });
     }
 
-    private void dealStr(){
-        mPassed = "";
-        for (AuditUser auditUser : list_signed){
-            if (TextUtils.isEmpty(mPassed)){
-                mPassed = auditUser.uname;
-            } else {
-                mPassed += "、"+auditUser.uname;
-            }
+    private void removeItemViews(TableLayout tableLayout) {
+        try {
+            tableLayout.removeAllViews();
+            tableLayout.addView(LayoutInflater.from(mContext).inflate(R.layout.layout_item_table_row_sign_details, null));
+        } catch (Exception e) {
+            showDebugException(e);
         }
-        mPass.setText(mPassed);
+    }
+
+    private void updateView() {
+        for (AuditUser auditUser : mListUnSign) {
+            mTableUnSign.addView(ItemTableRowSignDetails_.build(mContext, auditUser, this));
+        }
+        for (AuditUser auditUser : mListSigned) {
+            mTableSigned.addView(ItemTableRowSignDetails_.build(mContext, auditUser, this));
+        }
     }
 }

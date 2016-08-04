@@ -60,13 +60,6 @@ public class DepartmentSelectActivity extends BaseActivity {
     ArrayList<IndexHeaderEntity<Account>> mHeaderList = new ArrayList<>();
     ArrayList<String> mHeaderTitleList = new ArrayList<>();
 
-
-    @AfterExtras
-    void getData() {
-        getHeader();
-        getMainList();
-    }
-
     private void getMainList() {
         OAService.getOrganizationData(new StringCallback() {
             @Override
@@ -169,6 +162,8 @@ public class DepartmentSelectActivity extends BaseActivity {
 
     @AfterViews
     void go() {
+        getHeader();
+        getMainList();
         setSupportActionBar(mTitleBar);
         mTitleBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,6 +257,7 @@ public class DepartmentSelectActivity extends BaseActivity {
                 str = name;
             } else if (str.contains(",")) {
                 str += "等";
+                break;
             } else {
                 str += "," + name;
             }

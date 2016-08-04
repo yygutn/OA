@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginBottom="1dp"
+    android:background="#eaeaea"
+    android:divider="@drawable/shape_divider_white"
+    android:showDividers="middle">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorMask"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="单位"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorMask"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="姓名"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorMask"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="操作"
+        android:textColor="@color/white" />
+</TableRow>
