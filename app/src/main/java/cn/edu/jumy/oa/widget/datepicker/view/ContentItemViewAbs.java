@@ -24,17 +24,16 @@ public class ContentItemViewAbs extends LinearLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    public ContentItemViewAbs(Context context, String title, String subtitle, String content) {
+    public ContentItemViewAbs(Context context, String title, String content) {
         super(context, null, 0);
         View view = LayoutInflater.from(context).inflate(R.layout.content_list_item_abs,null);
         view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        setViews(view,title,subtitle,content);
+        setViews(view,title,content);
         addView(view);
     }
 
-    private void setViews(View view, String title, String subTitle, String content) {
+    private void setViews(View view, String title, String content) {
         ((TextView)view.findViewById(R.id.title)).setText(title);
-        ((TextView)view.findViewById(R.id.subtitle)).setText(subTitle);
         ((TextView)view.findViewById(R.id.content)).setText(content);
     }
 }

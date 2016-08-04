@@ -38,8 +38,10 @@ import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.MeetResponse;
+import cn.edu.jumy.oa.Utils.CardGenerator;
 import cn.edu.jumy.oa.bean.Alarm;
 import cn.edu.jumy.oa.bean.Meet;
+import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.datepicker.calendar.bizs.decors.DPDecor;
 import cn.edu.jumy.oa.widget.datepicker.calendar.cons.DPMode;
 import cn.edu.jumy.oa.widget.datepicker.calendar.utils.MeasureUtil;
@@ -62,14 +64,6 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
     @ViewById(R.id.content_layout)
     LinearLayout contentLayout;
 
-    @StringRes(R.string.message)
-    String mNotification;
-    @StringRes(R.string.content1)
-    String content1;
-    @StringRes(R.string.content2)
-    String content2;
-    @StringRes(R.string.content3)
-    String content3;
 
     //会议日期列表
     List<String> mMeetingList = new ArrayList<>();
@@ -83,8 +77,8 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
     long mTimeStamp;
 
     @AfterExtras
-    void ex(){
-        getList();
+    void ex() {
+        getList(now.get(Calendar.YEAR), now.get(Calendar.MONTH));
     }
 
     @AfterViews
@@ -100,7 +94,7 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
         toolbar.setSubtitle(now.get(Calendar.YEAR) + "." + (now.get(Calendar.MONTH) + 1));
 
         monthView.setDPMode(DPMode.SINGLE);
-        if (mTimeStamp > 100){
+        if (mTimeStamp > 100) {
             now.setTimeInMillis(mTimeStamp);
         }
         monthView.setDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1);
@@ -124,44 +118,31 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
         weekView.setFestivalDisplay(true);
         weekView.setTodayDisplay(true);
         weekView.setOnDatePickedListener(this);
-        initNotification();
 
     }
+
     private void initMeetingList() {
-        for (Meet meet : mList){
+        mMeetingList.clear();
+        mMeetingListCopy.clear();
+        for (Meet meet : mList) {
             now.setTimeInMillis(meet.meetTime);
             int y = now.get(Calendar.YEAR);
-            int m = now.get(Calendar.MONTH);
+            int m = now.get(Calendar.MONTH) + 1;
             int d = now.get(Calendar.DAY_OF_MONTH);
-            String time = y+"-"+m+"-"+d;
-            String timeCopy = y+"-"+(m>9?m:("0"+m))+"-"+(d>9?d:("0"+d));
+            String time = y + "-" + m + "-" + d;
+            String timeCopy = y + "-" + (m > 9 ? m : ("0" + m)) + "-" + (d > 9 ? d : ("0" + d));
             mMeetingList.add(time);
             mMeetingListCopy.add(timeCopy);
         }
-    }
-
-    /**
-     * 初始化当天有会议的情况
-     */
-    private void initNotification() {
-        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-        String date = format1.format(new Date());
-        addCard(date);
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy.MM.dd");
+        onDatePicked(format1.format(new Date()));
     }
 
     private void addCard(String date) {
-        int len = mList.size();
-        for (int i = 0; i < mMeetingListCopy.size(); i++) {
+        int len = mMeetingListCopy.size();
+        for (int i = 0; i < len; i++) {
             if (mMeetingListCopy.get(i).equals(date)) {
-                Meet node = mList.get(i);
-                String message = "";
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                message += "发文单位: " + node.sendDepartmentInfo + "\n";
-                message += "发文时间: " + sdf.format(new Date(node.createTime)) + "\n";
-                message += "承办单位: " + node.meetCompanyName + "\n";
-                message += "会议时间: " + sdf.format(new Date(node.meetTime)) + "\n";
-                message += "会议地点: " + node.addr + "\n";
-                ContentItemViewAbs cia = new ContentItemViewAbs(this, "会议", "", message);
+                ContentItemViewAbs cia = new ContentItemViewAbs(this, "会议", CardGenerator.getContentString(new Node(mList.get(i))));
                 contentLayout.addView(cia);
             }
         }
@@ -170,8 +151,10 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
     @Override
     public void onDateChange(int year, int month) {
         ActionBar toolbar = getSupportActionBar();
-        if (null != toolbar)
+        if (null != toolbar) {
             toolbar.setSubtitle(year + "." + month);
+        }
+        getList(year, month - 1);
     }
 
     @Override
@@ -187,45 +170,32 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
             showDebugException(e);
         }
     }
-    private void getList(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        int year, month, day;
-        Calendar calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR) - 1900;
-        month = calendar.get(Calendar.MONTH);
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-        if ((month < 8 && (month & 1) == 1) || (month >= 8 && (month & 1) == 0)) {
-            if (day == 31) {
-                day--;
-            }
-            if (month == 2 && day > 28) {
-                day = 28;
-            }
-            if (month == 0) {
-                month = 11;
-                year--;
-            } else {
-                month--;
-            }
+
+    private int[] arr = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    private void getList(int year, int month) {
+        int day = 1;
+        if (isLeapYear(year) && month == 1){
+            day = 29;
         } else {
-            month--;
+            day = arr[month];
         }
-        String before = sdf.format(new Date(year, month, day));
-        String now = sdf.format(date);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        String start = sdf.format(new Date(year-1900, month, 1));
+        String end = sdf.format(new Date(year-1900, month, day));
 
         Map<String, String> params = new HashMap<>();
         params.put("page", "1");
-        params.put("size", "20");
-        params.put("startTime", before);
-        params.put("endTime", now);
+        params.put("size", "100");
+        params.put("startTime", start);
+        params.put("endTime", end);
         params.put("level", "");
         params.put("docNo", "");
         params.put("docTitle", "");
         params.put("meetCompany", "");
         params.put("signStatus", "");
         params.put("passStatus", "");
-
         OAService.meetReceive(params, new MeetCallback() {
             @Override
             public void onResponse(MeetResponse response, int id) {
@@ -239,7 +209,13 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
         });
     }
 
-
+    private boolean isLeapYear(int year) {
+        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+            //闰年
+            return true;
+        }
+        return false;
+    }
 
 
     @OptionsItem(R.id.action_add_alarm)
@@ -250,7 +226,7 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePicker picker = new cn.qqtheme.framework.picker.DatePicker(this, cn.qqtheme.framework.picker.DatePicker.YEAR_MONTH_DAY);
+        DatePicker picker = new cn.qqtheme.framework.picker.DatePicker(this, DatePicker.YEAR_MONTH_DAY);
         picker.setRange(2016, 2050);//年份范围
         picker.setLabel("年", "月", "日");
         picker.setSelectedItem(year, month + 1, day);
@@ -285,7 +261,7 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String str = edit.getText().toString();
-                        Date date = new Date(year-1900, monthOfYear-1, dayOfMonth, hour, minute, 0);
+                        Date date = new Date(year - 1900, monthOfYear - 1, dayOfMonth, hour, minute, 0);
                         Alarm alarm = new Alarm(str, date, EMClient.getInstance().getCurrentUser());
                         boolean flag = alarm.save();
                         String message = flag ? "创建日程提醒成功" : "创建日程提醒失败,请重新创建";

@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
@@ -181,8 +180,9 @@ public class SendMeetingActivity extends BaseActivity {
                 }
 
                 UndertakingUnitsID = response.data.oid;
-                showDebugLogd(response.data.toString());
-                mDropDownMenuUnit.setText(UndertakingUnits);
+                if (!TextUtils.isEmpty(UndertakingUnitsID)) {
+                    mDropDownMenuUnit.setText(UndertakingUnits);
+                }
             }
         });
     }
