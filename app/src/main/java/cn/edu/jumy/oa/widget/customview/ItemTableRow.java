@@ -154,7 +154,7 @@ public class ItemTableRow extends TableRow implements View.OnClickListener {
     private void skip2edit(String title) {
         Sign node = new Sign(user);
         node.pid = ((SignUpDetailsActivity)mActivity).tid;
-        SignUpAddActivity_.intent(mActivity).extra("old",node).extra("fromItem",true).extra("title",title).start();
+        SignUpAddActivity_.intent(mActivity).extra("old",node).extra("fromItem",true).extra("title",title).startForResult(2048);
     }
 
     private void init() {

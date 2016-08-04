@@ -13,6 +13,7 @@ import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -137,5 +138,10 @@ public class SignUpDetailsActivity extends BaseActivity {
         if (deleteReceiver != null){
             unregisterReceiver(deleteReceiver);
         }
+    }
+
+    @OnActivityResult(2048)
+    void change(){
+        getData();
     }
 }

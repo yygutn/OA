@@ -36,7 +36,7 @@ public class AuditAdapter2 extends CommonAdapter<AuditUser> {
     @Override
     public void convert(final ViewHolder holder, final AuditUser user) {
         int position = holder.getLayoutPosition();
-        Logger.d(position + "," + user.oid + "," + (position == 0 ? "" : mDatas.get(position - 1).oid));
+//        Logger.d(position + "," + user.oid + "," + (position == 0 ? "" : mDatas.get(position - 1).oid));
         if (position == 0 || !user.oid.equals(mDatas.get(position - 1).oid)) {
             holder.setVisible(R.id.audit_meet_header, true);
             holder.setText(R.id.audit_meet_header_tv, user.organame);

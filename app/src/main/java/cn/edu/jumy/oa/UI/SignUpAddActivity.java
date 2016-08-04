@@ -210,6 +210,7 @@ public class SignUpAddActivity extends BaseActivity {
             params.put("editType","edit");
             params.put("pid",node.pid);
             params.put("name",name);
+            params.put("id",node.id);
             params.put("post",position);
             params.put("type",status+"");
             params.put("sex","");

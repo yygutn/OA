@@ -73,7 +73,7 @@ public class SignDetailsActivity extends BaseActivity{
                 if (response.code == 0){
                     list = response.data;
                     for (AuditUser user : list){
-                        if (user.passStatus == 0){
+                        if (user.signStatus == 0){
                             list_signed.add(user);
                         } else {
                             list_un_signed.add(user);
