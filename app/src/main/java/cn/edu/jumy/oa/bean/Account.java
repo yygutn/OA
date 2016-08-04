@@ -14,7 +14,7 @@ import cn.edu.jumy.oa.widget.IndexableStickyListView.IndexEntity;
  * Created by Jumy on 16/7/6 16:23.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-public class Account extends IndexEntity implements Serializable, Parcelable {
+public class Account extends IndexEntity implements Parcelable {
 
     /**
      * id : 2
@@ -53,7 +53,7 @@ public class Account extends IndexEntity implements Serializable, Parcelable {
     public long createTime;
     public long updataTime;
     public String orderBy;
-    public List<Attachment> organizationList;
+    public List<Account> organizationList;
 
     public boolean checked = false;
 
@@ -121,8 +121,8 @@ public class Account extends IndexEntity implements Serializable, Parcelable {
         this.createTime = in.readLong();
         this.updataTime = in.readLong();
         this.orderBy = in.readString();
-        this.organizationList = new ArrayList<Attachment>();
-        in.readList(this.organizationList, Attachment.class.getClassLoader());
+        this.organizationList = new ArrayList<Account>();
+        in.readList(this.organizationList, Account.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Account> CREATOR = new Parcelable.Creator<Account>() {

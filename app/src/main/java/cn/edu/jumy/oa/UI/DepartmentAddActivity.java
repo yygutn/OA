@@ -78,7 +78,10 @@ public class DepartmentAddActivity extends BaseActivity {
                     if (account.code != 0) {
                         showToast("获取可发送单位失败");
                     } else {
-                        mDepartments = account.data;
+                        mDepartments.clear();
+                        for (Account temp : account.data) {
+                            DFS(temp);
+                        }
                         updateList();
                     }
                 } catch (Exception e) {
@@ -87,7 +90,15 @@ public class DepartmentAddActivity extends BaseActivity {
             }
         });
     }
-
+    private void DFS(Account temp) {
+        mDepartments.add(temp);
+        if (temp.organizationList != null && temp.organizationList.size() >= 0){
+            for (Account account : temp.organizationList) {
+                account.name = temp.name + "/" + account.name;
+                DFS(account);
+            }
+        }
+    }
     @AfterViews
     void go() {
         setSupportActionBar(mTitleBar);

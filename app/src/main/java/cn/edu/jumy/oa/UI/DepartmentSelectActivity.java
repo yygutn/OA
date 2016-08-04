@@ -89,7 +89,10 @@ public class DepartmentSelectActivity extends BaseActivity {
                     if (account.code != 0) {
                         showToast("获取可发送单位失败");
                     } else {
-                        mDepartments = account.data;
+                        mDepartments.clear();
+                        for (Account temp : account.data) {
+                            DFS(temp);
+                        }
                         updateView();
                     }
                 } catch (Exception e) {
@@ -97,6 +100,16 @@ public class DepartmentSelectActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void DFS(Account temp) {
+        mDepartments.add(temp);
+        if (temp.organizationList != null && temp.organizationList.size() >= 0) {
+            for (Account account : temp.organizationList) {
+                account.name = temp.name + "/" + account.name;
+                DFS(account);
+            }
+        }
     }
 
     private void getHeader() {
@@ -188,7 +201,7 @@ public class DepartmentSelectActivity extends BaseActivity {
             @Override
             public void onItemClick(View v, String title) {
                 for (IndexHeaderEntity<Account> headerEntity : mHeaderList) {
-                    if (headerEntity.getHeaderTitle().equals(title)){
+                    if (headerEntity.getHeaderTitle().equals(title)) {
                         for (Account account : headerEntity.getHeaderList()) {
                             account.checked = !(account.checked);
                         }
@@ -276,7 +289,7 @@ public class DepartmentSelectActivity extends BaseActivity {
      */
     @OptionsItem(R.id.action_add)
     void addOrganization() {
-        DepartmentAddActivity_.intent(mContext).extra("titleList",mHeaderTitleList).startForResult(16);
+        DepartmentAddActivity_.intent(mContext).extra("titleList", mHeaderTitleList).startForResult(16);
     }
 
     /**
