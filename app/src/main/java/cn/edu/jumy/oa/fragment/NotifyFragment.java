@@ -24,6 +24,7 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import cn.edu.jumy.jumyframework.BaseFragment;
 import cn.edu.jumy.oa.BroadCastReceiver.NotifyReceiveBroadCastReceiver;
@@ -83,7 +84,7 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
     PullToRefreshRecyclerView mListView;
 
     ImageView mEmptyImageView;
-    private ArrayList<Node> mList;
+    private CopyOnWriteArrayList<Node> mList;
     NotifyCardAdapter adapter;
 
     Handler mHandler = new Handler();
@@ -122,12 +123,12 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
     @AfterInject
     void initList() {
         try {
-            mList = (ArrayList<Node>) ACache.get(MyApplication.getContext()).getAsObject(KEY);
+            mList = (CopyOnWriteArrayList<Node>) ACache.get(MyApplication.getContext()).getAsObject(KEY);
         } catch (Exception e) {
             showDebugException(e);
         }
         if (mList == null) {
-            mList = new ArrayList<>();
+            mList = new CopyOnWriteArrayList<>();
         }
     }
 
