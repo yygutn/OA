@@ -20,6 +20,7 @@ public class Notify {
     public String title;
     public String summary;
     public String department;
+    public String departmentName;
     public String cuid;
     public long createTime;
     public String tid;

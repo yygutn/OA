@@ -41,6 +41,7 @@ public class NotifyActivity extends BaseSearchRefreshActivity{
             public void onResponse(NotifyResponse response, int id) {
                 if (response.code == 0){
                     mList = response.data;
+                    adapter.setList(mList);
                 } else {
                     showToast("获取公告失败");
                 }
@@ -83,12 +84,10 @@ public class NotifyActivity extends BaseSearchRefreshActivity{
     @Override
     protected void doRefresh() {
         initData();
-        adapter.setList(mList);
     }
 
     @Override
     protected void doLoadMore() {
         initData();
-        adapter.setList(mList);
     }
 }

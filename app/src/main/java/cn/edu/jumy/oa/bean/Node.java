@@ -112,32 +112,6 @@ public class Node implements Serializable {
     public String tid = "";
     public String summary = "";
 
-    public Node(NotifyCard node){
-        this.type = node.getType();
-        this.id = node.getId();
-        this.dispatchUnit = node.getDispatchUnit();
-        this.dispatchTime = node.getDispatchTime();
-        this.undertakingUnit = node.getUndertakingUnit();
-        this.meetingTime = node.getMeetingTime();
-        this.meetingLocation = node.getMeetingLocation();
-        this.documentNumber = node.getDocumentNumber();
-        this.title = node.getTitle();
-        this.contentHead = node.getContentHead();
-        this.content = node.getContent();
-        this.department = node.getDepartment();
-        this.personnel = node.getPersonnel();
-        this.attachmentList = node.getAttachmentList();
-        this.contactName = node.getContactName();
-        this.contactPhone = node.getContactPhone();
-        this.level = node.getLevel();
-        this.issuer = node.getIssuer();
-        this.signNum = node.getSignNum();
-        this.other = node.getOther();
-        this.uuid = node.getUuid();
-        this.tid = node.getTid();
-        this.summary = node.getSummary();
-    }
-
     public Node() {
 
     }
@@ -151,6 +125,7 @@ public class Node implements Serializable {
         this.summary = notify.summary;
         this.cuid = notify.cuid;
         this.tid = notify.tid;
+        this.dispatchUnit = notify.departmentName;
         this.dispatchTime = sdf.format(new Date(notify.createTime));
     }
     public Node(Doc doc) {
