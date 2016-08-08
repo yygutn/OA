@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -17,6 +18,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.Response.OrgRelayResponse;
 import cn.edu.jumy.oa.adapter.DepartmentAdapter;
+import cn.edu.jumy.oa.adapter.OrgRelayAdapter;
 import cn.edu.jumy.oa.bean.OrgRelay;
 import cn.edu.jumy.oa.widget.IndexableStickyListView.IndexableStickyListView;
 import okhttp3.Call;
@@ -39,13 +42,14 @@ import okhttp3.Response;
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EActivity(R.layout.activity_pick_department)
+@OptionsMenu(R.menu.org_relay_submit)
 public class OrgRelaySelectActivity extends BaseActivity {
     @ViewById(R.id.searchview)
     SearchView mSearchView;
     @ViewById(R.id.indexListView)
     IndexableStickyListView mIndexListView;
 
-    DepartmentAdapter adapter;
+    OrgRelayAdapter adapter;
     @ViewById(R.id.title_bar)
     Toolbar mTitleBar;
 
@@ -96,7 +100,7 @@ public class OrgRelaySelectActivity extends BaseActivity {
             }
         });
         //init ListView && adapter
-        adapter = new DepartmentAdapter(mContext);
+        adapter = new OrgRelayAdapter(mContext);
         mIndexListView.setAdapter(adapter);
 
         updateView();
@@ -178,14 +182,14 @@ public class OrgRelaySelectActivity extends BaseActivity {
      * 转发
      *
      * @param message 转发意见
-     * @param ids ID
+     * @param ids     ID
      */
     private void sendRelay(String message, String ids) {
         Map<String, String> params = new HashMap<>();
         params.put("id", id);//公文或者会议的id
         params.put("type", 1 - type + "");//转发的类型（0：代表公文  ，1：代表会议）
         params.put("organid", ids);//你选择的所有机构的id的集合，比如"1,2,3,4,5"这样的字符串
-        OAService.Relay(null, new StringCallback() {
+        OAService.Relay(params, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int ID) {
                 showToast("转发失败");
@@ -193,11 +197,15 @@ public class OrgRelaySelectActivity extends BaseActivity {
 
             @Override
             public void onResponse(String response, int ID) {
-                Gson gson = new Gson();
-                BaseResponse baseResponse = gson.fromJson(response, BaseResponse.class);
-                showToast(baseResponse.msg);
-                if (baseResponse.code == 0) {
-                    backToPreActivity();
+                try {
+                    Gson gson = new Gson();
+                    BaseResponse baseResponse = gson.fromJson(response, BaseResponse.class);
+                    showToast(baseResponse.msg);
+                    if (baseResponse.code == 0) {
+                        backToPreActivity();
+                    }
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
                 }
             }
         });

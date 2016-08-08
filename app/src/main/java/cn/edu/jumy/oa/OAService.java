@@ -820,12 +820,12 @@ public class OAService {
     }
 
     /**
-     * 获取由我所转发的公文
+     * 获取由我所转发的公文/会议
      *
      * @param params   参数
      * @param callback 回调
      */
-    public static void finddocRelay(final Map<String, String> params, final Callback callback) {
+    public static void findRelay(final Map<String, String> params, final Callback callback) {
         getTime(new DateCallBack() {
             @Override
             public void onError(Call call, Exception e, int ID) {
@@ -836,7 +836,7 @@ public class OAService {
             public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
-                        .url(BASE_URL + "finddocRelay")
+                        .url(BASE_URL + "findRelay")
                         .params(params)
                         .build().execute(callback);
             }

@@ -91,32 +91,10 @@ public class MeetAuditActivity extends BaseActivity {
                             }
                         }
                     }
-                    Collections.sort(mListLeaved,new AuditUserCmp());
-                    Collections.sort(mListListen,new AuditUserCmp());
-                    Collections.sort(mListSigned,new AuditUserCmp());
                     updateView();
                 }
             }
         });
-    }
-
-    class AuditUserCmp implements Comparator<AuditUser>{
-
-        @Override
-        public int compare(AuditUser lhs, AuditUser rhs) {
-            if (lhs.passStatus == rhs.passStatus) {
-                return 0;
-            } else if (lhs.passStatus > rhs.passStatus){
-                return -1;
-            } else {
-                return 1;
-            }
-        }
-
-        @Override
-        public boolean equals(Object object) {
-            return false;
-        }
     }
 
 

@@ -37,7 +37,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
 
     @AfterExtras
     void getData() {
-        OAService.finddocRelay(getParams(index), new MeetCallback() {
+        OAService.findRelay(getParams(index), new MeetCallback() {
             @Override
             public void onResponse(MeetResponse response, int id) {
                 if (response != null && response.code == 0 && response.data != null) {
@@ -64,9 +64,6 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
         mTitleBar.setTitle("由我发起");
     }
 
-    @Override
-    protected void initData() {
-    }
 
     @Override
     protected void initListView() {
@@ -83,7 +80,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
     @Override
     protected void doLoadMore() {
         //加载更多
-        OAService.finddocRelay(getParams(index++), new MeetCallback() {
+        OAService.findRelay(getParams(index++), new MeetCallback() {
             @Override
             public void onResponse(MeetResponse response, int id) {
                 if (response != null && response.code == 0 && response.data != null) {
@@ -99,7 +96,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
     @Override
     public void doRefresh() {
         //下拉刷新
-        OAService.finddocRelay(getParams(1), new MeetCallback() {
+        OAService.findRelay(getParams(1), new MeetCallback() {
             @Override
             public void onResponse(MeetResponse response, int id) {
                 if (response != null && response.code == 0 && response.data != null) {
