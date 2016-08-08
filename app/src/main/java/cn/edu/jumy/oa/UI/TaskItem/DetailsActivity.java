@@ -528,7 +528,7 @@ public class DetailsActivity extends BaseActivity {
         Map<String, String> params = new HashMap<>();
         params.put("tid", mNode.tid);
         params.put("passRemark", message);
-        params.put("signnum", "");
+        params.put("signnum", mNode.signNum+"");
 
         OAService.RelayPass(params, new StringCallback() {
             @Override

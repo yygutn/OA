@@ -192,5 +192,6 @@ public class Node implements Serializable {
         this.tid = node.tid;
         this.documentNumber = node.docNo;
         this.remark = node.remark;
+        this.signNum = node.signNum;
     }
 }
