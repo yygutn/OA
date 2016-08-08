@@ -18,6 +18,8 @@ import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.CallBack.AuditCallback;
@@ -40,9 +42,9 @@ public class MeetAuditActivity extends BaseActivity {
     @ViewById(R.id.sign_details_table_join)
     TableLayout mTableSigned;
     @ViewById(R.id.sign_details_table_unsigned)
-    TableLayout mTableUnPass;
+    TableLayout mTableLeaved;
     @ViewById(R.id.sign_details_table_listen)
-    TableLayout mTablePassed;
+    TableLayout mTableListen;
 
     AuditAdapter adapter;
 
@@ -54,8 +56,8 @@ public class MeetAuditActivity extends BaseActivity {
 
 
     ArrayList<AuditUser> mListSigned = new ArrayList<>();
-    ArrayList<AuditUser> mListPassed = new ArrayList<>();
-    ArrayList<AuditUser> mListUnPass = new ArrayList<>();
+    ArrayList<AuditUser> mListListen = new ArrayList<>();
+    ArrayList<AuditUser> mListLeaved = new ArrayList<>();
 
     @AfterExtras
     protected void initList() {
@@ -67,32 +69,54 @@ public class MeetAuditActivity extends BaseActivity {
             @Override
             public void onResponse(AuditResponse response, int id) {
                 if (response.code == 0 && response.data != null) {
-                    removeItemViews(mTableUnPass);
+                    removeItemViews(mTableLeaved);
                     removeItemViews(mTableSigned);
-                    removeItemViews(mTablePassed);
+                    removeItemViews(mTableListen);
                     mListSigned.clear();
-                    mListPassed.clear();
-                    mListUnPass.clear();
+                    mListListen.clear();
+                    mListLeaved.clear();
                     for (AuditUser auditUser : response.data) {
-                        switch (auditUser.passStatus) {
-                            case 0: {
-                                mListPassed.add(auditUser);
-                                break;
-                            }
+                        switch (auditUser.type) {
                             case 1: {
-                                mListUnPass.add(auditUser);
+                                mListListen.add(auditUser);
                                 break;
                             }
-                            default: {
+                            case 2: {
+                                mListLeaved.add(auditUser);
+                                break;
+                            }
+                            case 0: {
                                 mListSigned.add(auditUser);
                                 break;
                             }
                         }
                     }
+                    Collections.sort(mListLeaved,new AuditUserCmp());
+                    Collections.sort(mListListen,new AuditUserCmp());
+                    Collections.sort(mListSigned,new AuditUserCmp());
                     updateView();
                 }
             }
         });
+    }
+
+    class AuditUserCmp implements Comparator<AuditUser>{
+
+        @Override
+        public int compare(AuditUser lhs, AuditUser rhs) {
+            if (lhs.passStatus == rhs.passStatus) {
+                return 0;
+            } else if (lhs.passStatus > rhs.passStatus){
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            return false;
+        }
     }
 
 
@@ -121,11 +145,11 @@ public class MeetAuditActivity extends BaseActivity {
         for (AuditUser auditUser : mListSigned) {
             mTableSigned.addView(ItemTableRowAudit_.build(mContext, auditUser, this));
         }
-        for (AuditUser auditUser : mListPassed) {
-            mTablePassed.addView(ItemTableRowAudit_.build(mContext, auditUser, this));
+        for (AuditUser auditUser : mListListen) {
+            mTableListen.addView(ItemTableRowAudit_.build(mContext, auditUser, this));
         }
-        for (AuditUser auditUser : mListUnPass) {
-            mTableUnPass.addView(ItemTableRowAudit_.build(mContext, auditUser, this));
+        for (AuditUser auditUser : mListLeaved) {
+            mTableLeaved.addView(ItemTableRowAudit_.build(mContext, auditUser, this));
         }
     }
 

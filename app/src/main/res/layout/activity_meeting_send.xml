@@ -204,7 +204,6 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:inputType="number"
-                android:maxLength="11"
                 android:minHeight="48dp" />
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"

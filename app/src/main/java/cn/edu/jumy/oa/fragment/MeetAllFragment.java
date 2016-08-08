@@ -79,7 +79,7 @@ public class MeetAllFragment extends BaseSearchRefreshFragment implements SwipeR
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         //下一步，进入详情界面...
         Node node = new Node((Meet) o);
-        DetailsActivity_.intent(mContext).extra("details", node).start();
+        DetailsActivity_.intent(mContext).extra("details", node).startForResult(2048);
     }
 
     @Override

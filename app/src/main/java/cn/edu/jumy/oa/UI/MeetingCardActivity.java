@@ -25,6 +25,7 @@ import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
 import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.PageScrollStateChanged;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.ColorRes;
@@ -270,5 +271,10 @@ public class MeetingCardActivity extends BaseActivity {
             super.onBackPressed();
         }
 
+    }
+
+    @OnActivityResult(2048)
+    void reSetData(){
+        getData();
     }
 }

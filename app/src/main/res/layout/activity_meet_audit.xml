@@ -26,7 +26,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="参会报名人员:"
+                android:text="参会人员:"
                 android:textColor="@color/black"
                 android:padding="15dp"/>
             <TableLayout
@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="已通过人员:"
+                android:text="听会人员:"
                 android:textColor="@color/black" />
 
             <TableLayout
@@ -62,7 +62,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="未通过人员:"
+                android:text="请假人员:"
                 android:textColor="@color/black"
                 android:padding="15dp"/>
             <TableLayout
