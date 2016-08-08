@@ -33,9 +33,9 @@ public class OAService {
     public static String base = "";
     public static String username = EMClient.getInstance().getCurrentUser() + "_";
     public static final String BASE_URL_ONLINE = "http://121.41.102.69:8080/OA_console/phone/";
-    public static final String BASE_URL_TEST = "http://192.168.3.124:8090/OA_console/phone/";
+    public static final String BASE_URL_TEST = "http://192.168.1.119:8080/OA_console/phone/";
 
-    public static final String BASE_URL = BASE_URL_ONLINE;
+    public static final String BASE_URL = BASE_URL_TEST;
 
     public abstract static class DateCallBack extends Callback<String> {
 
@@ -842,6 +842,7 @@ public class OAService {
             }
         });
     }
+
     /**
      * 获取转发时候的组织树
      *
@@ -884,6 +885,54 @@ public class OAService {
                 params.put("value", response);
                 OkHttpUtils.post()
                         .url(BASE_URL + "Relay")
+                        .params(params)
+                        .build().execute(callback);
+            }
+        });
+    }
+
+    /**
+     * 获取由我审批的公文和会议
+     *
+     * @param params   参数
+     * @param callback 回调
+     */
+    public static void findApproveRelay(final Map<String, String> params, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                params.put("value", response);
+                OkHttpUtils.post()
+                        .url(BASE_URL + "findApproveRelay")
+                        .params(params)
+                        .build().execute(callback);
+            }
+        });
+    }
+
+    /**
+     * 公文和会议的审批
+     *
+     * @param params
+     * @param callback
+     */
+    public static void RelayPass(final Map<String, String> params, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                params.put("value", response);
+                OkHttpUtils.post()
+                        .url(BASE_URL + "RelayPass")
                         .params(params)
                         .build().execute(callback);
             }

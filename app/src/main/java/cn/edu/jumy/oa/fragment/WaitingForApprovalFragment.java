@@ -12,25 +12,28 @@ import org.androidannotations.annotations.EFragment;
 import java.util.ArrayList;
 
 import cn.edu.jumy.oa.BroadCastReceiver.MeetBroadcastReceiver;
+import cn.edu.jumy.oa.BroadCastReceiver.RelayBroadcastReceiver;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
-import cn.edu.jumy.oa.bean.Meet;
+import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
+import cn.edu.jumy.oa.adapter.RelayAdapter;
+import cn.edu.jumy.oa.bean.Node;
+import cn.edu.jumy.oa.bean.Relay;
 
 /**
  * User: Jumy (yygutn@gmail.com)
  * Date: 16/7/24  下午5:55
  */
 @EFragment(R.layout.fragment_document_all)
-public class WaitingForApprovalFragment extends BaseSearchRefreshFragment{
-    MeetingCardAdapter adapter;
-    ArrayList<Meet> mList = new ArrayList<>();
+public class WaitingForApprovalFragment extends BaseSearchRefreshFragment {
+    RelayAdapter adapter;
+    ArrayList<Relay> mList = new ArrayList<>();
 
-    MeetBroadcastReceiver meetBroadcastReceiver = new MeetBroadcastReceiver(){
+    RelayBroadcastReceiver meetBroadcastReceiver = new RelayBroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             super.onReceive(context, intent);
-            if (getType() == 0){
-                mList = getMeetList();
+            if (getType() == 0) {
+                mList = getList();
                 adapter.setList(mList);
             }
         }
@@ -45,20 +48,20 @@ public class WaitingForApprovalFragment extends BaseSearchRefreshFragment{
 
     @Override
     protected void updateListView() {
-        adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification,mList);
+        adapter = new RelayAdapter(mContext, R.layout.item_card_notification, mList);
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
     }
 
     @Override
     public void onTextChanged(CharSequence message) {
-        if (TextUtils.isEmpty(message)){
+        if (TextUtils.isEmpty(message)) {
             return;
         }
-        ArrayList<Meet> list = new ArrayList<>();
-        for (Meet meet : mList){
-            if (meet.docTitle.contains(message)){
-                list.add(meet);
+        ArrayList<Relay> list = new ArrayList<>();
+        for (Relay temp : mList) {
+            if (temp.docTitle.contains(message)) {
+                list.add(temp);
             }
         }
         adapter.setList(list);
@@ -72,12 +75,14 @@ public class WaitingForApprovalFragment extends BaseSearchRefreshFragment{
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         //下一步，进入详情界面,通过审批或者退回
+        DetailsActivity_.intent(mContext).extra("from_SP",true).extra("details",new Node((Relay)o)).startForResult(2048);
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         try {
-            if (meetBroadcastReceiver != null){
+            if (meetBroadcastReceiver != null) {
                 mContext.unregisterReceiver(meetBroadcastReceiver);
             }
         } catch (Exception e) {

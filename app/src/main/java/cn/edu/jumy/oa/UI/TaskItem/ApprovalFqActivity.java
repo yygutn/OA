@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.androidannotations.annotations.AfterExtras;
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 
 import java.text.SimpleDateFormat;
@@ -16,11 +17,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.edu.jumy.oa.CallBack.MeetCallback;
+import cn.edu.jumy.oa.CallBack.RelayCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.MeetResponse;
+import cn.edu.jumy.oa.Response.RelayResponse;
 import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
+import cn.edu.jumy.oa.adapter.RelayAdapter;
 import cn.edu.jumy.oa.bean.Meet;
+import cn.edu.jumy.oa.bean.Relay;
 
 /**
  * User: Jumy (yygutn@gmail.com)
@@ -29,17 +34,17 @@ import cn.edu.jumy.oa.bean.Meet;
 @EActivity(R.layout.activity_fa_qi)
 public class ApprovalFqActivity extends BaseSearchRefreshActivity {
 
-    MeetingCardAdapter adapter;
-    ArrayList<Meet> mList = new ArrayList<>();
+    RelayAdapter adapter;
+    ArrayList<Relay> mList = new ArrayList<>();
 
     int index = 1;
     static final int basePages = 20;
 
-    @AfterExtras
+    @AfterViews
     void getData() {
-        OAService.findRelay(getParams(index), new MeetCallback() {
+        OAService.findRelay(getParams(index), new RelayCallback() {
             @Override
-            public void onResponse(MeetResponse response, int id) {
+            public void onResponse(RelayResponse response, int id) {
                 if (response != null && response.code == 0 && response.data != null) {
                     mList.addAll(response.data.pageObject);
                     adapter.setList(new ArrayList(mList));
@@ -56,6 +61,10 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
         Map<String, String> params = new HashMap<>();
         params.put("page", Index + "");
         params.put("size", basePages + "");
+        params.put("level", "");
+        params.put("docNo", "");
+        params.put("docTitle", "");
+        params.put("name", "");
         return params;
     }
 
@@ -67,7 +76,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void initListView() {
-        adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification, new ArrayList(mList));
+        adapter = new RelayAdapter(mContext, R.layout.item_card_notification, new ArrayList(mList));
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
     }
@@ -80,9 +89,9 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
     @Override
     protected void doLoadMore() {
         //加载更多
-        OAService.findRelay(getParams(index++), new MeetCallback() {
+        OAService.findRelay(getParams(index++), new RelayCallback() {
             @Override
-            public void onResponse(MeetResponse response, int id) {
+            public void onResponse(RelayResponse response, int id) {
                 if (response != null && response.code == 0 && response.data != null) {
                     mList.addAll(response.data.pageObject);
                     adapter.setList(new ArrayList(mList));
@@ -96,12 +105,12 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
     @Override
     public void doRefresh() {
         //下拉刷新
-        OAService.findRelay(getParams(1), new MeetCallback() {
+        OAService.findRelay(getParams(1), new RelayCallback() {
             @Override
-            public void onResponse(MeetResponse response, int id) {
+            public void onResponse(RelayResponse response, int id) {
                 if (response != null && response.code == 0 && response.data != null) {
                     int size = response.data.pageObject.size();
-                    Meet node = mList.get(0);
+                    Relay node = mList.get(0);
                     int position = 0;
                     for (int i = size - 1; i >= 0; i--) {
                         if (response.data.pageObject.get(i).id.equals(node.id)) {
@@ -125,11 +134,9 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
             showToast("请输入关键字");
             return;
         }
-        ArrayList<Meet> list = new ArrayList<>();
-        for (Meet node : mList) {
-            if (node.docTitle.contains(str)) {
-                list.add(node);
-            }
+        ArrayList<Relay> list = new ArrayList<>();
+        for (Relay node : mList) {
+
         }
         adapter.setList(list);
     }

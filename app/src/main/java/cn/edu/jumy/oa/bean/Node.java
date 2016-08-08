@@ -1,5 +1,7 @@
 package cn.edu.jumy.oa.bean;
 
+import android.text.TextUtils;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -111,6 +113,7 @@ public class Node implements Serializable {
     public String uuid = "";
     public String tid = "";
     public String summary = "";
+    public String remark = "";
 
     public Node() {
 
@@ -135,7 +138,7 @@ public class Node implements Serializable {
         this.id = doc.id;
         this.level = doc.level;
         this.content = doc.docSummary;
-        this.department = doc.department;
+        this.department = doc.departmentInfo;
         this.documentNumber = doc.docNo;
         this.attachmentList = doc.attachmentList;
         this.title = doc.docTitle;
@@ -166,5 +169,28 @@ public class Node implements Serializable {
         this.uuid = meet.uuid;
         this.title = meet.docTitle;
         this.tid = meet.tid;
+    }
+
+    public Node(Relay node) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        this.contactName = node.contactName;
+        this.type = TextUtils.isEmpty(node.meetCompany)?1:0;
+        this.attachmentList = node.attachmentList;
+        this.id = node.id;
+        this.meetingLocation = node.addr;
+        this.meetingTime = sdf.format(new Date(node.meetTime));
+        this.undertakingUnit = node.meetCompanyName;
+        this.dispatchTime = sdf.format(new Date(node.createTime));
+        this.dispatchUnit = node.sendDepartmentInfo;
+        this.department = node.departmentInfo;
+        this.level = node.level;
+        this.content = node.docSummary;
+        this.signStatus = node.signStatus;
+        this.cuid = node.cuid;
+        this.uuid = node.uuid;
+        this.title = node.docTitle;
+        this.tid = node.tid;
+        this.documentNumber = node.docNo;
+        this.remark = node.remark;
     }
 }

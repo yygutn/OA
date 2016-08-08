@@ -12,9 +12,12 @@ import org.androidannotations.annotations.EFragment;
 import java.util.ArrayList;
 
 import cn.edu.jumy.oa.BroadCastReceiver.MeetBroadcastReceiver;
+import cn.edu.jumy.oa.BroadCastReceiver.RelayBroadcastReceiver;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
-import cn.edu.jumy.oa.bean.Meet;
+import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
+import cn.edu.jumy.oa.adapter.RelayAdapter;
+import cn.edu.jumy.oa.bean.Node;
+import cn.edu.jumy.oa.bean.Relay;
 
 /**
  * User: Jumy (yygutn@gmail.com)
@@ -22,15 +25,15 @@ import cn.edu.jumy.oa.bean.Meet;
  */
 @EFragment(R.layout.fragment_document_all)
 public class AlreadyApprovalFragment extends BaseSearchRefreshFragment{
-    MeetingCardAdapter adapter;
-    ArrayList<Meet> mList = new ArrayList<>();
+    RelayAdapter adapter;
+    ArrayList<Relay> mList = new ArrayList<>();
 
-    MeetBroadcastReceiver meetBroadcastReceiver = new MeetBroadcastReceiver(){
+    RelayBroadcastReceiver relayBroadcastReceiver = new RelayBroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent) {
             super.onReceive(context, intent);
             if (getType() == 1){
-                mList = getMeetList();
+                mList = getList();
                 adapter.setList(mList);
             }
         }
@@ -40,11 +43,11 @@ public class AlreadyApprovalFragment extends BaseSearchRefreshFragment{
     protected void initList() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(MeetBroadcastReceiver.MEET);
-        mContext.registerReceiver(meetBroadcastReceiver, filter);
+        mContext.registerReceiver(relayBroadcastReceiver, filter);
     }
     @Override
     protected void updateListView() {
-        adapter = new MeetingCardAdapter(mContext, R.layout.item_card_notification,mList);
+        adapter = new RelayAdapter(mContext, R.layout.item_card_notification,mList);
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
     }
@@ -54,8 +57,8 @@ public class AlreadyApprovalFragment extends BaseSearchRefreshFragment{
         if (TextUtils.isEmpty(message)){
             return;
         }
-        ArrayList<Meet> list = new ArrayList<>();
-        for (Meet meet : mList){
+        ArrayList<Relay> list = new ArrayList<>();
+        for (Relay meet : mList){
             if (meet.docTitle.contains(message)){
                 list.add(meet);
             }
@@ -71,14 +74,15 @@ public class AlreadyApprovalFragment extends BaseSearchRefreshFragment{
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         //下一步，进入详情界面...
+        DetailsActivity_.intent(mContext).extra("from_SP",true).extra("details",new Node((Relay)o)).startForResult(2048);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         try {
-            if (meetBroadcastReceiver != null) {
-                mContext.unregisterReceiver(meetBroadcastReceiver);
+            if (relayBroadcastReceiver != null) {
+                mContext.unregisterReceiver(relayBroadcastReceiver);
             }
         } catch (Exception e) {
             e.printStackTrace();

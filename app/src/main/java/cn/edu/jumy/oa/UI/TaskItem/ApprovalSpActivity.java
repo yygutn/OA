@@ -23,34 +23,25 @@ import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
 import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.PageScrollStateChanged;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.ColorRes;
 import org.androidannotations.annotations.res.DrawableRes;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
-import cn.edu.jumy.oa.BroadCastReceiver.DocumentBroadcastReceiver;
-import cn.edu.jumy.oa.BroadCastReceiver.MeetBroadcastReceiver;
-import cn.edu.jumy.oa.CallBack.MeetCallback;
+import cn.edu.jumy.oa.BroadCastReceiver.RelayBroadcastReceiver;
+import cn.edu.jumy.oa.CallBack.RelayCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.Response.MeetResponse;
-import cn.edu.jumy.oa.bean.Doc;
-import cn.edu.jumy.oa.bean.Meet;
-import cn.edu.jumy.oa.fragment.AlreadyApprovalFragment;
+import cn.edu.jumy.oa.Response.RelayResponse;
+import cn.edu.jumy.oa.bean.Relay;
 import cn.edu.jumy.oa.fragment.AlreadyApprovalFragment_;
 import cn.edu.jumy.oa.fragment.BaseSearchRefreshFragment;
-import cn.edu.jumy.oa.fragment.DocumentAllFragment_;
-import cn.edu.jumy.oa.fragment.DocumentReadFragment_;
-import cn.edu.jumy.oa.fragment.DocumentUnreadFragment_;
-import cn.edu.jumy.oa.fragment.WaitingForApprovalFragment;
 import cn.edu.jumy.oa.fragment.WaitingForApprovalFragment_;
 
 /**
@@ -75,81 +66,54 @@ public class ApprovalSpActivity extends BaseActivity {
     MyAdapter adapter;
 
     @AfterExtras
-    void extras(){
+    void getList(){
         //getData from internet
+        OAService.findApproveRelay(getParams(), new RelayCallback() {
+            @Override
+            public void onResponse(RelayResponse response, int id) {
+                if (response.code == 1 || response.data == null) {
+                    showToast("获取会议列表失败");
+                    return;
+                }
+                ArrayList<Relay> list = response.data.pageObject;
+                //未审批-list
+                ArrayList<Relay> list1 = new ArrayList<>();
+                //已审批-list
+                ArrayList<Relay> list0 = new ArrayList<>();
 
-//        OAService.meetReceive(getParams(), new MeetCallback() {
-//            @Override
-//            public void onResponse(MeetResponse response, int id) {
-//                if (response.code == 1 || response.data == null) {
-//                    showToast("获取会议列表失败");
-//                    return;
-//                }
-//                ArrayList<Meet> list = response.data.pageObject;
-//                //未审批-list
-//                ArrayList<Meet> list0 = new ArrayList<>();
-//                //已审批-list
-//                ArrayList<Meet> list1 = new ArrayList<>();
-//
-//                for (Meet meet : list){
-//                    if (meet.passStatus == 3){
-//                        list0.add(meet);
-//                    } else if (meet.passStatus != 2){
-//                        list1.add(meet);
-//                    }
-//                }
-//                //已签收
-//                Intent intent = new Intent(MeetBroadcastReceiver.MEET);
-//                intent.putParcelableArrayListExtra(MeetBroadcastReceiver.MEET_LIST, list0);
-//                intent.putExtra(MeetBroadcastReceiver.TYPE, 0);
-//                sendBroadcast(intent);
-//                //未签收
-//                intent = new Intent(MeetBroadcastReceiver.MEET);
-//                intent.putParcelableArrayListExtra(MeetBroadcastReceiver.MEET_LIST, list1);
-//                intent.putExtra(MeetBroadcastReceiver.TYPE, 1);
-//                sendBroadcast(intent);
-//            }
-//        });
+                for (Relay temp : list){
+                    if (temp.remark.equals("1")){
+                        list1.add(temp);
+                    } else if (temp.remark.equals("0")){
+                        list0.add(temp);
+                    }
+                }
+                //已审批
+                Intent intent = new Intent(RelayBroadcastReceiver.RELAY);
+                intent.putParcelableArrayListExtra(RelayBroadcastReceiver.RELAY_LIST, list0);
+                intent.putExtra(RelayBroadcastReceiver.TYPE, 0);
+                sendBroadcast(intent);
+                //未审批
+                intent = new Intent(RelayBroadcastReceiver.RELAY);
+                intent.putParcelableArrayListExtra(RelayBroadcastReceiver.RELAY_LIST, list1);
+                intent.putExtra(RelayBroadcastReceiver.TYPE, 1);
+                sendBroadcast(intent);
+            }
+        });
     }
 
     private Map<String,String> getParams() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        int year, month, day;
-        Calendar calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR) - 1900;
-        month = calendar.get(Calendar.MONTH);
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-        if ((month < 8 && (month & 1) == 1) || (month >= 8 && (month & 1) == 0)) {
-            if (day == 31) {
-                day--;
-            }
-            if (month == 2 && day > 28) {
-                day = 28;
-            }
-            if (month == 0) {
-                month = 11;
-                year--;
-            } else {
-                month--;
-            }
-        } else {
-            month--;
-        }
-        String before = sdf.format(new Date(year, month, day));
-        String now = sdf.format(date);
 
         Map<String, String> params = new HashMap<>();
         params.put("page", "1");
-        params.put("size", "20");
-        params.put("startTime", before);
-        params.put("endTime", now);
+        params.put("size", "100");
         params.put("level", "");
         params.put("docNo", "");
         params.put("docTitle", "");
         params.put("meetCompany", "");
         params.put("signStatus", "");
         params.put("passStatus", "");
+        params.put("name", "");
         return params;
     }
 
@@ -295,5 +259,10 @@ public class ApprovalSpActivity extends BaseActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @OnActivityResult(2048)
+    void reSet(){
+        getList();
     }
 }

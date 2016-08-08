@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -33,7 +34,10 @@ import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
@@ -50,6 +54,7 @@ import cn.edu.jumy.oa.bean.Account;
 import cn.edu.jumy.oa.bean.Annex;
 import cn.edu.jumy.oa.bean.Attachment;
 import cn.edu.jumy.oa.bean.Node;
+import cn.edu.jumy.oa.bean.Notify;
 import cn.edu.jumy.oa.bean.OrgRelay;
 import okhttp3.Call;
 import okhttp3.Response;
@@ -89,8 +94,8 @@ public class DetailsActivity extends BaseActivity {
     protected Node mNode = new Node();
     @Extra("from_sent_meet")
     boolean fromSentMeet = false;
-
-    ArrayList<OrgRelay> mList = new ArrayList<>();
+    @Extra("from_SP")
+    boolean fromSP = false;
 
     ClipboardManager clipboardManager;
 
@@ -110,10 +115,10 @@ public class DetailsActivity extends BaseActivity {
             showDebugException(e);
         }
 
-        if (mNode.type == 1) {
+        if (mNode.type == 1 && !fromSP && !fromSentMeet) {
             DocSignBackground();
             setResult(1025);
-        } else if (mNode.type == 0) {
+        } else if (mNode.type == 0 && !fromSP && !fromSentMeet) {
             MeetSign();
         }
     }
@@ -180,7 +185,7 @@ public class DetailsActivity extends BaseActivity {
             case 0: {
                 mTitleBar.setTitle("会议详情");
 //                mDocumentDetailsLevel.setVisibility(View.GONE);
-                mDocumentDetailsSignUp.setVisibility(fromSentMeet ? View.GONE : View.VISIBLE);
+                mDocumentDetailsSignUp.setVisibility(fromSentMeet || fromSP ? View.GONE : View.VISIBLE);
                 break;
             }
             case 1: {
@@ -383,8 +388,8 @@ public class DetailsActivity extends BaseActivity {
                                         }
                                     }
                                     final Annex tempNode = annex;
-                                    if (annex != null && annex.getFile() != null){
-                                        CallOtherOpenFile.openFile(mContext,annex.getFile());
+                                    if (annex != null && annex.getFile() != null) {
+                                        CallOtherOpenFile.openFile(mContext, annex.getFile());
                                         alertDialog.cancel();
                                     } else {
                                         OAService.downloadAttachment(id, new FileCallBack(filepath, filename) {
@@ -400,7 +405,7 @@ public class DetailsActivity extends BaseActivity {
 
                                             @Override
                                             public void syncSaveToSQL(File file) {
-                                                if (tempNode != null){
+                                                if (tempNode != null) {
                                                     tempNode.setFileName(newFileName);
                                                     tempNode.setFile(file);
                                                     if (tempNode.save()) {
@@ -448,7 +453,7 @@ public class DetailsActivity extends BaseActivity {
         for (int i = 1; i < length - 1; i++) {
             tempFileName += "." + str[i];
         }
-        tempFileName = tempFileName + "_" + mNode.dispatchTime + "." +str[length - 1];
+        tempFileName = tempFileName + "_" + mNode.dispatchTime + "." + str[length - 1];
         return tempFileName;
     }
 
@@ -486,15 +491,60 @@ public class DetailsActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (mNode.type != 2) {
+        if (fromSP && mNode.remark.equals("0")) {
+            getMenuInflater().inflate(R.menu.details_shenpi, menu);
+        } else if (!fromSP && mNode.type != 2) {
             getMenuInflater().inflate(R.menu.details_share, menu);
         }
         return super.onCreateOptionsMenu(menu);
     }
 
     @OptionsItem(R.id.action_share)
-    void share(){
-        OrgRelaySelectActivity_.intent(mContext).extra("type",mNode.type).extra("id",mNode.id).start();
+    void share() {
+        OrgRelaySelectActivity_.intent(mContext).extra("type", mNode.type).extra("id", mNode.id).start();
     }
 
+    @OptionsItem(R.id.action_shenpi)
+    void shenpi() {
+        final EditText editText = new EditText(mContext);
+        AlertDialog dialog = new AlertDialog.Builder(mContext)
+                .setTitle("转发审批意见")
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        skip2Sp(editText.getText().toString());
+                    }
+                })
+                .setView(editText)
+                .create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    /**
+     * @param message 转发审批意见
+     */
+    private void skip2Sp(String message) {
+        Map<String, String> params = new HashMap<>();
+        params.put("tid", mNode.tid);
+        params.put("passRemark", message);
+        params.put("signnum", "");
+
+        OAService.RelayPass(params, new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                showToast("审批失败");
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                Gson gson = new Gson();
+                BaseResponse baseResponse = gson.fromJson(response, BaseResponse.class);
+                showToast(baseResponse.msg);
+                if (baseResponse.code == 0) {
+                    backToPreActivity();
+                }
+            }
+        });
+    }
 }
