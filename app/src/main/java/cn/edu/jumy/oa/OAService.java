@@ -534,6 +534,7 @@ public class OAService {
             }
         });
     }
+
     /**
      * 批量添加报名人员
      */
@@ -548,8 +549,8 @@ public class OAService {
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
                         .url(BASE_URL + "insertListMEntry")
-                        .addParams("value",response)
-                        .addParams("json",json)
+                        .addParams("value", response)
+                        .addParams("json", json)
                         .build().execute(callback);
             }
         });
@@ -746,6 +747,7 @@ public class OAService {
             }
         });
     }
+
     /**
      * 获取当前用户以及其组织名称
      *
@@ -768,6 +770,7 @@ public class OAService {
             }
         });
     }
+
     /**
      * 获取当前用户以及其组织名称
      *
@@ -785,12 +788,13 @@ public class OAService {
                 OkHttpUtils.post()
                         .url(BASE_URL + "getNotice")
                         .addParams("value", response)
-                        .addParams("id",id)
+                        .addParams("id", id)
                         .build()
                         .execute(callback);
             }
         });
     }
+
     /**
      * 会议接收删除报名人员
      *
@@ -808,9 +812,80 @@ public class OAService {
                 OkHttpUtils.post()
                         .url(BASE_URL + "delMEntry")
                         .addParams("value", response)
-                        .addParams("id",id)
+                        .addParams("id", id)
                         .build()
                         .execute(callback);
+            }
+        });
+    }
+
+    /**
+     * 获取由我所转发的公文
+     *
+     * @param params   参数
+     * @param callback 回调
+     */
+    public static void finddocRelay(final Map<String, String> params, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                params.put("value", response);
+                OkHttpUtils.post()
+                        .url(BASE_URL + "finddocRelay")
+                        .params(params)
+                        .build().execute(callback);
+            }
+        });
+    }
+    /**
+     * 获取转发时候的组织树
+     *
+     * @param callback
+     */
+    public static void getOrganizationTreeData(final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+
+                OkHttpUtils.post()
+                        .url(BASE_URL + "getOrganizationTreeData")
+                        .addParams("value", response)
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
+
+    /**
+     * 公文或者会议的转发
+     *
+     * @param params   参数
+     * @param callback 回调
+     */
+    public static void Relay(final Map<String, String> params, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                params.put("value", response);
+                OkHttpUtils.post()
+                        .url(BASE_URL + "Relay")
+                        .params(params)
+                        .build().execute(callback);
             }
         });
     }

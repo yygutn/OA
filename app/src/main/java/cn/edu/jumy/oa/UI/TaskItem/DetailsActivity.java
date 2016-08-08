@@ -10,6 +10,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
@@ -40,12 +41,16 @@ import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.AttachResponse;
 import cn.edu.jumy.oa.Response.BaseResponse;
+import cn.edu.jumy.oa.Response.OrgRelayResponse;
+import cn.edu.jumy.oa.UI.OrgRelaySelectActivity_;
 import cn.edu.jumy.oa.UI.SignUpMultiAbleActivity_;
 import cn.edu.jumy.oa.Utils.CallOtherOpenFile;
 import cn.edu.jumy.oa.Utils.CardGenerator;
+import cn.edu.jumy.oa.bean.Account;
 import cn.edu.jumy.oa.bean.Annex;
 import cn.edu.jumy.oa.bean.Attachment;
 import cn.edu.jumy.oa.bean.Node;
+import cn.edu.jumy.oa.bean.OrgRelay;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -54,7 +59,6 @@ import okhttp3.Response;
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EActivity(R.layout.activity_document_details)
-@OptionsMenu(R.menu.details_share)
 public class DetailsActivity extends BaseActivity {
     @ViewById(R.id.title_bar)
     protected Toolbar mTitleBar;
@@ -85,6 +89,8 @@ public class DetailsActivity extends BaseActivity {
     protected Node mNode = new Node();
     @Extra("from_sent_meet")
     boolean fromSentMeet = false;
+
+    ArrayList<OrgRelay> mList = new ArrayList<>();
 
     ClipboardManager clipboardManager;
 
@@ -477,8 +483,18 @@ public class DetailsActivity extends BaseActivity {
             showToast("获取附件列表失败");
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (mNode.type != 2) {
+            getMenuInflater().inflate(R.menu.details_share, menu);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
     @OptionsItem(R.id.action_share)
     void share(){
-        showToast("转发...待完善");
+        OrgRelaySelectActivity_.intent(mContext).extra("type",mNode.type).extra("id",mNode.id).start();
     }
+
 }
