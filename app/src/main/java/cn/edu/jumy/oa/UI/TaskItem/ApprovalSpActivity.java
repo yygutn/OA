@@ -107,13 +107,7 @@ public class ApprovalSpActivity extends BaseActivity {
         Map<String, String> params = new HashMap<>();
         params.put("page", "1");
         params.put("size", "100");
-        params.put("level", "");
-        params.put("docNo", "");
-        params.put("docTitle", "");
-        params.put("meetCompany", "");
-        params.put("signStatus", "");
-        params.put("passStatus", "");
-        params.put("name", "");
+        params.put("keywords", "");
         return params;
     }
 
