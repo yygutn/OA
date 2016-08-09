@@ -19,6 +19,7 @@ public class Node implements Serializable {
     public int type = 0;
 
     public String id = "";//主键
+    public String name = "";
     /**
      * 创建人员
      * --发文单位
@@ -169,12 +170,13 @@ public class Node implements Serializable {
         this.uuid = meet.uuid;
         this.title = meet.docTitle;
         this.tid = meet.tid;
+        this.name = meet.name;
     }
 
     public Node(Relay node) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         this.contactName = node.contactName;
-        this.type = TextUtils.isEmpty(node.meetCompany)?1:0;
+        this.type = node.type == 2 ? 0 : 1;
         this.attachmentList = node.attachmentList;
         this.id = node.id;
         this.meetingLocation = node.addr;
@@ -193,5 +195,6 @@ public class Node implements Serializable {
         this.documentNumber = node.docNo;
         this.remark = node.remark;
         this.signNum = node.signNum;
+        this.name = node.name;
     }
 }

@@ -56,6 +56,7 @@ public class Relay implements Parcelable {
     public String personnel;
     public String department;
     public int level;
+    public int type;
     public String docNo;
     public String docTitle;
     public String docSummary;

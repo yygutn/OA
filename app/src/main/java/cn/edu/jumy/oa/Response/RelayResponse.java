@@ -9,14 +9,14 @@ import cn.edu.jumy.oa.bean.Relay;
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 public class RelayResponse extends BaseResponse{
-    public Response data;
+    public RelayData data;
     public RelayResponse(BaseResponse baseResponse){
         this.code = baseResponse.code;
         this.msg = baseResponse.msg;
         this.data = null;
     }
 
-    public class Response{
+    public class RelayData {
 
         /**
          * page : 1

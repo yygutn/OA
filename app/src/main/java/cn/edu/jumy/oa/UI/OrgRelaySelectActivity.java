@@ -187,7 +187,8 @@ public class OrgRelaySelectActivity extends BaseActivity {
     private void sendRelay(String message, String ids) {
         Map<String, String> params = new HashMap<>();
         params.put("id", id);//公文或者会议的id
-        params.put("type", 1 - type + "");//转发的类型（0：代表公文  ，1：代表会议）
+        int mType = type == 0 ? 2 : 1;
+        params.put("type", mType + "");//转发的类型（0：代表公文  ，1：代表会议）
         params.put("organid", ids);//你选择的所有机构的id的集合，比如"1,2,3,4,5"这样的字符串
         OAService.Relay(params, new StringCallback() {
             @Override

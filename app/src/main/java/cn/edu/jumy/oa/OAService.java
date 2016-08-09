@@ -4,23 +4,14 @@ import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
-import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
-import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.Response.DateResponse;
-import cn.edu.jumy.oa.Response.DocResponse;
-import cn.edu.jumy.oa.Response.MeetResponse;
 import cn.edu.jumy.oa.safe.PasswordUtil;
 import okhttp3.Call;
-import okhttp3.MediaType;
 import okhttp3.Response;
 
 /**

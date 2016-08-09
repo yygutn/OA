@@ -165,6 +165,10 @@ public class SendMeetingActivity extends BaseActivity {
         if (!dirs.exists()) {
             dirs.mkdir();
         }
+        getMyInfo();
+    }
+
+    private void getMyInfo() {
         OAService.getMyUser(new UserCallback() {
             @Override
             public void onResponse(UserResponse response, int ID) {
@@ -182,6 +186,9 @@ public class SendMeetingActivity extends BaseActivity {
                 UndertakingUnitsID = response.data.oid;
                 if (!TextUtils.isEmpty(UndertakingUnitsID)) {
                     mDropDownMenuUnit.setText(UndertakingUnits);
+                }
+                if (TextUtils.isEmpty(UndertakingUnitsID)){
+                    getMyInfo();
                 }
             }
         });
@@ -307,6 +314,7 @@ public class SendMeetingActivity extends BaseActivity {
         params.put("contactName", contactName);
         params.put("contactPhone", contactPhone);
         params.put("addr", location);
+        params.put("name", name);
         params.put("meetTimeString", time);
         dealZipFile();
         OAService.meetSend(params, fileMap, new StringCallback() {
@@ -314,7 +322,7 @@ public class SendMeetingActivity extends BaseActivity {
             public void onError(Call call, Exception e, int id) {
                 progressDialog.dismiss();
                 showDebugException(e);
-                showToast("网络异常,发送失败");
+                showToast("服务器错误,发送失败");
             }
 
             @Override
