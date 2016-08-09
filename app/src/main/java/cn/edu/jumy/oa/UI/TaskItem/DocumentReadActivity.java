@@ -270,7 +270,6 @@ public class DocumentReadActivity extends BaseActivity {
                     return;
                 }
                 ArrayList<Doc> list = response.data.pageObject;
-                showDebugLogw(list.toString());
                 //全部
                 Intent intent = new Intent(DocumentBroadcastReceiver.DOC);
                 intent.putParcelableArrayListExtra(DocumentBroadcastReceiver.DOC_LIST, list);

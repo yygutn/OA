@@ -171,6 +171,8 @@ public class Node implements Serializable {
         this.title = meet.docTitle;
         this.tid = meet.tid;
         this.name = meet.name;
+        this.contactPhone = meet.contactPhone;
+        this.contactName = meet.contactName;
     }
 
     public Node(Relay node) {

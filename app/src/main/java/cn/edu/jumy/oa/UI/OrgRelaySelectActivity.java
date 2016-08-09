@@ -149,7 +149,7 @@ public class OrgRelaySelectActivity extends BaseActivity {
         final String IDS = ids;
         final EditText editText = new EditText(mContext);
         AlertDialog dialog = new AlertDialog.Builder(mContext)
-                .setTitle("转发意见")
+                .setTitle("备注")
                 .setView(editText)
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override

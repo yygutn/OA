@@ -2,6 +2,7 @@ package cn.edu.jumy.oa.UI.TaskItem;
 
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -9,7 +10,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.text.ClipboardManager;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.RelativeSizeSpan;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -23,21 +27,18 @@ import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.OptionsItem;
-import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
@@ -45,17 +46,14 @@ import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.AttachResponse;
 import cn.edu.jumy.oa.Response.BaseResponse;
-import cn.edu.jumy.oa.Response.OrgRelayResponse;
 import cn.edu.jumy.oa.UI.OrgRelaySelectActivity_;
 import cn.edu.jumy.oa.UI.SignUpMultiAbleActivity_;
 import cn.edu.jumy.oa.Utils.CallOtherOpenFile;
 import cn.edu.jumy.oa.Utils.CardGenerator;
-import cn.edu.jumy.oa.bean.Account;
 import cn.edu.jumy.oa.bean.Annex;
 import cn.edu.jumy.oa.bean.Attachment;
 import cn.edu.jumy.oa.bean.Node;
-import cn.edu.jumy.oa.bean.Notify;
-import cn.edu.jumy.oa.bean.OrgRelay;
+import cn.edu.jumy.oa.widget.datepicker.calendar.utils.MeasureUtil;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -73,14 +71,8 @@ public class DetailsActivity extends BaseActivity {
     protected AppCompatTextView mDocumentDetailsTitle;
     @ViewById(R.id.document_details_number)
     protected AppCompatTextView mDocumentDetailsNumber;
-    @ViewById(R.id.document_details_content_head)
-    protected AppCompatTextView mDocumentDetailsContentHead;
-    @ViewById(R.id.document_details_content)
-    protected AppCompatTextView mDocumentDetailsContent;
     @ViewById(R.id.document_details_content_meet)
     protected AppCompatTextView mDocumentDetailsContent_meet;
-    @ViewById(R.id.document_details_time)
-    protected AppCompatTextView mDocumentDetailsTime;
     @ViewById(R.id.document_details_other)
     protected AppCompatTextView mDocumentDetailsOther;
     @ViewById(R.id.document_details_download)
@@ -97,7 +89,25 @@ public class DetailsActivity extends BaseActivity {
     @Extra("from_SP")
     boolean fromSP = false;
 
-    ClipboardManager clipboardManager;
+    //附件列表
+    ArrayList<Attachment> mList;
+
+    public static ClipboardManager clipboardManager;
+
+    @AfterExtras
+    void getList() {
+        Map<String, String> params = new HashMap<>();
+        params.put("pid", TextUtils.isEmpty(mNode.id) ? "" : mNode.id);
+        OAService.getAttachmentList(params, new AttachListCallBack() {
+            @Override
+            public void onResponse(AttachResponse response, int id) {
+                mList = response.data;
+                if (mList == null || mList.size() <= 0) {
+                    doSign();
+                }
+            }
+        });
+    }
 
     @AfterViews
     void start() {
@@ -109,12 +119,10 @@ public class DetailsActivity extends BaseActivity {
                 backToPreActivity();
             }
         });
-        try {
-            setUpViews();
-        } catch (Exception e) {
-            showDebugException(e);
-        }
+        setUpViews();
+    }
 
+    private void doSign() {
         if (mNode.type == 1 && !fromSP && !fromSentMeet) {
             DocSignBackground();
             setResult(1025);
@@ -208,120 +216,46 @@ public class DetailsActivity extends BaseActivity {
                 break;
             }
             case 1: {
-                level = "特急";
+                level = "等级:特急";
                 break;
             }
             case 2: {
-                level = "加急";
+                level = "等级:加急";
                 break;
             }
             case 3: {
-                level = "平急";
+                level = "等级:平急";
                 break;
             }
             case 4: {
-                level = "特提";
+                level = "等级:特提";
                 break;
             }
             default:
                 break;
         }
-        try {
-            mDocumentDetailsLevel.setText(level);
-            if (!TextUtils.isEmpty(mNode.title)) {
-                mDocumentDetailsTitle.setText(mNode.title);
-            } else {
-                mDocumentDetailsTitle.setVisibility(View.GONE);
-            }
-            if (!TextUtils.isEmpty(mNode.documentNumber)) {
-                mDocumentDetailsNumber.setText(mNode.documentNumber);
-            } else {
-                mDocumentDetailsNumber.setVisibility(View.GONE);
-            }
-            if (TextUtils.isEmpty(mNode.dispatchUnit)) {
-                mDocumentDetailsContentHead.setVisibility(View.GONE);
-            } else {
-                mDocumentDetailsContentHead.setText(mNode.dispatchUnit + ":");
-            }
+        mDocumentDetailsLevel.setText(level);
+        if (!TextUtils.isEmpty(mNode.title)) {
+            mDocumentDetailsTitle.setText(mNode.title);
+        } else {
+            mDocumentDetailsTitle.setVisibility(View.GONE);
+        }
+        if (!TextUtils.isEmpty(mNode.documentNumber)) {
+            mDocumentDetailsNumber.setText("发文编号: "+mNode.documentNumber);
+        } else {
+            mDocumentDetailsNumber.setVisibility(View.GONE);
+        }
+        mDocumentDetailsContent_meet.setVisibility(View.VISIBLE);
+        mDocumentDetailsContent_meet.setText(CardGenerator.getContentString(mNode));
 
-            mDocumentDetailsContent.setVisibility(View.GONE);
-            mDocumentDetailsContent_meet.setVisibility(View.VISIBLE);
-            mDocumentDetailsContent_meet.setText(CardGenerator.getContentString(mNode));
-            mDocumentDetailsContent_meet.getViewTreeObserver().addOnGlobalLayoutListener(new OnTvGlobalLayoutListener());
-
-            mDocumentDetailsTime.setText(mNode.dispatchTime);
-            if (!TextUtils.isEmpty(mNode.other)) {
-                mDocumentDetailsOther.setText(mNode.other);
-            } else {
-                mDocumentDetailsOther.setVisibility(View.GONE);
-            }
-        } catch (Exception e) {
-            showDebugException(e);
+        if (!TextUtils.isEmpty(mNode.contactName) && !TextUtils.isEmpty(mNode.contactPhone)) {
+            mDocumentDetailsOther.setText("联系人: " + mNode.contactName + "\n" + "联系电话: " + mNode.contactPhone);
+        } else {
+            mDocumentDetailsOther.setVisibility(View.GONE);
         }
 
     }
 
-    private String autoSplitText(final TextView tv, final String indent) {
-        final String rawText = tv.getText().toString(); //原始文本
-        final Paint tvPaint = tv.getPaint(); //paint，包含字体等信息
-        final float tvWidth = tv.getWidth() - tv.getPaddingLeft() - tv.getPaddingRight(); //控件可用宽度
-        //将原始文本按行拆分
-        String[] rawTextLines = rawText.replaceAll("\r", "").split("\n");
-        StringBuilder sbNewText = new StringBuilder();
-
-        for (String rawTextLine : rawTextLines) {
-            //获取当前子串的悬挂头
-            String str = "";
-            int position = rawTextLine.indexOf(indent) + indent.length();
-            if (position == 0) {
-                position = rawTextLine.indexOf("：") + 1;
-            }
-            str = rawTextLine.substring(0, position);
-//            showDebugLogw("subStr:  " + str);
-            //将缩进处理成空格
-            String indentSpace = "";
-            float indentWidth = 0;
-            if (!TextUtils.isEmpty(str)) {
-                float rawIndentWidth = tvPaint.measureText(str);
-                if (rawIndentWidth < tvWidth) {
-                    while ((indentWidth = tvPaint.measureText(indentSpace)) < rawIndentWidth) {
-                        indentSpace += " ";
-                    }
-                }
-            }
-            if (tvPaint.measureText(rawTextLine) <= tvWidth) {
-                //如果整行宽度在控件可用宽度之内，就不处理了
-                sbNewText.append(rawTextLine);
-            } else {
-                //如果整行宽度超过控件可用宽度，则按字符测量，在超过可用宽度的前一个字符处手动换行
-                float lineWidth = 0;
-                for (int cnt = 0; cnt != rawTextLine.length(); ++cnt) {
-                    char ch = rawTextLine.charAt(cnt);
-                    //从手动换行的第二行开始，加上悬挂缩进
-                    if (lineWidth < 0.1f && cnt != 0) {
-                        sbNewText.append(indentSpace);
-                        lineWidth += indentWidth;
-                    }
-                    lineWidth += tvPaint.measureText(String.valueOf(ch));
-                    if (lineWidth <= tvWidth) {
-                        sbNewText.append(ch);
-                    } else {
-                        sbNewText.append("\n");
-                        lineWidth = 0;
-                        --cnt;
-                    }
-                }
-            }
-            sbNewText.append("\n");
-        }
-
-        //把结尾多余的\n去掉
-        if (!rawText.endsWith("\n")) {
-            sbNewText.deleteCharAt(sbNewText.length() - 1);
-        }
-
-        return sbNewText.toString();
-    }
 
     @Click({R.id.document_details_download, R.id.document_details_sign_up, R.id.document_details_cui})
     void click(View view) {
@@ -346,102 +280,103 @@ public class DetailsActivity extends BaseActivity {
     AlertDialog alertDialog;
 
     private void doFileDownload() {
-        Map<String, String> params = new HashMap<>();
-        params.put("pid", TextUtils.isEmpty(mNode.id) ? "" : mNode.id);
-        OAService.getAttachmentList(params, new AttachListCallBack() {
-            @Override
-            public void onResponse(AttachResponse response, int id) {
-                final ArrayList<Attachment> list = response.data;
-                if (list == null || list.size() == 0 || response.code == 1) {
-                    showToast("无附件");
-                    return;
-                }
-                ArrayList<String> item_list = new ArrayList<String>();
-                for (Attachment attachment : list) {
-                    item_list.add(attachment.getFileName());
-                }
-                final String[] items = item_list.toArray(new String[item_list.size()]);
-                alertDialog = new AlertDialog.Builder(mContext)
-                        .setTitle("附件查看 " +
-                                "\n(请点击文件名查看附件内容," +
-                                "\n查看后保存至文件柜)")
-                        .setItems(items, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, final int which) {
-                                try {
-                                    String id = list.get(which).getId();
-                                    id = TextUtils.isEmpty(id) ? "" : id;
-                                    String filepath = mContext.getExternalCacheDir().getAbsolutePath();
-                                    final String filename = list.get(which).getFileName();
-                                    //检索数据库，获取文件，否则下载
-                                    final String newFileName = getRealFileName(filename);
+        if (mList == null || mList.size() <= 0) {
+            showToast("无附件");
+            return;
+        }
+        ArrayList<String> item_list = new ArrayList<String>();
+        for (Attachment attachment : mList) {
+            item_list.add(attachment.getFileName());
+        }
+        final String[] items = item_list.toArray(new String[item_list.size()]);
+        SpannableString spannableString = new SpannableString("附件查看\n请点击文件名查看附件内容\n查看后保存至文件柜");
+        RelativeSizeSpan sizeSpan = new RelativeSizeSpan(0.9f);
+        RelativeSizeSpan sizeSpan0 = new RelativeSizeSpan(1.0f);
+        spannableString.setSpan(sizeSpan0,0,3,Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(sizeSpan,4,spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        final TextView title = new TextView(mContext);
+        title.setTextColor(Color.BLACK);
+        title.setText(spannableString);
+        int padding = MeasureUtil.dp2px(mContext,16);
+        title.setPadding(padding,padding,padding,0);
+        alertDialog = new AlertDialog.Builder(mContext)
+                .setCustomTitle(title)
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, final int which) {
+                        try {
+                            doSign();
+                            String id = mList.get(which).getId();
+                            id = TextUtils.isEmpty(id) ? "" : id;
+                            String filepath = mContext.getExternalCacheDir().getAbsolutePath();
+                            final String filename = mList.get(which).getFileName();
+                            //检索数据库，获取文件，否则下载
+                            final String newFileName = getRealFileName(filename);
 
-                                    final Attachment attachment = list.get(which);
-                                    ArrayList<Annex> annexArrayList = (ArrayList<Annex>) DataSupport
-                                            .where("username = ?", EMClient.getInstance().getCurrentUser()).find(Annex.class);
+                            final Attachment attachment = mList.get(which);
+                            ArrayList<Annex> annexArrayList = (ArrayList<Annex>) DataSupport
+                                    .where("username = ?", EMClient.getInstance().getCurrentUser()).find(Annex.class);
 
-                                    Annex annex = null;
+                            Annex annex = null;
 
-                                    for (Annex node : annexArrayList) {
-                                        if (node.getFileName().equals(newFileName) && node.getPid().equals(attachment.getPid())) {
-                                            annex = node;
-                                        }
-                                    }
-                                    final Annex tempNode = annex;
-                                    if (annex != null && annex.getFile() != null) {
-                                        CallOtherOpenFile.openFile(mContext, annex.getFile());
-                                        alertDialog.cancel();
-                                    } else {
-                                        OAService.downloadAttachment(id, new FileCallBack(filepath, filename) {
-                                            @Override
-                                            public void onError(Call call, Exception e, int id) {
-                                                showToast("下载附件失败");
-                                            }
-
-                                            @Override
-                                            public void onResponse(File file, int id) {
-                                                CallOtherOpenFile.openFile(mContext, file);
-                                            }
-
-                                            @Override
-                                            public void syncSaveToSQL(File file) {
-                                                if (tempNode != null) {
-                                                    tempNode.setFileName(newFileName);
-                                                    tempNode.setFile(file);
-                                                    if (tempNode.save()) {
-                                                        showDebugLoge(tempNode.getFileName() + "：保存成功");
-                                                    }
-                                                    return;
-                                                }
-                                                Annex annex = new Annex(attachment, file);
-                                                annex.setFileName(newFileName);
-                                                if (annex.save()) {
-                                                    showDebugLoge(annex.getFileName() + "：保存成功");
-                                                }
-
-                                            }
-                                        });
-                                        alertDialog.cancel();
-                                    }
-                                } catch (Exception e) {
-                                    showDebugException(e);
+                            for (Annex node : annexArrayList) {
+                                if (node.getFileName().equals(newFileName) && node.getPid().equals(attachment.getPid())) {
+                                    annex = node;
                                 }
                             }
-                        })
-                        .setNegativeButton("取消", null)
-                        .create();
-                alertDialog.getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                        clipboardManager.setText(items[position]);
-                        showToast("标题已复制到剪贴板");
-                        return true;
+                            final Annex tempNode = annex;
+                            if (annex != null && annex.getFile() != null) {
+                                CallOtherOpenFile.openFile(mContext, annex.getFile());
+                                alertDialog.cancel();
+                            } else {
+                                OAService.downloadAttachment(id, new FileCallBack(filepath, filename) {
+                                    @Override
+                                    public void onError(Call call, Exception e, int id) {
+                                        showToast("下载附件失败");
+                                    }
+
+                                    @Override
+                                    public void onResponse(File file, int id) {
+                                        CallOtherOpenFile.openFile(mContext, file);
+                                    }
+
+                                    @Override
+                                    public void syncSaveToSQL(File file) {
+                                        if (tempNode != null) {
+                                            tempNode.setFileName(newFileName);
+                                            tempNode.setFile(file);
+                                            if (tempNode.save()) {
+                                                showDebugLoge(tempNode.getFileName() + "：保存成功");
+                                            }
+                                            return;
+                                        }
+                                        Annex annex = new Annex(attachment, file);
+                                        annex.setFileName(newFileName);
+                                        if (annex.save()) {
+                                            showDebugLoge(annex.getFileName() + "：保存成功");
+                                        }
+
+                                    }
+                                });
+                                alertDialog.cancel();
+                            }
+                        } catch (Exception e) {
+                            showDebugException(e);
+                        }
                     }
-                });
-                alertDialog.show();
-                alertDialog.setCanceledOnTouchOutside(true);
+                })
+                .setNegativeButton("取消", null)
+                .create();
+        alertDialog.getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                clipboardManager.setText(items[position]);
+                showToast("标题已复制到剪贴板");
+                return true;
             }
         });
+        alertDialog.show();
+        alertDialog.setCanceledOnTouchOutside(true);
 
     }
 
@@ -455,18 +390,6 @@ public class DetailsActivity extends BaseActivity {
         }
         tempFileName = tempFileName + "_" + mNode.dispatchTime + "." + str[length - 1];
         return tempFileName;
-    }
-
-    private class OnTvGlobalLayoutListener implements ViewTreeObserver.OnGlobalLayoutListener {
-        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-        @Override
-        public void onGlobalLayout() {
-            mDocumentDetailsContent_meet.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            final String newText = autoSplitText(mDocumentDetailsContent_meet, ":");
-            if (!TextUtils.isEmpty(newText)) {
-                mDocumentDetailsContent_meet.setText(newText);
-            }
-        }
     }
 
     abstract class AttachListCallBack extends Callback<AttachResponse> {
@@ -528,7 +451,7 @@ public class DetailsActivity extends BaseActivity {
         Map<String, String> params = new HashMap<>();
         params.put("tid", mNode.tid);
         params.put("passRemark", message);
-        params.put("signnum", mNode.signNum+"");
+        params.put("signnum", mNode.signNum + "");
 
         OAService.RelayPass(params, new StringCallback() {
             @Override

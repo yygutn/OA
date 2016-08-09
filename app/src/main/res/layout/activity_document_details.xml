@@ -25,17 +25,6 @@
             android:orientation="vertical">
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/document_details_level"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:padding="15dp"
-                android:text="特急"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/document_details_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,63 +35,41 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/document_details_content_meet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:textSize="20sp"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/document_details_level"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:text="等级:特急"
+                android:textSize="20sp"
+                android:textColor="@color/black"/>
+
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/document_details_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:paddingRight="15dp"
-                android:text="123字[2016]321号"
-                android:textColor="@color/black" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/document_details_content_head"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
+                android:gravity="center_vertical"
                 android:paddingLeft="15dp"
-                android:text="杭州市人大常委:"
-                android:textColor="@color/black" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <android.support.v7.widget.AppCompatTextView
-                    android:visibility="visible"
-                    android:id="@+id/document_details_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:text="@string/temp"
-                    android:textColor="@color/black" />
-                <android.support.v7.widget.AppCompatTextView
-                    android:visibility="gone"
-                    android:id="@+id/document_details_content_meet"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="50dp"
-                    android:text="@string/content2"
-                    android:textColor="@color/black" />
-
-            </FrameLayout>
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/document_details_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:padding="15dp"
-                android:text="2016年5月20号"
+                android:text="发文编号:"
+                android:textSize="20sp"
                 android:textColor="@color/black" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/document_details_other"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
-                android:padding="15dp"
-                android:text="( 联系人：王自如        联系电话：15520479829 )"
+                android:paddingLeft="15dp"
+                android:textSize="20sp"
+                android:text="联系人：王自如\n联系电话：15520479829"
                 android:textColor="@color/black" />
 
 
@@ -117,8 +84,8 @@
                 android:text="附件查看"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
+
             <android.support.v7.widget.AppCompatTextView
-                android:visibility="gone"
                 android:id="@+id/document_details_sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -128,9 +95,10 @@
                 android:padding="10dp"
                 android:text="报名"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:visibility="gone" />
+
             <android.support.v7.widget.AppCompatTextView
-                android:visibility="gone"
                 android:id="@+id/document_details_cui"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -140,7 +108,8 @@
                 android:padding="10dp"
                 android:text="催收"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:visibility="gone" />
 
         </LinearLayout>
     </ScrollView>
