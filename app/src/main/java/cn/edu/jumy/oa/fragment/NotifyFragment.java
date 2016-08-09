@@ -92,10 +92,8 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
     Gson gson = new Gson();
     NotifyReceiveBroadCastReceiver notifyReceiveBroadCastReceiver = new NotifyReceiveBroadCastReceiver() {
         @Override
-        public void onNotifyReceive(Context context, Intent intent) {
-            final String action = intent.getStringExtra(NotifyUtils.ACTION);
-            showDebugLogd("onNotifyReceive", action);
-            NotifyBroadCastResponse response = gson.fromJson(action, NotifyBroadCastResponse.class);
+        public void onNotifyReceive(NotifyBroadCastResponse response) {
+            showDebugLogd("onNotifyReceive", response.toString());
             switch (response.action) {
                 case "docSend":
                 case "docReceive":

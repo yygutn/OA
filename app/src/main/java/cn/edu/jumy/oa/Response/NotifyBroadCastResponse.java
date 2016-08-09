@@ -7,4 +7,12 @@ package cn.edu.jumy.oa.Response;
 public class NotifyBroadCastResponse {
     public String action;
     public String id;
+
+    @Override
+    public String toString() {
+        return "NotifyBroadCastResponse{" +
+                "action='" + action + '\'' +
+                ", id='" + id + '\'' +
+                '}';
+    }
 }

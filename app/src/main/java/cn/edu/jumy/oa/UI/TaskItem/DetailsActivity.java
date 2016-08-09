@@ -69,8 +69,6 @@ public class DetailsActivity extends BaseActivity {
     protected AppCompatTextView mDocumentDetailsLevel;
     @ViewById(R.id.document_details_title)
     protected AppCompatTextView mDocumentDetailsTitle;
-    @ViewById(R.id.document_details_number)
-    protected AppCompatTextView mDocumentDetailsNumber;
     @ViewById(R.id.document_details_content_meet)
     protected AppCompatTextView mDocumentDetailsContent_meet;
     @ViewById(R.id.document_details_other)
@@ -239,11 +237,6 @@ public class DetailsActivity extends BaseActivity {
             mDocumentDetailsTitle.setText(mNode.title);
         } else {
             mDocumentDetailsTitle.setVisibility(View.GONE);
-        }
-        if (!TextUtils.isEmpty(mNode.documentNumber)) {
-            mDocumentDetailsNumber.setText("发文编号: "+mNode.documentNumber);
-        } else {
-            mDocumentDetailsNumber.setVisibility(View.GONE);
         }
         mDocumentDetailsContent_meet.setVisibility(View.VISIBLE);
         mDocumentDetailsContent_meet.setText(CardGenerator.getContentString(mNode));

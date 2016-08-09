@@ -23,6 +23,7 @@ public class CardGenerator {
                     message += "发文时间: " + (TextUtils.isEmpty(node.dispatchTime)?"":node.dispatchTime) + "\n";
                     message += "承办单位: " + (TextUtils.isEmpty(node.undertakingUnit)?"":node.undertakingUnit) + "\n";
                     message += "会议时间: " + (TextUtils.isEmpty(node.meetingTime)?"":node.meetingTime) + "\n";
+                    message += "发文编号: " + (TextUtils.isEmpty(node.documentNumber)?"":node.documentNumber) + "\n";
                     message += "会议地点: " + (TextUtils.isEmpty(node.meetingLocation)?"":node.meetingLocation);
                     break;
                 }

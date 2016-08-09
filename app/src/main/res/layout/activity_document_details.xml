@@ -53,15 +53,6 @@
                 android:textColor="@color/black"/>
 
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/document_details_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:paddingLeft="15dp"
-                android:text="发文编号:"
-                android:textSize="20sp"
-                android:textColor="@color/black" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/document_details_other"
