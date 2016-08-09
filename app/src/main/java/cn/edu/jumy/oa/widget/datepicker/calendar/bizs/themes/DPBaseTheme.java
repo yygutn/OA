@@ -60,6 +60,6 @@ public class DPBaseTheme extends DPTheme {
 
 	@Override
 	public int colorChooseText() {
-		return 0x00000000;
+		return 0xFFFFFFFF;
 	}
 }

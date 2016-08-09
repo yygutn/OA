@@ -31,4 +31,14 @@ public class DPCNTheme extends DPBaseTheme {
     public int colorDeferred() {
         return 0x50B48172;
     }
+
+    /**
+     * 主动覆盖颜色的日期文字颜色
+     */
+    public int colorChooseText = 0xFFFFFFFF;
+
+    @Override
+    public int colorChooseText() {
+        return colorChooseText;
+    }
 }

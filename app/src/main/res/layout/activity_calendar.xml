@@ -22,6 +22,7 @@
     <include layout="@layout/top_week_title" />
 
     <cn.edu.jumy.oa.widget.datepicker.ScrollLayout
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:background="@color/white"
         android:layout_height="wrap_content">

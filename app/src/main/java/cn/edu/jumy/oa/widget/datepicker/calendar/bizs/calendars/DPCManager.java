@@ -26,6 +26,7 @@ public final class DPCManager {
     private static final HashMap<String, Set<String>> DECOR_CACHE_TR = new HashMap<>();
     private static final HashMap<String, Set<String>> DECOR_CACHE_L = new HashMap<>();
     private static final HashMap<String, Set<String>> DECOR_CACHE_R = new HashMap<>();
+    private static boolean dataChanged = false;
 
     private static DPCManager sManager;
 
@@ -140,7 +141,7 @@ public final class DPCManager {
      */
     public DPInfo[][] obtainDPInfo(int year, int month) {
         HashMap<Integer, DPInfo[][]> dataOfYear = DATE_CACHE.get(year);
-        if (null != dataOfYear && dataOfYear.size() != 0) {
+        if (null != dataOfYear && dataOfYear.size() != 0 && dataChanged == false) {
             DPInfo[][] dataOfMonth = dataOfYear.get(month);
             if (dataOfMonth != null) {
                 return dataOfMonth;
@@ -149,7 +150,8 @@ public final class DPCManager {
             dataOfYear.put(month, dataOfMonth);
             return dataOfMonth;
         }
-        if (null == dataOfYear) dataOfYear = new HashMap<>();
+        dataChanged = false;
+        dataOfYear = new HashMap<>();
         DPInfo[][] dataOfMonth = buildDPInfo(year, month);
         dataOfYear.put((month), dataOfMonth);
         DATE_CACHE.put(year, dataOfYear);
@@ -167,6 +169,7 @@ public final class DPCManager {
             days.add(str.substring(index + 1, str.length()));
             cache.put(key, days);
         }
+        dataChanged = true;
     }
 
     private DPInfo[][] buildDPInfo(int year, int month) {

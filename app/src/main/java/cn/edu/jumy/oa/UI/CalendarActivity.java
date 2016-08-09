@@ -5,12 +5,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Handler;
+import android.support.annotation.ColorInt;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatui.DemoApplication;
@@ -22,6 +25,7 @@ import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.res.ColorRes;
 import org.androidannotations.annotations.res.StringRes;
 
 import java.text.SimpleDateFormat;
@@ -42,6 +46,7 @@ import cn.edu.jumy.oa.Utils.CardGenerator;
 import cn.edu.jumy.oa.bean.Alarm;
 import cn.edu.jumy.oa.bean.Meet;
 import cn.edu.jumy.oa.bean.Node;
+import cn.edu.jumy.oa.widget.datepicker.ScrollLayout;
 import cn.edu.jumy.oa.widget.datepicker.calendar.bizs.decors.DPDecor;
 import cn.edu.jumy.oa.widget.datepicker.calendar.cons.DPMode;
 import cn.edu.jumy.oa.widget.datepicker.calendar.utils.MeasureUtil;
@@ -63,6 +68,8 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
     Toolbar toolbar;
     @ViewById(R.id.content_layout)
     LinearLayout contentLayout;
+    @ViewById(R.id.scroll_view)
+    ScrollLayout root_layout;
 
 
     //会议日期列表
@@ -97,6 +104,16 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
         if (mTimeStamp > 100) {
             now.setTimeInMillis(mTimeStamp);
         }
+        initMonthView();
+        weekView.setDPMode(DPMode.SINGLE);
+        weekView.setDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1);
+        weekView.setFestivalDisplay(true);
+        weekView.setTodayDisplay(true);
+        weekView.setOnDatePickedListener(this);
+
+    }
+
+    private void initMonthView() {
         monthView.setDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1);
         monthView.setFestivalDisplay(true);
         monthView.setTodayDisplay(true);
@@ -107,19 +124,16 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
         monthView.setDPDecor(new DPDecor() {
             @Override
             public void drawDecorBG(Canvas canvas, Rect rect, Paint paint) {
-                paint.setColor(Color.RED);
+                paint.setColor(pressed);
                 canvas.drawCircle(rect.centerX(), rect.centerY(), rect.width() / 2F, paint);
             }
+
         });
         //end
-
-        weekView.setDPMode(DPMode.SINGLE);
-        weekView.setDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1);
-        weekView.setFestivalDisplay(true);
-        weekView.setTodayDisplay(true);
-        weekView.setOnDatePickedListener(this);
-
     }
+
+    @ColorRes(R.color.btn_red_hover)
+    int pressed;
 
     private void initMeetingList() {
         mMeetingList.clear();
@@ -134,6 +148,8 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
             mMeetingList.add(time);
             mMeetingListCopy.add(timeCopy);
         }
+        monthView.mCManager.setDecorBG(mMeetingList);
+        monthView.postInvalidate();
         SimpleDateFormat format1 = new SimpleDateFormat("yyyy.MM.dd");
         onDatePicked(format1.format(new Date()));
     }
@@ -175,15 +191,15 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
 
     private void getList(int year, int month) {
         int day = 1;
-        if (isLeapYear(year) && month == 1){
+        if (isLeapYear(year) && month == 1) {
             day = 29;
         } else {
             day = arr[month];
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        String start = sdf.format(new Date(year-1900, month, 1));
-        String end = sdf.format(new Date(year-1900, month, day));
+        String start = sdf.format(new Date(year - 1900, month, 1));
+        String end = sdf.format(new Date(year - 1900, month, day));
 
         Map<String, String> params = new HashMap<>();
         params.put("page", "1");
