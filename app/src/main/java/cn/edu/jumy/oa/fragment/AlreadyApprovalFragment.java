@@ -32,7 +32,7 @@ public class AlreadyApprovalFragment extends BaseSearchRefreshFragment{
         @Override
         public void onReceive(Context context, Intent intent) {
             super.onReceive(context, intent);
-            if (getType() == 1){
+            if (getType() == 0){
                 mList = getList();
                 adapter.setList(mList);
             }

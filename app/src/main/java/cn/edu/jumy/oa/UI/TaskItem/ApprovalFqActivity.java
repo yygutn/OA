@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.zhy.http.okhttp.callback.StringCallback;
+
 import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -22,10 +24,12 @@ import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.MeetResponse;
 import cn.edu.jumy.oa.Response.RelayResponse;
+import cn.edu.jumy.oa.UI.AuditDetailsActivity_;
 import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
 import cn.edu.jumy.oa.adapter.RelayAdapter;
 import cn.edu.jumy.oa.bean.Meet;
 import cn.edu.jumy.oa.bean.Relay;
+import okhttp3.Call;
 
 /**
  * User: Jumy (yygutn@gmail.com)
@@ -61,10 +65,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
         Map<String, String> params = new HashMap<>();
         params.put("page", Index + "");
         params.put("size", basePages + "");
-        params.put("level", "");
-        params.put("docNo", "");
-        params.put("docTitle", "");
-        params.put("name", "");
+        params.put("keywords", "");
         return params;
     }
 
@@ -84,6 +85,8 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         showDebugLogd(o.toString());
+        Relay node = (Relay) o;
+        AuditDetailsActivity_.intent(mContext).extra("id",node.id).extra("type",(node.type == 1 ? 1 : 2) + "").start();
     }
 
     @Override

@@ -34,10 +34,6 @@ public class AppManager {
         mActivityStack = new Stack<>();
     }
 
-    public static void addActivities(BaseActivity activity) {
-        AppManager.getInstance().addActivity(activity);
-    }
-
     /**
      * 添加Activity到堆栈
      */
@@ -48,19 +44,6 @@ public class AppManager {
         mActivityStack.push(activity);
         Logger.t(TAG).w("add " + activity.getLocalClassName() + "\n" + "current size is : " + mActivityStack.size());
         logStackInfo();
-    }
-
-    /**
-     * 添加单例Activity到堆栈
-     */
-    public void addSingleActivity(BaseActivity activity) {
-        if (mActivityStack == null) {
-            mActivityStack = new Stack<>();
-        }
-        if (!mActivityStack.contains(activity)) {
-            mActivityStack.push(activity);
-            Log.e("AppManager", "add Single" + activity.getLocalClassName() + "\n" + "current size is : " + mActivityStack.size());
-        }
     }
 
     /**
@@ -101,6 +84,12 @@ public class AppManager {
             if (!activities.getClass().getSimpleName().equals(name)){
                 finishActivity(activities);
             }
+        }
+    }
+
+    public void back2Level2(){
+        while (mActivityStack.size() > 2){
+            finishActivity(mActivityStack.pop());
         }
     }
 

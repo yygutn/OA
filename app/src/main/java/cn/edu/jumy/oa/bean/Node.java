@@ -115,6 +115,7 @@ public class Node implements Serializable {
     public String tid = "";
     public String summary = "";
     public String remark = "";
+    public int isPass;
 
     public Node() {
 
@@ -198,5 +199,6 @@ public class Node implements Serializable {
         this.remark = node.remark;
         this.signNum = node.signNum;
         this.name = node.name;
+        this.isPass = node.isPass;
     }
 }

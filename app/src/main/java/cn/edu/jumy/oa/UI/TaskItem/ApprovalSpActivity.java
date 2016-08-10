@@ -82,9 +82,9 @@ public class ApprovalSpActivity extends BaseActivity {
                 ArrayList<Relay> list0 = new ArrayList<>();
 
                 for (Relay temp : list){
-                    if (temp.remark.equals("1")){
+                    if (temp.isPass == 1){
                         list1.add(temp);
-                    } else if (temp.remark.equals("0")){
+                    } else if (temp.isPass == 0){
                         list0.add(temp);
                     }
                 }

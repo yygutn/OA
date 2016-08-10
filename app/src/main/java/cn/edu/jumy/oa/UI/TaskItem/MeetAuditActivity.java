@@ -18,8 +18,6 @@ import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.CallBack.AuditCallback;
@@ -107,7 +105,7 @@ public class MeetAuditActivity extends BaseActivity {
             }
         });
 
-        registerReceiver(deleteReceiver,new IntentFilter(DELETE));
+        registerReceiver(deleteReceiver, new IntentFilter(DELETE));
     }
 
     private void removeItemViews(TableLayout tableLayout) {

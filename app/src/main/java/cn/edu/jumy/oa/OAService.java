@@ -26,7 +26,7 @@ public class OAService {
     public static final String BASE_URL_ONLINE = "http://121.41.102.69:8080/OA_console/phone/";
     public static final String BASE_URL_TEST = "http://192.168.1.119:8080/OA_console/phone/";
 
-    public static final String BASE_URL = BASE_URL_TEST;
+    public static final String BASE_URL = BASE_URL_ONLINE;
 
     public abstract static class DateCallBack extends Callback<String> {
 
@@ -926,6 +926,30 @@ public class OAService {
                         .url(BASE_URL + "RelayPass")
                         .params(params)
                         .build().execute(callback);
+            }
+        });
+    }
+    /**
+     * 查看别人的审批意见（在我的转发中）
+     *
+     * @param callback 回调
+     */
+    public static void findapproved(final String id, final String type, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "findapproved")
+                        .addParams("value", response)
+                        .addParams("id", id)
+                        .addParams("type", type)
+                        .build()
+                        .execute(callback);
             }
         });
     }

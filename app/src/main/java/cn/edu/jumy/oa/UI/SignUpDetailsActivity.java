@@ -14,10 +14,13 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.OnActivityResult;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 
+import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.CallBack.AuditCallback;
 import cn.edu.jumy.oa.OAService;
@@ -32,6 +35,7 @@ import cn.edu.jumy.oa.widget.customview.ItemTableRow_;
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EActivity(R.layout.activity_sign_up_details)
+@OptionsMenu(R.menu.back2meet)
 public class SignUpDetailsActivity extends BaseActivity {
     @ViewById(R.id.tool_bar)
     Toolbar mToolBar;
@@ -88,6 +92,7 @@ public class SignUpDetailsActivity extends BaseActivity {
 
     @AfterViews
     void go() {
+        setSupportActionBar(mToolBar);
         mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,5 +148,10 @@ public class SignUpDetailsActivity extends BaseActivity {
     @OnActivityResult(2048)
     void change(){
         getData();
+    }
+
+    @OptionsItem(R.id.action_back2meet)
+    void back(){
+        AppManager.getInstance().back2Level2();
     }
 }

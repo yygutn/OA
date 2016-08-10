@@ -44,7 +44,7 @@ public class MyApplication extends MultiDexApplication {
         DemoApplication.getInstance().init(this);
         //
         Logger.init("Jumy")
-                .methodCount(3)
+                .methodCount(1)
                 .logLevel(LogLevel.FULL)
                 .methodOffset(1);
         LitePalApplication.initialize(this);

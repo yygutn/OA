@@ -25,6 +25,7 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 
+import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
@@ -55,14 +56,6 @@ public class SignUpMultiActivity extends BaseActivity {
 
     @Extra("tid")
     String tid = "";
-
-    @AfterExtras
-    void go() {
-        if (TextUtils.isEmpty(pid)) {
-            return;
-        }
-        //获取个人报名信息,,,waiting
-    }
 
     /**
      * 初始化--控件绑定之后
@@ -130,6 +123,7 @@ public class SignUpMultiActivity extends BaseActivity {
                                 BaseResponse baseResponse = gson.fromJson(response, BaseResponse.class);
                                 if (baseResponse.code == 0) {
                                     showToast("报名成功");
+                                    AppManager.getInstance().back2Level2();
                                 } else {
                                     showToast("报名失败");
                                 }

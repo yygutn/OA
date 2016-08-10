@@ -12,7 +12,9 @@ import java.util.Date;
 import java.util.List;
 
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.Utils.CardGenerator;
 import cn.edu.jumy.oa.bean.Doc;
+import cn.edu.jumy.oa.bean.Node;
 
 /**
  * Created by Jumy on 16/6/20 16:22.
@@ -31,12 +33,7 @@ public class DocumentAdapter extends CommonAdapter<Doc> {
             ((CardView) holder.getView(R.id.cardView)).setCardBackgroundColor(Color.parseColor("#30DDDDDD"));
 
             holder.setText(R.id.subtitle, node.docTitle);
-
-            String message = "";
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            message += "发文单位: " + node.department + "\n";
-            message += "发文时间: " + sdf.format(new Date(node.createTime)) + "\n";
-            holder.setText(R.id.supportingText, node.docSummary);
+            holder.setText(R.id.supportingText, CardGenerator.getContentString(new Node(node)));
         } catch (Exception e) {
             e.printStackTrace();
         }

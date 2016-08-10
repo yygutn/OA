@@ -80,8 +80,16 @@ public class Relay implements Parcelable {
     public String tid;
     public String didtask;
     public String oldid;
-    public String isPass;
+    public int isPass;
     public String signUid;
+    //
+    public String uid;
+    public String oid;
+    public String did;
+    public String organame;
+    public String uname;
+    public String passRemark;
+
 
     @Override
     public int describeContents() {
@@ -97,6 +105,7 @@ public class Relay implements Parcelable {
         dest.writeString(this.personnel);
         dest.writeString(this.department);
         dest.writeInt(this.level);
+        dest.writeInt(this.type);
         dest.writeString(this.docNo);
         dest.writeString(this.docTitle);
         dest.writeString(this.docSummary);
@@ -120,8 +129,14 @@ public class Relay implements Parcelable {
         dest.writeString(this.tid);
         dest.writeString(this.didtask);
         dest.writeString(this.oldid);
-        dest.writeString(this.isPass);
+        dest.writeInt(this.isPass);
         dest.writeString(this.signUid);
+        dest.writeString(this.uid);
+        dest.writeString(this.oid);
+        dest.writeString(this.did);
+        dest.writeString(this.organame);
+        dest.writeString(this.uname);
+        dest.writeString(this.passRemark);
     }
 
     public Relay() {
@@ -135,6 +150,7 @@ public class Relay implements Parcelable {
         this.personnel = in.readString();
         this.department = in.readString();
         this.level = in.readInt();
+        this.type = in.readInt();
         this.docNo = in.readString();
         this.docTitle = in.readString();
         this.docSummary = in.readString();
@@ -159,8 +175,14 @@ public class Relay implements Parcelable {
         this.tid = in.readString();
         this.didtask = in.readString();
         this.oldid = in.readString();
-        this.isPass = in.readString();
+        this.isPass = in.readInt();
         this.signUid = in.readString();
+        this.uid = in.readString();
+        this.oid = in.readString();
+        this.did = in.readString();
+        this.organame = in.readString();
+        this.uname = in.readString();
+        this.passRemark = in.readString();
     }
 
     public static final Parcelable.Creator<Relay> CREATOR = new Parcelable.Creator<Relay>() {

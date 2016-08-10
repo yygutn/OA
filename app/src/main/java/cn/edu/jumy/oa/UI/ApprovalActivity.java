@@ -22,30 +22,6 @@ import cn.edu.jumy.oa.widget.dragrecyclerview.entity.Item;
  * Created by Jumy on 16/5/23 09:38.
  * 审核页面
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
- * *****************************************************
- * #                       _oo0oo_                     #
- * #                      o8888888o                    #
- * #                      88" . "88                    #
- * #                      (| -_- |)                    #
- * #                      0\  =  /0                    #
- * #                    ___/`---'\___                  #
- * #                  .' \\|     |# '.                 #
- * #                 / \\|||  :  |||# \                #
- * #                / _||||| -:- |||||- \              #
- * #               |   | \\\  -  #/ |   |              #
- * #               | \_|  ''\---/''  |_/ |             #
- * #               \  .-\__  '-'  ___/-. /             #
- * #             ___'. .'  /--.--\  `. .'___           #
- * #          ."" '<  `.___\_<|>_/___.' >' "".         #
- * #         | | :  `- \`.;`\ _ /`;.`/ - ` : | |       #
- * #         \  \ `_.   \_ __\ /__ _/   .-` /  /       #
- * #     =====`-.____`.___ \_____/___.-`___.-'=====    #
- * #                       `=---='                     #
- * #     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   #
- * #                                                   #
- * #                佛祖保佑         永无BUG
- * #                                                   #
- * *****************************************************
  */
 @EActivity(R.layout.activity_approval)
 public class ApprovalActivity extends BaseActivity {
@@ -77,19 +53,14 @@ public class ApprovalActivity extends BaseActivity {
     void click(View view) {
         switch (view.getId()) {
             case R.id.approval_mine: {
-                showToast("我发起的");
                 ApprovalFqActivity_.intent(mContext).start();
-//                FromMeActivity_.intent(this).start();
                 break;
             }
             case R.id.approval_wait: {
-                showToast("待我审批");
                 ApprovalSpActivity_.intent(mContext).start();
-//                WaitingForApprovalActivity_.intent(this).start();
                 break;
             }
             case R.id.approval_sick_leave: {
-                showToast("销假");
                 break;
             }
             case R.id.approval_sick_leave_invisible: {

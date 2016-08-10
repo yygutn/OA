@@ -43,6 +43,7 @@
         <activity android:name=".UI.DepartmentRedoActivity_" />
         <activity android:name=".UI.DepartmentOftenUseFixActivity_" />
         <activity android:name=".UI.OrgRelaySelectActivity_" />
+        <activity android:name=".UI.AuditDetailsActivity_" />
 
         <activity android:name=".UI.web.StudyOnlineActivity_" />
         <activity android:name=".UI.TaskItem.BaseSearchRefreshActivity_" />

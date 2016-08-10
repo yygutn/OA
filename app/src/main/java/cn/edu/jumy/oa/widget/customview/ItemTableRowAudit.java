@@ -27,11 +27,8 @@ import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.BaseResponse;
-import cn.edu.jumy.oa.UI.SignUpAddActivity_;
-import cn.edu.jumy.oa.UI.SignUpDetailsActivity;
 import cn.edu.jumy.oa.UI.TaskItem.MeetAuditActivity;
 import cn.edu.jumy.oa.bean.AuditUser;
-import cn.edu.jumy.oa.bean.Sign;
 import cn.edu.jumy.oa.widget.datepicker.calendar.utils.MeasureUtil;
 import okhttp3.Call;
 
@@ -69,7 +66,7 @@ public class ItemTableRowAudit extends TableRow implements View.OnClickListener 
         if (node == null) {
             node = new AuditUser("", "");
         }
-        this.mActivityRef = new WeakReference<BaseActivity>(activity);
+        this.mActivityRef = new WeakReference<>(activity);
         this.user = node;
     }
 
@@ -133,38 +130,46 @@ public class ItemTableRowAudit extends TableRow implements View.OnClickListener 
 
     private void skip2edit(final boolean pass) {
         final EditText editText = new EditText(mActivityRef.get());
-        final String title = pass ? "通过意见":"退回意见";
-        AlertDialog alertDialog = new AlertDialog.Builder(mActivityRef.get())
-                .setTitle(title)
-                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        final String passRemark = editText.getText().toString();
-                        OAService.meetUserPass(user.id, String.valueOf(pass), passRemark, new StringCallback() {
-                            @Override
-                            public void onError(Call call, Exception e, int id) {
-                                Toast.makeText(mActivityRef.get(), "当前网络不可用,审核报名失败", Toast.LENGTH_SHORT).show();
-                            }
+        final String title = pass ? "通过意见" : "退回意见";
+        if (!pass) {
+            AlertDialog alertDialog = new AlertDialog.Builder(mActivityRef.get())
+                    .setTitle(title)
+                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final String passRemark = editText.getText().toString();
+                            doUpdate(passRemark, pass);
 
-                            @Override
-                            public void onResponse(String response, int id) {
-                                Gson gson = new Gson();
-                                BaseResponse baseResponse = gson.fromJson(response, BaseResponse.class);
-                                if (baseResponse.code == 0) {
-                                    //审核通过/退回
-                                    Intent data = new Intent(MeetAuditActivity.DELETE);
-                                    mActivityRef.get().sendBroadcast(data);
-                                }
-                            }
-                        });
+                        }
+                    })
+                    .setNegativeButton("取消", null)
+                    .setView(editText)
+                    .create();
+            alertDialog.setCanceledOnTouchOutside(true);
+            alertDialog.show();
+        } else {
+            doUpdate("", pass);
+        }
+    }
 
-                    }
-                })
-                .setNegativeButton("取消", null)
-                .setView(editText)
-                .create();
-        alertDialog.setCanceledOnTouchOutside(true);
-        alertDialog.show();
+    private void doUpdate(String passRemark, boolean pass) {
+        OAService.meetUserPass(user.id, String.valueOf(pass), passRemark, new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Toast.makeText(mActivityRef.get(), "当前网络不可用,审核报名失败", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                Gson gson = new Gson();
+                BaseResponse baseResponse = gson.fromJson(response, BaseResponse.class);
+                if (baseResponse.code == 0) {
+                    //审核通过/退回
+                    Intent data = new Intent(MeetAuditActivity.DELETE);
+                    mActivityRef.get().sendBroadcast(data);
+                }
+            }
+        });
     }
 
     private void init() {

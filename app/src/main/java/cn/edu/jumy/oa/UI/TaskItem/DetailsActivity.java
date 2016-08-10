@@ -407,7 +407,7 @@ public class DetailsActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (fromSP && mNode.remark.equals("0")) {
+        if (fromSP && mNode.isPass == 1) {
             getMenuInflater().inflate(R.menu.details_shenpi, menu);
         } else if (!fromSP && mNode.type != 2) {
             getMenuInflater().inflate(R.menu.details_share, menu);

@@ -171,17 +171,7 @@ public class SignUpAddActivity extends BaseActivity {
     @Click(R.id.submit)
     void submit() {
         clearFocus();
-        alertDialog = new AlertDialog.Builder(mContext)
-                .setTitle("确认报名")
-                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dealPreWork();
-                    }
-                }).setNegativeButton("取消", null)
-                .create();
-        alertDialog.show();
-        alertDialog.setCanceledOnTouchOutside(true);
+        dealPreWork();
     }
 
     private void dealPreWork() {
