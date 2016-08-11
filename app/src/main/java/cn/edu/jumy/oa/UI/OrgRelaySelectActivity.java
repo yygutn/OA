@@ -190,6 +190,7 @@ public class OrgRelaySelectActivity extends BaseActivity {
         int mType = type == 0 ? 2 : 1;
         params.put("type", mType + "");//转发的类型（0：代表公文  ，1：代表会议）
         params.put("organid", ids);//你选择的所有机构的id的集合，比如"1,2,3,4,5"这样的字符串
+        params.put("relayRemark",message);
         OAService.Relay(params, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int ID) {
