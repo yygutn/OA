@@ -1,5 +1,6 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
+import android.app.ProgressDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import com.hyphenate.chat.EMClient;
 import com.zhy.http.okhttp.callback.FileCallBack;
 
+import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.EActivity;
 import org.litepal.crud.DataSupport;
 
@@ -19,6 +21,7 @@ import cn.edu.jumy.oa.Utils.CallOtherOpenFile;
 import cn.edu.jumy.oa.adapter.AnnexAdapter;
 import cn.edu.jumy.oa.bean.Annex;
 import okhttp3.Call;
+import okhttp3.Request;
 
 /**
  * Created by Jumy on 16/6/20 13:57.
@@ -36,8 +39,8 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
         mTitleBar.setTitle("文件柜");
     }
 
-    @Override
-    protected void initData() {
+    @AfterExtras
+    void getData() {
         mList = (ArrayList<Annex>) DataSupport.where("username = ?", EMClient.getInstance().getCurrentUser()).find(Annex.class);
         if (mList == null) {
             mList = new ArrayList<>();
@@ -63,7 +66,21 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
             if (newFile != null && newFile.exists()) {
                 CallOtherOpenFile.openFile(mContext, file);
             } else {
+                final ProgressDialog progressDialog = new ProgressDialog(mContext);
+                progressDialog.setMessage("加载中...");
                 OAService.downloadAttachment(id, new FileCallBack(filepath, filename) {
+                    @Override
+                    public void onAfter(int ID) {
+                        super.onAfter(ID);
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onBefore(Request request, int ID) {
+                        super.onBefore(request, ID);
+                        progressDialog.show();
+                    }
+
                     @Override
                     public void syncSaveToSQL(File file) {
 
@@ -71,7 +88,7 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
 
                     @Override
                     public void onError(Call call, Exception e, int id) {
-
+                        showToast("加载失败");
                     }
 
                     @Override

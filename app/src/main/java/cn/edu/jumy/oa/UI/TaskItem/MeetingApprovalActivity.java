@@ -171,6 +171,6 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity {
 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-        MeetAuditActivity_.intent(mContext).extra("mid", ((Meet) o).id).start();
+        MeetAuditActivity_.intent(mContext).extra("mid", ((Meet) o).id).extra("time",((Meet)o).meetTime).start();
     }
 }

@@ -24,7 +24,7 @@ public class Sign implements Parcelable {
     /**
      * 性别(0:男  1:女)
      */
-    public Integer sex;
+    public int sex;
     /**
      * 电话
      */
@@ -32,11 +32,11 @@ public class Sign implements Parcelable {
     /**
      * 状态(0:参会 1:听会 2:请假)
      */
-    public Integer type;
+    public int type;
     /**
      * 审批状态(0:审批通过,1:审批未通过,2:正在审批,3:未审批)
      */
-    public Integer passStatus;
+    public int passStatus;
     /**
      * 备注
      */
@@ -93,10 +93,10 @@ public class Sign implements Parcelable {
         this.pid = in.readString();
         this.name = in.readString();
         this.post = in.readString();
-        this.sex = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.sex = (int) in.readValue(int.class.getClassLoader());
         this.phone = in.readString();
-        this.type = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.passStatus = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.type = (int) in.readValue(int.class.getClassLoader());
+        this.passStatus = (int) in.readValue(int.class.getClassLoader());
         this.remark = in.readString();
         this.passRemark = in.readString();
         this.organame = in.readString();

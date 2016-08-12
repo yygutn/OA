@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -89,6 +90,11 @@ public class BaseActivity extends AppCompatActivity {
     public void showToast(String message) {
         if (!TextUtils.isEmpty(message)) {
             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void showToast(String message,int duration) {
+        if (!TextUtils.isEmpty(message)) {
+            Toast.makeText(mContext, message, duration).show();
         }
     }
 

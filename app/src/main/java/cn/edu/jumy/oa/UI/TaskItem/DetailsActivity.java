@@ -1,10 +1,8 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
-import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
@@ -14,15 +12,16 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
+import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -42,6 +41,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
+import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.AttachResponse;
@@ -55,6 +55,7 @@ import cn.edu.jumy.oa.bean.Attachment;
 import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.widget.datepicker.calendar.utils.MeasureUtil;
 import okhttp3.Call;
+import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -184,67 +185,71 @@ public class DetailsActivity extends BaseActivity {
 
 
     private void setUpViews() {
-        //催收按钮
-        mCuiS.setVisibility(fromSentMeet ? View.VISIBLE : View.GONE);
-        //标题处理
-        switch (mNode.type) {
-            case 0: {
-                mTitleBar.setTitle("会议详情");
-//                mDocumentDetailsLevel.setVisibility(View.GONE);
-                mDocumentDetailsSignUp.setVisibility(fromSentMeet || fromSP ? View.GONE : View.VISIBLE);
-                break;
+        try {
+            //催收按钮
+            mCuiS.setVisibility(fromSentMeet ? View.VISIBLE : View.GONE);
+            //标题处理
+            switch (mNode.type) {
+                case 0: {
+                    mTitleBar.setTitle("会议详情");
+                    //                mDocumentDetailsLevel.setVisibility(View.GONE);
+                    mDocumentDetailsSignUp.setVisibility(fromSentMeet || fromSP ? View.GONE : View.VISIBLE);
+                    break;
+                }
+                case 1: {
+                    mTitleBar.setTitle("公文详情");
+                    break;
+                }
+                case 2: {
+                    mTitleBar.setTitle("公告详情");
+                    break;
+                }
+                default:
+                    break;
             }
-            case 1: {
-                mTitleBar.setTitle("公文详情");
-                break;
+            //文字信息处理
+            // TODO: 16/7/12 根据LEVEL的等级ID设置不同的等级显示
+            String level = "";
+            switch (mNode.level) {
+                case 0: {
+                    mDocumentDetailsLevel.setVisibility(View.GONE);
+                    break;
+                }
+                case 1: {
+                    level = "等级:特急";
+                    break;
+                }
+                case 2: {
+                    level = "等级:加急";
+                    break;
+                }
+                case 3: {
+                    level = "等级:平急";
+                    break;
+                }
+                case 4: {
+                    level = "等级:特提";
+                    break;
+                }
+                default:
+                    break;
             }
-            case 2: {
-                mTitleBar.setTitle("公告详情");
-                break;
+            mDocumentDetailsLevel.setText(level);
+            if (!TextUtils.isEmpty(mNode.title)) {
+                mDocumentDetailsTitle.setText(mNode.title);
+            } else {
+                mDocumentDetailsTitle.setVisibility(View.GONE);
             }
-            default:
-                break;
-        }
-        //文字信息处理
-        // TODO: 16/7/12 根据LEVEL的等级ID设置不同的等级显示
-        String level = "";
-        switch (mNode.level) {
-            case 0: {
-                mDocumentDetailsLevel.setVisibility(View.GONE);
-                break;
-            }
-            case 1: {
-                level = "等级:特急";
-                break;
-            }
-            case 2: {
-                level = "等级:加急";
-                break;
-            }
-            case 3: {
-                level = "等级:平急";
-                break;
-            }
-            case 4: {
-                level = "等级:特提";
-                break;
-            }
-            default:
-                break;
-        }
-        mDocumentDetailsLevel.setText(level);
-        if (!TextUtils.isEmpty(mNode.title)) {
-            mDocumentDetailsTitle.setText(mNode.title);
-        } else {
-            mDocumentDetailsTitle.setVisibility(View.GONE);
-        }
-        mDocumentDetailsContent_meet.setVisibility(View.VISIBLE);
-        mDocumentDetailsContent_meet.setText(CardGenerator.getContentString(mNode));
+            mDocumentDetailsContent_meet.setVisibility(View.VISIBLE);
+            mDocumentDetailsContent_meet.setText(CardGenerator.getContentString(mNode));
 
-        if (!TextUtils.isEmpty(mNode.contactName) && !TextUtils.isEmpty(mNode.contactPhone)) {
-            mDocumentDetailsOther.setText("联系人: " + mNode.contactName + "\n" + "联系电话: " + mNode.contactPhone);
-        } else {
-            mDocumentDetailsOther.setVisibility(View.GONE);
+            if (!TextUtils.isEmpty(mNode.contactName) && !TextUtils.isEmpty(mNode.contactPhone)) {
+                mDocumentDetailsOther.setText("联系人: " + mNode.contactName + "\n" + "联系电话: " + mNode.contactPhone);
+            } else {
+                mDocumentDetailsOther.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
@@ -285,13 +290,13 @@ public class DetailsActivity extends BaseActivity {
         SpannableString spannableString = new SpannableString("附件查看\n请点击文件名查看附件内容\n查看后保存至文件柜");
         RelativeSizeSpan sizeSpan = new RelativeSizeSpan(0.9f);
         RelativeSizeSpan sizeSpan0 = new RelativeSizeSpan(1.0f);
-        spannableString.setSpan(sizeSpan0,0,3,Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(sizeSpan,4,spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(sizeSpan0, 0, 3, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(sizeSpan, 4, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         final TextView title = new TextView(mContext);
         title.setTextColor(Color.BLACK);
         title.setText(spannableString);
-        int padding = MeasureUtil.dp2px(mContext,16);
-        title.setPadding(padding,padding,padding,0);
+        int padding = MeasureUtil.dp2px(mContext, 16);
+        title.setPadding(padding, padding, padding, 0);
         alertDialog = new AlertDialog.Builder(mContext)
                 .setCustomTitle(title)
                 .setItems(items, new DialogInterface.OnClickListener() {
@@ -322,7 +327,47 @@ public class DetailsActivity extends BaseActivity {
                                 CallOtherOpenFile.openFile(mContext, annex.getFile());
                                 alertDialog.cancel();
                             } else {
+                                final ProgressDialog progressDialog = new ProgressDialog(mContext);
+                                progressDialog.setMessage("下载中...");
+                                progressDialog.setMax(100);
+                                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                progressDialog.setIndeterminate(false);
+                                progressDialog.setCanceledOnTouchOutside(false);
+                                progressDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                    @Override
+                                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                        if (keyCode == KeyEvent.KEYCODE_BACK && isDownLoading) {
+                                            OkHttpUtils.getInstance().cancelTag(MyApplication.getContext());
+                                            isDownLoading = false;
+                                            return true;
+                                        }
+                                        return false;
+                                    }
+                                });
+
                                 OAService.downloadAttachment(id, new FileCallBack(filepath, filename) {
+
+                                    @Override
+                                    public void onBefore(Request request, int ID) {
+                                        super.onBefore(request, ID);
+                                        progressDialog.show();
+                                        isDownLoading = true;
+                                    }
+
+                                    @Override
+                                    public void onAfter(int ID) {
+                                        super.onAfter(ID);
+                                        progressDialog.dismiss();
+                                        isDownLoading = false;
+                                    }
+
+                                    @Override
+                                    public void inProgress(float progress, long total, int ID) {
+                                        super.inProgress(progress, total, ID);
+                                        int percent = (int) (progress * 100);
+                                        progressDialog.setProgress(percent);
+                                    }
+
                                     @Override
                                     public void onError(Call call, Exception e, int id) {
                                         showToast("下载附件失败");
@@ -372,6 +417,9 @@ public class DetailsActivity extends BaseActivity {
         alertDialog.setCanceledOnTouchOutside(true);
 
     }
+
+    boolean isDownLoading = false;
+
 
     @NonNull
     private String getRealFileName(String filename) {

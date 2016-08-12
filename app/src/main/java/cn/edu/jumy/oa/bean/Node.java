@@ -86,7 +86,7 @@ public class Node implements Serializable {
      * 等级:(1.特急2.加急3.平急4.特提)
      */
 
-    public Integer level = 0;
+    public int level = 0;
     /**
      * 已签收人员
      */
@@ -95,13 +95,13 @@ public class Node implements Serializable {
      * 签收人数
      */
 
-    public Integer signNum = 0;
+    public int signNum = 0;
     public String other = "";// 其他
     /**
      * 签收状态(0:是 1:否)
      */
 
-    public Integer signStatus = 1;
+    public int signStatus = 1;
 
     /**
      * 创建人员

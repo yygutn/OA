@@ -9,6 +9,9 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TableLayout;
+import android.widget.Toast;
+
+import com.zhy.http.okhttp.callback.FileCallBack;
 
 import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
@@ -17,16 +20,22 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.CallBack.AuditCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.AuditResponse;
+import cn.edu.jumy.oa.Utils.CallOtherOpenFile;
 import cn.edu.jumy.oa.adapter.AuditAdapter;
 import cn.edu.jumy.oa.bean.AuditUser;
 import cn.edu.jumy.oa.widget.customview.ItemTableRowAudit_;
+import cn.qqtheme.framework.picker.FilePicker;
+import okhttp3.Call;
 
 /**
  * Created by Jumy on 16/7/6 11:37.
@@ -51,6 +60,9 @@ public class MeetAuditActivity extends BaseActivity {
     //会议ID
     @Extra("mid")
     String mid = "";
+    //会议时间
+    @Extra("time")
+    long time = -1;
 
 
     ArrayList<AuditUser> mListSigned = new ArrayList<>();
@@ -129,9 +141,42 @@ public class MeetAuditActivity extends BaseActivity {
         }
     }
 
+    String fileName = "";
+
     @Click(R.id.out)
     void click() {
-        showToast("导出...");
+        FilePicker filePicker = new FilePicker(this, FilePicker.DIRECTORY);
+        filePicker.setTitleText("请选择导出文件夹位置");
+        filePicker.setOnFilePickListener(new FilePicker.OnFilePickListener() {
+            @Override
+            public void onFilePicked(final String currentPath) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
+                if (time > 0){
+                    fileName = sdf.format(new Date(time));
+                } else {
+                    fileName = sdf.format(new Date());
+                }
+                fileName += ".xlsx";
+                OAService.passExcel(mid, new FileCallBack(currentPath, fileName) {
+                    @Override
+                    public void syncSaveToSQL(File file) {
+
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int ID) {
+                        showToast("导出列表失败");
+                    }
+
+                    @Override
+                    public void onResponse(File response, int ID) {
+                        showToast("导出成功,文件保存在"+currentPath+"/"+fileName, Toast.LENGTH_LONG);
+                        CallOtherOpenFile.openFile(mContext,response);
+                    }
+                });
+            }
+        });
+        filePicker.show();
     }
 
     BroadcastReceiver deleteReceiver = new BroadcastReceiver() {

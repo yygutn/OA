@@ -22,7 +22,7 @@ public class Attachment implements Serializable{
     /**
      * 1为公文;2为会议;3用户头像
      */
-    private Integer type;
+    private int type;
     /**
      * 文件名称
      */
@@ -42,7 +42,7 @@ public class Attachment implements Serializable{
     /**
      * 是否启用(0:是  1:否)
      */
-    private Integer isuse;
+    private int isuse;
 
     public String getId() {
         return id;
@@ -68,11 +68,11 @@ public class Attachment implements Serializable{
         this.cuid = cuid;
     }
 
-    public Integer getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(int type) {
         this.type = type;
     }
 
@@ -108,11 +108,11 @@ public class Attachment implements Serializable{
         this.remark = remark;
     }
 
-    public Integer getIsuse() {
+    public int getIsuse() {
         return isuse;
     }
 
-    public void setIsuse(Integer isuse) {
+    public void setIsuse(int isuse) {
         this.isuse = isuse;
     }
 

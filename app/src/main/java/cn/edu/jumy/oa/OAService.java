@@ -8,7 +8,6 @@ import com.zhy.http.okhttp.callback.Callback;
 import java.io.File;
 import java.util.Map;
 
-import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.Response.DateResponse;
 import cn.edu.jumy.oa.safe.PasswordUtil;
 import okhttp3.Call;
@@ -182,26 +181,23 @@ public class OAService {
      * @param callback
      */
     public static void downloadAttachment(final String ids, final Callback callback) {
-        try {
-            getTime(new DateCallBack() {
-                @Override
-                public void onError(Call call, Exception e, int ID) {
-                    callback.onError(call, e, ID);
-                }
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
 
-                @Override
-                public void onResponse(String response, int ID) {
-                    OkHttpUtils.get()
-                            .url(BASE_URL + "download")
-                            .addParams("value", response)
-                            .addParams("id", ids)
-                            .build()
-                            .execute(callback);
-                }
-            });
-        } catch (Exception e) {
-            BaseActivity.showDebugException(e);
-        }
+            @Override
+            public void onResponse(String response, int ID) {
+                OkHttpUtils.get()
+                        .tag(MyApplication.getContext())
+                        .url(BASE_URL + "download")
+                        .addParams("value", response)
+                        .addParams("id", ids)
+                        .build()
+                        .execute(callback);
+            }
+        });
     }
 
     /**
@@ -929,6 +925,7 @@ public class OAService {
             }
         });
     }
+
     /**
      * 查看别人的审批意见（在我的转发中）
      *
@@ -948,6 +945,30 @@ public class OAService {
                         .addParams("value", response)
                         .addParams("id", id)
                         .addParams("type", type)
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
+
+    /**
+     * 手机端导出Excel
+     *
+     * @param callback 回调
+     */
+    public static void passExcel(final String id, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "passExcel")
+                        .addParams("value", response)
+                        .addParams("mid", id)
                         .build()
                         .execute(callback);
             }

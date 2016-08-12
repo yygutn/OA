@@ -26,11 +26,11 @@ public class Organization{
     /**
      * 序列号
      */
-    private Integer sort;
+    private int sort;
     /**
      * 单位层级
      */
-    private Integer level;
+    private int level;
     /**
      * 联系人1
      */
@@ -46,11 +46,11 @@ public class Organization{
     /**
      * 是否默认(0:默认   1:非默认)
      */
-    private Integer isdef;
+    private int isdef;
     /**
      * 是否启用(0:是  1:否)
      */
-    private Integer isuse;
+    private int isuse;
     /**
      * 备注
      */

@@ -41,7 +41,7 @@ public class Meet extends DataSupport implements Parcelable {
      * 等级(1:特急 2:加急 3:平急 4:特提)
      */
     
-    public Integer level;
+    public int level;
     /**
      * 编号
      */
@@ -75,17 +75,17 @@ public class Meet extends DataSupport implements Parcelable {
      * 签收人数
      */
 
-    public Integer signNum;
+    public int signNum;
     /**
      * 签收状态(0:是 1:否)
      */
 
-    public Integer signStatus;
+    public int signStatus;
     /**
      * 签收(0:是  1:否)
      */
     
-    public Integer isuse;
+    public int isuse;
     /**
      * 备注
      */
@@ -192,16 +192,16 @@ public class Meet extends DataSupport implements Parcelable {
         this.meetTime = in.readLong();
         this.meetCompany = in.readString();
         this.department = in.readString();
-        this.level = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.level = (int) in.readValue(int.class.getClassLoader());
         this.docNo = in.readString();
         this.docTitle = in.readString();
         this.docSummary = in.readString();
         this.contactName = in.readString();
         this.contactPhone = in.readString();
         this.addr = in.readString();
-        this.signNum = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.signStatus = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.isuse = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.signNum = (int) in.readValue(int.class.getClassLoader());
+        this.signStatus = (int) in.readValue(int.class.getClassLoader());
+        this.isuse = (int) in.readValue(int.class.getClassLoader());
         this.remark = in.readString();
         this.cuid = in.readString();
         this.uuid = in.readString();

@@ -86,7 +86,7 @@ public class NotifyCard extends DataSupport implements Parcelable {
      * 等级:(1.特急2.加急3.平急4.特提)
      */
 
-    private Integer level = 0;
+    private int level = 0;
     /**
      * 已签收人员
      */
@@ -95,13 +95,13 @@ public class NotifyCard extends DataSupport implements Parcelable {
      * 签收人数
      */
 
-    private Integer signNum = 0;
+    private int signNum = 0;
     private String other = "";// 其他
     /**
      * 签收状态(0:是 1:否)
      */
 
-    private Integer signStatus = 1;
+    private int signStatus = 1;
 
     /**
      * 创建人员
@@ -272,11 +272,11 @@ public class NotifyCard extends DataSupport implements Parcelable {
         this.contactPhone = contactPhone;
     }
 
-    public Integer getLevel() {
+    public int getLevel() {
         return level;
     }
 
-    public void setLevel(Integer level) {
+    public void setLevel(int level) {
         this.level = level;
     }
 
@@ -288,11 +288,11 @@ public class NotifyCard extends DataSupport implements Parcelable {
         this.issuer = issuer;
     }
 
-    public Integer getSignNum() {
+    public int getSignNum() {
         return signNum;
     }
 
-    public void setSignNum(Integer signNum) {
+    public void setSignNum(int signNum) {
         this.signNum = signNum;
     }
 
@@ -304,11 +304,11 @@ public class NotifyCard extends DataSupport implements Parcelable {
         this.other = other;
     }
 
-    public Integer getSignStatus() {
+    public int getSignStatus() {
         return signStatus;
     }
 
-    public void setSignStatus(Integer signStatus) {
+    public void setSignStatus(int signStatus) {
         this.signStatus = signStatus;
     }
 
@@ -396,11 +396,11 @@ public class NotifyCard extends DataSupport implements Parcelable {
         in.readList(this.attachmentList, Attachment.class.getClassLoader());
         this.contactName = in.readString();
         this.contactPhone = in.readString();
-        this.level = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.level = (int) in.readValue(int.class.getClassLoader());
         this.issuer = in.readString();
-        this.signNum = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.signNum = (int) in.readValue(int.class.getClassLoader());
         this.other = in.readString();
-        this.signStatus = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.signStatus = (int) in.readValue(int.class.getClassLoader());
         this.cuid = in.readString();
         this.uuid = in.readString();
         this.tid = in.readString();
