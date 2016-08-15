@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -94,6 +95,9 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
         @Override
         public void onNotifyReceive(NotifyBroadCastResponse response) {
             showDebugLogd("onNotifyReceive", response.toString());
+            if (!TextUtils.isEmpty(response.id)){
+                return;
+            }
             switch (response.action) {
                 case "docSend":
                 case "docReceive":

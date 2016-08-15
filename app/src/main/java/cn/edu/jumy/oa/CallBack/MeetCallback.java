@@ -15,21 +15,19 @@ import okhttp3.Response;
 public abstract class MeetCallback extends Callback<MeetResponse> {
         @Override
         public MeetResponse parseNetworkResponse(Response response, int id) throws Exception {
-            synchronized (response) {
-                try {
-                    String data = response.body().string();
-                    Gson gson = new Gson();
-                    BaseResponse baseResponse = gson.fromJson(data, BaseResponse.class);
-                    if (baseResponse.code == 0) {
-                        return gson.fromJson(data, MeetResponse.class);
-                    } else if (baseResponse.code == 1) {
-                        return new MeetResponse(baseResponse);
-                    }
-                } catch (Exception e) {
-                    onError(null, e, 0);
+            try {
+                String data = response.body().string();
+                Gson gson = new Gson();
+                BaseResponse baseResponse = gson.fromJson(data, BaseResponse.class);
+                if (baseResponse.code == 0) {
+                    return gson.fromJson(data, MeetResponse.class);
+                } else if (baseResponse.code == 1) {
+                    return new MeetResponse(baseResponse);
                 }
-                return null;
+            } catch (Exception e) {
+                onError(null, e, 0);
             }
+            return null;
         }
 
         @Override
