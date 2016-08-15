@@ -46,7 +46,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatui.Constant;
 import com.hyphenate.chatui.DemoHelper;
 import com.hyphenate.chatui.R;
-import com.hyphenate.chatui.db.InviteMessgeDao;
+import com.hyphenate.chatui.db.InviteMessageDao;
 import com.hyphenate.chatui.db.UserDao;
 import com.hyphenate.chatui.domain.InviteMessage;
 import com.hyphenate.chatui.runtimepermissions.PermissionsManager;
@@ -139,7 +139,7 @@ public class MainActivity extends BaseActivity {
 			showAccountRemovedDialog();
 		}
 
-		inviteMessgeDao = new InviteMessgeDao(this);
+		inviteMessageDao = new InviteMessageDao(this);
 		userDao = new UserDao(this);
 		conversationListFragment = new ConversationListFragment();
 		contactListFragment = new ContactListFragment();
@@ -402,7 +402,7 @@ public class MainActivity extends BaseActivity {
 	 */
 	public int getUnreadAddressCountTotal() {
 		int unreadAddressCountTotal;
-		unreadAddressCountTotal = inviteMessgeDao.getUnreadMessagesCount();
+		unreadAddressCountTotal = inviteMessageDao.getUnreadMessagesCount();
 		return unreadAddressCountTotal;
 	}
 
@@ -422,7 +422,7 @@ public class MainActivity extends BaseActivity {
 		return unreadMsgCountTotal-chatroomUnreadMsgCount;
 	}
 
-	private InviteMessgeDao inviteMessgeDao;
+	private InviteMessageDao inviteMessageDao;
 	private UserDao userDao;
 
 
@@ -452,9 +452,9 @@ public class MainActivity extends BaseActivity {
 	 */
 	private void saveInviteMsg(InviteMessage msg) {
 		// 保存msg
-		inviteMessgeDao.saveMessage(msg);
+		inviteMessageDao.saveMessage(msg);
 		//保存未读数，这里没有精确计算
-		inviteMessgeDao.saveUnreadMessageCount(1);
+		inviteMessageDao.saveUnreadMessageCount(1);
 	}
 
 

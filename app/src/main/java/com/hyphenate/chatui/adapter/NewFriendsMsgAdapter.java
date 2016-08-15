@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatui.R;
-import com.hyphenate.chatui.db.InviteMessgeDao;
+import com.hyphenate.chatui.db.InviteMessageDao;
 import com.hyphenate.chatui.domain.InviteMessage;
 import com.hyphenate.chatui.domain.InviteMessage.InviteMesageStatus;
 
@@ -39,12 +39,12 @@ import android.widget.Toast;
 public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 
 	private Context context;
-	private InviteMessgeDao messgeDao;
+	private InviteMessageDao messgeDao;
 
 	public NewFriendsMsgAdapter(Context context, int textViewResourceId, List<InviteMessage> objects) {
 		super(context, textViewResourceId, objects);
 		this.context = context;
-		messgeDao = new InviteMessgeDao(context);
+		messgeDao = new InviteMessageDao(context);
 	}
 
 	@Override
@@ -194,7 +194,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                     msg.setStatus(InviteMesageStatus.AGREED);
                     // 更新db
                     ContentValues values = new ContentValues();
-                    values.put(InviteMessgeDao.COLUMN_NAME_STATUS, msg.getStatus().ordinal());
+                    values.put(InviteMessageDao.COLUMN_NAME_STATUS, msg.getStatus().ordinal());
                     messgeDao.updateMessage(msg.getId(), values);
 					((Activity) context).runOnUiThread(new Runnable() {
 
@@ -252,7 +252,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                     msg.setStatus(InviteMesageStatus.REFUSED);
                     // 更新db
                     ContentValues values = new ContentValues();
-                    values.put(InviteMessgeDao.COLUMN_NAME_STATUS, msg.getStatus().ordinal());
+                    values.put(InviteMessageDao.COLUMN_NAME_STATUS, msg.getStatus().ordinal());
                     messgeDao.updateMessage(msg.getId(), values);
                     ((Activity) context).runOnUiThread(new Runnable() {
 

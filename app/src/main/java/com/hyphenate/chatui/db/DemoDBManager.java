@@ -184,16 +184,16 @@ public class DemoDBManager {
         int id = -1;
         if(db.isOpen()){
             ContentValues values = new ContentValues();
-            values.put(InviteMessgeDao.COLUMN_NAME_FROM, message.getFrom());
-            values.put(InviteMessgeDao.COLUMN_NAME_GROUP_ID, message.getGroupId());
-            values.put(InviteMessgeDao.COLUMN_NAME_GROUP_Name, message.getGroupName());
-            values.put(InviteMessgeDao.COLUMN_NAME_REASON, message.getReason());
-            values.put(InviteMessgeDao.COLUMN_NAME_TIME, message.getTime());
-            values.put(InviteMessgeDao.COLUMN_NAME_STATUS, message.getStatus().ordinal());
-            values.put(InviteMessgeDao.COLUMN_NAME_GROUPINVITER, message.getGroupInviter());
-            db.insert(InviteMessgeDao.TABLE_NAME, null, values);
+            values.put(InviteMessageDao.COLUMN_NAME_FROM, message.getFrom());
+            values.put(InviteMessageDao.COLUMN_NAME_GROUP_ID, message.getGroupId());
+            values.put(InviteMessageDao.COLUMN_NAME_GROUP_Name, message.getGroupName());
+            values.put(InviteMessageDao.COLUMN_NAME_REASON, message.getReason());
+            values.put(InviteMessageDao.COLUMN_NAME_TIME, message.getTime());
+            values.put(InviteMessageDao.COLUMN_NAME_STATUS, message.getStatus().ordinal());
+            values.put(InviteMessageDao.COLUMN_NAME_GROUPINVITER, message.getGroupInviter());
+            db.insert(InviteMessageDao.TABLE_NAME, null, values);
             
-            Cursor cursor = db.rawQuery("select last_insert_rowid() from " + InviteMessgeDao.TABLE_NAME,null); 
+            Cursor cursor = db.rawQuery("select last_insert_rowid() from " + InviteMessageDao.TABLE_NAME,null);
             if(cursor.moveToFirst()){
                 id = cursor.getInt(0);
             }
@@ -211,7 +211,7 @@ public class DemoDBManager {
     synchronized public void updateMessage(int msgId,ContentValues values){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db.isOpen()){
-            db.update(InviteMessgeDao.TABLE_NAME, values, InviteMessgeDao.COLUMN_NAME_ID + " = ?", new String[]{String.valueOf(msgId)});
+            db.update(InviteMessageDao.TABLE_NAME, values, InviteMessageDao.COLUMN_NAME_ID + " = ?", new String[]{String.valueOf(msgId)});
         }
     }
     
@@ -223,17 +223,17 @@ public class DemoDBManager {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         List<InviteMessage> msgs = new ArrayList<InviteMessage>();
         if(db.isOpen()){
-            Cursor cursor = db.rawQuery("select * from " + InviteMessgeDao.TABLE_NAME + " desc",null);
+            Cursor cursor = db.rawQuery("select * from " + InviteMessageDao.TABLE_NAME + " desc",null);
             while(cursor.moveToNext()){
                 InviteMessage msg = new InviteMessage();
-                int id = cursor.getInt(cursor.getColumnIndex(InviteMessgeDao.COLUMN_NAME_ID));
-                String from = cursor.getString(cursor.getColumnIndex(InviteMessgeDao.COLUMN_NAME_FROM));
-                String groupid = cursor.getString(cursor.getColumnIndex(InviteMessgeDao.COLUMN_NAME_GROUP_ID));
-                String groupname = cursor.getString(cursor.getColumnIndex(InviteMessgeDao.COLUMN_NAME_GROUP_Name));
-                String reason = cursor.getString(cursor.getColumnIndex(InviteMessgeDao.COLUMN_NAME_REASON));
-                long time = cursor.getLong(cursor.getColumnIndex(InviteMessgeDao.COLUMN_NAME_TIME));
-                int status = cursor.getInt(cursor.getColumnIndex(InviteMessgeDao.COLUMN_NAME_STATUS));
-                String groupInviter = cursor.getString(cursor.getColumnIndex(InviteMessgeDao.COLUMN_NAME_GROUPINVITER));
+                int id = cursor.getInt(cursor.getColumnIndex(InviteMessageDao.COLUMN_NAME_ID));
+                String from = cursor.getString(cursor.getColumnIndex(InviteMessageDao.COLUMN_NAME_FROM));
+                String groupid = cursor.getString(cursor.getColumnIndex(InviteMessageDao.COLUMN_NAME_GROUP_ID));
+                String groupname = cursor.getString(cursor.getColumnIndex(InviteMessageDao.COLUMN_NAME_GROUP_Name));
+                String reason = cursor.getString(cursor.getColumnIndex(InviteMessageDao.COLUMN_NAME_REASON));
+                long time = cursor.getLong(cursor.getColumnIndex(InviteMessageDao.COLUMN_NAME_TIME));
+                int status = cursor.getInt(cursor.getColumnIndex(InviteMessageDao.COLUMN_NAME_STATUS));
+                String groupInviter = cursor.getString(cursor.getColumnIndex(InviteMessageDao.COLUMN_NAME_GROUPINVITER));
                 
                 msg.setId(id);
                 msg.setFrom(from);
@@ -276,7 +276,7 @@ public class DemoDBManager {
     synchronized public void deleteMessage(String from){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db.isOpen()){
-            db.delete(InviteMessgeDao.TABLE_NAME, InviteMessgeDao.COLUMN_NAME_FROM + " = ?", new String[]{from});
+            db.delete(InviteMessageDao.TABLE_NAME, InviteMessageDao.COLUMN_NAME_FROM + " = ?", new String[]{from});
         }
     }
     
@@ -284,7 +284,7 @@ public class DemoDBManager {
         int count = 0;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         if(db.isOpen()){
-            Cursor cursor = db.rawQuery("select " + InviteMessgeDao.COLUMN_NAME_UNREAD_MSG_COUNT + " from " + InviteMessgeDao.TABLE_NAME, null);
+            Cursor cursor = db.rawQuery("select " + InviteMessageDao.COLUMN_NAME_UNREAD_MSG_COUNT + " from " + InviteMessageDao.TABLE_NAME, null);
             if(cursor.moveToFirst()){
                 count = cursor.getInt(0);
             }
@@ -297,9 +297,9 @@ public class DemoDBManager {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db.isOpen()){
             ContentValues values = new ContentValues();
-            values.put(InviteMessgeDao.COLUMN_NAME_UNREAD_MSG_COUNT, count);
+            values.put(InviteMessageDao.COLUMN_NAME_UNREAD_MSG_COUNT, count);
 
-            db.update(InviteMessgeDao.TABLE_NAME, values, null,null);
+            db.update(InviteMessageDao.TABLE_NAME, values, null,null);
         }
     }
     

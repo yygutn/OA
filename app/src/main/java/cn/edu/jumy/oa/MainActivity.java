@@ -29,7 +29,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatui.Constant;
 import com.hyphenate.chatui.DemoApplication;
 import com.hyphenate.chatui.DemoHelper;
-import com.hyphenate.chatui.db.InviteMessgeDao;
+import com.hyphenate.chatui.db.InviteMessageDao;
 import com.hyphenate.chatui.db.UserDao;
 import com.hyphenate.chatui.domain.InviteMessage;
 import com.hyphenate.chatui.runtimepermissions.PermissionsManager;
@@ -77,24 +77,17 @@ public class MainActivity extends BaseActivity {
     // 未读消息textview
     private TextView unreadLabel;
     // 未读通讯录textview
-    private TextView unreadAddressLable;
+    private TextView unreadAddressLabel;
     // 账号在别处登录
     public boolean isConflict = false;
     // 账号被移除
     private boolean isCurrentAccountRemoved = false;
 
-    /**
-     * 检查当前用户是否被删除
-     */
-    public boolean getCurrentAccountRemoved() {
-        return isCurrentAccountRemoved;
-    }
 
     private android.app.AlertDialog.Builder conflictBuilder;
     private android.app.AlertDialog.Builder accountRemovedBuilder;
     private boolean isConflictDialogShow;
     private boolean isAccountRemovedDialogShow;
-    private BroadcastReceiver internalDebugReceiver;
     private BroadcastReceiver broadcastReceiver;
     private LocalBroadcastManager broadcastManager;
 
@@ -132,7 +125,7 @@ public class MainActivity extends BaseActivity {
         }
         setContentView(R.layout.activity_home);
 
-        saveUserInfo();
+        DemoApplication.currentUserName = EMClient.getInstance().getCurrentUser();
 
 
         try {
@@ -150,7 +143,7 @@ public class MainActivity extends BaseActivity {
             showAccountRemovedDialog();
         }
 
-        inviteMessgeDao = new InviteMessgeDao(this);
+        inviteMessageDao = new InviteMessageDao(this);
         userDao = new UserDao(this);
 
         //注册local广播接收者，用于接收demohelper中发出的群组联系人的变动通知
@@ -159,13 +152,6 @@ public class MainActivity extends BaseActivity {
         initMeetBroadCastReceiver();
         EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
 
-    }
-
-    /**
-     * 保存用户信息到数据库
-     */
-    private void saveUserInfo() {
-        DemoApplication.currentUserName = EMClient.getInstance().getCurrentUser();
     }
 
     private void initView() {
@@ -181,19 +167,6 @@ public class MainActivity extends BaseActivity {
             mTabHost.getTabWidget().setDividerDrawable(null);
 
         }
-//        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-//            @Override
-//            public void onTabChanged(String tabId) {
-//                Log.e(TAG, "onTabChanged: "+tabId );
-//                int fragmentCount = fragmentArray.length;
-//                for (int i = 0; i < fragmentCount; i++) {
-//                    ((TextView) mTabHost.getTabWidget().getChildTabViewAt(i).findViewById(R.id.title)).
-//                            setTextColor(getResources().getColor(R.color.normal));
-//                }
-//                ((TextView) mTabHost.getTabWidget().getChildTabViewAt(mTabHost.getCurrentTab()).findViewById(R.id.title)).
-//                        setTextColor(getResources().getColor(R.color.pressed));
-//            }
-//        });
         mTabHost.onTabChanged(mTextViewArray[0]);
     }
 
@@ -208,7 +181,7 @@ public class MainActivity extends BaseActivity {
 //            title.setTextColor(getResources().getColor(R.color.pressed));
         }
         if (index == 3) {
-            unreadAddressLable = (TextView) view.findViewById(R.id.tabUnread);
+            unreadAddressLabel = (TextView) view.findViewById(R.id.tabUnread);
 //            title.setTextColor(getResources().getColor(R.color.pressed));
         }
         return view;
@@ -286,13 +259,12 @@ public class MainActivity extends BaseActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constant.ACTION_CONTACT_CHANAGED);
         intentFilter.addAction(Constant.ACTION_GROUP_CHANAGED);
-//		intentFilter.addAction(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION);
         broadcastReceiver = new BroadcastReceiver() {
 
             @Override
             public void onReceive(Context context, Intent intent) {
                 updateUnreadLabel();
-                updateUnreadAddressLable();
+                updateUnreadAddressLabel();
                 switch (mTabHost.getCurrentTab()) {
                     case 2:
                         // 当前页面如果为聊天历史页面，刷新此页面
@@ -312,11 +284,6 @@ public class MainActivity extends BaseActivity {
                         GroupsActivity.instance.onResume();
                     }
                 }
-//				if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
-//					if (conversationListFragment != null){
-//						conversationListFragment.refresh();
-//					}
-//				}
             }
         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
@@ -372,9 +339,6 @@ public class MainActivity extends BaseActivity {
             if (alarmBroadCastReceiver != null) {
                 unregisterReceiver(alarmBroadCastReceiver);
             }
-            if (internalDebugReceiver != null) {
-                unregisterReceiver(internalDebugReceiver);
-            }
         } catch (Exception e) {
             showDebugException(e);
         }
@@ -396,15 +360,15 @@ public class MainActivity extends BaseActivity {
     /**
      * 刷新申请与通知消息数
      */
-    public void updateUnreadAddressLable() {
+    public void updateUnreadAddressLabel() {
         runOnUiThread(new Runnable() {
             public void run() {
                 int count = getUnreadAddressCountTotal();
                 if (count > 0) {
-//					unreadAddressLable.setText(String.valueOf(count));
-                    unreadAddressLable.setVisibility(View.VISIBLE);
+//					unreadAddressLabel.setText(String.valueOf(count));
+                    unreadAddressLabel.setVisibility(View.VISIBLE);
                 } else {
-                    unreadAddressLable.setVisibility(View.INVISIBLE);
+                    unreadAddressLabel.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -418,7 +382,7 @@ public class MainActivity extends BaseActivity {
      */
     public int getUnreadAddressCountTotal() {
         int unreadAddressCountTotal;
-        unreadAddressCountTotal = inviteMessgeDao.getUnreadMessagesCount();
+        unreadAddressCountTotal = inviteMessageDao.getUnreadMessagesCount();
         return unreadAddressCountTotal;
     }
 
@@ -429,16 +393,16 @@ public class MainActivity extends BaseActivity {
      */
     public int getUnreadMsgCountTotal() {
         int unreadMsgCountTotal;
-        int chatroomUnreadMsgCount = 0;
+        int chatRoomUnreadMsgCount = 0;
         unreadMsgCountTotal = EMClient.getInstance().chatManager().getUnreadMsgsCount();
         for (EMConversation conversation : EMClient.getInstance().chatManager().getAllConversations().values()) {
             if (conversation.getType() == EMConversation.EMConversationType.ChatRoom)
-                chatroomUnreadMsgCount = chatroomUnreadMsgCount + conversation.getUnreadMsgCount();
+                chatRoomUnreadMsgCount = chatRoomUnreadMsgCount + conversation.getUnreadMsgCount();
         }
-        return unreadMsgCountTotal - chatroomUnreadMsgCount;
+        return unreadMsgCountTotal - chatRoomUnreadMsgCount;
     }
 
-    private InviteMessgeDao inviteMessgeDao;
+    private InviteMessageDao inviteMessageDao;
     private UserDao userDao;
 
 
@@ -447,13 +411,13 @@ public class MainActivity extends BaseActivity {
      *
      * @param msg void
      */
-    private void notifyNewIviteMessage(InviteMessage msg) {
+    private void notifyNewInviteMessage(InviteMessage msg) {
         saveInviteMsg(msg);
         // 提示有新消息
         DemoHelper.getInstance().getNotifier().viberateAndPlayTone(null);
 
         // 刷新bottom bar消息未读数
-        updateUnreadAddressLable();
+        updateUnreadAddressLabel();
         // 刷新好友页面ui
         if (mTabHost.getCurrentTab() == 3)
             ((ContactListFragment) mTabHost.mTabs.get(3).fragment).refresh();
@@ -466,9 +430,9 @@ public class MainActivity extends BaseActivity {
      */
     private void saveInviteMsg(InviteMessage msg) {
         // 保存msg
-        inviteMessgeDao.saveMessage(msg);
+        inviteMessageDao.saveMessage(msg);
         //保存未读数，这里没有精确计算
-        inviteMessgeDao.saveUnreadMessageCount(1);
+        inviteMessageDao.saveUnreadMessageCount(1);
     }
 
 
@@ -478,7 +442,7 @@ public class MainActivity extends BaseActivity {
 
         if (!isConflict && !isCurrentAccountRemoved) {
             updateUnreadLabel();
-            updateUnreadAddressLable();
+            updateUnreadAddressLabel();
         }
 
         // unregister this event listener when this activity enters the

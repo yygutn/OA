@@ -21,7 +21,7 @@ import android.widget.ListView;
 
 import com.hyphenate.chatui.R;
 import com.hyphenate.chatui.adapter.NewFriendsMsgAdapter;
-import com.hyphenate.chatui.db.InviteMessgeDao;
+import com.hyphenate.chatui.db.InviteMessageDao;
 import com.hyphenate.chatui.domain.InviteMessage;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -44,7 +44,7 @@ public class NewFriendsMsgActivity extends BaseActivity {
 		StatusBarCompat.compat(this,getResources().getColor(R.color.pressed));
 		try {
 			listView = (ListView) findViewById(R.id.list);
-			InviteMessgeDao dao = new InviteMessgeDao(this);
+			InviteMessageDao dao = new InviteMessageDao(this);
 			List<InviteMessage> msgs = dao.getMessagesList();
 			//设置adapter
 			NewFriendsMsgAdapter adapter = new NewFriendsMsgAdapter(this, 1, msgs);

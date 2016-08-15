@@ -25,7 +25,7 @@ import com.hyphenate.chat.EMMessage.Type;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatui.db.DemoDBManager;
-import com.hyphenate.chatui.db.InviteMessgeDao;
+import com.hyphenate.chatui.db.InviteMessageDao;
 import com.hyphenate.chatui.db.UserDao;
 import com.hyphenate.chatui.domain.EmojiconExampleGroupData;
 import com.hyphenate.chatui.domain.InviteMessage;
@@ -70,6 +70,7 @@ public class DemoHelper {
     static public interface DataSyncListener {
         /**
          * 同步完毕
+         *
          * @param success true：成功同步到数据，false失败
          */
         public void onSyncComplete(boolean success);
@@ -77,24 +78,24 @@ public class DemoHelper {
 
     protected static final String TAG = "DemoHelper";
 
-	private EaseUI easeUI;
+    private EaseUI easeUI;
 
     /**
      * EMEventListener
      */
     protected EMMessageListener messageListener = null;
 
-	private Map<String, EaseUser> contactList;
+    private Map<String, EaseUser> contactList;
 
-	private Map<String, RobotUser> robotList;
+    private Map<String, RobotUser> robotList;
 
-	private UserProfileManager userProManager;
+    private UserProfileManager userProManager;
 
-	private static DemoHelper instance = null;
+    private static DemoHelper instance = null;
 
-	private DemoModel demoModel = null;
+    private DemoModel demoModel = null;
 
-	/**
+    /**
      * HuanXin sync groups status listener
      */
     private List<DataSyncListener> syncGroupsListeners;
@@ -116,10 +117,10 @@ public class DemoHelper {
 
     private boolean alreadyNotified = false;
 
-	public boolean isVoiceCalling;
+    public boolean isVoiceCalling;
     public boolean isVideoCalling;
 
-	private String username;
+    private String username;
 
     private Context appContext;
 
@@ -127,58 +128,57 @@ public class DemoHelper {
 
     private EMConnectionListener connectionListener;
 
-    private InviteMessgeDao inviteMessgeDao;
+    private InviteMessageDao inviteMessageDao;
     private UserDao userDao;
 
     private LocalBroadcastManager broadcastManager;
 
     private boolean isGroupAndContactListenerRegisted;
 
-	private DemoHelper() {
-	}
+    private DemoHelper() {
+    }
 
-	public synchronized static DemoHelper getInstance() {
-		if (instance == null) {
-			instance = new DemoHelper();
-		}
-		return instance;
-	}
+    public synchronized static DemoHelper getInstance() {
+        if (instance == null) {
+            instance = new DemoHelper();
+        }
+        return instance;
+    }
 
-	/**
-	 * init helper
-	 *
-	 * @param context
-	 *            application context
-	 */
-	public void init(Context context) {
-	    demoModel = new DemoModel(context);
-	    EMOptions options = initChatOptions();
-	    //options传null则使用默认的
-		if (EaseUI.getInstance().init(context, options)) {
-		    appContext = context;
+    /**
+     * init helper
+     *
+     * @param context application context
+     */
+    public void init(Context context) {
+        demoModel = new DemoModel(context);
+        EMOptions options = initChatOptions();
+        //options传null则使用默认的
+        if (EaseUI.getInstance().init(context, options)) {
+            appContext = context;
 
-		    //设为调试模式，打成正式包时，最好设为false，以免消耗额外的资源
-		    EMClient.getInstance().setDebugMode(true);
-		    //get easeui instance
-		    easeUI = EaseUI.getInstance();
-		    //调用easeui的api设置providers
-		    setEaseUIProviders();
-			//初始化PreferenceManager
-			PreferenceManager.init(context);
-			//初始化用户管理类
-			getUserProfileManager().init(context);
+            //设为调试模式，打成正式包时，最好设为false，以免消耗额外的资源
+            EMClient.getInstance().setDebugMode(true);
+            //get easeui instance
+            easeUI = EaseUI.getInstance();
+            //调用easeui的api设置providers
+            setEaseUIProviders();
+            //初始化PreferenceManager
+            PreferenceManager.init(context);
+            //初始化用户管理类
+            getUserProfileManager().init(context);
 
-			EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(getModel().isAdaptiveVideoEncode());
+            EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(getModel().isAdaptiveVideoEncode());
 
-			//设置全局监听
-			setGlobalListeners();
-			broadcastManager = LocalBroadcastManager.getInstance(appContext);
-	        initDbDao();
-		}
-	}
+            //设置全局监听
+            setGlobalListeners();
+            broadcastManager = LocalBroadcastManager.getInstance(appContext);
+            initDbDao();
+        }
+    }
 
 
-	private EMOptions initChatOptions(){
+    private EMOptions initChatOptions() {
         Log.d(TAG, "init HuanXin Options");
 
         // 获取到EMChatOptions对象
@@ -235,12 +235,12 @@ public class DemoHelper {
 
             @Override
             public boolean isMsgNotifyAllowed(EMMessage message) {
-                if(message == null){
+                if (message == null) {
                     return demoModel.getSettingMsgNotification();
                 }
-                if(!demoModel.getSettingMsgNotification()){
+                if (!demoModel.getSettingMsgNotification()) {
                     return false;
-                }else{
+                } else {
                     //如果允许新消息提示
                     //屏蔽的用户和群组不提示用户
                     String chatUsename = null;
@@ -268,8 +268,8 @@ public class DemoHelper {
             @Override
             public EaseEmojicon getEmojiconInfo(String emojiconIdentityCode) {
                 EaseEmojiconGroupEntity data = EmojiconExampleGroupData.getData();
-                for(EaseEmojicon emojicon : data.getEmojiconList()){
-                    if(emojicon.getIdentityCode().equals(emojiconIdentityCode)){
+                for (EaseEmojicon emojicon : data.getEmojiconList()) {
+                    if (emojicon.getIdentityCode().equals(emojiconIdentityCode)) {
                         return emojicon;
                     }
                 }
@@ -288,13 +288,13 @@ public class DemoHelper {
 
             @Override
             public String getTitle(EMMessage message) {
-              //修改标题,这里使用默认
+                //修改标题,这里使用默认
                 return null;
             }
 
             @Override
             public int getSmallIcon(EMMessage message) {
-              //设置小图标，这里为默认
+                //设置小图标，这里为默认
                 return 0;
             }
 
@@ -302,17 +302,17 @@ public class DemoHelper {
             public String getDisplayedText(EMMessage message) {
                 // 设置状态栏的消息提示，可以根据message的类型做相应提示
                 String ticker = EaseCommonUtils.getMessageDigest(message, appContext);
-                if(message.getType() == Type.TXT){
+                if (message.getType() == Type.TXT) {
                     ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
                 }
                 EaseUser user = getUserInfo(message.getFrom());
-                if(user != null){
-                    if(EaseAtMessageHelper.get().isAtMeMsg(message)){
+                if (user != null) {
+                    if (EaseAtMessageHelper.get().isAtMeMsg(message)) {
                         return String.format(appContext.getString(R.string.at_your_in_group), user.getNick());
                     }
                     return user.getNick() + ": " + ticker;
-                }else{
-                    if(EaseAtMessageHelper.get().isAtMeMsg(message)){
+                } else {
+                    if (EaseAtMessageHelper.get().isAtMeMsg(message)) {
                         return String.format(appContext.getString(R.string.at_your_in_group), message.getFrom());
                     }
                     return message.getFrom() + ": " + ticker;
@@ -330,11 +330,11 @@ public class DemoHelper {
                 //设置点击通知栏跳转事件
                 Intent intent = new Intent(appContext, ChatActivity.class);
                 //有电话时优先跳转到通话页面
-                if(isVideoCalling){
+                if (isVideoCalling) {
                     intent = new Intent(appContext, VideoCallActivity.class);
-                }else if(isVoiceCalling){
+                } else if (isVoiceCalling) {
                     intent = new Intent(appContext, VoiceCallActivity.class);
-                }else{
+                } else {
                     ChatType chatType = message.getChatType();
                     if (chatType == ChatType.Chat) { // 单聊信息
                         intent.putExtra("userId", message.getFrom());
@@ -342,9 +342,9 @@ public class DemoHelper {
                     } else { // 群聊信息
                         // message.getTo()为群聊id
                         intent.putExtra("userId", message.getTo());
-                        if(chatType == ChatType.GroupChat){
+                        if (chatType == ChatType.GroupChat) {
                             intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
-                        }else{
+                        } else {
                             intent.putExtra("chatType", Constant.CHATTYPE_CHATROOM);
                         }
 
@@ -358,7 +358,7 @@ public class DemoHelper {
     /**
      * 设置全局事件监听
      */
-    protected void setGlobalListeners(){
+    protected void setGlobalListeners() {
         syncGroupsListeners = new ArrayList<DataSyncListener>();
         syncContactsListeners = new ArrayList<DataSyncListener>();
         syncBlackListListeners = new ArrayList<DataSyncListener>();
@@ -373,7 +373,7 @@ public class DemoHelper {
             public void onDisconnected(int error) {
                 if (error == EMError.USER_REMOVED) {
                     onCurrentAccountRemoved();
-                }else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
+                } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
                     onConnectionConflict();
                 }
             }
@@ -382,23 +382,23 @@ public class DemoHelper {
             public void onConnected() {
 
                 // in case group and contact were already synced, we supposed to document sdk we are ready to receive the events
-                if(isGroupsSyncedWithServer && isContactsSyncedWithServer){
-                    new Thread(){
+                if (isGroupsSyncedWithServer && isContactsSyncedWithServer) {
+                    new Thread() {
                         @Override
-                        public void run(){
+                        public void run() {
                             DemoHelper.getInstance().notifyForRecevingEvents();
                         }
                     }.start();
-                }else{
-                    if(!isGroupsSyncedWithServer){
+                } else {
+                    if (!isGroupsSyncedWithServer) {
                         asyncFetchGroupsFromServer(null);
                     }
 
-                    if(!isContactsSyncedWithServer){
+                    if (!isContactsSyncedWithServer) {
                         asyncFetchContactsFromServer(null);
                     }
 
-                    if(!isBlackListSyncedWithServer){
+                    if (!isBlackListSyncedWithServer) {
                         asyncFetchBlackListFromServer(null);
                     }
                 }
@@ -407,7 +407,7 @@ public class DemoHelper {
 
 
         IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
-        if(callReceiver == null){
+        if (callReceiver == null) {
             callReceiver = new CallReceiver();
         }
 
@@ -423,15 +423,15 @@ public class DemoHelper {
     }
 
     private void initDbDao() {
-        inviteMessgeDao = new InviteMessgeDao(appContext);
+        inviteMessageDao = new InviteMessageDao(appContext);
         userDao = new UserDao(appContext);
     }
 
     /**
      * 注册群组和联系人监听，由于logout的时候会被sdk清除掉，再次登录的时候需要再注册一下
      */
-    public void registerGroupAndContactListener(){
-        if(!isGroupAndContactListenerRegisted){
+    public void registerGroupAndContactListener() {
+        if (!isGroupAndContactListenerRegisted) {
             //注册群组变动监听
             EMClient.getInstance().groupManager().addGroupChangeListener(new MyGroupChangeListener());
             //注册联系人变动监听
@@ -449,7 +449,7 @@ public class DemoHelper {
         @Override
         public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
 
-            new InviteMessgeDao(appContext).deleteMessage(groupId);
+            new InviteMessageDao(appContext).deleteMessage(groupId);
 
             // 用户申请加入群聊
             InviteMessage msg = new InviteMessage();
@@ -468,7 +468,7 @@ public class DemoHelper {
         @Override
         public void onInvitationAccpted(String groupId, String invitee, String reason) {
 
-            new InviteMessgeDao(appContext).deleteMessage(groupId);
+            new InviteMessageDao(appContext).deleteMessage(groupId);
 
             // 对方同意加群邀请
             boolean hasGroup = false;
@@ -499,7 +499,7 @@ public class DemoHelper {
         @Override
         public void onInvitationDeclined(String groupId, String invitee, String reason) {
 
-            new InviteMessgeDao(appContext).deleteMessage(groupId);
+            new InviteMessageDao(appContext).deleteMessage(groupId);
 
             // 对方同意加群邀请
             boolean hasGroup = false;
@@ -566,7 +566,7 @@ public class DemoHelper {
             msg.setFrom(accepter);
             msg.setTo(groupId);
             msg.setMsgId(UUID.randomUUID().toString());
-            msg.addBody(new EMTextMessageBody(accepter + " " +st4));
+            msg.addBody(new EMTextMessageBody(accepter + " " + st4));
             msg.setStatus(Status.SUCCESS);
             // 保存同意消息
             EMClient.getInstance().chatManager().saveMessage(msg);
@@ -590,7 +590,7 @@ public class DemoHelper {
             msg.setFrom(inviter);
             msg.setTo(groupId);
             msg.setMsgId(UUID.randomUUID().toString());
-            msg.addBody(new EMTextMessageBody(inviter + " " +st3));
+            msg.addBody(new EMTextMessageBody(inviter + " " + st3));
             msg.setStatus(EMMessage.Status.SUCCESS);
             // 保存邀请消息
             EMClient.getInstance().chatManager().saveMessage(msg);
@@ -604,7 +604,6 @@ public class DemoHelper {
 
     /***
      * 好友变化listener
-     *
      */
     public class MyContactListener implements EMContactListener {
 
@@ -621,7 +620,7 @@ public class DemoHelper {
             toAddUsers.put(username, user);
             localUsers.putAll(toAddUsers);
 
-           //发送好友变动广播
+            //发送好友变动广播
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
         }
 
@@ -631,7 +630,7 @@ public class DemoHelper {
             Map<String, EaseUser> localUsers = DemoHelper.getInstance().getContactList();
             localUsers.remove(username);
             userDao.deleteContact(username);
-            inviteMessgeDao.deleteMessage(username);
+            inviteMessageDao.deleteMessage(username);
 
             //发送好友变动广播
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
@@ -640,11 +639,11 @@ public class DemoHelper {
         @Override
         public void onContactInvited(String username, String reason) {
             // 接到邀请的消息，如果不处理(同意或拒绝)，掉线后，服务器会自动再发过来，所以客户端不需要重复提醒
-            List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
+            List<InviteMessage> msgs = inviteMessageDao.getMessagesList();
 
             for (InviteMessage inviteMessage : msgs) {
                 if (inviteMessage.getGroupId() == null && inviteMessage.getFrom().equals(username)) {
-                    inviteMessgeDao.deleteMessage(username);
+                    inviteMessageDao.deleteMessage(username);
                 }
             }
             // 自己封装的javabean
@@ -661,7 +660,7 @@ public class DemoHelper {
 
         @Override
         public void onContactAgreed(String username) {
-            List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
+            List<InviteMessage> msgs = inviteMessageDao.getMessagesList();
             for (InviteMessage inviteMessage : msgs) {
                 if (inviteMessage.getFrom().equals(username)) {
                     return;
@@ -686,15 +685,16 @@ public class DemoHelper {
 
     /**
      * 保存并提示消息的邀请消息
+     *
      * @param msg
      */
-    private void notifyNewIviteMessage(InviteMessage msg){
-        if(inviteMessgeDao == null){
-            inviteMessgeDao = new InviteMessgeDao(appContext);
+    private void notifyNewIviteMessage(InviteMessage msg) {
+        if (inviteMessageDao == null) {
+            inviteMessageDao = new InviteMessageDao(appContext);
         }
-        inviteMessgeDao.saveMessage(msg);
+        inviteMessageDao.saveMessage(msg);
         //保存未读数，这里没有精确计算
-        inviteMessgeDao.saveUnreadMessageCount(1);
+        inviteMessageDao.saveUnreadMessageCount(1);
         // 提示有新消息
         getNotifier().viberateAndPlayTone(null);
     }
@@ -702,7 +702,7 @@ public class DemoHelper {
     /**
      * 账号在别的设备登录
      */
-    protected void onConnectionConflict(){
+    protected void onConnectionConflict() {
         Intent intent = new Intent(appContext, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(Constant.ACCOUNT_CONFLICT, true);
@@ -712,169 +712,168 @@ public class DemoHelper {
     /**
      * 账号被移除
      */
-    protected void onCurrentAccountRemoved(){
+    protected void onCurrentAccountRemoved() {
         Intent intent = new Intent(appContext, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(Constant.ACCOUNT_REMOVED, true);
         appContext.startActivity(intent);
     }
 
-	private EaseUser getUserInfo(String username){
-	    //获取user信息，demo是从内存的好友列表里获取，
+    private EaseUser getUserInfo(String username) {
+        //获取user信息，demo是从内存的好友列表里获取，
         //实际开发中，可能还需要从服务器获取用户信息,
         //从服务器获取的数据，最好缓存起来，避免频繁的网络请求
         EaseUser user = null;
-        if(username.equals(EMClient.getInstance().getCurrentUser()))
+        if (username.equals(EMClient.getInstance().getCurrentUser()))
             return getUserProfileManager().getCurrentUserInfo();
         user = getContactList().get(username);
-        if(user == null && getRobotList() != null){
+        if (user == null && getRobotList() != null) {
             user = getRobotList().get(username);
         }
         //TODO 获取不在好友列表里的群成员具体信息，即陌生人信息，
         //demo这里简单返回只有username的user
-        if(user == null){
+        if (user == null) {
             user = new EaseUser(username);
             EaseCommonUtils.setUserInitialLetter(user);
         }
         return user;
-	}
+    }
 
-	 /**
+    /**
      * 全局事件监听
      * 因为可能会有UI页面先处理到这个消息，所以一般如果UI页面已经处理，这里就不需要再次处理
      * activityList.size() <= 0 意味着所有页面都已经在后台运行，或者已经离开Activity Stack
      */
     protected void registerEventListener() {
-    	messageListener = new EMMessageListener() {
+        messageListener = new EMMessageListener() {
             private BroadcastReceiver broadCastReceiver = null;
 
-			@Override
-			public void onMessageReceived(List<EMMessage> messages) {
-			    for (EMMessage message : messages) {
-			        EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
-			        //应用在后台，不需要刷新UI,通知栏提示新消息
-			        if(!easeUI.hasForegroundActivies()){
-			            getNotifier().onNewMsg(message);
-			        }
-			    }
-			}
+            @Override
+            public void onMessageReceived(List<EMMessage> messages) {
+                for (EMMessage message : messages) {
+                    EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
+                    //应用在后台，不需要刷新UI,通知栏提示新消息
+                    if (!easeUI.hasForegroundActivies()) {
+                        getNotifier().onNewMsg(message);
+                    }
+                }
+            }
 
-			@Override
-			public void onCmdMessageReceived(List<EMMessage> messages) {
-			    for (EMMessage message : messages) {
-                    BaseActivity.showDebugLogd(TAG,"收到透传消息");
+            @Override
+            public void onCmdMessageReceived(List<EMMessage> messages) {
+                for (EMMessage message : messages) {
+                    BaseActivity.showDebugLogd(TAG, "收到透传消息");
                     //获取消息body
                     EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action();//获取自定义action
 
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");
-                    NotifyUtils.sendNotifyBroadCast(MyApplication.getContext(),action);
-                    BaseActivity.showDebugLogd(TAG,String.format("透传消息：action:%s,message:%s", action,message.toString()));
+                    NotifyUtils.sendNotifyBroadCast(MyApplication.getContext(), action);
+                    BaseActivity.showDebugLogd(TAG, String.format("透传消息：action:%s,message:%s", action, message.toString()));
                 }
-			}
+            }
 
-			@Override
-			public void onMessageReadAckReceived(List<EMMessage> messages) {
-			}
+            @Override
+            public void onMessageReadAckReceived(List<EMMessage> messages) {
+            }
 
-			@Override
-			public void onMessageDeliveryAckReceived(List<EMMessage> message) {
-			}
+            @Override
+            public void onMessageDeliveryAckReceived(List<EMMessage> message) {
+            }
 
-			@Override
-			public void onMessageChanged(EMMessage message, Object change) {
+            @Override
+            public void onMessageChanged(EMMessage message, Object change) {
 
-			}
-		};
+            }
+        };
 
         EMClient.getInstance().chatManager().addMessageListener(messageListener);
     }
 
-	/**
-	 * 是否登录成功过
-	 *
-	 * @return
-	 */
-	public boolean isLoggedIn() {
-		return EMClient.getInstance().isLoggedInBefore();
-	}
+    /**
+     * 是否登录成功过
+     *
+     * @return
+     */
+    public boolean isLoggedIn() {
+        return EMClient.getInstance().isLoggedInBefore();
+    }
 
-	/**
-	 * 退出登录
-	 *
-	 * @param unbindDeviceToken
-	 *            是否解绑设备token(使用GCM才有)
-	 * @param callback
-	 *            callback
-	 */
-	public void logout(boolean unbindDeviceToken, final EMCallBack callback) {
-		endCall();
-		Log.d(TAG, "logout: " + unbindDeviceToken);
-		EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
+    /**
+     * 退出登录
+     *
+     * @param unbindDeviceToken 是否解绑设备token(使用GCM才有)
+     * @param callback          callback
+     */
+    public void logout(boolean unbindDeviceToken, final EMCallBack callback) {
+        endCall();
+        Log.d(TAG, "logout: " + unbindDeviceToken);
+        EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
 
-			@Override
-			public void onSuccess() {
-				Log.d(TAG, "logout: onSuccess");
-			    reset();
-				if (callback != null) {
-					callback.onSuccess();
-				}
-
-			}
-
-			@Override
-			public void onProgress(int progress, String status) {
-				if (callback != null) {
-					callback.onProgress(progress, status);
-				}
-			}
-
-			@Override
-			public void onError(int code, String error) {
-				Log.d(TAG, "logout: onSuccess");
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "logout: onSuccess");
                 reset();
-				if (callback != null) {
-					callback.onError(code, error);
-				}
-			}
-		});
-	}
+                if (callback != null) {
+                    callback.onSuccess();
+                }
 
-	/**
-	 * 获取消息通知类
-	 * @return
-	 */
-	public EaseNotifier getNotifier(){
-	    return easeUI.getNotifier();
-	}
+            }
 
-	public DemoModel getModel(){
+            @Override
+            public void onProgress(int progress, String status) {
+                if (callback != null) {
+                    callback.onProgress(progress, status);
+                }
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                Log.d(TAG, "logout: onSuccess");
+                reset();
+                if (callback != null) {
+                    callback.onError(code, error);
+                }
+            }
+        });
+    }
+
+    /**
+     * 获取消息通知类
+     *
+     * @return 通知类
+     */
+    public EaseNotifier getNotifier() {
+        return easeUI.getNotifier();
+    }
+
+    public DemoModel getModel() {
         return (DemoModel) demoModel;
     }
 
-	/**
-	 * 设置好友user list到内存中
-	 *
-	 * @param aContactList contactList
-	 */
-	public void setContactList(Map<String, EaseUser> aContactList) {
-		if(aContactList == null){
-		    if (contactList != null) {
-		        contactList.clear();
-		    }
-			return;
-		}
+    /**
+     * 设置好友user list到内存中
+     *
+     * @param aContactList contactList
+     */
+    public void setContactList(Map<String, EaseUser> aContactList) {
+        if (aContactList == null) {
+            if (contactList != null) {
+                contactList.clear();
+            }
+            return;
+        }
 
-		contactList = aContactList;
-	}
+        contactList = aContactList;
+    }
 
-	/**
+    /**
      * 保存单个user
      */
-    public void saveContact(EaseUser user){
-    	contactList.put(user.getUsername(), user);
-    	demoModel.saveContact(user);
+    public void saveContact(EaseUser user) {
+        contactList.put(user.getUsername(), user);
+        demoModel.saveContact(user);
     }
 
     /**
@@ -888,8 +887,8 @@ public class DemoHelper {
         }
 
         // return a empty non-null object to avoid app crash
-        if(contactList == null){
-        	return new Hashtable<String, EaseUser>();
+        if (contactList == null) {
+            return new Hashtable<String, EaseUser>();
         }
 
         return contactList;
@@ -897,310 +896,313 @@ public class DemoHelper {
 
     /**
      * 设置当前用户的环信id
+     *
      * @param username
      */
-    public void setCurrentUserName(String username){
-    	this.username = username;
-    	demoModel.setCurrentUserName(username);
+    public void setCurrentUserName(String username) {
+        this.username = username;
+        demoModel.setCurrentUserName(username);
     }
 
     /**
      * 获取当前用户的环信id
      */
-    public String getCurrentUsernName(){
-    	if(username == null){
-    		username = demoModel.getCurrentUsernName();
-    	}
-    	return username;
+    public String getCurrentUsernName() {
+        if (username == null) {
+            username = demoModel.getCurrentUsernName();
+        }
+        return username;
     }
 
-	public void setRobotList(Map<String, RobotUser> robotList) {
-		this.robotList = robotList;
-	}
-	public Map<String, RobotUser> getRobotList() {
-		if (isLoggedIn() && robotList == null) {
-			robotList = demoModel.getRobotList();
-		}
-		return robotList;
-	}
+    public void setRobotList(Map<String, RobotUser> robotList) {
+        this.robotList = robotList;
+    }
 
-	 /**
+    public Map<String, RobotUser> getRobotList() {
+        if (isLoggedIn() && robotList == null) {
+            robotList = demoModel.getRobotList();
+        }
+        return robotList;
+    }
+
+    /**
      * update user list to cach And db
      *
      * @param contactInfoList
      */
     public void updateContactList(List<EaseUser> contactInfoList) {
-         for (EaseUser u : contactInfoList) {
+        for (EaseUser u : contactInfoList) {
             contactList.put(u.getUsername(), u);
-         }
-         ArrayList<EaseUser> mList = new ArrayList<EaseUser>();
-         mList.addAll(contactList.values());
-         demoModel.saveContactList(mList);
+        }
+        ArrayList<EaseUser> mList = new ArrayList<EaseUser>();
+        mList.addAll(contactList.values());
+        demoModel.saveContactList(mList);
     }
 
-	public UserProfileManager getUserProfileManager() {
-		if (userProManager == null) {
-			userProManager = new UserProfileManager();
-		}
-		return userProManager;
-	}
+    public UserProfileManager getUserProfileManager() {
+        if (userProManager == null) {
+            userProManager = new UserProfileManager();
+        }
+        return userProManager;
+    }
 
-	void endCall() {
-		try {
-			EMClient.getInstance().callManager().endCall();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    void endCall() {
+        try {
+            EMClient.getInstance().callManager().endCall();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	  public void addSyncGroupListener(DataSyncListener listener) {
-	        if (listener == null) {
-	            return;
-	        }
-	        if (!syncGroupsListeners.contains(listener)) {
-	            syncGroupsListeners.add(listener);
-	        }
-	    }
+    public void addSyncGroupListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (!syncGroupsListeners.contains(listener)) {
+            syncGroupsListeners.add(listener);
+        }
+    }
 
-	    public void removeSyncGroupListener(DataSyncListener listener) {
-	        if (listener == null) {
-	            return;
-	        }
-	        if (syncGroupsListeners.contains(listener)) {
-	            syncGroupsListeners.remove(listener);
-	        }
-	    }
+    public void removeSyncGroupListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (syncGroupsListeners.contains(listener)) {
+            syncGroupsListeners.remove(listener);
+        }
+    }
 
-	    public void addSyncContactListener(DataSyncListener listener) {
-	        if (listener == null) {
-	            return;
-	        }
-	        if (!syncContactsListeners.contains(listener)) {
-	            syncContactsListeners.add(listener);
-	        }
-	    }
+    public void addSyncContactListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (!syncContactsListeners.contains(listener)) {
+            syncContactsListeners.add(listener);
+        }
+    }
 
-	    public void removeSyncContactListener(DataSyncListener listener) {
-	        if (listener == null) {
-	            return;
-	        }
-	        if (syncContactsListeners.contains(listener)) {
-	            syncContactsListeners.remove(listener);
-	        }
-	    }
+    public void removeSyncContactListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (syncContactsListeners.contains(listener)) {
+            syncContactsListeners.remove(listener);
+        }
+    }
 
-	    public void addSyncBlackListListener(DataSyncListener listener) {
-	        if (listener == null) {
-	            return;
-	        }
-	        if (!syncBlackListListeners.contains(listener)) {
-	            syncBlackListListeners.add(listener);
-	        }
-	    }
+    public void addSyncBlackListListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (!syncBlackListListeners.contains(listener)) {
+            syncBlackListListeners.add(listener);
+        }
+    }
 
-	    public void removeSyncBlackListListener(DataSyncListener listener) {
-	        if (listener == null) {
-	            return;
-	        }
-	        if (syncBlackListListeners.contains(listener)) {
-	            syncBlackListListeners.remove(listener);
-	        }
-	    }
+    public void removeSyncBlackListListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (syncBlackListListeners.contains(listener)) {
+            syncBlackListListeners.remove(listener);
+        }
+    }
 
-	/**
-    * 同步操作，从服务器获取群组列表
-    * 该方法会记录更新状态，可以通过isSyncingGroupsFromServer获取是否正在更新
-    * 和isGroupsSyncedWithServer获取是否更新已经完成
-    * @throws EMCallBack callback
-    */
-   public synchronized void asyncFetchGroupsFromServer(final EMCallBack callback){
-       if(isSyncingGroupsWithServer){
-           return;
-       }
+    /**
+     * 同步操作，从服务器获取群组列表
+     * 该方法会记录更新状态，可以通过isSyncingGroupsFromServer获取是否正在更新
+     * 和isGroupsSyncedWithServer获取是否更新已经完成
+     *
+     * @throws EMCallBack callback
+     */
+    public synchronized void asyncFetchGroupsFromServer(final EMCallBack callback) {
+        if (isSyncingGroupsWithServer) {
+            return;
+        }
 
-       isSyncingGroupsWithServer = true;
+        isSyncingGroupsWithServer = true;
 
-       new Thread(){
-           @Override
-           public void run(){
-               try {
-                   EMClient.getInstance().groupManager().getJoinedGroupsFromServer();
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    EMClient.getInstance().groupManager().getJoinedGroupsFromServer();
 
-                   // in case that logout already before server returns, we should return immediately
-                   if(!isLoggedIn()){
-                       isGroupsSyncedWithServer = false;
-                       isSyncingGroupsWithServer = false;
-                       //通知listener同步群组完毕
-                       noitifyGroupSyncListeners(false);
-                       return;
-                   }
+                    // in case that logout already before server returns, we should return immediately
+                    if (!isLoggedIn()) {
+                        isGroupsSyncedWithServer = false;
+                        isSyncingGroupsWithServer = false;
+                        //通知listener同步群组完毕
+                        noitifyGroupSyncListeners(false);
+                        return;
+                    }
 
-                   demoModel.setGroupsSynced(true);
+                    demoModel.setGroupsSynced(true);
 
-                   isGroupsSyncedWithServer = true;
-                   isSyncingGroupsWithServer = false;
+                    isGroupsSyncedWithServer = true;
+                    isSyncingGroupsWithServer = false;
 
-                   //通知listener同步群组完毕
-                   noitifyGroupSyncListeners(true);
-                   if(isContactsSyncedWithServer()){
-                       notifyForRecevingEvents();
-                   }
-                   if(callback != null){
-                       callback.onSuccess();
-                   }
-               } catch (HyphenateException e) {
-                   demoModel.setGroupsSynced(false);
-                   isGroupsSyncedWithServer = false;
-                   isSyncingGroupsWithServer = false;
-                   noitifyGroupSyncListeners(false);
-                   if(callback != null){
-                       callback.onError(e.getErrorCode(), e.toString());
-                   }
-               }
+                    //通知listener同步群组完毕
+                    noitifyGroupSyncListeners(true);
+                    if (isContactsSyncedWithServer()) {
+                        notifyForRecevingEvents();
+                    }
+                    if (callback != null) {
+                        callback.onSuccess();
+                    }
+                } catch (HyphenateException e) {
+                    demoModel.setGroupsSynced(false);
+                    isGroupsSyncedWithServer = false;
+                    isSyncingGroupsWithServer = false;
+                    noitifyGroupSyncListeners(false);
+                    if (callback != null) {
+                        callback.onError(e.getErrorCode(), e.toString());
+                    }
+                }
 
-           }
-       }.start();
-   }
+            }
+        }.start();
+    }
 
-   public void noitifyGroupSyncListeners(boolean success){
-       for (DataSyncListener listener : syncGroupsListeners) {
-           listener.onSyncComplete(success);
-       }
-   }
+    public void noitifyGroupSyncListeners(boolean success) {
+        for (DataSyncListener listener : syncGroupsListeners) {
+            listener.onSyncComplete(success);
+        }
+    }
 
-   public void asyncFetchContactsFromServer(final EMValueCallBack<List<String>> callback){
-       if(isSyncingContactsWithServer){
-           return;
-       }
+    public void asyncFetchContactsFromServer(final EMValueCallBack<List<String>> callback) {
+        if (isSyncingContactsWithServer) {
+            return;
+        }
 
-       isSyncingContactsWithServer = true;
+        isSyncingContactsWithServer = true;
 
-       new Thread(){
-           @Override
-           public void run(){
-               List<String> usernames = null;
-               try {
-                   usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
-                   // in case that logout already before server returns, we should return immediately
-                   if(!isLoggedIn()){
-                       isContactsSyncedWithServer = false;
-                       isSyncingContactsWithServer = false;
-                       //通知listeners联系人同步完毕
-                       notifyContactsSyncListener(false);
-                       return;
-                   }
+        new Thread() {
+            @Override
+            public void run() {
+                List<String> usernames = null;
+                try {
+                    usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
+                    // in case that logout already before server returns, we should return immediately
+                    if (!isLoggedIn()) {
+                        isContactsSyncedWithServer = false;
+                        isSyncingContactsWithServer = false;
+                        //通知listeners联系人同步完毕
+                        notifyContactsSyncListener(false);
+                        return;
+                    }
 
-                   Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
-                   for (String username : usernames) {
-                       EaseUser user = new EaseUser(username);
-                       EaseCommonUtils.setUserInitialLetter(user);
-                       userlist.put(username, user);
-                   }
-                   // 存入内存
-                   getContactList().clear();
-                   getContactList().putAll(userlist);
+                    Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
+                    for (String username : usernames) {
+                        EaseUser user = new EaseUser(username);
+                        EaseCommonUtils.setUserInitialLetter(user);
+                        userlist.put(username, user);
+                    }
+                    // 存入内存
+                    getContactList().clear();
+                    getContactList().putAll(userlist);
                     // 存入db
-                   UserDao dao = new UserDao(appContext);
-                   List<EaseUser> users = new ArrayList<EaseUser>(userlist.values());
-                   dao.saveContactList(users);
+                    UserDao dao = new UserDao(appContext);
+                    List<EaseUser> users = new ArrayList<EaseUser>(userlist.values());
+                    dao.saveContactList(users);
 
-                   demoModel.setContactSynced(true);
-                   EMLog.d(TAG, "set contact syn status to true");
+                    demoModel.setContactSynced(true);
+                    EMLog.d(TAG, "set contact syn status to true");
 
-                   isContactsSyncedWithServer = true;
-                   isSyncingContactsWithServer = false;
+                    isContactsSyncedWithServer = true;
+                    isSyncingContactsWithServer = false;
 
-                   //通知listeners联系人同步完毕
-                   notifyContactsSyncListener(true);
-                   if(isGroupsSyncedWithServer()){
-                       notifyForRecevingEvents();
-                   }
+                    //通知listeners联系人同步完毕
+                    notifyContactsSyncListener(true);
+                    if (isGroupsSyncedWithServer()) {
+                        notifyForRecevingEvents();
+                    }
 
 
-                   getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<EaseUser>>() {
+                    getUserProfileManager().asyncFetchContactInfosFromServer(usernames, new EMValueCallBack<List<EaseUser>>() {
 
-                       @Override
-                       public void onSuccess(List<EaseUser> uList) {
-                           updateContactList(uList);
-                           getUserProfileManager().notifyContactInfosSyncListener(true);
-                       }
+                        @Override
+                        public void onSuccess(List<EaseUser> uList) {
+                            updateContactList(uList);
+                            getUserProfileManager().notifyContactInfosSyncListener(true);
+                        }
 
-                       @Override
-                       public void onError(int error, String errorMsg) {
-                       }
-                   });
-                   if(callback != null){
-                       callback.onSuccess(usernames);
-                   }
-               } catch (HyphenateException e) {
-                   demoModel.setContactSynced(false);
-                   isContactsSyncedWithServer = false;
-                   isSyncingContactsWithServer = false;
-                   notifyContactsSyncListener(false);
-                   e.printStackTrace();
-                   if(callback != null){
-                       callback.onError(e.getErrorCode(), e.toString());
-                   }
-               }
+                        @Override
+                        public void onError(int error, String errorMsg) {
+                        }
+                    });
+                    if (callback != null) {
+                        callback.onSuccess(usernames);
+                    }
+                } catch (HyphenateException e) {
+                    demoModel.setContactSynced(false);
+                    isContactsSyncedWithServer = false;
+                    isSyncingContactsWithServer = false;
+                    notifyContactsSyncListener(false);
+                    e.printStackTrace();
+                    if (callback != null) {
+                        callback.onError(e.getErrorCode(), e.toString());
+                    }
+                }
 
-           }
-       }.start();
-   }
+            }
+        }.start();
+    }
 
-   public void notifyContactsSyncListener(boolean success){
-       for (DataSyncListener listener : syncContactsListeners) {
-           listener.onSyncComplete(success);
-       }
-   }
+    public void notifyContactsSyncListener(boolean success) {
+        for (DataSyncListener listener : syncContactsListeners) {
+            listener.onSyncComplete(success);
+        }
+    }
 
-   public void asyncFetchBlackListFromServer(final EMValueCallBack<List<String>> callback){
+    public void asyncFetchBlackListFromServer(final EMValueCallBack<List<String>> callback) {
 
-       if(isSyncingBlackListWithServer){
-           return;
-       }
+        if (isSyncingBlackListWithServer) {
+            return;
+        }
 
-       isSyncingBlackListWithServer = true;
+        isSyncingBlackListWithServer = true;
 
-       new Thread(){
-           @Override
-           public void run(){
-               try {
-                   List<String> usernames = EMClient.getInstance().contactManager().getBlackListFromServer();
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    List<String> usernames = EMClient.getInstance().contactManager().getBlackListFromServer();
 
-                   // in case that logout already before server returns, we should return immediately
-                   if(!isLoggedIn()){
-                       isBlackListSyncedWithServer = false;
-                       isSyncingBlackListWithServer = false;
-                       notifyBlackListSyncListener(false);
-                       return;
-                   }
+                    // in case that logout already before server returns, we should return immediately
+                    if (!isLoggedIn()) {
+                        isBlackListSyncedWithServer = false;
+                        isSyncingBlackListWithServer = false;
+                        notifyBlackListSyncListener(false);
+                        return;
+                    }
 
-                   demoModel.setBlacklistSynced(true);
+                    demoModel.setBlacklistSynced(true);
 
-                   isBlackListSyncedWithServer = true;
-                   isSyncingBlackListWithServer = false;
+                    isBlackListSyncedWithServer = true;
+                    isSyncingBlackListWithServer = false;
 
-                   notifyBlackListSyncListener(true);
-                   if(callback != null){
-                       callback.onSuccess(usernames);
-                   }
-               } catch (HyphenateException e) {
-                   demoModel.setBlacklistSynced(false);
+                    notifyBlackListSyncListener(true);
+                    if (callback != null) {
+                        callback.onSuccess(usernames);
+                    }
+                } catch (HyphenateException e) {
+                    demoModel.setBlacklistSynced(false);
 
-                   isBlackListSyncedWithServer = false;
-                   isSyncingBlackListWithServer = true;
-                   e.printStackTrace();
+                    isBlackListSyncedWithServer = false;
+                    isSyncingBlackListWithServer = true;
+                    e.printStackTrace();
 
-                   if(callback != null){
-                       callback.onError(e.getErrorCode(), e.toString());
-                   }
-               }
+                    if (callback != null) {
+                        callback.onError(e.getErrorCode(), e.toString());
+                    }
+                }
 
-           }
-       }.start();
-   }
+            }
+        }.start();
+    }
 
-	public void notifyBlackListSyncListener(boolean success){
+    public void notifyBlackListSyncListener(boolean success) {
         for (DataSyncListener listener : syncBlackListListeners) {
             listener.onSyncComplete(success);
         }
@@ -1230,8 +1232,8 @@ public class DemoHelper {
         return isBlackListSyncedWithServer;
     }
 
-	public synchronized void notifyForRecevingEvents(){
-        if(alreadyNotified){
+    public synchronized void notifyForRecevingEvents() {
+        if (alreadyNotified) {
             return;
         }
 
@@ -1239,7 +1241,7 @@ public class DemoHelper {
         alreadyNotified = true;
     }
 
-    synchronized void reset(){
+    synchronized void reset() {
         isSyncingGroupsWithServer = false;
         isSyncingContactsWithServer = false;
         isSyncingBlackListWithServer = false;

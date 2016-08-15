@@ -19,7 +19,7 @@ import com.hyphenate.chat.EMConversation.EMConversationType;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatui.Constant;
 import com.hyphenate.chatui.R;
-import com.hyphenate.chatui.db.InviteMessgeDao;
+import com.hyphenate.chatui.db.InviteMessageDao;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelper;
 import com.hyphenate.util.NetUtils;
@@ -128,8 +128,8 @@ public class ConversationListFragment extends EaseConversationListFragment{
         try {
             // 删除此会话
             EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.getUserName(), deleteMessage);
-            InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
-            inviteMessgeDao.deleteMessage(tobeDeleteCons.getUserName());
+            InviteMessageDao inviteMessageDao = new InviteMessageDao(getActivity());
+            inviteMessageDao.deleteMessage(tobeDeleteCons.getUserName());
         } catch (Exception e) {
             e.printStackTrace();
         }

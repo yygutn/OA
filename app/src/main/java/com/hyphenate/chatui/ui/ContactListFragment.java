@@ -20,7 +20,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatui.DemoHelper;
 import com.hyphenate.chatui.DemoHelper.DataSyncListener;
 import com.hyphenate.chatui.R;
-import com.hyphenate.chatui.db.InviteMessgeDao;
+import com.hyphenate.chatui.db.InviteMessageDao;
 import com.hyphenate.chatui.db.UserDao;
 import com.hyphenate.chatui.widget.ContactItemView;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -53,7 +53,7 @@ public class ContactListFragment extends EaseContactListFragment {
     private ContactInfoSyncListener contactInfoSyncListener;
     private View loadingView;
     private ContactItemView applicationItem;
-    private InviteMessgeDao inviteMessgeDao;
+    private InviteMessageDao inviteMessageDao;
 
     @Override
     protected void initView() {
@@ -82,10 +82,10 @@ public class ContactListFragment extends EaseContactListFragment {
         }
         setContactsMap(m);
         super.refresh();
-        if(inviteMessgeDao == null){
-            inviteMessgeDao = new InviteMessgeDao(getActivity());
+        if(inviteMessageDao == null){
+            inviteMessageDao = new InviteMessageDao(getActivity());
         }
-        if(inviteMessgeDao.getUnreadMessagesCount() > 0){
+        if(inviteMessageDao.getUnreadMessagesCount() > 0){
             applicationItem.showUnreadMsgView();
         }else{
             applicationItem.hideUnreadMsgView();
@@ -212,7 +212,7 @@ public class ContactListFragment extends EaseContactListFragment {
                 // 删除此联系人
                 deleteContact(toBeProcessUser);
                 // 删除相关的邀请消息
-                InviteMessgeDao dao = new InviteMessgeDao(getActivity());
+                InviteMessageDao dao = new InviteMessageDao(getActivity());
                 dao.deleteMessage(toBeProcessUser.getUsername());
             } catch (Exception e) {
                 e.printStackTrace();
