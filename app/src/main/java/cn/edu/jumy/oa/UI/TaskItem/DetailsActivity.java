@@ -96,7 +96,13 @@ public class DetailsActivity extends BaseActivity {
     @AfterExtras
     void getList() {
         Map<String, String> params = new HashMap<>();
-        params.put("pid", TextUtils.isEmpty(mNode.id) ? "" : mNode.id);
+        String id = "";
+        if (fromSP){
+            id = mNode.oldid;
+        } else {
+            id = mNode.id;
+        }
+        params.put("pid", TextUtils.isEmpty(id) ? "" : id);
         OAService.getAttachmentList(params, new AttachListCallBack() {
             @Override
             public void onResponse(AttachResponse response, int id) {

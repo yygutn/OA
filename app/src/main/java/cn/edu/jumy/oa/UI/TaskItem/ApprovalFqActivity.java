@@ -5,31 +5,20 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.edu.jumy.oa.CallBack.MeetCallback;
 import cn.edu.jumy.oa.CallBack.RelayCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.Response.MeetResponse;
 import cn.edu.jumy.oa.Response.RelayResponse;
 import cn.edu.jumy.oa.UI.AuditDetailsActivity_;
-import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
 import cn.edu.jumy.oa.adapter.RelayAdapter;
-import cn.edu.jumy.oa.bean.Meet;
 import cn.edu.jumy.oa.bean.Relay;
-import okhttp3.Call;
 
 /**
  * User: Jumy (yygutn@gmail.com)
@@ -86,7 +75,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         showDebugLogd(o.toString());
         Relay node = (Relay) o;
-        AuditDetailsActivity_.intent(mContext).extra("id",node.id).extra("type",(node.type == 1 ? 1 : 2) + "").start();
+        AuditDetailsActivity_.intent(mContext).extra("id", node.id).extra("type", (node.type == 1 ? 1 : 2) + "").start();
     }
 
     @Override
@@ -124,7 +113,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
                     for (int i = position - 1; i >= 0; i--) {
                         mList.add(0, response.data.pageObject.get(i));
                     }
-                    mListView.setLoadMoreCount((index-1)*basePages+position);
+                    mListView.setLoadMoreCount((index - 1) * basePages + position);
                     adapter.setList(new ArrayList(mList));
                 }
             }
