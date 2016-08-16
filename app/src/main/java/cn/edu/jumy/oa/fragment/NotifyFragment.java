@@ -95,7 +95,7 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
         @Override
         public void onNotifyReceive(NotifyBroadCastResponse response) {
             showDebugLogd("onNotifyReceive", response.toString());
-            if (!TextUtils.isEmpty(response.id)){
+            if (TextUtils.isEmpty(response.id)){
                 return;
             }
             switch (response.action) {
