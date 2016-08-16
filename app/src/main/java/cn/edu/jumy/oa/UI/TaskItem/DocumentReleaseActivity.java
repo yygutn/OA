@@ -1,21 +1,18 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Environment;
 import android.os.FileObserver;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -41,18 +38,17 @@ import java.util.Map;
 
 import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
-import cn.edu.jumy.oa.BroadCastReceiver.UploadBroadcastReceiver;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.DepartmentSelectActivity_;
 import cn.edu.jumy.oa.Utils.OpenApp;
 import cn.edu.jumy.oa.adapter.ListDropDownAdapter;
-import cn.edu.jumy.oa.bean.Account;
+import cn.edu.jumy.oa.adapter.UploadItemAdapter;
+import cn.edu.jumy.oa.bean.UploadItemBean;
 import cn.edu.jumy.oa.safe.PasswordUtil;
 import cn.edu.jumy.oa.widget.DropDownMenu;
+import cn.edu.jumy.oa.widget.customview.NoScrollLinearLayoutManager;
 import cn.edu.jumy.oa.widget.customview.NoScrollListView;
-import cn.edu.jumy.oa.widget.customview.UploadItem;
-import cn.edu.jumy.oa.widget.customview.UploadItem_;
 import okhttp3.Call;
 import okhttp3.Request;
 
@@ -77,19 +73,16 @@ public class DocumentReleaseActivity extends BaseActivity {
     @ViewById
     TextView submit;
 
-    List<String> mFilePath = new ArrayList<>();
-    Map<String, File> fileMap;
-    @ViewById(R.id.uploadView)
-    LinearLayout uploadView;
-    int index = 0;
+    UploadItemAdapter adapter;
+    List<UploadItemBean> mList = new ArrayList<>();
 
-    ArrayList<Account> accountList;
+    Map<String, File> fileMap = new HashMap<>();
+    @ViewById(R.id.uploadView)
+    RecyclerView uploadView;
 
     String receiveUnitsID = "";//公文接收单位
     String receiveUnitsStr = "";//公文接收单位
     String level = "0"; //等级
-
-    private Object str;
 
     private ListDropDownAdapter mLevelAdapter;
 
@@ -98,24 +91,6 @@ public class DocumentReleaseActivity extends BaseActivity {
 
     private List<View> popupView2 = new ArrayList<>();
 
-
-    BroadcastReceiver uploadBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(UploadBroadcastReceiver.UPLOAD_BR_RESULT)) {
-                String path = intent.getStringExtra(UploadBroadcastReceiver.EXTRA_PATH);
-                if (!mFilePath.contains(path)) {
-                    mFilePath.add(path);
-                }
-            }
-            if (intent.getAction().equals(UploadBroadcastReceiver.UPLOAD_BR_RESULT_DELETE)) {
-                String path = intent.getStringExtra(UploadBroadcastReceiver.EXTRA_PATH);
-                if (mFilePath.contains(path)) {
-                    mFilePath.remove(path);
-                }
-            }
-        }
-    };
     String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/Office Lens";
 
     Map<String, Boolean> picMap = new HashMap<>();//扫描件
@@ -134,21 +109,14 @@ public class DocumentReleaseActivity extends BaseActivity {
                 backToPreActivity();
             }
         });
-        try {
-            initLevelView();
-        } catch (Exception e) {
-            showDebugException(e);
-        }
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(UploadBroadcastReceiver.UPLOAD_BR_RESULT);
-        filter.addAction(UploadBroadcastReceiver.UPLOAD_BR_RESULT_DELETE);
-        registerReceiver(uploadBroadcastReceiver, filter);
-
-
+        initLevelView();
         File dirs = new File(dir);
         if (!dirs.exists()) {
             dirs.mkdir();
         }
+        uploadView.setLayoutManager(new NoScrollLinearLayoutManager(this));
+        adapter = new UploadItemAdapter(mContext, R.layout.widget_select_upload, mList, this);
+        uploadView.setAdapter(adapter);
     }
 
     @Click({R.id.submit, R.id.addUpload, R.id.dropDownMenu_1, R.id.addUpload_2})
@@ -159,8 +127,8 @@ public class DocumentReleaseActivity extends BaseActivity {
                 break;
             }
             case R.id.addUpload: {
-                UploadItem item = UploadItem_.build(mContext, this);
-                uploadView.addView(item, index++);
+                mList.add(new UploadItemBean());
+                adapter.notifyDataSetChanged();
                 break;
             }
             case R.id.dropDownMenu_1: {
@@ -223,7 +191,7 @@ public class DocumentReleaseActivity extends BaseActivity {
                             public void onError(Call call, Exception e, int id) {
                                 progressDialog.dismiss();
                                 showDebugException(e);
-                                showToast("网络异常,发送失败");
+                                showToast("服务器错误,发送失败");
                             }
 
                             @Override
@@ -287,15 +255,14 @@ public class DocumentReleaseActivity extends BaseActivity {
         mEt1.setText("");
         mEt2.setText("");
         mEt3.setText("");
-        uploadView.removeAllViews();
-        mFilePath.clear();
-        index = 0;
+        mList.clear();
+        adapter.notifyDataSetChanged();
     }
 
     private void dealZipFile() {
-        fileMap = new HashMap<>();
-        for (String path : mFilePath) {
-            File file = new File(path);
+        fileMap.clear();
+        for (UploadItemBean itemBean : mList) {
+            File file = new File(itemBean.filePath);
             fileMap.put(file.getName(), file);
         }
     }
@@ -324,12 +291,6 @@ public class DocumentReleaseActivity extends BaseActivity {
 
     @ColorRes(R.color.pressed)
     int pressed;
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(uploadBroadcastReceiver);
-    }
 
     @Override
     public void onBackPressed() {
@@ -367,11 +328,9 @@ public class DocumentReleaseActivity extends BaseActivity {
         listener.stopWatching();
         for (String name : picMap.keySet()) {
             File file = new File(dir, name);
-            if (file != null && file.exists()) {
-                UploadItem item = UploadItem_.build(mContext, this);
-                item.setPathForShow(name);
-                uploadView.addView(item, index++);
-                mFilePath.add(file.getAbsolutePath());
+            if (file.exists()) {
+                mList.add(new UploadItemBean(name, file.getAbsolutePath()));
+                adapter.notifyDataSetChanged();
             }
         }
         picMap.clear();

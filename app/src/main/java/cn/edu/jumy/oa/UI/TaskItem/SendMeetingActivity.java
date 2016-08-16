@@ -1,21 +1,18 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Environment;
 import android.os.FileObserver;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -38,7 +35,6 @@ import java.util.Map;
 
 import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
-import cn.edu.jumy.oa.BroadCastReceiver.UploadBroadcastReceiver;
 import cn.edu.jumy.oa.CallBack.UserCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
@@ -47,10 +43,11 @@ import cn.edu.jumy.oa.Response.UserResponse;
 import cn.edu.jumy.oa.UI.DepartmentSelectActivity_;
 import cn.edu.jumy.oa.Utils.OpenApp;
 import cn.edu.jumy.oa.adapter.ListDropDownAdapter;
+import cn.edu.jumy.oa.adapter.UploadItemAdapter;
+import cn.edu.jumy.oa.bean.UploadItemBean;
 import cn.edu.jumy.oa.widget.DropDownMenu;
+import cn.edu.jumy.oa.widget.customview.NoScrollLinearLayoutManager;
 import cn.edu.jumy.oa.widget.customview.NoScrollListView;
-import cn.edu.jumy.oa.widget.customview.UploadItem;
-import cn.edu.jumy.oa.widget.customview.UploadItem_;
 import cn.qqtheme.framework.picker.DatePicker;
 import cn.qqtheme.framework.picker.TimePicker;
 import okhttp3.Call;
@@ -87,22 +84,21 @@ public class SendMeetingActivity extends BaseActivity {
     protected AppCompatEditText mMeetingLoc;
     @ViewById(R.id.addUpload)
     protected AppCompatTextView mAddUpload;
-    @ViewById(R.id.uploadView)
-    protected LinearLayout mUploadView;
     @ViewById(R.id.submit)
     protected TextView mSubmit;
 
-    List<String> mFilePath = new ArrayList<>();
+    UploadItemAdapter adapter;
+    List<UploadItemBean> mFileList = new ArrayList<>();
+
     @ViewById(R.id.uploadView)
-    LinearLayout uploadView;
-    int index = 0;
+    RecyclerView uploadView;
 
     String receiveUnits = "";//接收单位
     String receiveUnitsID = "";//接收单位ID
     String UndertakingUnits = "";//承办单位
     String UndertakingUnitsID = "";//承办单位ID
     String level = "0"; //等级
-    Map<String, File> fileMap;
+    Map<String, File> fileMap = new HashMap<>();
 
     private ListDropDownAdapter mLevelAdapter;
 
@@ -110,25 +106,6 @@ public class SendMeetingActivity extends BaseActivity {
     private String headers[] = {"请选择"};
 
     private List<View> popupView2 = new ArrayList<>();
-
-
-    BroadcastReceiver uploadBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction() == UploadBroadcastReceiver.UPLOAD_BR_RESULT) {
-                String path = intent.getStringExtra(UploadBroadcastReceiver.EXTRA_PATH);
-                if (!mFilePath.contains(path)) {
-                    mFilePath.add(path);
-                }
-            }
-            if (intent.getAction() == UploadBroadcastReceiver.UPLOAD_BR_RESULT_DELETE) {
-                String path = intent.getStringExtra(UploadBroadcastReceiver.EXTRA_PATH);
-                if (mFilePath.contains(path)) {
-                    mFilePath.remove(path);
-                }
-            }
-        }
-    };
 
     String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/Office Lens";
 
@@ -141,9 +118,9 @@ public class SendMeetingActivity extends BaseActivity {
     };
 
     private void dealZipFile() {
-        fileMap = new HashMap<>();
-        for (String path : mFilePath) {
-            File file = new File(path);
+        fileMap.clear();
+        for (UploadItemBean itemBean : mFileList) {
+            File file = new File(itemBean.filePath);
             fileMap.put(file.getName(), file);
         }
     }
@@ -157,15 +134,16 @@ public class SendMeetingActivity extends BaseActivity {
             }
         });
         initLevelView();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(UploadBroadcastReceiver.UPLOAD_BR_RESULT);
-        filter.addAction(UploadBroadcastReceiver.UPLOAD_BR_RESULT_DELETE);
-        registerReceiver(uploadBroadcastReceiver, filter);
+
         File dirs = new File(dir);
         if (!dirs.exists()) {
             dirs.mkdir();
         }
         getMyInfo();
+
+        uploadView.setLayoutManager(new NoScrollLinearLayoutManager(this));
+        adapter = new UploadItemAdapter(mContext, R.layout.widget_select_upload, mFileList, this);
+        uploadView.setAdapter(adapter);
     }
 
     private void getMyInfo() {
@@ -187,7 +165,7 @@ public class SendMeetingActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(UndertakingUnitsID)) {
                     mDropDownMenuUnit.setText(UndertakingUnits);
                 }
-                if (TextUtils.isEmpty(UndertakingUnitsID)){
+                if (TextUtils.isEmpty(UndertakingUnitsID)) {
                     getMyInfo();
                 }
             }
@@ -202,8 +180,8 @@ public class SendMeetingActivity extends BaseActivity {
                 break;
             }
             case R.id.addUpload: {
-                UploadItem item = UploadItem_.build(mContext, this);
-                uploadView.addView(item, index++);
+                mFileList.add(new UploadItemBean());
+                adapter.notifyDataSetChanged();
                 break;
             }
             case R.id.meeting_time: {
@@ -375,9 +353,8 @@ public class SendMeetingActivity extends BaseActivity {
         mMeetingPeople.setText("");
         mMeetingPhone.setText("");
         mMeetingLoc.setText("");
-        mUploadView.removeAllViews();
-        mFilePath.clear();
-        index = 0;
+        mFileList.clear();
+        adapter.notifyDataSetChanged();
     }
 
 
@@ -405,12 +382,6 @@ public class SendMeetingActivity extends BaseActivity {
 
     @ColorRes(R.color.pressed)
     int pressed;
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(uploadBroadcastReceiver);
-    }
 
     @Override
     public void onBackPressed() {
@@ -469,11 +440,9 @@ public class SendMeetingActivity extends BaseActivity {
         listener.stopWatching();
         for (String name : picMap.keySet()) {
             File file = new File(dir, name);
-            if (file != null && file.exists()) {
-                UploadItem item = UploadItem_.build(mContext, this);
-                item.setPathForShow(name);
-                uploadView.addView(item, index++);
-                mFilePath.add(file.getAbsolutePath());
+            if (file.exists()) {
+                mFileList.add(new UploadItemBean(name, file.getAbsolutePath()));
+                adapter.notifyDataSetChanged();
             }
         }
         picMap.clear();
