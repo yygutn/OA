@@ -65,7 +65,7 @@ public class AppManager {
 
     private void logStackInfo() {
         String message = "StackSize = " + mActivityStack.size() + "\n";
-        for(Activity ac : mActivityStack){
+        for (Activity ac : mActivityStack) {
             message += ac.getClass().getSimpleName() + "\n";
         }
         Logger.t(TAG).w(message);
@@ -76,19 +76,25 @@ public class AppManager {
      */
     public synchronized void finishAllBesideTop() {
         BaseActivity activity = mActivityStack.lastElement();
-        if (activity == null){
+        if (activity == null) {
             return;
         }
         String name = activity.getClass().getSimpleName();
-        for (BaseActivity activities : mActivityStack){
-            if (!activities.getClass().getSimpleName().equals(name)){
+        for (BaseActivity activities : mActivityStack) {
+            if (!activities.getClass().getSimpleName().equals(name)) {
                 finishActivity(activities);
             }
         }
     }
 
-    public void back2Level2(){
-        while (mActivityStack.size() > 2){
+    public void back2Level2() {
+        while (mActivityStack.size() > 2) {
+            finishActivity(mActivityStack.pop());
+        }
+    }
+
+    public void back2Level1() {
+        while (mActivityStack.size() > 1) {
             finishActivity(mActivityStack.pop());
         }
     }
@@ -108,8 +114,8 @@ public class AppManager {
      */
     public void finishActivity(BaseActivity activity) {
         String message = "";
-        message += "Finishing " + activity.getClass().getSimpleName()+"\n";
-        message += "Before finish, the Stack size is :" + AppManager.getStackSize() +"\n";
+        message += "Finishing " + activity.getClass().getSimpleName() + "\n";
+        message += "Before finish, the Stack size is :" + AppManager.getStackSize() + "\n";
         finishActivity(activity.getClass());
         if (activity != null) {
 //            activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);

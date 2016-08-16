@@ -39,6 +39,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.MyApplication;
@@ -107,6 +108,7 @@ public class DetailsActivity extends BaseActivity {
             @Override
             public void onResponse(AttachResponse response, int id) {
                 mList = response.data;
+                showDebugLoge(response.data.toString());
                 if (mList == null || mList.size() <= 0) {
                     doSign();
                 }
@@ -133,6 +135,8 @@ public class DetailsActivity extends BaseActivity {
             setResult(1025);
         } else if (mNode.type == 0 && !fromSP && !fromSentMeet) {
             MeetSign();
+            setResult(1025);
+        } else if (mNode.type == 2){
             setResult(1025);
         }
     }

@@ -212,7 +212,7 @@ public class FragmentTabHost extends TabHost
             if (info.fragment != null && !info.fragment.isDetached()) {
                 FragmentTransaction ft = mFragmentManager.beginTransaction();
                 ft.detach(info.fragment);
-                ft.commit();
+                ft.commitAllowingStateLoss();
             }
         }
 
@@ -254,7 +254,7 @@ public class FragmentTabHost extends TabHost
         mAttached = true;
         ft = doTabChanged(currentTab, ft);
         if (ft != null) {
-            ft.commit();
+            ft.commitAllowingStateLoss();
             mFragmentManager.executePendingTransactions();
         }
     }
@@ -285,7 +285,7 @@ public class FragmentTabHost extends TabHost
         if (mAttached) {
             FragmentTransaction ft = doTabChanged(tabId, null);
             if (ft != null) {
-                ft.commit();
+                ft.commitAllowingStateLoss();
             }
         }
         if (mOnTabChangeListener != null) {

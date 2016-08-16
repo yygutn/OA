@@ -42,13 +42,17 @@ import com.hyphenate.chatui.ui.LoginActivity;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 
+import org.androidannotations.annotations.OnActivityResult;
+
 import java.util.List;
 
 import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.BroadCastReceiver.AlarmBroadCastReceiver;
+import cn.edu.jumy.oa.BroadCastReceiver.NotificationBroadCastReceiver;
 import cn.edu.jumy.oa.Utils.NotifyUtils;
 import cn.edu.jumy.oa.fragment.MineFragment_;
+import cn.edu.jumy.oa.fragment.NotifyFragment;
 import cn.edu.jumy.oa.fragment.NotifyFragment_;
 import cn.edu.jumy.oa.fragment.TaskFragment;
 import cn.edu.jumy.oa.widget.FragmentTabHost;
@@ -68,16 +72,11 @@ public class MainActivity extends BaseActivity {
     private static MainActivity instance;
 
     public static MainActivity getMainInstance() {
-        if (instance == null) {
-            instance = new MainActivity();
-        }
         return instance;
     }
 
-    // 未读消息textview
+    // 未读消息textview && 未读通讯录textview
     private TextView unreadLabel;
-    // 未读通讯录textview
-    private TextView unreadAddressLabel;
     // 账号在别处登录
     public boolean isConflict = false;
     // 账号被移除
@@ -92,11 +91,32 @@ public class MainActivity extends BaseActivity {
     private LocalBroadcastManager broadcastManager;
 
     private AlarmBroadCastReceiver alarmBroadCastReceiver;
+    private BroadcastReceiver refreshBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                if (intent.getAction().equals(NotificationBroadCastReceiver.NOTIFY_REFRESH_HOME)) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mTabHost.onTabChanged(mTextViewArray[0]);
+                            if (mTabHost.getCurrentTab() != 0) {
+                                mTabHost.setCurrentTab(0);
+                            }
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppManager.getInstance().finishAllBesideTop();
+        instance = this;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String packageName = getPackageName();
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -152,6 +172,8 @@ public class MainActivity extends BaseActivity {
         initMeetBroadCastReceiver();
         EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
 
+        IntentFilter filter = new IntentFilter(NotificationBroadCastReceiver.NOTIFY_REFRESH_HOME);
+        registerReceiver(refreshBroadcastReceiver, filter);
     }
 
     private void initView() {
@@ -167,7 +189,7 @@ public class MainActivity extends BaseActivity {
             mTabHost.getTabWidget().setDividerDrawable(null);
 
         }
-        mTabHost.onTabChanged(mTextViewArray[0]);
+        mTabHost.onTabChanged(mTextViewArray[1]);
     }
 
     private View getTabItemView(int index) {
@@ -178,11 +200,9 @@ public class MainActivity extends BaseActivity {
         title.setText(mTitleArray[index]);
         if (index == 2) {
             unreadLabel = (TextView) view.findViewById(R.id.tabUnread);
-//            title.setTextColor(getResources().getColor(R.color.pressed));
         }
         if (index == 3) {
-            unreadAddressLabel = (TextView) view.findViewById(R.id.tabUnread);
-//            title.setTextColor(getResources().getColor(R.color.pressed));
+            unreadLabel = (TextView) view.findViewById(R.id.tabUnread);
         }
         return view;
     }
@@ -221,7 +241,7 @@ public class MainActivity extends BaseActivity {
                 EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                 final String action = cmdMsgBody.action();//获取自定义action
                 showDebugLogd(TAG, "action:" + action);
-                NotifyUtils.sendNotifyBroadCast(mContext,action);
+                NotifyUtils.sendNotifyBroadCast(mContext, action);
             }
             refreshUIWithMessage();
         }
@@ -339,6 +359,9 @@ public class MainActivity extends BaseActivity {
             if (alarmBroadCastReceiver != null) {
                 unregisterReceiver(alarmBroadCastReceiver);
             }
+            if (refreshBroadcastReceiver != null) {
+                unregisterReceiver(refreshBroadcastReceiver);
+            }
         } catch (Exception e) {
             showDebugException(e);
         }
@@ -365,10 +388,10 @@ public class MainActivity extends BaseActivity {
             public void run() {
                 int count = getUnreadAddressCountTotal();
                 if (count > 0) {
-//					unreadAddressLabel.setText(String.valueOf(count));
-                    unreadAddressLabel.setVisibility(View.VISIBLE);
+					unreadLabel.setText(String.valueOf(count));
+                    unreadLabel.setVisibility(View.VISIBLE);
                 } else {
-                    unreadAddressLabel.setVisibility(View.INVISIBLE);
+                    unreadLabel.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -566,7 +589,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initMeetBroadCastReceiver() {
-        if (alarmBroadCastReceiver != null){
+        if (alarmBroadCastReceiver != null) {
             return;
         }
         try {
@@ -580,5 +603,13 @@ public class MainActivity extends BaseActivity {
         } catch (Exception e) {
             showDebugException(e);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 2048 && resultCode == 1025) {
+            ((NotifyFragment)mTabHost.mTabs.get(0).fragment).onResult(1025);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

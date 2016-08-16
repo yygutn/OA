@@ -74,7 +74,6 @@ public class AlarmBroadCastReceiver extends BroadcastReceiver {
         y2 = calendar.get(Calendar.YEAR);
         m2 = calendar.get(Calendar.MONTH);
         d2 = calendar.get(Calendar.DAY_OF_MONTH);
-        boolean result = y1 == y2 && m1 == m2 && d1 == d2;
-        return result;
+        return y1 == y2 && m1 == m2 && d1 == d2;
     }
 }

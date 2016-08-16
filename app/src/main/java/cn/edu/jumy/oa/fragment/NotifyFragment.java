@@ -272,8 +272,8 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
             }
         });
     }
-    @OnActivityResult(2048)
-    void onResult(int resultCode){
+
+    public void onResult(int resultCode){
         if (resultCode == 1025){
             mList.remove(lastClickPosition);
             adapter.notifyDataSetChanged();

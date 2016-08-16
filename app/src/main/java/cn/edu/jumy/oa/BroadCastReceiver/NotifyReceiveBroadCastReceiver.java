@@ -12,20 +12,20 @@ import com.google.gson.Gson;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.NotifyBroadCastResponse;
 import cn.edu.jumy.oa.Utils.NotifyUtils;
-import cn.edu.jumy.oa.bean.Alarm;
 
 /**
  * 通告推送广播
  * Created by Jumy on 16/7/26 11:19.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
-public abstract class NotifyReceiveBroadCastReceiver extends BroadcastReceiver{
+public abstract class NotifyReceiveBroadCastReceiver extends BroadcastReceiver {
     public static final String ACTION_NOTIFY = "cn.edu.jumy.oa.BroadCastReceiver.NotifyReceive";
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(ACTION_NOTIFY)){
+        if (intent.getAction().equals(ACTION_NOTIFY)) {
             //通告推送
-            final NotifyBroadCastResponse response = new Gson().fromJson(intent.getStringExtra(NotifyUtils.ACTION),NotifyBroadCastResponse.class);
+            final NotifyBroadCastResponse response = new Gson().fromJson(intent.getStringExtra(NotifyUtils.ACTION), NotifyBroadCastResponse.class);
             onNotifyReceive(response);
 
             // 在Android进行通知处理，首先需要重系统哪里获得通知管理器NotificationManager，它是一个系统Service。
@@ -33,7 +33,7 @@ public abstract class NotifyReceiveBroadCastReceiver extends BroadcastReceiver{
             String message = "";
             switch (response.action) {
                 case "docSend":
-                case "docReceive":{
+                case "docReceive": {
                     message = "您有一个新的公文,请注意签收";
                     break;
                 }
@@ -41,7 +41,7 @@ public abstract class NotifyReceiveBroadCastReceiver extends BroadcastReceiver{
                     message = "您有一个新的公文正在被催收,请尽快签收";
                     break;
                 }
-                case "meetReceive":{
+                case "meetReceive": {
                     message = "您有一个新的会议,请注意签收";
                     break;
                 }
@@ -55,7 +55,7 @@ public abstract class NotifyReceiveBroadCastReceiver extends BroadcastReceiver{
                     message = "您有一个新的公告,请注意签收";
                     break;
                 }
-                case "meetUserPass":{
+                case "meetUserPass": {
                     //报名被退回
                     message = "您有一个报名被退回";
                     break;
@@ -63,13 +63,19 @@ public abstract class NotifyReceiveBroadCastReceiver extends BroadcastReceiver{
                 default:
                     break;
             }
-            showNotification(context,manager,message);
+            showNotification(context, manager, message);
         }
     }
-    private void showNotification(Context context, NotificationManager manager,String message) {
+
+    private void showNotification(Context context, NotificationManager manager, String message) {
         // 通过Notification.Builder来创建通知，注意API Level
         // API11之后才支持
+        Intent broadCastIntent = new Intent(context, NotificationBroadCastReceiver.class);
+        broadCastIntent.setAction(NotificationBroadCastReceiver.NOTIFY_FROM_HOME);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, broadCastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         Notification notify = new Notification.Builder(context)
+                .setContentIntent(pendingIntent)
                 .setSmallIcon(R.mipmap.ic_launcher) // 设置状态栏中的小图片，尺寸一般建议在24×24，这个图片同样也是在下拉状态栏中所显示，如果在那里需要更换更大的图片，可以使用setLargeIcon(Bitmap
                 // icon)
                 .setTicker("您有新的消息,请注意查收!")// 设置在status
@@ -82,9 +88,10 @@ public abstract class NotifyReceiveBroadCastReceiver extends BroadcastReceiver{
         notify.flags |= Notification.FLAG_AUTO_CANCEL;
         manager.notify(1, notify);
     }
+
     public abstract void onNotifyReceive(NotifyBroadCastResponse action);
 
-    private void showTuihuiNotify(Context context, NotificationManager manager,String message){
+    private void showTuihuiNotify(Context context, NotificationManager manager, String message) {
         // 通过Notification.Builder来创建通知，注意API Level
 
         // API11之后才支持
