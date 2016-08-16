@@ -133,6 +133,7 @@ public class DetailsActivity extends BaseActivity {
             setResult(1025);
         } else if (mNode.type == 0 && !fromSP && !fromSentMeet) {
             MeetSign();
+            setResult(1025);
         }
     }
 

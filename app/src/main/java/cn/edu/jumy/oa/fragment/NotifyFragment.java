@@ -1,5 +1,6 @@
 package cn.edu.jumy.oa.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -20,6 +21,7 @@ import com.zhy.http.okhttp.callback.Callback;
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -87,6 +89,7 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
     ImageView mEmptyImageView;
     private CopyOnWriteArrayList<Node> mList;
     NotifyCardAdapter adapter;
+    private int lastClickPosition = 0;
 
     Handler mHandler = new Handler();
 
@@ -163,14 +166,8 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         Node node = (Node) o;
-        mList.remove(position);
-        DetailsActivity_.intent(mContext).extra("details", node).start();
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-            }
-        }, 1000);
+        DetailsActivity_.intent(mContext).extra("details", node).startForResult(2048);
+        lastClickPosition = position;
     }
 
     @Override
@@ -274,6 +271,13 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                 }
             }
         });
+    }
+    @OnActivityResult(2048)
+    void onResult(int resultCode){
+        if (resultCode == 1025){
+            mList.remove(lastClickPosition);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     abstract class NotifyCallBack extends Callback<SingleNotifyResponse> {

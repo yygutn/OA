@@ -3,11 +3,9 @@ package cn.edu.jumy.oa.UI;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,6 +44,7 @@ import cn.edu.jumy.oa.fragment.BaseSearchRefreshFragment;
 import cn.edu.jumy.oa.fragment.MeetAllFragment_;
 import cn.edu.jumy.oa.fragment.MeetReadFragment_;
 import cn.edu.jumy.oa.fragment.MeetUnreadFragment_;
+
 /**
  * @会议卡片列表，所有的会议卡片都在这儿 1
  * Created by Jumy on 16/6/1 13:18.
@@ -161,6 +160,7 @@ public class MeetingCardActivity extends BaseActivity {
             mSearchView.closeSearch();
         }
     }
+
     private class MyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
         private String[] tabNames = {"未签收", "已签收", "全部"};
         private LayoutInflater inflater;
@@ -274,7 +274,9 @@ public class MeetingCardActivity extends BaseActivity {
     }
 
     @OnActivityResult(2048)
-    void reSetData(){
-        getData();
+    void reSetData(int resultCode) {
+        if (resultCode == 1025) {
+            getData();
+        }
     }
 }
