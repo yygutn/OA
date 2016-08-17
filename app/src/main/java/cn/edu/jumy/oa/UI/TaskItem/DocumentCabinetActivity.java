@@ -9,6 +9,7 @@ import com.hyphenate.chat.EMClient;
 import com.zhy.http.okhttp.callback.FileCallBack;
 
 import org.androidannotations.annotations.AfterExtras;
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.litepal.crud.DataSupport;
 
@@ -39,8 +40,7 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
         mTitleBar.setTitle("文件柜");
     }
 
-    @AfterExtras
-    void getData() {
+    private void getData() {
         try {
             mList = (ArrayList<Annex>) DataSupport.where("username = ?", EMClient.getInstance().getCurrentUser()).find(Annex.class);
         } catch (Exception e) {
@@ -49,6 +49,20 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
         if (mList == null) {
             mList = new ArrayList<>();
         }
+        showDebugLogd(mList.toString());
+        adapter.setList(mList);
+    }
+
+    @Override
+    protected void start() {
+        super.start();
+        mListView.post(new Runnable() {
+            @Override
+            public void run() {
+                onRefresh();
+                mListView.setRefreshing(true);
+            }
+        });
     }
 
     @Override
@@ -64,12 +78,11 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
         final File file = Annex.getFileByByte(annex);
         if (file == null) {
             String id = mList.get(position).getID();
-            String path = mContext.getCacheDir().getAbsolutePath();
             String filepath = mContext.getExternalCacheDir().getAbsolutePath();
             String filename = mList.get(position).getFileName();
             File newFile = new File(filepath, filename);
             if (newFile.exists()) {
-                CallOtherOpenFile.openFile(mContext, file);
+                CallOtherOpenFile.openFile(mContext, newFile);
             } else {
                 final ProgressDialog progressDialog = new ProgressDialog(mContext);
                 progressDialog.setMessage("加载中...");
@@ -130,13 +143,11 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void doRefresh() {
-        initData();
-        adapter.setList(mList);
+        getData();
     }
 
     @Override
     protected void doLoadMore() {
-        initData();
-        adapter.setList(mList);
+        getData();
     }
 }
