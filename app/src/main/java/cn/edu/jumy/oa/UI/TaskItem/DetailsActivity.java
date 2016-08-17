@@ -255,7 +255,11 @@ public class DetailsActivity extends BaseActivity {
                 mDocumentDetailsTitle.setVisibility(View.GONE);
             }
             mDocumentDetailsContent_meet.setVisibility(View.VISIBLE);
-            mDocumentDetailsContent_meet.setText(CardGenerator.getContentString(mNode));
+            if (fromSP){
+                mDocumentDetailsContent_meet.setText(CardGenerator.getZFContentString(mNode));
+            } else {
+                mDocumentDetailsContent_meet.setText(CardGenerator.getContentString(mNode));
+            }
 
             if (!TextUtils.isEmpty(mNode.contactName) && !TextUtils.isEmpty(mNode.contactPhone)) {
                 mDocumentDetailsOther.setText("联系人: " + mNode.contactName + "\n" + "联系电话: " + mNode.contactPhone);

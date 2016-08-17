@@ -44,4 +44,32 @@ public class CardGenerator {
         }
         return message;
     }
+    public static String getZFContentString(@NonNull Node node) {
+        String message = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        try {
+            switch (node.type) {
+                case 0: {//会议
+                    message += "发文单位: " + (TextUtils.isEmpty(node.dispatchUnit)?"":node.oldSendDepartment) + "\n";
+                    message += "转发单位: " + (TextUtils.isEmpty(node.dispatchUnit)?"":node.dispatchUnit) + "\n";
+                    message += "发布时间: " + (TextUtils.isEmpty(node.dispatchTime)?"":node.dispatchTime) + "\n";
+                    message += "承办单位: " + (TextUtils.isEmpty(node.undertakingUnit)?"":node.undertakingUnit) + "\n";
+                    message += "会议时间: " + (TextUtils.isEmpty(node.meetingTime)?"":node.meetingTime) + "\n";
+                    message += "发文编号: " + (TextUtils.isEmpty(node.documentNumber)?"":node.documentNumber) + "\n";
+                    message += "会议地点: " + (TextUtils.isEmpty(node.meetingLocation)?"":node.meetingLocation);
+                    break;
+                }
+                case 1: {//公文
+                    message += "发文单位: " + (TextUtils.isEmpty(node.dispatchUnit)?"":node.oldSendDepartment) + "\n";
+                    message += "转发单位: " + (TextUtils.isEmpty(node.dispatchUnit)?"":node.dispatchUnit) + "\n";
+                    message += "发布时间: " + (TextUtils.isEmpty(node.dispatchTime)?"":node.dispatchTime) + "\n";
+                    message += "文件文号: " + (TextUtils.isEmpty(node.documentNumber)?"":node.documentNumber);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return message;
+    }
 }

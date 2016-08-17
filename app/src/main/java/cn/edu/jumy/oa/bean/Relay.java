@@ -89,7 +89,11 @@ public class Relay implements Parcelable {
     public String organame;
     public String uname;
     public String passRemark;
+    public String oldSendDepartment;//文件的初始发送单位
 
+
+    public Relay() {
+    }
 
     @Override
     public int describeContents() {
@@ -137,9 +141,7 @@ public class Relay implements Parcelable {
         dest.writeString(this.organame);
         dest.writeString(this.uname);
         dest.writeString(this.passRemark);
-    }
-
-    public Relay() {
+        dest.writeString(this.oldSendDepartment);
     }
 
     protected Relay(Parcel in) {
@@ -183,9 +185,10 @@ public class Relay implements Parcelable {
         this.organame = in.readString();
         this.uname = in.readString();
         this.passRemark = in.readString();
+        this.oldSendDepartment = in.readString();
     }
 
-    public static final Parcelable.Creator<Relay> CREATOR = new Parcelable.Creator<Relay>() {
+    public static final Creator<Relay> CREATOR = new Creator<Relay>() {
         @Override
         public Relay createFromParcel(Parcel source) {
             return new Relay(source);
