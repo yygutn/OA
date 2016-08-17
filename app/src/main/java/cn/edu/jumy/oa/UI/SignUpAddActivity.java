@@ -1,27 +1,21 @@
 package cn.edu.jumy.oa.UI;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
-import org.androidannotations.annotations.OnActivityResult;
-import org.androidannotations.annotations.OptionsItem;
-import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.HashMap;
@@ -30,11 +24,9 @@ import java.util.Map;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.Response.AccountResponse;
 import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.bean.Sign;
 import okhttp3.Call;
-import okhttp3.Request;
 
 /**
  * 报名
@@ -59,6 +51,10 @@ public class SignUpAddActivity extends BaseActivity {
     protected CheckBox mSignUpLeaveButton;
     @ViewById(R.id.sign_up_leave)
     protected AppCompatEditText mSignUpLeave;
+    @ViewById(R.id.sign_up_man_button)
+    CheckBox signUpManButton;
+    @ViewById(R.id.sign_up_women_button)
+    CheckBox signUpWomenButton;
 
     //基本信息
     String name, position, tel, remark;
@@ -86,6 +82,8 @@ public class SignUpAddActivity extends BaseActivity {
 
     String editType = "add";
 
+    int sex = 0;
+
     /**
      * 初始化--控件绑定之后
      */
@@ -107,9 +105,11 @@ public class SignUpAddActivity extends BaseActivity {
             mSignUpPhone.setText(node.phone);
             mSignUpLeave.setText(node.remark);
             status = node.type;
+            boolean flag = node.sex == 1;
+            setSex(!flag,flag);
             clickCheckBox(status);
         }
-        if (flag && !TextUtils.isEmpty(title)){
+        if (flag && !TextUtils.isEmpty(title)) {
             mToolBar.setTitle(title);
         }
     }
@@ -137,7 +137,7 @@ public class SignUpAddActivity extends BaseActivity {
      *
      * @param view
      */
-    @Click({R.id.sign_up_ll_join, R.id.sign_up_ll_leave, R.id.sign_up_ll_listen})
+    @Click({R.id.sign_up_ll_join, R.id.sign_up_ll_leave, R.id.sign_up_ll_listen, R.id.sign_up_ll_man, R.id.sign_up_ll_women})
     void click(View view) {
         switch (view.getId()) {
             case R.id.sign_up_ll_join: {//参会
@@ -158,12 +158,25 @@ public class SignUpAddActivity extends BaseActivity {
                 clickCheckBox(1);
                 break;
             }
+            case R.id.sign_up_ll_women: {
+                sex = 1;
+                setSex(true, false);
+                break;
+            }
+            case R.id.sign_up_ll_man: {
+                sex = 0;
+                setSex(false, true);
+                break;
+            }
             default:
                 break;
         }
     }
 
-    AlertDialog alertDialog;
+    private void setSex(boolean checked, boolean checked2) {
+        signUpWomenButton.setChecked(checked);
+        signUpManButton.setChecked(checked2);
+    }
 
     /**
      * 上传（个人/单位）会议报名信息
@@ -194,18 +207,19 @@ public class SignUpAddActivity extends BaseActivity {
         node.post = position;
         node.type = status;
         node.remark = remark;
+        node.sex = sex;
 
-        if (flag){
-            Map<String,String> params = new HashMap<>();
-            params.put("editType","edit");
-            params.put("pid",node.pid);
-            params.put("name",name);
-            params.put("id",node.id);
-            params.put("post",position);
-            params.put("type",status+"");
-            params.put("sex","");
-            params.put("phone",tel);
-            params.put("remark",remark);
+        if (flag) {
+            Map<String, String> params = new HashMap<>();
+            params.put("editType", "edit");
+            params.put("pid", node.pid);
+            params.put("name", name);
+            params.put("id", node.id);
+            params.put("post", position);
+            params.put("type", status + "");
+            params.put("sex", "");
+            params.put("phone", tel);
+            params.put("remark", remark);
             OAService.updateMEntry(params, new StringCallback() {
                 @Override
                 public void onError(Call call, Exception e, int ID) {
@@ -214,11 +228,11 @@ public class SignUpAddActivity extends BaseActivity {
 
                 @Override
                 public void onResponse(String response, int ID) {
-                    BaseResponse baseResponse = new Gson().fromJson(response,BaseResponse.class);
-                    if (baseResponse.code == 0){
+                    BaseResponse baseResponse = new Gson().fromJson(response, BaseResponse.class);
+                    if (baseResponse.code == 0) {
                         showToast("报名成功");
                     } else {
-                        showToast("报名失败"+(TextUtils.isEmpty(baseResponse.msg)?"":(","+baseResponse.msg)));
+                        showToast("报名失败" + (TextUtils.isEmpty(baseResponse.msg) ? "" : ("," + baseResponse.msg)));
                     }
                 }
             });

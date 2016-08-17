@@ -1,7 +1,5 @@
 package cn.edu.jumy.oa.bean;
 
-import android.text.TextUtils;
-
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -121,7 +119,8 @@ public class Node implements Serializable {
     public Node() {
 
     }
-    public Node(Notify notify){
+
+    public Node(Notify notify) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         this.type = 2;
         this.id = notify.id;
@@ -132,8 +131,9 @@ public class Node implements Serializable {
         this.cuid = notify.cuid;
         this.tid = notify.tid;
         this.dispatchUnit = notify.departmentName;
-        this.dispatchTime = sdf.format(new Date(notify.createTime));
+        this.dispatchTime = notify.createTime > 100 ? sdf.format(new Date(notify.createTime)) : "";
     }
+
     public Node(Doc doc) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         this.type = 1;
@@ -145,7 +145,7 @@ public class Node implements Serializable {
         this.documentNumber = doc.docNo;
         this.attachmentList = doc.attachmentList;
         this.title = doc.docTitle;
-        this.dispatchTime = sdf.format(new Date(doc.createTime));
+        this.dispatchTime = doc.createTime > 100 ? sdf.format(new Date(doc.createTime)) : "";
         this.tid = doc.tid;
         this.signStatus = doc.signStatus;
         this.cuid = doc.cuid;
@@ -160,9 +160,9 @@ public class Node implements Serializable {
         this.attachmentList = meet.attachmentList;
         this.id = meet.id;
         this.meetingLocation = meet.addr;
-        this.meetingTime = sdf.format(new Date(meet.meetTime));
+        this.meetingTime = meet.meetTime > 100 ? sdf.format(new Date(meet.meetTime)) : "";
         this.undertakingUnit = meet.meetCompanyName;
-        this.dispatchTime = sdf.format(new Date(meet.createTime));
+        this.dispatchTime = meet.createTime > 100 ? sdf.format(new Date(meet.createTime)) : "";
         this.dispatchUnit = meet.sendDepartmentInfo;
         this.department = meet.departmentInfo;
         this.level = meet.level;
@@ -184,9 +184,9 @@ public class Node implements Serializable {
         this.attachmentList = node.attachmentList;
         this.id = node.id;
         this.meetingLocation = node.addr;
-        this.meetingTime = sdf.format(new Date(node.meetTime));
+        this.meetingTime = node.meetTime > 100 ? sdf.format(new Date(node.meetTime)) : "";
         this.undertakingUnit = node.meetCompanyName;
-        this.dispatchTime = sdf.format(new Date(node.createTime));
+        this.dispatchTime = node.createTime > 100 ? sdf.format(new Date(node.createTime)) : "";
         this.dispatchUnit = node.sendDepartmentInfo;
         this.department = node.departmentInfo;
         this.level = node.level;

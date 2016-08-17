@@ -54,6 +54,11 @@ public class SignUpMultiAbleActivity extends BaseActivity {
     protected CheckBox mSignUpLeaveButton;
     @ViewById(R.id.sign_up_leave)
     protected AppCompatEditText mSignUpLeave;
+    @ViewById(R.id.sign_up_man_button)
+    CheckBox signUpManButton;
+    @ViewById(R.id.sign_up_women_button)
+    CheckBox signUpWomenButton;
+    int sex = 0;
 
     //基本信息
     String name, position, tel, remark;
@@ -75,13 +80,6 @@ public class SignUpMultiAbleActivity extends BaseActivity {
 
     String editType = "add";
 
-    @AfterExtras
-    void go() {
-        if (TextUtils.isEmpty(pid)) {
-            return;
-        }
-        //获取个人报名信息,,,waiting
-    }
 
     /**
      * 初始化--控件绑定之后
@@ -130,6 +128,7 @@ public class SignUpMultiAbleActivity extends BaseActivity {
     void skipToDetails() {
         SignUpDetailsActivity_.intent(mContext).extra("tid", tid).extra("pid", pid).start();
     }
+
     @OptionsItem(R.id.action_multi)
     void skipToMulti() {
         SignUpMultiActivity_.intent(mContext).extra("tid", tid).extra("pid", pid).start();
@@ -140,7 +139,7 @@ public class SignUpMultiAbleActivity extends BaseActivity {
      *
      * @param view
      */
-    @Click({R.id.sign_up_ll_join, R.id.sign_up_ll_leave, R.id.sign_up_ll_listen})
+    @Click({R.id.sign_up_ll_join, R.id.sign_up_ll_leave, R.id.sign_up_ll_listen, R.id.sign_up_ll_man, R.id.sign_up_ll_women})
     void click(View view) {
         switch (view.getId()) {
             case R.id.sign_up_ll_join: {//参会
@@ -161,9 +160,24 @@ public class SignUpMultiAbleActivity extends BaseActivity {
                 clickCheckBox(1);
                 break;
             }
+            case R.id.sign_up_ll_women: {
+                sex = 1;
+                setSex(true, false);
+                break;
+            }
+            case R.id.sign_up_ll_man: {
+                sex = 0;
+                setSex(false, true);
+                break;
+            }
             default:
                 break;
         }
+    }
+
+    private void setSex(boolean checked, boolean checked2) {
+        signUpWomenButton.setChecked(checked);
+        signUpManButton.setChecked(checked2);
     }
 
     AlertDialog alertDialog;
@@ -196,15 +210,15 @@ public class SignUpMultiAbleActivity extends BaseActivity {
             showToast("报名信息不完善,请再次确认");
             return;
         }
-        Map<String,String> params = new HashMap<>();
-        params.put("editType",editType);
-        params.put("pid",tid);
-        params.put("name",name);
-        params.put("post",position);
-        params.put("type",status+"");
-        params.put("sex","");
-        params.put("phone",tel);
-        params.put("remark",remark);
+        Map<String, String> params = new HashMap<>();
+        params.put("editType", editType);
+        params.put("pid", tid);
+        params.put("name", name);
+        params.put("post", position);
+        params.put("type", status + "");
+        params.put("sex", sex + "");
+        params.put("phone", tel);
+        params.put("remark", remark);
         OAService.updateMEntry(params, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int ID) {
@@ -213,11 +227,11 @@ public class SignUpMultiAbleActivity extends BaseActivity {
 
             @Override
             public void onResponse(String response, int ID) {
-                BaseResponse baseResponse = new Gson().fromJson(response,BaseResponse.class);
-                if (baseResponse.code == 0){
+                BaseResponse baseResponse = new Gson().fromJson(response, BaseResponse.class);
+                if (baseResponse.code == 0) {
                     showToast("报名成功");
                 } else {
-                    showToast("报名失败"+(TextUtils.isEmpty(baseResponse.msg)?"":(","+baseResponse.msg)));
+                    showToast("报名失败" + (TextUtils.isEmpty(baseResponse.msg) ? "" : ("," + baseResponse.msg)));
                 }
             }
         });
