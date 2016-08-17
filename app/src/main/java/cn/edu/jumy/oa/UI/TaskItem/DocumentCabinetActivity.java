@@ -41,7 +41,11 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
 
     @AfterExtras
     void getData() {
-        mList = (ArrayList<Annex>) DataSupport.where("username = ?", EMClient.getInstance().getCurrentUser()).find(Annex.class);
+        try {
+            mList = (ArrayList<Annex>) DataSupport.where("username = ?", EMClient.getInstance().getCurrentUser()).find(Annex.class);
+        } catch (Exception e) {
+            showDebugException(e);
+        }
         if (mList == null) {
             mList = new ArrayList<>();
         }
@@ -60,10 +64,11 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
         final File file = Annex.getFileByByte(annex);
         if (file == null) {
             String id = mList.get(position).getID();
+            String path = mContext.getCacheDir().getAbsolutePath();
             String filepath = mContext.getExternalCacheDir().getAbsolutePath();
             String filename = mList.get(position).getFileName();
             File newFile = new File(filepath, filename);
-            if (newFile != null && newFile.exists()) {
+            if (newFile.exists()) {
                 CallOtherOpenFile.openFile(mContext, file);
             } else {
                 final ProgressDialog progressDialog = new ProgressDialog(mContext);
