@@ -130,15 +130,15 @@ public class ItemTableRowAudit extends TableRow implements View.OnClickListener 
 
     private void skip2edit(final boolean pass) {
         final EditText editText = new EditText(mActivityRef.get());
-        final String title = pass ? "通过意见" : "退回意见";
-        if (!pass) {
+        final String title = pass ? "通过" : "退回意见";
+        if (!pass) {//退回
             AlertDialog alertDialog = new AlertDialog.Builder(mActivityRef.get())
                     .setTitle(title)
                     .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             final String passRemark = editText.getText().toString();
-                            doUpdate(passRemark, pass);
+                            doUpdate(passRemark, false);
 
                         }
                     })
@@ -147,8 +147,20 @@ public class ItemTableRowAudit extends TableRow implements View.OnClickListener 
                     .create();
             alertDialog.setCanceledOnTouchOutside(true);
             alertDialog.show();
-        } else {
-            doUpdate("", pass);
+        } else {//通过
+            AlertDialog alertDialog = new AlertDialog.Builder(mActivityRef.get())
+                    .setTitle(title)
+                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            doUpdate("", true);
+
+                        }
+                    })
+                    .setNegativeButton("否", null)
+                    .create();
+            alertDialog.setCanceledOnTouchOutside(true);
+            alertDialog.show();
         }
     }
 
@@ -156,7 +168,7 @@ public class ItemTableRowAudit extends TableRow implements View.OnClickListener 
         OAService.meetUserPass(user.id, String.valueOf(pass), passRemark, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                Toast.makeText(mActivityRef.get(), "当前网络不可用,审核报名失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivityRef.get(), "服务器错误,审核报名失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -167,6 +179,8 @@ public class ItemTableRowAudit extends TableRow implements View.OnClickListener 
                     //审核通过/退回
                     Intent data = new Intent(MeetAuditActivity.DELETE);
                     mActivityRef.get().sendBroadcast(data);
+                } else {
+                    Toast.makeText(mActivityRef.get(), baseResponse.msg, Toast.LENGTH_SHORT).show();
                 }
             }
         });

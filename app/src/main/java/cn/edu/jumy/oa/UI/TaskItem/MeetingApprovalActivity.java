@@ -1,5 +1,6 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
@@ -62,39 +63,14 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity {
 
     @NonNull
     private Map<String, String> getParams(int Index) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        int year, month, day;
-        Calendar calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR) - 1900;
-        month = calendar.get(Calendar.MONTH);
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-        if ((month < 8 && (month & 1) == 1) || (month >= 8 && (month & 1) == 0)) {
-            if (day == 31) {
-                day--;
-            }
-            if (month == 2 && day > 28) {
-                day = 28;
-            }
-            if (month == 0) {
-                month = 11;
-                year--;
-            } else {
-                month--;
-            }
-        } else {
-            month--;
-        }
-        String before = sdf.format(new Date(year, month, day));
-        String now = sdf.format(date);
         Map<String, String> params = new HashMap<>();
         params.put("page", Index + "");
         params.put("size", basePages + "");
         params.put("level", "");
         params.put("docNo", "");
         params.put("docTitle", "");
-        params.put("startTime", before);
-        params.put("endTime", now);
+        params.put("startTime", "");
+        params.put("endTime", "");
         params.put("signStatus", "");
         params.put("passStatus", "");
         return params;
