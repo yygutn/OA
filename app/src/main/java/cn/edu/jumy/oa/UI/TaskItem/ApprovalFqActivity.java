@@ -1,5 +1,6 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
@@ -19,6 +20,7 @@ import cn.edu.jumy.oa.Response.RelayResponse;
 import cn.edu.jumy.oa.UI.AuditDetailsActivity_;
 import cn.edu.jumy.oa.adapter.RelayAdapter;
 import cn.edu.jumy.oa.bean.Relay;
+import okhttp3.Call;
 
 /**
  * User: Jumy (yygutn@gmail.com)
@@ -35,15 +37,38 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
 
     @AfterViews
     void getData() {
+        mListView.post(new Runnable() {
+            @Override
+            public void run() {
+                mListView.setRefreshing(true);
+            }
+        });
         OAService.findRelay(getParams(index), new RelayCallback() {
             @Override
             public void onResponse(RelayResponse response, int id) {
                 if (response != null && response.code == 0 && response.data != null) {
                     mList.addAll(response.data.pageObject);
-                    adapter.setList(new ArrayList(mList));
-                    mListView.setLoadMoreCount(index * basePages);
-                    index++;
+                    mListView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.setList(new ArrayList(mList));
+                            mListView.setLoadMoreCount(index * basePages);
+                            index++;
+                            mListView.setOnRefreshComplete();
+                        }
+                    },1000);
                 }
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                super.onError(call, e, id);
+                mListView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mListView.setOnRefreshComplete();
+                    }
+                },1000);
             }
         });
     }
