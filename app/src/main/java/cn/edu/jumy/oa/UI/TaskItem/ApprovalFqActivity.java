@@ -153,7 +153,9 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
         }
         ArrayList<Relay> list = new ArrayList<>();
         for (Relay node : mList) {
-
+            if (node.remark.contains(str) || node.docTitle.contains(str) || node.docSummary.contains(str)){
+                list.add(node);
+            }
         }
         adapter.setList(list);
     }
