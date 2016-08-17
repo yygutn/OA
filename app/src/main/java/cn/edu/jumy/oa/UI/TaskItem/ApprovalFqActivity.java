@@ -75,7 +75,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         showDebugLogd(o.toString());
         Relay node = (Relay) o;
-        AuditDetailsActivity_.intent(mContext).extra("id", node.id).extra("type", (node.type == 1 ? 1 : 2) + "").start();
+        AuditDetailsActivity_.intent(mContext).extra("id", node.oldid).extra("type", (node.type == 1 ? 1 : 2) + "").extra("From_FQ",true).start();
     }
 
     @Override

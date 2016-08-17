@@ -218,6 +218,9 @@ public class DetailsActivity extends BaseActivity {
                 default:
                     break;
             }
+            if (fromSP){
+                mTitleBar.setTitle("详情");
+            }
             //文字信息处理
             // TODO: 16/7/12 根据LEVEL的等级ID设置不同的等级显示
             String level = "";
