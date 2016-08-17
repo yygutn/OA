@@ -17,9 +17,10 @@ import java.util.List;
 
 import cn.edu.jumy.jumyframework.BaseFragment;
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.UI.ApprovalActivity_;
 import cn.edu.jumy.oa.UI.CalendarActivity_;
 import cn.edu.jumy.oa.UI.MeetingCardActivity_;
+import cn.edu.jumy.oa.UI.TaskItem.ApprovalFqActivity_;
+import cn.edu.jumy.oa.UI.TaskItem.ApprovalSpActivity_;
 import cn.edu.jumy.oa.UI.TaskItem.DocumentReadActivity_;
 import cn.edu.jumy.oa.UI.TaskItem.DocumentReleaseActivity_;
 import cn.edu.jumy.oa.UI.TaskItem.MeetingApprovalActivity_;
@@ -76,7 +77,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
         ////////////////////////////////////////////////////////
         /////////初始化数据，如果缓存中有就使用缓存中的
         ArrayList<Item> items = (ArrayList<Item>) ACache.get(mContext).getAsObject("task_items");
-        if (items != null && items.size() > 0 && false) {
+        if (items != null && items.size() > 0) {
             showDebugLogv("from local cache");
             results.addAll(items);
         } else {
@@ -86,9 +87,10 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
             results.add(new Item(3, "会议通知", R.drawable.task_approval));
             results.add(new Item(8, "会议发布", R.drawable.task_meet_send));
             results.add(new Item(9, "会议审核", R.drawable.task_meet_approval));
-            //add 内部办公
-//            results.add(new Item(11, "内部办公", R.drawable.task_internal_office));
-            results.add(new Item(0, "审批", R.drawable.task_shenpi));
+            //add 我的审批,我的转发
+            results.add(new Item(1, "我的审批", R.drawable.normal_1));
+//            results.add(new Item(11, "我的转发", R.drawable.normal_2));
+            results.add(new Item(0, "我的转发", R.drawable.normal_2));
             results.add(new Item(6, "文件柜", R.drawable.task_folder));
             results.add(new Item(10, "日程管理", R.drawable.task_schedule_management));
             //add 公告
@@ -96,7 +98,6 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
             results.add(new Item(7, "在线学习", R.drawable.task_learn_online));
             results.add(new Item(13, "已发送公文", R.drawable.task_file_send));
             results.add(new Item(14, "已发布会议", R.drawable.task_meet_sent));
-//            results.add(new Item(1, "签到", R.drawable.task_location));
             results.add(new Item(2, "加密邮件", R.drawable.task_mail));
         }
     }
@@ -108,7 +109,6 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
         return LayoutInflater.from(mContext).inflate(R.layout.fragment_task, null);
     }
 
-    private RecyclerView recyclerView;
     private ItemTouchHelper itemTouchHelper;
 
     @Override
@@ -116,7 +116,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
         super.onViewCreated(view, savedInstanceState);
 
         RecyclerAdapter adapter = new RecyclerAdapter(R.layout.item_grid, results);
-        recyclerView = (RecyclerView) getActivity().findViewById(R.id.recView);
+        RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.recView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(mContext, 4));
@@ -140,15 +140,12 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                 Item item = results.get(vh.getLayoutPosition());
 //                showToast(item.getId() + " " + item.getName());
                 switch (item.getId()) {
-                    case 0: {//审批
-                        ApprovalActivity_.intent(mContext).start();
+                    case 0: {//我的转发
+                        ApprovalFqActivity_.intent(mContext).start();
                         break;
                     }
-                    case 1: {//签到
-//                        bundle = new Bundle();
-//                        bundle.putString("title", "签到");
-//                        bundle.putString("img", "file:///android_asset/img/img_2225.png");
-//                        TempActivity_.intent(mContext).extra("temp", bundle).start();
+                    case 1: {//我的审批
+                        ApprovalSpActivity_.intent(mContext).start();
                         break;
                     }
                     case 2: {//邮件
@@ -195,8 +192,7 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                         CalendarActivity_.intent(mContext).start();
                         break;
                     }
-                    case 11: {//内部办公
-
+                    case 11: {//
                         break;
                     }
                     case 12: {//公告

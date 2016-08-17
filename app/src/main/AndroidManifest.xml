@@ -27,7 +27,6 @@
         </activity>
 
         <activity android:name=".MainActivity" />
-        <activity android:name=".UI.ApprovalActivity_" />
         <activity android:name=".UI.CalendarActivity_" />
         <activity android:name=".UI.MeetingCardActivity_" />
         <activity android:name=".UI.SettingActivity_" />

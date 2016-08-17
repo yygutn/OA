@@ -60,7 +60,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
 
     @Override
     protected void setTile() {
-        mTitleBar.setTitle("由我发起");
+        mTitleBar.setTitle("我的转发");
     }
 
 

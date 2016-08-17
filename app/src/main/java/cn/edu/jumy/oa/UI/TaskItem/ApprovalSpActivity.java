@@ -72,7 +72,7 @@ public class ApprovalSpActivity extends BaseActivity {
             @Override
             public void onResponse(RelayResponse response, int id) {
                 if (response.code == 1 || response.data == null) {
-                    showToast("获取会议列表失败");
+                    showToast("获取会议列表失败" + response.msg);
                     return;
                 }
                 ArrayList<Relay> list = response.data.pageObject;
@@ -131,7 +131,7 @@ public class ApprovalSpActivity extends BaseActivity {
         initSearchView();
         setSupportActionBar(mToolBar);
 
-        mToolBar.setTitle("由我审批");
+        mToolBar.setTitle("我的审批");
         mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
