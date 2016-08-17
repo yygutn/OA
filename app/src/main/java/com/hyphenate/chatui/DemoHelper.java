@@ -3,9 +3,12 @@ package com.hyphenate.chatui;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.hyphenate.EMCallBack;
@@ -34,6 +37,7 @@ import com.hyphenate.chatui.domain.RobotUser;
 import com.hyphenate.chatui.parse.UserProfileManager;
 import com.hyphenate.chatui.receiver.CallReceiver;
 import com.hyphenate.chatui.ui.ChatActivity;
+import com.hyphenate.chatui.ui.LoginActivity;
 import com.hyphenate.chatui.ui.VideoCallActivity;
 import com.hyphenate.chatui.ui.VoiceCallActivity;
 import com.hyphenate.chatui.utils.PreferenceManager;
@@ -58,6 +62,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.MainActivity;
 import cn.edu.jumy.oa.MyApplication;
@@ -703,10 +708,41 @@ public class DemoHelper {
      * 账号在别的设备登录
      */
     protected void onConnectionConflict() {
-        Intent intent = new Intent(appContext, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(Constant.ACCOUNT_CONFLICT, true);
-        appContext.startActivity(intent);
+        final Activity activity = AppManager.getInstance().getCurrentActivity();
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String message = activity.getResources().getString(com.hyphenate.chatui.R.string.Logoff_notification);
+                if (!activity.isFinishing()) {
+                    showConflictDialog(activity, message);
+                }
+            }
+        });
+    }
+
+    /**
+     * 显示帐号在别处登录dialog
+     */
+    private void showConflictDialog(final Activity activity, final String message) {
+        DemoHelper.getInstance().logout(false, null);
+        try {
+            AlertDialog alertDialog = new AlertDialog.Builder(activity)
+                    .setTitle(message)
+                    .setMessage(R.string.connect_conflict)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(activity, LoginActivity.class);
+                            activity.startActivity(intent);
+                        }
+                    })
+                    .setCancelable(false)
+                    .create();
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -907,7 +943,7 @@ public class DemoHelper {
     /**
      * 获取当前用户的环信id
      */
-    public String getCurrentUsernName() {
+    public String getCurrentUserName() {
         if (username == null) {
             username = demoModel.getCurrentUsernName();
         }
@@ -950,7 +986,7 @@ public class DemoHelper {
         try {
             EMClient.getInstance().callManager().endCall();
         } catch (Exception e) {
-            e.printStackTrace();
+            BaseActivity.showDebugLogd(e.getMessage());
         }
     }
 

@@ -52,7 +52,7 @@ public class SplashActivity extends BaseActivity {
                         EMClient.getInstance().groupManager().loadAllGroups();
                         EMClient.getInstance().chatManager().loadAllConversations();
 
-    //					RedPacket.getInstance().initRPToken(DemoHelper.getInstance().getCurrentUsernName(), DemoHelper.getInstance().getCurrentUsernName(), EMClient.getInstance().getChatConfig().getAccessToken(), new RPCallback() {
+    //					RedPacket.getInstance().initRPToken(DemoHelper.getInstance().getCurrentUserName(), DemoHelper.getInstance().getCurrentUserName(), EMClient.getInstance().getChatConfig().getAccessToken(), new RPCallback() {
     //						@Override
     //						public void onSuccess() {
     //

@@ -1,8 +1,6 @@
 package cn.edu.jumy.oa.fragment;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
-import com.hyphenate.chatui.DemoApplication;
 import com.hyphenate.chatui.DemoHelper;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
@@ -21,10 +18,8 @@ import com.zhy.http.okhttp.callback.Callback;
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -42,7 +37,6 @@ import cn.edu.jumy.oa.Response.MeetResponse;
 import cn.edu.jumy.oa.Response.NotifyBroadCastResponse;
 import cn.edu.jumy.oa.Response.SingleNotifyResponse;
 import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
-import cn.edu.jumy.oa.Utils.NotifyUtils;
 import cn.edu.jumy.oa.adapter.NotifyCardAdapter;
 import cn.edu.jumy.oa.bean.Doc;
 import cn.edu.jumy.oa.bean.Meet;
@@ -81,7 +75,7 @@ import okhttp3.Response;
  */
 @EFragment(R.layout.fragment_notify)
 public class NotifyFragment extends BaseFragment implements OnItemClickListener {
-    public final String KEY = NotifyFragment.class.getSimpleName() + "_" + DemoHelper.getInstance().getCurrentUsernName();
+    public final String KEY = NotifyFragment.class.getSimpleName() + "_" + DemoHelper.getInstance().getCurrentUserName();
     private Context mContext;
     @ViewById(R.id.notify_listView)
     PullToRefreshRecyclerView mListView;

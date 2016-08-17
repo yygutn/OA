@@ -87,8 +87,8 @@ public class LoginActivity extends BaseActivity {
 
                 }
             });
-            if (DemoHelper.getInstance().getCurrentUsernName() != null) {
-                usernameEditText.setText(DemoHelper.getInstance().getCurrentUsernName());
+            if (DemoHelper.getInstance().getCurrentUserName() != null) {
+                usernameEditText.setText(DemoHelper.getInstance().getCurrentUserName());
             }
         } catch (Exception e) {
             e.printStackTrace();

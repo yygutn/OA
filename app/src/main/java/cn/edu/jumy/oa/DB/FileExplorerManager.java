@@ -37,8 +37,8 @@ public class FileExplorerManager {
             for (Node node : list) {
                 ContentValues values = new ContentValues();
                 String username = OaPreference.getInstance().get("username");
-                if (TextUtils.isEmpty(username)||!DemoHelper.getInstance().getCurrentUsernName().equals(username)){
-                    OaPreference.getInstance().set("username",DemoHelper.getInstance().getCurrentUsernName());
+                if (TextUtils.isEmpty(username)||!DemoHelper.getInstance().getCurrentUserName().equals(username)){
+                    OaPreference.getInstance().set("username",DemoHelper.getInstance().getCurrentUserName());
                 }
                 values.put(FileDao.COLUMN_NAME_ID, OaPreference.getInstance().get("username"));
                 db.replace(FileDao.TABLE_NAME,null,values);

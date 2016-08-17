@@ -8,6 +8,8 @@ import android.util.Log;
 import com.orhanobut.logger.Logger;
 
 import java.util.Stack;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * User: Jumy (yygutn@gmail.com)
@@ -15,7 +17,7 @@ import java.util.Stack;
  */
 public class AppManager {
     private static final String TAG = AppManager.class.getSimpleName();
-    private static Stack<BaseActivity> mActivityStack;
+    private static CopyOnWriteArrayList<BaseActivity> mActivityStack;
     private static AppManager instance;
 
 
@@ -31,7 +33,7 @@ public class AppManager {
     }
 
     public void init() {
-        mActivityStack = new Stack<>();
+        mActivityStack = new CopyOnWriteArrayList<>();
     }
 
     /**
@@ -39,9 +41,9 @@ public class AppManager {
      */
     public void addActivity(BaseActivity activity) {
         if (mActivityStack == null) {
-            mActivityStack = new Stack<>();
+            mActivityStack = new CopyOnWriteArrayList<>();
         }
-        mActivityStack.push(activity);
+        mActivityStack.add(activity);
         Logger.t(TAG).w("add " + activity.getLocalClassName() + "\n" + "current size is : " + mActivityStack.size());
         logStackInfo();
     }
@@ -50,16 +52,15 @@ public class AppManager {
      * 获取当前Activity（堆栈中最后一个压入的）
      */
     public Activity getCurrentActivity() {
-        return mActivityStack.lastElement();
+        return mActivityStack.get(mActivityStack.size() - 1);
     }
 
     /**
      * 结束当前Activity（堆栈中最后一个压入的）
      */
     public void finishCurActivity() {
-        Activity activity = mActivityStack.pop();
+        Activity activity = mActivityStack.remove(mActivityStack.size() - 1);
         activity.finish();
-        activity = null;
         logStackInfo();
     }
 
@@ -74,8 +75,8 @@ public class AppManager {
     /**
      * 结束除了当前Activity（堆栈中最后一个压入的）所有的Activity
      */
-    public synchronized void finishAllBesideTop() {
-        BaseActivity activity = mActivityStack.lastElement();
+    public void finishAllBesideTop() {
+        BaseActivity activity = mActivityStack.get(mActivityStack.size() - 1);
         if (activity == null) {
             return;
         }
@@ -89,13 +90,13 @@ public class AppManager {
 
     public void back2Level2() {
         while (mActivityStack.size() > 2) {
-            finishActivity(mActivityStack.pop());
+            finishActivity(mActivityStack.remove(mActivityStack.size() - 1));
         }
     }
 
     public void back2Level1() {
         while (mActivityStack.size() > 1) {
-            finishActivity(mActivityStack.pop());
+            finishActivity(mActivityStack.remove(mActivityStack.size() - 1));
         }
     }
 
@@ -117,11 +118,7 @@ public class AppManager {
         message += "Finishing " + activity.getClass().getSimpleName() + "\n";
         message += "Before finish, the Stack size is :" + AppManager.getStackSize() + "\n";
         finishActivity(activity.getClass());
-        if (activity != null) {
-//            activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
-            activity.finish();
-            activity = null;
-        }
+        activity.finish();
         message += ("After finished, the Stack size is :" + AppManager.getStackSize()) + "\n";
         showDebugLog(message);
     }
@@ -145,8 +142,8 @@ public class AppManager {
      * 结束所有Activity
      */
     public void finishAllActivity() {
-        while (!mActivityStack.empty()) {
-            mActivityStack.pop().finish();
+        while (!mActivityStack.isEmpty()) {
+            mActivityStack.remove(mActivityStack.size() - 1).finish();
         }
         mActivityStack.clear();
     }

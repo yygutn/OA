@@ -42,8 +42,6 @@ import com.hyphenate.chatui.ui.LoginActivity;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 
-import org.androidannotations.annotations.OnActivityResult;
-
 import java.util.List;
 
 import cn.edu.jumy.jumyframework.AppManager;
@@ -157,9 +155,10 @@ public class MainActivity extends BaseActivity {
         }
 
 
-        if (getIntent().getBooleanExtra(Constant.ACCOUNT_CONFLICT, false) && !isConflictDialogShow) {
-            showConflictDialog();
-        } else if (getIntent().getBooleanExtra(Constant.ACCOUNT_REMOVED, false) && !isAccountRemovedDialogShow) {
+//        if (getIntent().getBooleanExtra(Constant.ACCOUNT_CONFLICT, false) && !isConflictDialogShow) {
+//            showConflictDialog();
+//        } else
+        if (getIntent().getBooleanExtra(Constant.ACCOUNT_REMOVED, false) && !isAccountRemovedDialogShow) {
             showAccountRemovedDialog();
         }
 
@@ -388,7 +387,7 @@ public class MainActivity extends BaseActivity {
             public void run() {
                 int count = getUnreadAddressCountTotal();
                 if (count > 0) {
-					unreadLabel.setText(String.valueOf(count));
+                    unreadLabel.setText(String.valueOf(count));
                     unreadLabel.setVisibility(View.VISIBLE);
                 } else {
                     unreadLabel.setVisibility(View.INVISIBLE);
@@ -495,43 +494,6 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
-     * 显示帐号在别处登录dialog
-     */
-    private void showConflictDialog() {
-        isConflictDialogShow = true;
-        DemoHelper.getInstance().logout(false, null);
-        String st = getResources().getString(com.hyphenate.chatui.R.string.Logoff_notification);
-        if (!MainActivity.this.isFinishing()) {
-            // clear up global variables
-            try {
-                if (conflictBuilder == null)
-                    conflictBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
-                conflictBuilder.setTitle(st);
-                conflictBuilder.setMessage(com.hyphenate.chatui.R.string.connect_conflict);
-                conflictBuilder.setPositiveButton(com.hyphenate.chatui.R.string.ok, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        conflictBuilder = null;
-                        AppManager.getInstance().finishActivity(getInstance());
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    }
-                });
-                conflictBuilder.setCancelable(false);
-                conflictBuilder.create().show();
-                isConflict = true;
-            } catch (Exception e) {
-                EMLog.e(TAG, "---------color conflictBuilder error" + e.getMessage());
-            }
-
-        }
-
-    }
-
-    /**
      * 帐号被移除的dialog
      */
     private void showAccountRemovedDialog() {
@@ -569,9 +531,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent.getBooleanExtra(Constant.ACCOUNT_CONFLICT, false) && !isConflictDialogShow) {
-            showConflictDialog();
-        } else if (intent.getBooleanExtra(Constant.ACCOUNT_REMOVED, false) && !isAccountRemovedDialogShow) {
+        if (intent.getBooleanExtra(Constant.ACCOUNT_REMOVED, false) && !isAccountRemovedDialogShow) {
             showAccountRemovedDialog();
         }
     }
@@ -608,7 +568,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 2048 && resultCode == 1025) {
-            ((NotifyFragment)mTabHost.mTabs.get(0).fragment).onResult(1025);
+            ((NotifyFragment) mTabHost.mTabs.get(0).fragment).onResult(1025);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

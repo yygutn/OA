@@ -43,10 +43,11 @@ public class MyApplication extends MultiDexApplication {
         //HX
         DemoApplication.getInstance().init(this);
         //
-        Logger.init("Jumy")
-                .methodCount(1)
-                .logLevel(LogLevel.FULL)
-                .methodOffset(1);
+        if (BuildConfig.DEBUG){
+            Logger.init("Jumy").hideThreadInfo().methodOffset(0);
+        } else {
+            Logger.init("Release").logLevel(LogLevel.NONE);
+        }
         LitePalApplication.initialize(this);
         K9.getInstance().onCreate(this);
     }

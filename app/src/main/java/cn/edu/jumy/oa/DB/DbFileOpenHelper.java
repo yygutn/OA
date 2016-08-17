@@ -27,7 +27,7 @@ public class DbFileOpenHelper extends SQLiteOpenHelper{
     }
 
     private static String getUserDatabaseName() {
-        return  DemoHelper.getInstance().getCurrentUsernName() + "_file.db";
+        return  DemoHelper.getInstance().getCurrentUserName() + "_file.db";
     }
 
     public static DbFileOpenHelper getInstance() {
