@@ -8,11 +8,11 @@ import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
-
-import java.lang.ref.WeakReference;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.MyApplication;
@@ -32,7 +32,6 @@ public class ItemTableRowAuditDetails extends TableRow {
     TextView text2;//转发审批意见
 
     private Relay user;
-    private WeakReference<BaseActivity> mActivityRef;
 
 
     public ItemTableRowAuditDetails(Context context) {
@@ -48,7 +47,6 @@ public class ItemTableRowAuditDetails extends TableRow {
         if (node == null) {
             node = new Relay();
         }
-        this.mActivityRef = new WeakReference<>(activity);
         this.user = node;
     }
 
@@ -75,6 +73,10 @@ public class ItemTableRowAuditDetails extends TableRow {
                 int oldHeight = oldBottom - oldTop;
                 int newWidth = right - left;
                 int newHeight = bottom - top;
+                Logger.w("\noldWidth:" + oldWidth +
+                        "\noldHeight:" + oldHeight +
+                        "\nnewWidth:" + newWidth +
+                        "\nnewHeight" + newHeight);
                 boolean sizeChanged = (newWidth != oldWidth) || (newHeight != oldHeight);
                 if (itemView.getLayoutParams() != null && sizeChanged) {
                     int m = MeasureUtil.dp2px(MyApplication.getContext(), 1.0f);

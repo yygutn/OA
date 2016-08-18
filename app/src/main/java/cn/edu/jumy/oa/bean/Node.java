@@ -116,6 +116,7 @@ public class Node implements Serializable {
     public int isPass;
     public String oldid = "";
     public String oldSendDepartment = "";
+    public String relayRemark = "";
 
     public Node() {
 
@@ -204,5 +205,6 @@ public class Node implements Serializable {
         this.isPass = node.isPass;
         this.oldid = node.oldid;
         this.oldSendDepartment = node.oldSendDepartment;
+        this.relayRemark = node.relayRemark;
     }
 }

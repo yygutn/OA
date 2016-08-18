@@ -974,4 +974,27 @@ public class OAService {
             }
         });
     }
+    /**
+     * 审批后，自己查看自己的审批意见
+     *
+     * @param callback 回调
+     */
+    public static void ApproveGet(final String id, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "ApproveGet")
+                        .addParams("value", response)
+                        .addParams("tid", id)
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
 }

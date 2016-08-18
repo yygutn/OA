@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_marginBottom="1dp"
-    android:background="#eaeaea"
-    android:orientation="horizontal"
+    android:background="@android:color/transparent"
     android:divider="@drawable/shape_divider_white"
+    android:orientation="horizontal"
     android:showDividers="middle">
 
     <TextView
-        android:layout_weight="4"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:background="@color/colorMask"
+        android:layout_weight="4"
         android:gravity="center"
         android:padding="5dp"
-        android:text="单位"
         android:textColor="@color/white" />
 
     <TextView
-        android:layout_weight="13"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:background="@color/colorMask"
+        android:layout_weight="13"
         android:gravity="center"
         android:padding="5dp"
-        android:text="转发审批意见"
         android:textColor="@color/white" />
 </TableRow>

@@ -19,6 +19,7 @@ import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.RelayResponse;
 import cn.edu.jumy.oa.UI.AuditDetailsActivity_;
 import cn.edu.jumy.oa.adapter.RelayAdapter;
+import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.bean.Relay;
 import okhttp3.Call;
 
@@ -100,7 +101,8 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         showDebugLogd(o.toString());
         Relay node = (Relay) o;
-        AuditDetailsActivity_.intent(mContext).extra("id", node.oldid).extra("type", (node.type == 1 ? 1 : 2) + "").extra("From_FQ",true).start();
+        DetailsActivity_.intent(mContext).extra("details",new Node(node)).extra("FromFQ",true).start();
+//        AuditDetailsActivity_.intent(mContext).extra("id", node.oldid).extra("type", (node.type == 1 ? 1 : 2) + "").extra("From_FQ",true).start();
     }
 
     @Override

@@ -4,8 +4,9 @@
 
     <TextView
         android:id="@+id/text1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:background="@color/mask_color"
         android:gravity="center"
         android:minHeight="40dp"
@@ -14,13 +15,12 @@
 
     <TextView
         android:id="@+id/text2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_weight="13"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:background="@color/mask_color"
         android:gravity="center"
         android:minHeight="40dp"
         android:text="第一行\n第二列"
         android:textColor="@color/black" />
-
-
 </merge>

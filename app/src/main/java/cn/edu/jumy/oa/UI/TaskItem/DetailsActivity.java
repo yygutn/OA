@@ -13,10 +13,13 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -39,7 +42,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.MyApplication;
@@ -47,6 +49,8 @@ import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.AttachResponse;
 import cn.edu.jumy.oa.Response.BaseResponse;
+import cn.edu.jumy.oa.Response.Relay2Response;
+import cn.edu.jumy.oa.Response.RelaySingleResponse;
 import cn.edu.jumy.oa.UI.OrgRelaySelectActivity_;
 import cn.edu.jumy.oa.UI.SignUpMultiAbleActivity_;
 import cn.edu.jumy.oa.Utils.CallOtherOpenFile;
@@ -54,6 +58,8 @@ import cn.edu.jumy.oa.Utils.CardGenerator;
 import cn.edu.jumy.oa.bean.Annex;
 import cn.edu.jumy.oa.bean.Attachment;
 import cn.edu.jumy.oa.bean.Node;
+import cn.edu.jumy.oa.bean.Relay;
+import cn.edu.jumy.oa.widget.customview.ItemTableRowAuditDetails_;
 import cn.edu.jumy.oa.widget.datepicker.calendar.utils.MeasureUtil;
 import okhttp3.Call;
 import okhttp3.Request;
@@ -81,6 +87,12 @@ public class DetailsActivity extends BaseActivity {
     protected AppCompatTextView mDocumentDetailsSignUp;
     @ViewById(R.id.document_details_cui)
     protected AppCompatTextView mCuiS;
+    @ViewById(R.id.root_ll)
+    protected LinearLayout mRootLayout;
+
+    TextView mZFYJ;
+    TextView mSPYJ;
+
 
     @Extra("details")
     protected Node mNode = new Node();
@@ -88,6 +100,13 @@ public class DetailsActivity extends BaseActivity {
     boolean fromSentMeet = false;
     @Extra("from_SP")
     boolean fromSP = false;
+    @Extra("FromFQ")
+    boolean fromFQ = false;
+
+    TableLayout mTableDone;
+    TableLayout mTableUndo;
+    ArrayList<Relay> mListUndo;
+    ArrayList<Relay> mListDone;
 
     //附件列表
     ArrayList<Attachment> mList;
@@ -98,7 +117,7 @@ public class DetailsActivity extends BaseActivity {
     void getList() {
         Map<String, String> params = new HashMap<>();
         String id = "";
-        if (fromSP){
+        if (fromSP) {
             id = mNode.oldid;
         } else {
             id = mNode.id;
@@ -108,12 +127,39 @@ public class DetailsActivity extends BaseActivity {
             @Override
             public void onResponse(AttachResponse response, int id) {
                 mList = response.data;
-                showDebugLoge(response.data.toString());
                 if (mList == null || mList.size() <= 0) {
+                    if (fromFQ || fromSP) {
+                        return;
+                    }
                     doSign();
                 }
             }
         });
+    }
+
+    /**
+     * 来自审批||转发
+     */
+    private void setUpAuditView() {
+        if (fromFQ) {//我的发起详情
+            View view = LayoutInflater.from(mContext).inflate(R.layout.layout_document_details_extra, null);
+            mZFYJ = (TextView) view.findViewById(R.id.mZFYJ);
+            mTableDone = (TableLayout) view.findViewById(R.id.sign_details_table_done);
+            mTableUndo = (TableLayout) view.findViewById(R.id.sign_details_table_undo);
+            mRootLayout.addView(view);
+            mListUndo = new ArrayList<>();
+            mListDone = new ArrayList<>();
+            OAService.findapproved(mNode.id, (mNode.type == 1 ? 1 : 2) + "", new RelayCallBack());
+            mZFYJ.setText(mNode.relayRemark);
+        } else if (fromSP) {//我的审批详情
+            View view = LayoutInflater.from(mContext).inflate(R.layout.layout_document_details_extra_2, null);
+            mZFYJ = (TextView) view.findViewById(R.id.mZFYJ);
+            mSPYJ = (TextView) view.findViewById(R.id.mSPYJ);
+            mRootLayout.addView(view);
+            mZFYJ.setText(mNode.relayRemark);
+            //获取我的审批意见并显示
+            OAService.ApproveGet(mNode.tid, new SingleRelayCallback());
+        }
     }
 
     @AfterViews
@@ -127,16 +173,20 @@ public class DetailsActivity extends BaseActivity {
             }
         });
         setUpViews();
+        setUpAuditView();
     }
 
+    /**
+     * 签收
+     */
     private void doSign() {
         if (mNode.type == 1 && !fromSP && !fromSentMeet) {
-            DocSignBackground();
+            DocSign();
             setResult(1025);
         } else if (mNode.type == 0 && !fromSP && !fromSentMeet) {
             MeetSign();
             setResult(1025);
-        } else if (mNode.type == 2){
+        } else if (mNode.type == 2) {
             setResult(1025);
         }
     }
@@ -166,7 +216,7 @@ public class DetailsActivity extends BaseActivity {
         });
     }
 
-    private void DocSignBackground() {
+    private void DocSign() {
         if (TextUtils.isEmpty(mNode.tid) || mNode.signStatus == 0) {
             return;
         }
@@ -218,7 +268,7 @@ public class DetailsActivity extends BaseActivity {
                 default:
                     break;
             }
-            if (fromSP){
+            if (fromSP || fromFQ) {
                 mTitleBar.setTitle("详情");
             }
             //文字信息处理
@@ -255,7 +305,7 @@ public class DetailsActivity extends BaseActivity {
                 mDocumentDetailsTitle.setVisibility(View.GONE);
             }
             mDocumentDetailsContent_meet.setVisibility(View.VISIBLE);
-            if (fromSP){
+            if (fromSP || fromFQ) {
                 mDocumentDetailsContent_meet.setText(CardGenerator.getZFContentString(mNode));
             } else {
                 mDocumentDetailsContent_meet.setText(CardGenerator.getContentString(mNode));
@@ -475,7 +525,7 @@ public class DetailsActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         if (fromSP && mNode.isPass == 1) {
             getMenuInflater().inflate(R.menu.details_shenpi, menu);
-        } else if (!fromSP && mNode.type != 2) {
+        } else if (!fromSP && mNode.type != 2 && !fromFQ) {
             getMenuInflater().inflate(R.menu.details_share, menu);
         }
         return super.onCreateOptionsMenu(menu);
@@ -528,5 +578,109 @@ public class DetailsActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private class RelayCallBack extends Callback<Relay2Response> {
+
+        @Override
+        public Relay2Response parseNetworkResponse(Response response, int ID) throws Exception {
+            String data = response.body().string();
+            Gson gson = new Gson();
+            BaseResponse baseResponse = gson.fromJson(data, BaseResponse.class);
+            if (baseResponse.code == 0) {
+                return gson.fromJson(data, Relay2Response.class);
+            } else {
+                return new Relay2Response(baseResponse);
+            }
+        }
+
+        @Override
+        public void onError(Call call, Exception e, int ID) {
+            showToast("服务器错误,获取审批意见失败");
+        }
+
+        @Override
+        public void onResponse(Relay2Response response, int ID) {
+            try {
+                if (response.code == 0) {
+                    if (response.data == null) return;
+                    mListUndo.clear();
+                    mListDone.clear();
+                    removeItemViews(mTableDone);
+                    removeItemViews(mTableUndo);
+                    for (Relay relay : response.data) {
+                        if (relay.remark.equals("0")) {
+                            mListDone.add(relay);
+                        } else {
+                            mListUndo.add(relay);
+                        }
+                    }
+                    updateView();
+                } else {
+                    showToast(response.msg);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void updateView() {
+        if (mTableDone == null) {
+            return;
+        }
+        for (Relay auditUser : mListDone) {
+            mTableDone.addView(ItemTableRowAuditDetails_.build(mContext, auditUser, this));
+        }
+        if (mTableUndo == null) {
+            return;
+        }
+        int len = mListUndo.size();
+        for (int i = 0; i < len; i++) {
+            mTableUndo.addView(ItemTableRowAuditDetails_.build(mContext, mListUndo.get(i), this));
+        }
+        mTableUndo.addView(View.inflate(mContext,R.layout.layout_empty,null));
+    }
+
+    private void removeItemViews(TableLayout tableLayout) {
+        try {
+            tableLayout.removeAllViews();
+            tableLayout.addView(LayoutInflater.from(mContext).inflate(R.layout.layout_item_table_row_audit_details, null));
+        } catch (Exception e) {
+            showDebugException(e);
+        }
+    }
+
+    private class SingleRelayCallback extends Callback<RelaySingleResponse> {
+
+        @Override
+        public RelaySingleResponse parseNetworkResponse(Response response, int ID) throws Exception {
+            String data = response.body().string();
+            Gson gson = new Gson();
+            BaseResponse baseResponse = gson.fromJson(data, BaseResponse.class);
+            if (baseResponse.code == 0) {
+                return gson.fromJson(data, RelaySingleResponse.class);
+            } else {
+                return new RelaySingleResponse(baseResponse);
+            }
+        }
+
+        @Override
+        public void onError(Call call, Exception e, int ID) {
+            showDebugException(e);
+            showToast("网络错误,获取我的审批意见失败");
+        }
+
+        @Override
+        public void onResponse(RelaySingleResponse response, int ID) {
+            if (response.code == 1) {
+                showToast(response.msg);
+                return;
+            }
+            if (response.data == null) {
+                return;
+            }
+            mSPYJ.setText(response.data.passRemark);
+        }
     }
 }

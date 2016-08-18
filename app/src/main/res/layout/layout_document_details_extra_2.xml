@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:text="转发意见:"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/mZFYJ"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="审批意见:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/black" />
+    <TextView
+        android:id="@+id/mSPYJ"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:paddingBottom="15dp"
+        android:textColor="@color/black" />
+
+</LinearLayout>
