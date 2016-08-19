@@ -101,6 +101,9 @@ public class MainActivity extends BaseActivity {
                             if (mTabHost.getCurrentTab() != 0) {
                                 mTabHost.setCurrentTab(0);
                             }
+                            if (!isAppOnForeground() || !isActive){
+                                moveTaskToFront();
+                            }
                         }
                     });
                 }

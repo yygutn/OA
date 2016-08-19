@@ -1,13 +1,13 @@
 package cn.edu.jumy.jumyframework;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,6 +20,7 @@ import org.androidannotations.annotations.EActivity;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 
 /**
@@ -32,6 +33,7 @@ public class BaseActivity extends AppCompatActivity {
     public static boolean DEBUG = true;
     public Context mContext;
     private WeakReference<BaseActivity> instance;
+    public static boolean isActive = true;
 
     protected BaseActivity getInstance() {
         return instance.get();
@@ -92,7 +94,8 @@ public class BaseActivity extends AppCompatActivity {
             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
         }
     }
-    public void showToast(String message,int duration) {
+
+    public void showToast(String message, int duration) {
         if (!TextUtils.isEmpty(message)) {
             Toast.makeText(mContext, message, duration).show();
         }
@@ -159,6 +162,18 @@ public class BaseActivity extends AppCompatActivity {
         if (mContext != null) {
             mContext = null;
         }
+        if (!isAppOnForeground()) {
+            isActive = false;
+        }
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!isActive) {
+            isActive = true;
+        }
     }
 
     @Override
@@ -178,5 +193,48 @@ public class BaseActivity extends AppCompatActivity {
                 item.delete();
             }
         }
+    }
+
+    /**
+     * 程序是否在前台运行
+     *
+     * @return true-yes or false-no
+     */
+    public boolean isAppOnForeground() {
+        // Returns a list of application processes that are running on the
+        // device
+
+        ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        String packageName = getApplicationContext().getPackageName();
+
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
+                .getRunningAppProcesses();
+        if (appProcesses == null)
+            return false;
+
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+            // The name of the process that this object is associated with.
+            if (appProcess.processName.equals(packageName)
+                    && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 后台切换到前台
+     * @return 是否在前台
+     */
+    public boolean moveTaskToFront() {
+        ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> taskInfoList = am.getRunningTasks(100);
+        for (ActivityManager.RunningTaskInfo taskInfo : taskInfoList) {
+            if (taskInfo.topActivity.getPackageName().equals(mContext.getPackageName())){
+                am.moveTaskToFront(taskInfo.id,0);
+                break;
+            }
+        }
+        return isAppOnForeground();
     }
 }
