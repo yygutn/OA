@@ -13,7 +13,9 @@ import java.util.Date;
 import java.util.List;
 
 import cn.edu.jumy.oa.R;
+import cn.edu.jumy.oa.Utils.CardGenerator;
 import cn.edu.jumy.oa.bean.Meet;
+import cn.edu.jumy.oa.bean.Node;
 
 /**
  * Created by Jumy on 16/6/1 17:48.
@@ -52,14 +54,7 @@ public class MeetingCardAdapter extends CommonAdapter<Meet>{
     public void convert(ViewHolder holder, Meet node) {
         ((CardView)holder.getView(R.id.cardView)).setCardBackgroundColor(Color.parseColor("#30DDDDDD"));
         holder.setText(R.id.subtitle,node.docTitle);
-        String message = "";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        message += "发文单位: " + node.sendDepartmentInfo + "\n";
-        message += "发文时间: " + sdf.format(new Date(node.createTime)) + "\n";
-        message += "承办单位: " + node.meetCompanyName + "\n";
-        message += "会议时间: " + sdf.format(new Date(node.meetTime)) + "\n";
-        message += "会议地点: " + node.addr + "\n";
-        holder.setText(R.id.supportingText,message);
+        holder.setText(R.id.supportingText, CardGenerator.getContentString(new Node(node)));
     }
     public void setList(ArrayList<Meet> list){
         mDatas.clear();

@@ -254,7 +254,7 @@ public class DetailsActivity extends BaseActivity {
                 case 0: {
                     mTitleBar.setTitle("会议详情");
                     //                mDocumentDetailsLevel.setVisibility(View.GONE);
-                    mDocumentDetailsSignUp.setVisibility(fromSentMeet || fromSP ? View.GONE : View.VISIBLE);
+                    mDocumentDetailsSignUp.setVisibility(fromSentMeet || fromSP || fromFQ ? View.GONE : View.VISIBLE);
                     break;
                 }
                 case 1: {
