@@ -123,7 +123,8 @@ public class SignUpMultiActivity extends BaseActivity {
                                 BaseResponse baseResponse = gson.fromJson(response, BaseResponse.class);
                                 if (baseResponse.code == 0) {
                                     showToast("报名成功");
-                                    AppManager.getInstance().back2Level2();
+                                    SignUpDetailsActivity_.intent(mContext).extra("tid", tid).extra("pid", pid).start();
+                                    AppManager.getInstance().finishCurActivity();
                                 } else {
                                     showToast("报名失败");
                                 }

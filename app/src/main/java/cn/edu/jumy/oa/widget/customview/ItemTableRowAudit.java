@@ -180,7 +180,7 @@ public class ItemTableRowAudit extends TableRow implements View.OnClickListener 
                     Intent data = new Intent(MeetAuditActivity.DELETE);
                     mActivityRef.get().sendBroadcast(data);
                 } else {
-                    Toast.makeText(mActivityRef.get(), baseResponse.msg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivityRef.get(), TextUtils.isEmpty(baseResponse.msg) ? "审核失败,请重试":baseResponse.msg, Toast.LENGTH_SHORT).show();
                 }
             }
         });

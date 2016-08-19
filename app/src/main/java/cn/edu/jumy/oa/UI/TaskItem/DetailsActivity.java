@@ -91,6 +91,7 @@ public class DetailsActivity extends BaseActivity {
     protected LinearLayout mRootLayout;
 
     TextView mZFYJ;
+    TextView mZFDW;
     TextView mSPYJ;
 
 
@@ -144,6 +145,7 @@ public class DetailsActivity extends BaseActivity {
         if (fromFQ) {//我的发起详情
             View view = LayoutInflater.from(mContext).inflate(R.layout.layout_document_details_extra, null);
             mZFYJ = (TextView) view.findViewById(R.id.mZFYJ);
+            mZFDW = (TextView) view.findViewById(R.id.mZFDW);
             mTableDone = (TableLayout) view.findViewById(R.id.sign_details_table_done);
             mTableUndo = (TableLayout) view.findViewById(R.id.sign_details_table_undo);
             mRootLayout.addView(view);
@@ -151,12 +153,15 @@ public class DetailsActivity extends BaseActivity {
             mListDone = new ArrayList<>();
             OAService.findapproved(mNode.id, (mNode.type == 1 ? 1 : 2) + "", new RelayCallBack());
             mZFYJ.setText(mNode.relayRemark);
+            mZFDW.setText(mNode.dispatchUnit);
         } else if (fromSP) {//我的审批详情
             View view = LayoutInflater.from(mContext).inflate(R.layout.layout_document_details_extra_2, null);
             mZFYJ = (TextView) view.findViewById(R.id.mZFYJ);
+            mZFDW = (TextView) view.findViewById(R.id.mZFDW);
             mSPYJ = (TextView) view.findViewById(R.id.mSPYJ);
             mRootLayout.addView(view);
             mZFYJ.setText(mNode.relayRemark);
+            mZFDW.setText(mNode.dispatchUnit);
             //获取我的审批意见并显示
             OAService.ApproveGet(mNode.tid, new SingleRelayCallback());
         }
