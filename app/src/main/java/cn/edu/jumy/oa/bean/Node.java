@@ -136,53 +136,30 @@ public class Node implements Serializable {
         this.dispatchTime = notify.createTime > 100 ? sdf.format(new Date(notify.createTime)) : "";
     }
 
-    public Node(Doc doc) {
+    public Node(Doc node) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         this.type = 1;
-        this.attachmentList = doc.attachmentList;
-        this.id = doc.id;
-        this.level = doc.level;
-        this.content = doc.docSummary;
-        this.department = doc.departmentInfo;
-        this.documentNumber = doc.docNo;
-        this.attachmentList = doc.attachmentList;
-        this.title = doc.docTitle;
-        this.dispatchTime = doc.createTime > 100 ? sdf.format(new Date(doc.createTime)) : "";
-        this.tid = doc.tid;
-        this.signStatus = doc.signStatus;
-        this.cuid = doc.cuid;
-        this.uuid = doc.uuid;
-        this.dispatchUnit = doc.sendDepartmentInfo;
+        this.attachmentList = node.attachmentList;
+        this.id = node.id;
+        this.level = node.level;
+        this.content = node.docSummary;
+        this.summary = node.docSummary;
+        this.department = node.departmentInfo;
+        this.documentNumber = node.docNo;
+        this.attachmentList = node.attachmentList;
+        this.title = node.docTitle;
+        this.dispatchTime = node.createTime > 100 ? sdf.format(new Date(node.createTime)) : "";
+        this.tid = node.tid;
+        this.signStatus = node.signStatus;
+        this.cuid = node.cuid;
+        this.uuid = node.uuid;
+        this.dispatchUnit = node.sendDepartmentInfo;
     }
 
-    public Node(Meet meet) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        this.contactName = meet.contactName;
-        this.type = 0;
-        this.attachmentList = meet.attachmentList;
-        this.id = meet.id;
-        this.meetingLocation = meet.addr;
-        this.meetingTime = meet.meetTime > 100 ? sdf.format(new Date(meet.meetTime)) : "";
-        this.undertakingUnit = meet.meetCompanyName;
-        this.dispatchTime = meet.createTime > 100 ? sdf.format(new Date(meet.createTime)) : "";
-        this.dispatchUnit = meet.sendDepartmentInfo;
-        this.department = meet.departmentInfo;
-        this.level = meet.level;
-        this.content = meet.docSummary;
-        this.signStatus = meet.signStatus;
-        this.cuid = meet.cuid;
-        this.uuid = meet.uuid;
-        this.title = meet.docTitle;
-        this.tid = meet.tid;
-        this.name = meet.name;
-        this.contactPhone = meet.contactPhone;
-        this.contactName = meet.contactName;
-    }
-
-    public Node(Relay node) {
+    public Node(Meet node) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         this.contactName = node.contactName;
-        this.type = node.type == 2 ? 0 : 1;
+        this.type = 0;
         this.attachmentList = node.attachmentList;
         this.id = node.id;
         this.meetingLocation = node.addr;
@@ -193,6 +170,32 @@ public class Node implements Serializable {
         this.department = node.departmentInfo;
         this.level = node.level;
         this.content = node.docSummary;
+        this.summary = node.docSummary;
+        this.signStatus = node.signStatus;
+        this.cuid = node.cuid;
+        this.uuid = node.uuid;
+        this.title = node.docTitle;
+        this.tid = node.tid;
+        this.name = node.name;
+        this.contactPhone = node.contactPhone;
+        this.contactName = node.contactName;
+    }
+
+    public Node(Relay node) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        this.contactName = node.contactName;
+        this.type = node.type == 2 ? 0 : (node.type == 3 ? 2 : 1);
+        this.attachmentList = node.attachmentList;
+        this.id = node.id;
+        this.meetingLocation = node.addr;
+        this.meetingTime = node.meetTime > 100 ? sdf.format(new Date(node.meetTime)) : "";
+        this.undertakingUnit = node.meetCompanyName;
+        this.dispatchTime = node.createTime > 100 ? sdf.format(new Date(node.createTime)) : "";
+        this.dispatchUnit = node.sendDepartmentInfo;
+        this.department = node.departmentInfo;
+        this.level = node.level;
+        this.content = node.docSummary;
+        this.summary = node.docSummary;
         this.signStatus = node.signStatus;
         this.cuid = node.cuid;
         this.uuid = node.uuid;

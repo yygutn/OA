@@ -15,6 +15,7 @@ import com.zhy.http.okhttp.callback.Callback;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.HashMap;
@@ -150,10 +151,10 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                 new Handler().post(new Runnable() {
                     @Override
                     public void run() {
-                        mList.clear();
                         for (Relay relay : response.data) {
                             mList.add(new Node(relay));
                         }
+                        response.data = null;
                         mListView.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -214,10 +215,13 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         if (notifyReceiveBroadCastReceiver != null) {
             mContext.unregisterReceiver(notifyReceiveBroadCastReceiver);
         }
+        if (adapter != null){
+            adapter = null;
+        }
+        super.onDestroy();
     }
 
     private Map<String, String> getParams(String id) {
@@ -243,6 +247,7 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                                 }
                             }
                             mList.add(0, new Node(doc));
+                            response.data = null;
                             adapter.notifyDataSetChanged();
                         }
                     } catch (Exception e) {
@@ -270,6 +275,7 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                                 }
                             }
                             mList.add(0, new Node(response.data.pageObject.get(0)));
+                            response.data = null;
                             adapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             showDebugException(e);
@@ -296,6 +302,7 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                             }
                         }
                         mList.add(0, temp);
+                        response.data = null;
                         adapter.notifyDataSetChanged();
                     } catch (Exception e) {
                         showDebugException(e);

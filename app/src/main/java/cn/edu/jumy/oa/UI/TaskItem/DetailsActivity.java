@@ -185,21 +185,20 @@ public class DetailsActivity extends BaseActivity {
      * 签收
      */
     private void doSign() {
-        if (mNode.type == 1 && !fromSP && !fromSentMeet) {
-            DocSign();
-            setResult(1025);
-        } else if (mNode.type == 0 && !fromSP && !fromSentMeet) {
-            MeetSign();
-            setResult(1025);
-        } else if (mNode.type == 2) {
-            setResult(1025);
-        }
-    }
-
-    private void MeetSign() {
         if (TextUtils.isEmpty(mNode.tid) || mNode.signStatus == 0) {
             return;
         }
+        if (mNode.type == 1 && !fromSP && !fromSentMeet) {
+            DocSign();
+        } else if (mNode.type == 0 && !fromSP && !fromSentMeet) {
+            MeetSign();
+        } else if (mNode.type == 2) {
+            NoticeSign();
+        }
+        setResult(1025);
+    }
+
+    private void MeetSign() {
         OAService.meetSign(mNode.tid, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -222,9 +221,6 @@ public class DetailsActivity extends BaseActivity {
     }
 
     private void DocSign() {
-        if (TextUtils.isEmpty(mNode.tid) || mNode.signStatus == 0) {
-            return;
-        }
         OAService.docSign(mNode.tid, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -248,7 +244,32 @@ public class DetailsActivity extends BaseActivity {
             }
         });
     }
+    private void NoticeSign(){
+        OAService.noticeSign(mNode.tid, new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                showDebugException(e);
+                showToast("服务器错误,公告签收失败");
+            }
 
+            @Override
+            public void onResponse(String response, int ID) {
+                Gson gson = new Gson();
+                BaseResponse baseResponse = gson.fromJson(response, BaseResponse.class);
+                if (baseResponse.code == 0) {
+//                    showToast("签收公告成功");
+                    setResult(1025);
+                } else {
+                    if (!TextUtils.isEmpty(baseResponse.msg)) {
+                        showToast(baseResponse.msg);
+                        if (baseResponse.msg.contains("已签收")){
+                            setResult(1025);
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     private void setUpViews() {
         try {

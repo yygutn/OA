@@ -96,4 +96,10 @@ public class MyApplication extends MultiDexApplication {
         }
         return false;
     }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        System.gc();
+    }
 }

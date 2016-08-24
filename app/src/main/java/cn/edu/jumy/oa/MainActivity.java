@@ -479,7 +479,6 @@ public class MainActivity extends BaseActivity {
 
         EMClient.getInstance().chatManager().addMessageListener(messageListener);
 
-        System.gc();
     }
 
     @Override
@@ -572,7 +571,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 2048 && resultCode == 1025) {
+        if (requestCode == 2048) {
             ((NotifyFragment) mTabHost.mTabs.get(0).fragment).onResult(1025);
         }
         super.onActivityResult(requestCode, resultCode, data);

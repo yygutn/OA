@@ -55,20 +55,20 @@ public class CardGenerator {
                     message += "会议时间: " + (TextUtils.isEmpty(node.meetingTime) ? "" : node.meetingTime) + "\n";
                     message += "发文编号: " + (TextUtils.isEmpty(node.documentNumber) ? "" : node.documentNumber) + "\n";
                     message += "会议地点: " + (TextUtils.isEmpty(node.meetingLocation) ? "" : node.meetingLocation) + "\n";
-                    message += "摘要:" + (TextUtils.isEmpty(node.summary) ? "" : node.summary);
+                    message += "摘要: " + (TextUtils.isEmpty(node.summary) ? "" : node.summary);
                     break;
                 }
                 case 1: {//公文
                     message += "发文单位: " + (TextUtils.isEmpty(node.dispatchUnit) ? "" : node.oldSendDepartment) + "\n";
                     message += "发布时间: " + (TextUtils.isEmpty(node.dispatchTime) ? "" : node.dispatchTime) + "\n";
                     message += "文件文号: " + (TextUtils.isEmpty(node.documentNumber) ? "" : node.documentNumber) + "\n";
-                    message += "摘要:" + (TextUtils.isEmpty(node.summary) ? "" : node.summary);
+                    message += "摘要: " + (TextUtils.isEmpty(node.summary) ? "" : node.summary);
                     break;
                 }
                 case 2: {//公告
                     message += "发布单位: " + (TextUtils.isEmpty(node.dispatchUnit) ? "" : node.dispatchUnit) + "\n";
                     message += "发布时间: " + (TextUtils.isEmpty(node.dispatchTime) ? "" : node.dispatchTime) + "\n";
-                    message += "摘要:" + (TextUtils.isEmpty(node.summary) ? "" : node.summary);
+                    message += "摘要: " + (TextUtils.isEmpty(node.summary) ? "" : node.summary);
                     break;
                 }
             }
