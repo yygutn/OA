@@ -181,9 +181,9 @@ public final class EaseUI {
                     //获取消息body
                     EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action();//获取自定义action
-                    Intent data = new Intent("cn.edu.jumy.oa.BroadCastReceiver.NotifyReceive");
-                    data.putExtra("cn.edu.jumy.oa.Utils.NotifyUtils.ACTION_GET",action);
-                    appContext.sendBroadcast(data);
+//                    Intent data = new Intent("cn.edu.jumy.oa.BroadCastReceiver.NotifyReceive");
+//                    data.putExtra("cn.edu.jumy.oa.Utils.NotifyUtils.ACTION_GET",action);
+//                    appContext.sendBroadcast(data);
                     BaseActivity.showDebugLogd(TAG, String.format("透传消息：action:%s,message:%s", action, message.toString()));
                 }
             }

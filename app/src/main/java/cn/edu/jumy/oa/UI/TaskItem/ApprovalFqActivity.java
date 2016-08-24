@@ -58,6 +58,8 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
                             mListView.setOnRefreshComplete();
                         }
                     },1000);
+                } else {
+                    onError(null,null,0);
                 }
             }
 

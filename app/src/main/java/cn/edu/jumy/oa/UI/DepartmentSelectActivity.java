@@ -86,7 +86,12 @@ public class DepartmentSelectActivity extends BaseActivity {
                         for (Account temp : account.data) {
                             DFS(temp);
                         }
-                        updateView();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateView();
+                            }
+                        });
                     }
                 } catch (Exception e) {
                     showDebugException(e);
@@ -157,7 +162,12 @@ public class DepartmentSelectActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        updateView();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                updateView();
+            }
+        });
     }
 
     @AfterViews

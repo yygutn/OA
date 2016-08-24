@@ -92,6 +92,11 @@ public class Relay implements Parcelable {
     public String oldSendDepartment;//文件的初始发送单位
     public String relayRemark;
 
+    public Relay(Doc node){
+        this.id = node.id;
+        this.tid = node.tid;
+    }
+
 
     public Relay() {
     }

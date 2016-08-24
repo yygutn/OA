@@ -95,10 +95,9 @@ public class DepartmentOftenUseFixActivity extends BaseActivity {
                             mOrg.value = "";
                         }
                         String[] ids = mOrg.value.split(",");
-                        int len = ids.length;
-                        for (int i = 0; i < len; i++) {
+                        for (String id1 : ids) {
                             for (Account account1 : mDepartments) {
-                                if (account1.id.equals(ids[i])) {
+                                if (account1.id.equals(id1)) {
                                     account1.checked = true;
                                 }
                             }

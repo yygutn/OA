@@ -1,6 +1,5 @@
 package cn.edu.jumy.oa.fragment;
 
-import android.content.Context;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,12 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
-import com.hyphenate.chatui.DemoHelper;
 import com.lhh.ptrrv.library.PullToRefreshRecyclerView;
 import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 import com.zhy.http.okhttp.callback.Callback;
 
-import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
@@ -28,20 +25,24 @@ import cn.edu.jumy.jumyframework.BaseFragment;
 import cn.edu.jumy.oa.BroadCastReceiver.NotifyReceiveBroadCastReceiver;
 import cn.edu.jumy.oa.CallBack.DocCallback;
 import cn.edu.jumy.oa.CallBack.MeetCallback;
-import cn.edu.jumy.oa.MyApplication;
+import cn.edu.jumy.oa.CallBack.RelayCallback2;
+import cn.edu.jumy.oa.CallBack.StringCallback2;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.Response.DocResponse;
 import cn.edu.jumy.oa.Response.MeetResponse;
 import cn.edu.jumy.oa.Response.NotifyBroadCastResponse;
+import cn.edu.jumy.oa.Response.Relay2Response;
 import cn.edu.jumy.oa.Response.SingleNotifyResponse;
+import cn.edu.jumy.oa.Response.StringListResponse;
 import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
+import cn.edu.jumy.oa.Utils.NotifyUtils;
 import cn.edu.jumy.oa.adapter.NotifyCardAdapter;
 import cn.edu.jumy.oa.bean.Doc;
 import cn.edu.jumy.oa.bean.Meet;
 import cn.edu.jumy.oa.bean.Node;
-import cn.edu.jumy.oa.widget.dragrecyclerview.utils.ACache;
+import cn.edu.jumy.oa.bean.Relay;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -75,13 +76,11 @@ import okhttp3.Response;
  */
 @EFragment(R.layout.fragment_notify)
 public class NotifyFragment extends BaseFragment implements OnItemClickListener {
-    public final String KEY = NotifyFragment.class.getSimpleName() + "_" + DemoHelper.getInstance().getCurrentUserName();
-    private Context mContext;
     @ViewById(R.id.notify_listView)
     PullToRefreshRecyclerView mListView;
 
     ImageView mEmptyImageView;
-    private CopyOnWriteArrayList<Node> mList;
+    private final CopyOnWriteArrayList<Node> mList = new CopyOnWriteArrayList<>();
     NotifyCardAdapter adapter;
     private int lastClickPosition = 0;
 
@@ -89,7 +88,7 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
         @Override
         public void onNotifyReceive(NotifyBroadCastResponse response) {
             showDebugLogd("onNotifyReceive", response.toString());
-            if (TextUtils.isEmpty(response.id)){
+            if (TextUtils.isEmpty(response.id)) {
                 return;
             }
             switch (response.action) {
@@ -101,6 +100,7 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                 }
                 case "meetReceive":
                 case "meetSend":
+                case "meetUserPass":
                 case "meetUrge": {
                     getMeet(response.id);
                     break;
@@ -116,23 +116,9 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
         }
     };
 
-    @AfterInject
-    void initList() {
-        try {
-            mList = (CopyOnWriteArrayList<Node>) ACache.get(MyApplication.getContext()).getAsObject(KEY);
-        } catch (Exception e) {
-            showDebugException(e);
-        }
-        if (mList == null) {
-            mList = new CopyOnWriteArrayList<>();
-        }
-    }
-
     @AfterViews
     void start() {
-        mContext = getActivity();
-
-        mListView.setLoadmoreString("加载中...");
+        getIndexData();
 
         mEmptyImageView = (ImageView) View.inflate(mContext, R.layout.item_empty_view, null);
 
@@ -146,13 +132,73 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
         mContext.registerReceiver(notifyReceiveBroadCastReceiver, filter);
     }
 
+    private void getIndexData() {
+        mListView.post(new Runnable() {
+            @Override
+            public void run() {
+                mListView.setRefreshing(true);
+            }
+        });
+        OAService.indexFirstGet(new RelayCallback2() {
+            @Override
+            public void onResponse(final Relay2Response response, int ID) {
+                if (response.code == 1) {
+                    showToast("获取列表失败");
+                    onError(null, null, 0);
+                    return;
+                }
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mList.clear();
+                        for (Relay relay : response.data) {
+                            mList.add(new Node(relay));
+                        }
+                        mListView.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.notifyDataSetChanged();
+                                mListView.setOnRefreshComplete();
+                            }
+                        }, 1000);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                mListView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mListView.setOnRefreshComplete();
+                    }
+                }, 1000);
+            }
+        });
+
+        OAService.indexNoPassMeet(new StringCallback2() {
+
+            @Override
+            public void onResponse(final StringListResponse response, int ID) {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (String id : response.data) {
+                            String action = "{\"action\":\"meetUserPass\",\"id\":\"" + id + "\"}";
+                            NotifyUtils.sendNotifyBroadCast(mContext, action);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
 
     private void initListView() {
         adapter = new NotifyCardAdapter(mContext, R.layout.item_card_notification, mList);
         mListView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
     }
-
 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
@@ -172,11 +218,6 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
         if (notifyReceiveBroadCastReceiver != null) {
             mContext.unregisterReceiver(notifyReceiveBroadCastReceiver);
         }
-        try {
-            ACache.get(MyApplication.getContext()).put(KEY, mList);
-        } catch (Exception e) {
-            showDebugException(e);
-        }
     }
 
     private Map<String, String> getParams(String id) {
@@ -192,7 +233,7 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                 if (response.code != 0) {
                     return;
                 }
-                synchronized (mList){
+                synchronized (mList) {
                     try {
                         if (response.data.pageObject.size() > 0) {
                             Doc doc = response.data.pageObject.get(0);
@@ -219,7 +260,7 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                 if (response.code != 0) {
                     return;
                 }
-                synchronized (mList){
+                synchronized (mList) {
                     if (response.data.pageObject.size() > 0) {
                         try {
                             Meet meet = response.data.pageObject.get(0);
@@ -246,15 +287,15 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                 if (response.code != 0 || response.data == null) {
                     return;
                 }
-                synchronized (mList){
+                synchronized (mList) {
                     try {
                         Node temp = new Node(response.data);
                         for (Node node : mList) {
-                            if (node.id.equals(temp.id)){
+                            if (node.id.equals(temp.id)) {
                                 mList.remove(node);
                             }
                         }
-                        mList.add(0,temp);
+                        mList.add(0, temp);
                         adapter.notifyDataSetChanged();
                     } catch (Exception e) {
                         showDebugException(e);
@@ -264,8 +305,8 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
         });
     }
 
-    public void onResult(int resultCode){
-        if (resultCode == 1025){
+    public void onResult(int resultCode) {
+        if (resultCode == 1025) {
             mList.remove(lastClickPosition);
             adapter.notifyDataSetChanged();
         }

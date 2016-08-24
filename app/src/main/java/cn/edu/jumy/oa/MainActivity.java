@@ -245,7 +245,7 @@ public class MainActivity extends BaseActivity {
                 EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                 final String action = cmdMsgBody.action();//获取自定义action
                 showDebugLogd(TAG, "action:" + action);
-                NotifyUtils.sendNotifyBroadCast(mContext, action);
+//                NotifyUtils.sendNotifyBroadCast(mContext, action);
             }
             refreshUIWithMessage();
         }

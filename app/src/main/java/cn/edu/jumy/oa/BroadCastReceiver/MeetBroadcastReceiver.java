@@ -27,12 +27,9 @@ public class MeetBroadcastReceiver extends BroadcastReceiver{
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction() == MEET){
+        if (intent.getAction().equals(MEET)){
             docList = intent.getParcelableArrayListExtra(MEET_LIST);
             type = intent.getIntExtra(TYPE,-1);
-            if (BaseActivity.DEBUG){
-                Logger.t("DocumentBroadcastReceiver").v(docList.toString());
-            }
         }
     }
 

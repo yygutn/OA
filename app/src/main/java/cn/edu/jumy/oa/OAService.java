@@ -997,4 +997,66 @@ public class OAService {
             }
         });
     }
+    /**
+     * 获取通告中应该显示的未签收的（公文，会议和公告）
+     *
+     * @param callback 回调
+     */
+    public static void indexFirstGet(final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "indexFirstGet")
+                        .addParams("value",response)
+                        .build().execute(callback);
+            }
+        });
+    }
+
+    /**
+     * 首页获取报名未通过的信息
+     *
+     * @param callback
+     */
+    public static void indexNoPassMeet(final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "indexNoPassMeet")
+                        .addParams("value",response)
+                        .build().execute(callback);
+            }
+        });
+    }
+    //首页中公告的签收
+    public static void noticeSign(final String tid, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "noticeSign")
+                        .addParams("value", response)
+                        .addParams("tid", tid)
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
 }
