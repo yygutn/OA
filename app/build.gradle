@@ -90,9 +90,9 @@ dependencies {
     //    compile(name: 'HoloColorPicker-debug', ext: 'aar')
     compile 'com.zhy:base-adapter:2.0.0'
     compile 'homhomlin.lib:ptrrv-library:1.3.1'
-    //    compile project(':easeUIDemo')
-    compile(name: 'easeUIDemo-debug', ext: 'aar')
-    compile(name: 'easeUI-debug', ext: 'aar')
+        compile project(':easeUIDemo')
+//    compile(name: 'easeUIDemo-debug', ext: 'aar')
+//    compile(name: 'easeUI-debug', ext: 'aar')
     //节操播放器
     compile 'fm.jiecao:jiecaovideoplayer:3.6.1'
     compile 'com.sun.mail:android-mail:1.5.5'

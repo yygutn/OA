@@ -31,6 +31,7 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMImageMessageBody;
@@ -585,7 +586,16 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     @Override
     public void onCmdMessageReceived(List<EMMessage> messages) {
-
+        for (EMMessage message : messages) {
+            BaseActivity.showDebugLogd(TAG, "收到透传消息");
+            //获取消息body
+            EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
+            final String action = cmdMsgBody.action();//获取自定义action
+            Intent data = new Intent("cn.edu.jumy.oa.BroadCastReceiver.NotifyReceive");
+            data.putExtra("cn.edu.jumy.oa.Utils.NotifyUtils.ACTION_GET",action);
+            mContext.sendBroadcast(data);
+            BaseActivity.showDebugLogd(TAG, String.format("透传消息：action:%s,message:%s", action, message.toString()));
+        }
     }
 
     @Override

@@ -37,6 +37,7 @@ import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.CallBack.UserCallback;
 import cn.edu.jumy.oa.OAService;
+import cn.edu.jumy.oa.OaPreference;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.Response.UserResponse;
@@ -164,8 +165,7 @@ public class SendMeetingActivity extends BaseActivity {
                 UndertakingUnitsID = response.data.oid;
                 if (!TextUtils.isEmpty(UndertakingUnitsID)) {
                     mDropDownMenuUnit.setText(UndertakingUnits);
-                }
-                if (TextUtils.isEmpty(UndertakingUnitsID)) {
+                } else {
                     getMyInfo();
                 }
             }
@@ -399,8 +399,8 @@ public class SendMeetingActivity extends BaseActivity {
     /**
      * 承办单位
      *
-     * @param resultCode
-     * @param data
+     * @param resultCode 状态码
+     * @param data 数据
      */
     @OnActivityResult(0)
     void result1(int resultCode, Intent data) {
@@ -408,9 +408,6 @@ public class SendMeetingActivity extends BaseActivity {
             UndertakingUnitsID = data.getStringExtra("ids");
             UndertakingUnits = data.getStringExtra("str");
             mDropDownMenuUnit.setText(UndertakingUnits);
-        } else if (resultCode == 1) {
-            //没有选择接收单位
-            UndertakingUnits = UndertakingUnitsID = "";
         }
     }
 
@@ -426,9 +423,6 @@ public class SendMeetingActivity extends BaseActivity {
             receiveUnitsID = data.getStringExtra("ids");
             receiveUnits = data.getStringExtra("str");
             mDropDownMenu1.setText(receiveUnits);
-        } else if (resultCode == 1) {
-            //没有选择接收单位
-            receiveUnits = receiveUnitsID = "";
         }
     }
 

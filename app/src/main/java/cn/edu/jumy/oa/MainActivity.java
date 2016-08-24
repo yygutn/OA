@@ -48,6 +48,8 @@ import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.BroadCastReceiver.AlarmBroadCastReceiver;
 import cn.edu.jumy.oa.BroadCastReceiver.NotificationBroadCastReceiver;
+import cn.edu.jumy.oa.CallBack.UserCallback;
+import cn.edu.jumy.oa.Response.UserResponse;
 import cn.edu.jumy.oa.Utils.NotifyUtils;
 import cn.edu.jumy.oa.fragment.MineFragment_;
 import cn.edu.jumy.oa.fragment.NotifyFragment;

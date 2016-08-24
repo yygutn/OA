@@ -1,6 +1,8 @@
 package cn.edu.jumy.oa;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.os.Process;
 import android.support.multidex.MultiDexApplication;
 
 import com.fsck.k9.K9;
@@ -12,6 +14,7 @@ import com.zhy.http.okhttp.https.HttpsUtils;
 
 import org.litepal.LitePalApplication;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import cn.edu.jumy.jumyframework.AppManager;
@@ -35,6 +38,9 @@ public class MyApplication extends MultiDexApplication {
 
     @Override
     public void onCreate() {
+        if (!isInMainProcess(this)){
+            return;
+        }
         super.onCreate();
         context = getApplicationContext();
         AppManager.getInstance().init();
@@ -72,5 +78,22 @@ public class MyApplication extends MultiDexApplication {
             }
         }
         return context;
+    }
+
+    /**
+     * 注意：因为推送服务等设置为运行在另外一个进程，这导致本Application会被实例化两次。
+     * 而有些操作我们需要让应用的主进程时才进行，所以用到了这个方法
+     */
+    public static boolean isInMainProcess(Context context) {
+        ActivityManager am = ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE));
+        List<ActivityManager.RunningAppProcessInfo> processes = am.getRunningAppProcesses();
+        String mainProcessName = context.getPackageName();
+        int myPid = Process.myPid();
+        for (ActivityManager.RunningAppProcessInfo info : processes) {
+            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMMessage.ChatType;
@@ -20,8 +21,11 @@ import com.hyphenate.easeui.model.EaseNotifier;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
+
+import cn.edu.jumy.jumyframework.BaseActivity;
 
 public final class EaseUI {
     private static final String TAG = EaseUI.class.getSimpleName();
@@ -172,7 +176,16 @@ public final class EaseUI {
             }
             @Override
             public void onCmdMessageReceived(List<EMMessage> messages) {
-                
+                for (EMMessage message : messages) {
+                    BaseActivity.showDebugLogd(TAG, "收到透传消息");
+                    //获取消息body
+                    EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
+                    final String action = cmdMsgBody.action();//获取自定义action
+                    Intent data = new Intent("cn.edu.jumy.oa.BroadCastReceiver.NotifyReceive");
+                    data.putExtra("cn.edu.jumy.oa.Utils.NotifyUtils.ACTION_GET",action);
+                    appContext.sendBroadcast(data);
+                    BaseActivity.showDebugLogd(TAG, String.format("透传消息：action:%s,message:%s", action, message.toString()));
+                }
             }
         });
     }

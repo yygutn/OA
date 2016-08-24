@@ -85,9 +85,6 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
     NotifyCardAdapter adapter;
     private int lastClickPosition = 0;
 
-    Handler mHandler = new Handler();
-
-    Gson gson = new Gson();
     NotifyReceiveBroadCastReceiver notifyReceiveBroadCastReceiver = new NotifyReceiveBroadCastReceiver() {
         @Override
         public void onNotifyReceive(NotifyBroadCastResponse response) {
