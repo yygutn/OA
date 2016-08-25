@@ -6,20 +6,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
+import com.zhy.http.okhttp.OkHttpUtils;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -165,6 +169,11 @@ public class BaseActivity extends AppCompatActivity {
         if (!isAppOnForeground()) {
             isActive = false;
         }
+        try {
+            OkHttpUtils.getInstance().cancelTag(mContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -174,6 +183,12 @@ public class BaseActivity extends AppCompatActivity {
         if (!isActive) {
             isActive = true;
         }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                System.gc();
+            }
+        },3000);
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.zhy.http.okhttp.callback.Callback;
 import java.io.File;
 import java.util.Map;
 
+import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.oa.Response.DateResponse;
 import cn.edu.jumy.oa.safe.PasswordUtil;
 import okhttp3.Call;
@@ -86,6 +87,7 @@ public class OAService {
                 params.put("value", response);
 
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "docReceive")
                         .params(params)
                         .build()
@@ -114,6 +116,7 @@ public class OAService {
                 params.put("value", response);
 
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "docSend")
                         .params(params)
                         .files("upfile", fileMap)
@@ -139,6 +142,7 @@ public class OAService {
             public void onResponse(String response, int ID) {
 
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "getOrganizationData")
                         .addParams("value", response)
                         .build()
@@ -165,6 +169,7 @@ public class OAService {
             public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "getAttach")
                         .params(params)
                         .build()
@@ -190,6 +195,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.get()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .tag(MyApplication.getContext())
                         .url(BASE_URL + "download")
                         .addParams("value", response)
@@ -217,6 +223,7 @@ public class OAService {
             public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "meetReceive")
                         .params(params)
                         .build()
@@ -243,6 +250,7 @@ public class OAService {
             public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "meetSend")
                         .params(params)
                         .files("upfile", fileMap)
@@ -268,6 +276,7 @@ public class OAService {
             public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "docUser")
                         .params(params)
                         .build().execute(callback);
@@ -292,6 +301,7 @@ public class OAService {
             public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "meetUser")
                         .params(params)
                         .build().execute(callback);
@@ -315,6 +325,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "docSign")
                         .addParams("value", response)
                         .addParams("tid", tid)
@@ -340,6 +351,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "getCheckInfo")
                         .addParams("value", response)
                         .addParams("pid", pid)
@@ -366,6 +378,7 @@ public class OAService {
             public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "meetCompany")
                         .params(params)
                         .build().execute(callback);
@@ -389,6 +402,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "getMEntryByPassStatus")
                         .addParams("value", response)
                         .addParams("mid", mid)
@@ -416,6 +430,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "meetUserPass")
                         .addParams("value", response)
                         .addParams("id", id)
@@ -438,6 +453,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "meetSign")
                         .addParams("value", response)
                         .addParams("tid", tid)
@@ -464,6 +480,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "docUrge")
                         .addParams("value", response)
                         .addParams("oid", oid)
@@ -491,6 +508,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "meetUrge")
                         .addParams("value", response)
                         .addParams("oid", oid)
@@ -515,6 +533,7 @@ public class OAService {
             public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "updateMEntry")
                         .params(params)
                         .build().execute(callback);
@@ -535,6 +554,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "insertListMEntry")
                         .addParams("value", response)
                         .addParams("json", json)
@@ -559,6 +579,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "getMEntry")
                         .addParams("value", response)
                         .addParams("id", id)
@@ -581,6 +602,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "getMEntryByPid")
                         .addParams("value", response)
                         .addParams("pid", pid)
@@ -603,6 +625,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "insertMagroup")
                         .addParams("value", response)
                         .addParams("ids", ids)
@@ -627,6 +650,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "getMagroupAll")
                         .addParams("value", response)
                         .addParams("select", "all")
@@ -650,6 +674,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "updateMagroup")
                         .addParams("value", response)
                         .addParams("id", Id)
@@ -677,6 +702,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "getNoticeList")
                         .addParams("value", response)
                         .build()
@@ -701,6 +727,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "meetUnpass")
                         .addParams("value", response)
                         .addParams("mid", mid)
@@ -726,6 +753,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "meetPass")
                         .addParams("value", response)
                         .addParams("mid", mid)
@@ -750,6 +778,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "getMyUser")
                         .addParams("value", response)
                         .build()
@@ -773,6 +802,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "getNotice")
                         .addParams("value", response)
                         .addParams("id", id)
@@ -797,6 +827,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "delMEntry")
                         .addParams("value", response)
                         .addParams("id", id)
@@ -823,6 +854,7 @@ public class OAService {
             public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "findRelay")
                         .params(params)
                         .build().execute(callback);
@@ -846,6 +878,7 @@ public class OAService {
             public void onResponse(String response, int ID) {
 
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "getOrganizationTreeData")
                         .addParams("value", response)
                         .build()
@@ -871,6 +904,7 @@ public class OAService {
             public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "Relay")
                         .params(params)
                         .build().execute(callback);
@@ -895,6 +929,7 @@ public class OAService {
             public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "findApproveRelay")
                         .params(params)
                         .build().execute(callback);
@@ -919,6 +954,7 @@ public class OAService {
             public void onResponse(String response, int ID) {
                 params.put("value", response);
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "RelayPass")
                         .params(params)
                         .build().execute(callback);
@@ -941,6 +977,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "findapproved")
                         .addParams("value", response)
                         .addParams("id", id)
@@ -966,6 +1003,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "passExcel")
                         .addParams("value", response)
                         .addParams("mid", id)
@@ -989,6 +1027,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "ApproveGet")
                         .addParams("value", response)
                         .addParams("tid", id)
@@ -1012,6 +1051,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "indexFirstGet")
                         .addParams("value",response)
                         .build().execute(callback);
@@ -1034,6 +1074,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "indexNoPassMeet")
                         .addParams("value",response)
                         .build().execute(callback);
@@ -1051,6 +1092,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "noticeSign")
                         .addParams("value", response)
                         .addParams("tid", tid)
@@ -1070,6 +1112,7 @@ public class OAService {
             @Override
             public void onResponse(String response, int ID) {
                 OkHttpUtils.post()
+                        .tag(AppManager.getInstance().getCurrentActivity().mContext)
                         .url(BASE_URL + "updateTaskPassStatus")
                         .addParams("value", response)
                         .addParams("tid", tid)

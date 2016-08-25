@@ -51,7 +51,7 @@ public class AppManager {
     /**
      * 获取当前Activity（堆栈中最后一个压入的）
      */
-    public Activity getCurrentActivity() {
+    public BaseActivity getCurrentActivity() {
         return mActivityStack.get(mActivityStack.size() - 1);
     }
 

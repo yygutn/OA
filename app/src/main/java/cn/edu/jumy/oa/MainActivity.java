@@ -48,9 +48,6 @@ import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.BroadCastReceiver.AlarmBroadCastReceiver;
 import cn.edu.jumy.oa.BroadCastReceiver.NotificationBroadCastReceiver;
-import cn.edu.jumy.oa.CallBack.UserCallback;
-import cn.edu.jumy.oa.Response.UserResponse;
-import cn.edu.jumy.oa.Utils.NotifyUtils;
 import cn.edu.jumy.oa.fragment.MineFragment_;
 import cn.edu.jumy.oa.fragment.NotifyFragment;
 import cn.edu.jumy.oa.fragment.NotifyFragment_;
@@ -68,12 +65,6 @@ public class MainActivity extends BaseActivity {
     private int mTitleArray[] = {R.string.home_notify_tab, R.string.home_work_tab, R.string.home_message_tab, R.string.home_contact_tab, R.string.home_me_tab};
     private int mImageViewArray[] = {R.drawable.tab_notify, R.drawable.tab_work, R.drawable.tab_message, R.drawable.tab_person, R.drawable.tab_settings};
     public String mTextViewArray[] = {"notify", "work", "message", "contact", "setting"};
-
-    private static MainActivity instance;
-
-    public static MainActivity getMainInstance() {
-        return instance;
-    }
 
     // 未读消息textview && 未读通讯录textview
     private TextView unreadLabel;
@@ -103,7 +94,7 @@ public class MainActivity extends BaseActivity {
                             if (mTabHost.getCurrentTab() != 0) {
                                 mTabHost.setCurrentTab(0);
                             }
-                            if (!isAppOnForeground() || !isActive){
+                            if (!isAppOnForeground() || !isActive) {
                                 moveTaskToFront();
                             }
                         }
@@ -119,7 +110,6 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppManager.getInstance().finishAllBesideTop();
-        instance = this;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String packageName = getPackageName();
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
