@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -33,7 +34,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
@@ -229,7 +229,7 @@ public class DocumentReadActivity extends BaseActivity {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
-        int year,month,day;
+        int year, month, day;
         Calendar calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR) - 1900;
         month = calendar.get(Calendar.MONTH);
@@ -250,10 +250,10 @@ public class DocumentReadActivity extends BaseActivity {
         } else {
             month--;
         }
-        String before = sdf.format(new Date(year,month,day));
+        String before = sdf.format(new Date(year, month, day));
         String now = sdf.format(date);
 
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new ArrayMap<>();
         params.put("page", "1");
         params.put("size", "20");
         params.put("level", "");
@@ -265,7 +265,7 @@ public class DocumentReadActivity extends BaseActivity {
         OAService.docReceive(params, new DocCallback() {
             @Override
             public void onResponse(DocResponse response, int id) {
-                if (response.code == 1){
+                if (response.code == 1) {
                     showToast("获取公文失败");
                     return;
                 }
@@ -282,7 +282,7 @@ public class DocumentReadActivity extends BaseActivity {
                 for (Doc doc : list) {
                     if (doc.signStatus == 0) {
                         list0.add(doc);
-                    } else if (doc.signStatus == 1){
+                    } else if (doc.signStatus == 1) {
                         list1.add(doc);
                     }
                 }
@@ -303,7 +303,7 @@ public class DocumentReadActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1024 && resultCode == 1025){
+        if (requestCode == 1024 && resultCode == 1025) {
             downloadList();
         }
     }
@@ -314,11 +314,11 @@ public class DocumentReadActivity extends BaseActivity {
         public DocResponse parseNetworkResponse(Response response, int id) throws Exception {
             String data = response.body().string();
             Gson gson = new Gson();
-            BaseResponse baseResponse = gson.fromJson(data,BaseResponse.class);
-            if (baseResponse.code==0) {
+            BaseResponse baseResponse = gson.fromJson(data, BaseResponse.class);
+            if (baseResponse.code == 0) {
                 return gson.fromJson(data, DocResponse.class);
             } else {
-                return new DocResponse(baseResponse.msg,baseResponse.code,null);
+                return new DocResponse(baseResponse.msg, baseResponse.code, null);
             }
         }
 

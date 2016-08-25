@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -30,7 +31,6 @@ import org.androidannotations.annotations.res.ColorRes;
 import org.androidannotations.annotations.res.DrawableRes;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
@@ -113,7 +113,7 @@ public class MeetingCardActivity extends BaseActivity {
 
     private Map<String, String> getParams(int Index) {
 
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new ArrayMap<>();
         params.put("page", Index + "");
         params.put("size", basePages + "");
         params.put("startTime", "");

@@ -103,6 +103,7 @@ public class VerifyActivity extends AppCompatActivity {
         } else {
             startActivity(new Intent(mContext, SplashActivity.class));
         }
+        imageView = null;
         finish();
     }
 

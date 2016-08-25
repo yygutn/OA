@@ -1,18 +1,14 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
-import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
+import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.androidannotations.annotations.EActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import cn.edu.jumy.oa.CallBack.MeetCallback;
@@ -21,7 +17,6 @@ import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.MeetResponse;
 import cn.edu.jumy.oa.adapter.MeetingCardAdapter;
 import cn.edu.jumy.oa.bean.Meet;
-import cn.edu.jumy.oa.bean.Node;
 
 /**
  * Created by Jumy on 16/6/20 13:57.
@@ -63,7 +58,7 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity {
 
     @NonNull
     private Map<String, String> getParams(int Index) {
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new ArrayMap<>();
         params.put("page", Index + "");
         params.put("size", basePages + "");
         params.put("level", "");
@@ -117,7 +112,7 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity {
                     for (int i = position - 1; i >= 0; i--) {
                         mList.add(0, response.data.pageObject.get(i));
                     }
-                    mListView.setLoadMoreCount((index-1)*basePages+position);
+                    mListView.setLoadMoreCount((index - 1) * basePages + position);
                     adapter.setList(new ArrayList(mList));
                 }
             }
@@ -147,6 +142,6 @@ public class MeetingApprovalActivity extends BaseSearchRefreshActivity {
 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-        MeetAuditActivity_.intent(mContext).extra("mid", ((Meet) o).id).extra("time",((Meet)o).meetTime).start();
+        MeetAuditActivity_.intent(mContext).extra("mid", ((Meet) o).id).extra("time", ((Meet) o).meetTime).start();
     }
 }

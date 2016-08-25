@@ -7,5 +7,5 @@ import org.androidannotations.annotations.EActivity;
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EActivity
-public class VideoListActivity extends BaseSearchRefreshActivity{
+public class VideoListActivity extends BaseSearchRefreshActivity {
 }

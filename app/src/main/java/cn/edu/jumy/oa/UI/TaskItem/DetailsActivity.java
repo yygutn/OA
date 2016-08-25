@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
@@ -40,7 +41,6 @@ import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
@@ -118,7 +118,7 @@ public class DetailsActivity extends BaseActivity {
 
     @AfterExtras
     void getList() {
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new ArrayMap<>();
         String id = "";
         if (fromSP) {
             id = mNode.oldid;
@@ -584,7 +584,7 @@ public class DetailsActivity extends BaseActivity {
      * @param message 转发审批意见
      */
     private void skip2Sp(String message) {
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new ArrayMap<>();
         params.put("tid", mNode.tid);
         params.put("passRemark", message);
         params.put("signnum", mNode.signNum + "");

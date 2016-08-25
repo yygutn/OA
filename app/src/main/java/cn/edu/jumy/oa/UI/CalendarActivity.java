@@ -2,21 +2,17 @@ package cn.edu.jumy.oa.UI;
 
 import android.content.DialogInterface;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Handler;
-import android.support.annotation.ColorInt;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatui.DemoApplication;
 
 import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
@@ -26,13 +22,11 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.ColorRes;
-import org.androidannotations.annotations.res.StringRes;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -201,7 +195,7 @@ public class CalendarActivity extends BaseActivity implements MonthView.OnDateCh
         String start = sdf.format(new Date(year - 1900, month, 1));
         String end = sdf.format(new Date(year - 1900, month, day));
 
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new ArrayMap<>();
         params.put("page", "1");
         params.put("size", "100");
         params.put("startTime", start);

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -30,7 +31,6 @@ import org.androidannotations.annotations.res.ColorRes;
 import org.androidannotations.annotations.res.DrawableRes;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
@@ -66,7 +66,7 @@ public class ApprovalSpActivity extends BaseActivity {
     MyAdapter adapter;
 
     @AfterExtras
-    void getList(){
+    void getList() {
         //getData from internet
         OAService.findApproveRelay(getParams(), new RelayCallback() {
             @Override
@@ -81,10 +81,10 @@ public class ApprovalSpActivity extends BaseActivity {
                 //已审批-list
                 ArrayList<Relay> list0 = new ArrayList<>();
 
-                for (Relay temp : list){
-                    if (temp.isPass == 1){
+                for (Relay temp : list) {
+                    if (temp.isPass == 1) {
                         list1.add(temp);
-                    } else if (temp.isPass == 0){
+                    } else if (temp.isPass == 0) {
                         list0.add(temp);
                     }
                 }
@@ -102,9 +102,9 @@ public class ApprovalSpActivity extends BaseActivity {
         });
     }
 
-    private Map<String,String> getParams() {
+    private Map<String, String> getParams() {
 
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new ArrayMap<>();
         params.put("page", "1");
         params.put("size", "100");
         params.put("keywords", "");
@@ -256,7 +256,7 @@ public class ApprovalSpActivity extends BaseActivity {
     }
 
     @OnActivityResult(2048)
-    void reSet(){
+    void reSet() {
         getList();
     }
 }

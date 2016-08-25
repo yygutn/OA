@@ -1,13 +1,12 @@
 package cn.edu.jumy.oa.UI;
 
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -18,7 +17,6 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
@@ -106,7 +104,7 @@ public class SignUpAddActivity extends BaseActivity {
             mSignUpLeave.setText(node.remark);
             status = node.type;
             boolean flag = node.sex == 1;
-            setSex(!flag,flag);
+            setSex(!flag, flag);
             clickCheckBox(status);
         }
         if (flag && !TextUtils.isEmpty(title)) {
@@ -210,7 +208,7 @@ public class SignUpAddActivity extends BaseActivity {
         node.sex = sex;
 
         if (flag) {
-            Map<String, String> params = new HashMap<>();
+            Map<String, String> params = new ArrayMap<>();
             params.put("editType", "edit");
             params.put("pid", node.pid);
             params.put("name", name);

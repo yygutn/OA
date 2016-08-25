@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Environment;
 import android.os.FileObserver;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
@@ -29,7 +30,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +37,6 @@ import cn.edu.jumy.jumyframework.AppManager;
 import cn.edu.jumy.jumyframework.BaseActivity;
 import cn.edu.jumy.oa.CallBack.UserCallback;
 import cn.edu.jumy.oa.OAService;
-import cn.edu.jumy.oa.OaPreference;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.Response.UserResponse;
@@ -99,7 +98,7 @@ public class SendMeetingActivity extends BaseActivity {
     String UndertakingUnits = "";//承办单位
     String UndertakingUnitsID = "";//承办单位ID
     String level = "0"; //等级
-    Map<String, File> fileMap = new HashMap<>();
+    Map<String, File> fileMap = new ArrayMap<>();
 
     private ListDropDownAdapter mLevelAdapter;
 
@@ -110,7 +109,7 @@ public class SendMeetingActivity extends BaseActivity {
 
     String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/Office Lens";
 
-    Map<String, Boolean> picMap = new HashMap<>();//扫描件
+    Map<String, Boolean> picMap = new ArrayMap<>();//扫描件
     FileObserver listener = new FileObserver(dir, FileObserver.CREATE) {
         @Override
         public void onEvent(int event, String path) {
@@ -282,7 +281,7 @@ public class SendMeetingActivity extends BaseActivity {
         String contactPhone = mMeetingPhone.getText().toString();
         String location = mMeetingLoc.getText().toString();
         String time = mMeetingTime.getText().toString();
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new ArrayMap<>();
         params.put("department", receiveUnitsID);
         params.put("meetCompany", UndertakingUnitsID);
         params.put("level", level);
@@ -400,7 +399,7 @@ public class SendMeetingActivity extends BaseActivity {
      * 承办单位
      *
      * @param resultCode 状态码
-     * @param data 数据
+     * @param data       数据
      */
     @OnActivityResult(0)
     void result1(int resultCode, Intent data) {

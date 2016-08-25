@@ -1,6 +1,7 @@
 package cn.edu.jumy.oa.UI;
 
 import android.content.DialogInterface;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
@@ -210,7 +211,7 @@ public class SignUpMultiAbleActivity extends BaseActivity {
             showToast("报名信息不完善,请再次确认");
             return;
         }
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new ArrayMap<>();
         params.put("editType", editType);
         params.put("pid", tid);
         params.put("name", name);

@@ -10,16 +10,12 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.TableLayout;
 
-import com.google.gson.Gson;
-import com.zhy.http.okhttp.callback.StringCallback;
-
 import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
-import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -30,12 +26,10 @@ import cn.edu.jumy.oa.CallBack.AuditCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.AuditResponse;
-import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity;
 import cn.edu.jumy.oa.bean.AuditUser;
 import cn.edu.jumy.oa.widget.customview.ItemTableRow;
 import cn.edu.jumy.oa.widget.customview.ItemTableRow_;
-import okhttp3.Call;
 
 /**
  * Created by Jumy on 16/7/5 16:46.
@@ -130,7 +124,7 @@ public class SignUpDetailsActivity extends BaseActivity {
     private void removeItemViews(TableLayout tableLayout) {
         try {
             tableLayout.removeAllViews();
-            tableLayout.addView(LayoutInflater.from(mContext).inflate(R.layout.layout_item_table_row_sign_up,null));
+            tableLayout.addView(LayoutInflater.from(mContext).inflate(R.layout.layout_item_table_row_sign_up, null));
         } catch (Exception e) {
             showDebugException(e);
         }
@@ -148,20 +142,20 @@ public class SignUpDetailsActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (deleteReceiver != null){
+        if (deleteReceiver != null) {
             unregisterReceiver(deleteReceiver);
         }
     }
 
     @OnActivityResult(2048)
-    void change(){
+    void change() {
         getData();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (DetailsActivity.FROM_NOTIFY){
-            getMenuInflater().inflate(R.menu.back2notify,menu);
+        if (DetailsActivity.FROM_NOTIFY) {
+            getMenuInflater().inflate(R.menu.back2notify, menu);
         } else {
             getMenuInflater().inflate(R.menu.back2meet, menu);
         }
@@ -169,12 +163,13 @@ public class SignUpDetailsActivity extends BaseActivity {
     }
 
     @OptionsItem(R.id.action_back2meet)
-    void back(){
+    void back() {
         doUpdate();
         AppManager.getInstance().back2Level2();
     }
+
     @OptionsItem(R.id.action_back2notify)
-    void back2notify(){
+    void back2notify() {
         doUpdate();
         AppManager.getInstance().back2Level1();
     }
@@ -185,13 +180,13 @@ public class SignUpDetailsActivity extends BaseActivity {
     private void doUpdate() {
         boolean flag = false;
         for (AuditUser user : mList) {
-            if (user.passStatus == 1){
+            if (user.passStatus == 1) {
                 flag = true;
                 break;
             }
         }
-        if (!flag){
-            OAService.updateTaskPassStatus(tid,null);
+        if (!flag) {
+            OAService.updateTaskPassStatus(tid, null);
         }
     }
 

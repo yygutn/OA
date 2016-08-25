@@ -1,7 +1,7 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
-import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +10,12 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import cn.edu.jumy.oa.CallBack.RelayCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.RelayResponse;
-import cn.edu.jumy.oa.UI.AuditDetailsActivity_;
 import cn.edu.jumy.oa.adapter.RelayAdapter;
 import cn.edu.jumy.oa.bean.Node;
 import cn.edu.jumy.oa.bean.Relay;
@@ -57,9 +55,9 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
                             index++;
                             mListView.setOnRefreshComplete();
                         }
-                    },1000);
+                    }, 1000);
                 } else {
-                    onError(null,null,0);
+                    onError(null, null, 0);
                 }
             }
 
@@ -71,7 +69,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
                     public void run() {
                         mListView.setOnRefreshComplete();
                     }
-                },1000);
+                }, 1000);
             }
         });
     }
@@ -79,7 +77,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
     @NonNull
     private Map<String, String> getParams(int Index) {
 
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new ArrayMap<>();
         params.put("page", Index + "");
         params.put("size", basePages + "");
         params.put("keywords", "");
@@ -103,7 +101,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
         showDebugLogd(o.toString());
         Relay node = (Relay) o;
-        DetailsActivity_.intent(mContext).extra("details",new Node(node)).extra("FromFQ",true).start();
+        DetailsActivity_.intent(mContext).extra("details", new Node(node)).extra("FromFQ", true).start();
 //        AuditDetailsActivity_.intent(mContext).extra("id", node.oldid).extra("type", (node.type == 1 ? 1 : 2) + "").extra("From_FQ",true).start();
     }
 
@@ -157,7 +155,7 @@ public class ApprovalFqActivity extends BaseSearchRefreshActivity {
         }
         ArrayList<Relay> list = new ArrayList<>();
         for (Relay node : mList) {
-            if (node.remark.contains(str) || node.docTitle.contains(str) || node.docSummary.contains(str)){
+            if (node.remark.contains(str) || node.docTitle.contains(str) || node.docSummary.contains(str)) {
                 list.add(node);
             }
         }

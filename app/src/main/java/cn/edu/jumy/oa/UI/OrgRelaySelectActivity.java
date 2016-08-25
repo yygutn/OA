@@ -1,7 +1,7 @@
 package cn.edu.jumy.oa.UI;
 
 import android.content.DialogInterface;
-import android.os.Handler;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -23,7 +23,6 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
@@ -31,7 +30,6 @@ import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.Response.OrgRelayResponse;
-import cn.edu.jumy.oa.adapter.DepartmentAdapter;
 import cn.edu.jumy.oa.adapter.OrgRelayAdapter;
 import cn.edu.jumy.oa.bean.OrgRelay;
 import cn.edu.jumy.oa.widget.IndexableStickyListView.IndexableStickyListView;
@@ -135,7 +133,7 @@ public class OrgRelaySelectActivity extends BaseActivity {
     @OptionsItem(R.id.action_submit)
     void submit() {
         String ids = "";
-        Map<String, Integer> idMap = new HashMap<>();
+        Map<String, Integer> idMap = new ArrayMap<>();
 
         for (OrgRelay account : mList) {
             if (account.checked) {
@@ -188,12 +186,12 @@ public class OrgRelaySelectActivity extends BaseActivity {
      * @param ids     ID
      */
     private void sendRelay(String message, String ids) {
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new ArrayMap<>();
         params.put("id", id);//公文或者会议的id
         int mType = type == 0 ? 2 : 1;
         params.put("type", mType + "");//转发的类型（0：代表公文  ，1：代表会议）
         params.put("organid", ids);//你选择的所有机构的id的集合，比如"1,2,3,4,5"这样的字符串
-        params.put("relayRemark",message);
+        params.put("relayRemark", message);
         OAService.Relay(params, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int ID) {

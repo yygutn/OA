@@ -1,6 +1,7 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
 import android.support.annotation.NonNull;
+import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,6 @@ import android.view.ViewGroup;
 import org.androidannotations.annotations.EActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import cn.edu.jumy.oa.CallBack.MeetCallback;
@@ -18,7 +18,6 @@ import cn.edu.jumy.oa.Response.MeetResponse;
 import cn.edu.jumy.oa.adapter.SentMeetAdapter;
 import cn.edu.jumy.oa.bean.Meet;
 import cn.edu.jumy.oa.bean.Node;
-import cn.edu.jumy.oa.widget.customview.SimpleDividerItemDecoration;
 
 /**
  * Created by Jumy on 16/7/12 20:25.
@@ -55,7 +54,7 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
     @NonNull
     private Map<String, String> getParams(int Index) {
 
-        final Map<String, String> params = new HashMap<>();
+        final Map<String, String> params = new ArrayMap<>();
         params.put("page", Index + "");
         params.put("size", basePages + "");
         params.put("level", "");
@@ -114,7 +113,7 @@ public class SentMeetingActivity extends BaseSearchRefreshActivity {
                     for (int i = position - 1; i >= 0; i--) {
                         mList.add(0, response.data.pageObject.get(i));
                     }
-                    mListView.setLoadMoreCount((index-1)*basePages+position);
+                    mListView.setLoadMoreCount((index - 1) * basePages + position);
                     adapter.setList(new ArrayList(mList));
                 }
             }

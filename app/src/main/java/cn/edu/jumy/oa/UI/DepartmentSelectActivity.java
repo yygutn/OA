@@ -1,6 +1,7 @@
 package cn.edu.jumy.oa.UI;
 
 import android.content.Intent;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -9,7 +10,6 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OnActivityResult;
@@ -18,7 +18,6 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import cn.edu.jumy.jumyframework.BaseActivity;
@@ -226,8 +225,8 @@ public class DepartmentSelectActivity extends BaseActivity {
     void submit() {
         String str = "";
         String ids = "";
-        Map<String, Integer> idMap = new HashMap<>();
-        Map<String, Integer> nameMap = new HashMap<>();
+        Map<String, Integer> idMap = new ArrayMap<>();
+        Map<String, Integer> nameMap = new ArrayMap<>();
         for (Account account : mDepartments) {
             if (account.checked) {
                 nameMap.put(account.name, 0);

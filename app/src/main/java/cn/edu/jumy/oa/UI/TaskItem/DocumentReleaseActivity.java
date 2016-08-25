@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Environment;
 import android.os.FileObserver;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
@@ -32,7 +33,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -76,7 +76,7 @@ public class DocumentReleaseActivity extends BaseActivity {
     UploadItemAdapter adapter;
     List<UploadItemBean> mList = new ArrayList<>();
 
-    Map<String, File> fileMap = new HashMap<>();
+    Map<String, File> fileMap = new ArrayMap<>();
     @ViewById(R.id.uploadView)
     RecyclerView uploadView;
 
@@ -93,7 +93,7 @@ public class DocumentReleaseActivity extends BaseActivity {
 
     String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/Office Lens";
 
-    Map<String, Boolean> picMap = new HashMap<>();//扫描件
+    Map<String, Boolean> picMap = new ArrayMap<>();//扫描件
     FileObserver listener = new FileObserver(dir, FileObserver.CREATE) {
         @Override
         public void onEvent(int event, String path) {
@@ -180,7 +180,7 @@ public class DocumentReleaseActivity extends BaseActivity {
 
                         dealZipFile();
 
-                        Map<String, String> params = new HashMap<>();
+                        Map<String, String> params = new ArrayMap<>();
                         params.put("department", receiveUnitsID);
                         params.put("level", level);
                         params.put("docNo", docNo);
