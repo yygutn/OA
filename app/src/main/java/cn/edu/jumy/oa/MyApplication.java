@@ -43,7 +43,6 @@ public class MyApplication extends MultiDexApplication {
         context = getApplicationContext();
         instance = this;
         AppManager.getInstance().init();
-        CrashHandler.getInstance().init(context);
         initOkHttpUtils();
         //HX
         DemoApplication.getInstance().init(this);
@@ -54,6 +53,7 @@ public class MyApplication extends MultiDexApplication {
             Logger.init("Release").logLevel(LogLevel.NONE);
         }
         LitePalApplication.initialize(this);
+        CrashHandler.getInstance().init(this,MainActivity.class);
     }
 
     private void initOkHttpUtils() {

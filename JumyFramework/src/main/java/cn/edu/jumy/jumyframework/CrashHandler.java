@@ -1,13 +1,17 @@
 package cn.edu.jumy.jumyframework;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Looper;
 import android.os.Process;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.orhanobut.logger.Logger;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,7 +29,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
     private static final String TAG = "CrashHandler";
     private static final boolean DEBUG = true;
 
-    private static final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/jumy/log/";
+    private static final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/oa/log/";
     private static final String FILE_NAME = "crash";
 
     //log文件的后缀名
@@ -47,13 +51,14 @@ public class CrashHandler implements UncaughtExceptionHandler {
     }
 
     //这里主要完成初始化工作
-    public void init(Context context) {
+    public void init(Context context,Class clz) {
         //获取系统默认的异常处理器
         mDefaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
         //将当前实例设为系统默认的异常处理器
         Thread.setDefaultUncaughtExceptionHandler(this);
         //获取Context，方便内部使用
         mContext = context.getApplicationContext();
+        restartClz = clz;
     }
 
     /**
@@ -63,7 +68,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
         try {
-            Toast.makeText(mContext,"crash test",Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "crash test", Toast.LENGTH_SHORT).show();
             //导出异常信息到SD卡中
             dumpExceptionToSDCard(ex);
             //这里可以通过网络上传异常信息到服务器，便于开发人员分析日志从而解决bug
@@ -76,12 +81,60 @@ public class CrashHandler implements UncaughtExceptionHandler {
         ex.printStackTrace();
 
         //如果系统提供了默认的异常处理器，则交给系统去结束我们的程序，否则就由我们自己结束自己
-        if (mDefaultCrashHandler != null) {
+        if (!handleException(ex) && mDefaultCrashHandler != null) {
             mDefaultCrashHandler.uncaughtException(thread, ex);
         } else {
-            Process.killProcess(Process.myPid());
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                Log.e(TAG, "error : ", e);
+            }
+            toast.cancel();
+            Logger.t(TAG).e("finish all activity");
+            AppManager.getInstance().AppExit(mContext);
+            restart();
+//            Logger.t(TAG).e("kill process");
+//            Process.killProcess(Process.myPid());
+//            Logger.t(TAG).e("system exit with 1");
+//            System.exit(1);
         }
 
+    }
+    public static Class restartClz = null;
+    public void restart(){
+        if (restartClz == null){
+            return;
+        }
+        Logger.t(TAG).e("start new activity");
+        Intent intent = new Intent(mContext,restartClz);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
+        Logger.t(TAG).e("kill process");
+        Process.killProcess(Process.myPid());
+    }
+    Toast toast;
+    /**
+     * 自定义错误处理,收集错误信息 发送错误报告等操作均在此完成.
+     *
+     * @param ex
+     * @return true:如果处理了该异常信息;否则返回false.
+     */
+    private boolean handleException(Throwable ex) {
+        if (ex == null) {
+            return false;
+        }
+        // 使用Toast来显示异常信息
+        Logger.t(TAG).e("自定义处理异常");
+        new Thread() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                toast = Toast.makeText(mContext, "程序出现异常，即将退出～", Toast.LENGTH_SHORT);
+                toast.show();
+                Looper.loop();
+            }
+        }.start();
+        return true;
     }
 
     private void dumpExceptionToSDCard(Throwable ex) throws IOException {
