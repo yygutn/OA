@@ -1,7 +1,9 @@
 package cn.edu.jumy.oa.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,12 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fsck.k9.K9;
 import com.fsck.k9.activity.Accounts;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.jumy.jumyframework.BaseFragment;
+import cn.edu.jumy.oa.MyApplication;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.UI.CalendarActivity_;
 import cn.edu.jumy.oa.UI.MeetingCardActivity_;
@@ -149,6 +153,16 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                         break;
                     }
                     case 2: {//邮件
+                        final ProgressDialog progressDialog = new ProgressDialog(mContext);
+                        progressDialog.setMessage("邮箱加载中...");
+                        progressDialog.show();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                K9.getInstance().onCreate(MyApplication.getInstance());
+                                progressDialog.dismiss();
+                            }
+                        },1500);
                         startActivity(new Intent(mContext, Accounts.class));
                         break;
                     }

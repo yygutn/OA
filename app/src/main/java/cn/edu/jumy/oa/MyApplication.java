@@ -30,11 +30,8 @@ import okhttp3.OkHttpClient;
  * 全局Application
  */
 public class MyApplication extends MultiDexApplication {
-
-    private static final String TAG = "Application";
-
     private static volatile Context context;
-    public static String DEVICE_ID = "";
+    private static volatile MyApplication instance;
 
     @Override
     public void onCreate() {
@@ -43,6 +40,7 @@ public class MyApplication extends MultiDexApplication {
         }
         super.onCreate();
         context = getApplicationContext();
+        instance = this;
         AppManager.getInstance().init();
         CrashHandler.getInstance().init(context);
         initOkHttpUtils();
@@ -55,7 +53,6 @@ public class MyApplication extends MultiDexApplication {
             Logger.init("Release").logLevel(LogLevel.NONE);
         }
         LitePalApplication.initialize(this);
-        K9.getInstance().onCreate(this);
     }
     private void initOkHttpUtils() {
         HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);//可访问所有Https网站
@@ -78,6 +75,17 @@ public class MyApplication extends MultiDexApplication {
             }
         }
         return context;
+    }
+    public static MyApplication getInstance(){
+        if (instance == null){
+            synchronized (MyApplication.class){
+                if (instance == null){
+                    instance = new MyApplication();
+                }
+                return instance;
+            }
+        }
+        return instance;
     }
 
     /**
