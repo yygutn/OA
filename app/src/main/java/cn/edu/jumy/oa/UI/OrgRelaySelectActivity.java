@@ -1,6 +1,7 @@
 package cn.edu.jumy.oa.UI;
 
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -78,12 +79,14 @@ public class OrgRelaySelectActivity extends BaseActivity {
                     showToast(response.msg);
                     return;
                 }
-                mList.clear();
-                for (OrgRelay orgRelay : response.data) {
-                    DFS(orgRelay);
-                }
+                mList = response.data;
                 //end of format List
-                updateView();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateView();
+                    }
+                });
             }
         });
     }
@@ -211,17 +214,6 @@ public class OrgRelaySelectActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-
-    private void DFS(OrgRelay temp) {
-        mList.add(temp);
-        if (temp.children != null && temp.children.size() >= 0) {
-            for (OrgRelay relay : temp.children) {
-                relay.name = temp.name + "/" + relay.name;
-                DFS(relay);
-            }
-        }
     }
 
     private abstract class OrgCallback extends Callback<OrgRelayResponse> {
