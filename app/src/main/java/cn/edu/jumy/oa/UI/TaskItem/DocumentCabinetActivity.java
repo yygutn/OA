@@ -1,6 +1,7 @@
 package cn.edu.jumy.oa.UI.TaskItem;
 
 import android.app.ProgressDialog;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +9,6 @@ import android.view.ViewGroup;
 import com.hyphenate.chat.EMClient;
 import com.zhy.http.okhttp.callback.FileCallBack;
 
-import org.androidannotations.annotations.AfterExtras;
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.litepal.crud.DataSupport;
 
@@ -34,7 +33,8 @@ import okhttp3.Request;
 public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
     AnnexAdapter adapter;
     ArrayList<Annex> mList = new ArrayList<>();
-
+    Annex tempAnnex;
+    File file = null;
     @Override
     protected void setTile() {
         mTitleBar.setTitle("文件柜");
@@ -42,7 +42,7 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
 
     private void getData() {
         try {
-            mList = (ArrayList<Annex>) DataSupport.where("username = ?", EMClient.getInstance().getCurrentUser()).find(Annex.class);
+            mList = (ArrayList<Annex>) DataSupport.select("fileName", "IDS").where("username = ?", EMClient.getInstance().getCurrentUser()).find(Annex.class);
         } catch (Exception e) {
             showDebugException(e);
         }
@@ -73,9 +73,20 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
     }
 
     @Override
-    public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-        Annex annex = mList.get(position);
-        final File file = Annex.getFileByByte(annex);
+    public void onItemClick(ViewGroup parent, View view, Object o, final int position) {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                tempAnnex = DataSupport.where("IDS = ?", mList.get(position).getID())
+                        .where("username = ?", EMClient.getInstance().getCurrentUser())
+                        .findFirst(Annex.class);
+
+                if (tempAnnex != null) {
+                    file =Annex.getFileByByte(tempAnnex);
+                }
+            }
+        });
+
         if (file == null) {
             String id = mList.get(position).getID();
             String filepath = mContext.getExternalCacheDir().getAbsolutePath();
@@ -101,7 +112,10 @@ public class DocumentCabinetActivity extends BaseSearchRefreshActivity {
 
                     @Override
                     public void syncSaveToSQL(File file) {
-
+                        if (tempAnnex != null){
+                            tempAnnex.setByteFile(Annex.File2byte(file));
+                            tempAnnex.saveThrows();
+                        }
                     }
 
                     @Override

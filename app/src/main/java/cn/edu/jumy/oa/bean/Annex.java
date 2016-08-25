@@ -42,8 +42,6 @@ public class Annex extends DataSupport {
      * 文件后缀名
      */
     private String suffix;
-    @Column(ignore = true)
-    private File file;
     private byte byteFile[];
 
     private String username;
@@ -113,14 +111,6 @@ public class Annex extends DataSupport {
 
     public void setSuffix(String suffix) {
         this.suffix = suffix;
-    }
-
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
     }
 
     public byte[] getByteFile() {

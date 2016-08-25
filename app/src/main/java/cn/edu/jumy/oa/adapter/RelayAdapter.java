@@ -26,7 +26,7 @@ public class RelayAdapter extends CommonAdapter<Relay> {
         ((CardView) holder.getView(R.id.cardView)).setCardBackgroundColor(Color.parseColor("#30DDDDDD"));
         holder.setText(R.id.subtitle, node.docTitle);
         Node temp = new Node(node);
-        holder.setText(R.id.supportingText, CardGenerator.getZFContentString(temp));
+        holder.setText(R.id.supportingText, CardGenerator.getContentString(temp));
     }
     public void setList(ArrayList<Relay> list){
         mDatas.clear();

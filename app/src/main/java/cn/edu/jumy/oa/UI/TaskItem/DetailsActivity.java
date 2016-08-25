@@ -417,8 +417,9 @@ public class DetailsActivity extends BaseActivity {
                                 }
                             }
                             final Annex tempNode = annex;
-                            if (annex != null && annex.getFile() != null) {
-                                CallOtherOpenFile.openFile(mContext, annex.getFile());
+                            File temp = Annex.getFileByByte(annex);
+                            if (annex != null && temp != null) {
+                                CallOtherOpenFile.openFile(mContext, temp);
                                 alertDialog.cancel();
                             } else {
                                 final ProgressDialog progressDialog = new ProgressDialog(mContext);
@@ -476,7 +477,7 @@ public class DetailsActivity extends BaseActivity {
                                     public void syncSaveToSQL(File file) {
                                         if (tempNode != null) {
                                             tempNode.setFileName(newFileName);
-                                            tempNode.setFile(file);
+                                            tempNode.setByteFile(Annex.File2byte(file));
                                             if (tempNode.save()) {
                                                 showDebugLoge(tempNode.getFileName() + "：保存成功");
                                             }
