@@ -92,11 +92,74 @@ public class Relay implements Parcelable {
     public String oldSendDepartment;//文件的初始发送单位
     public String relayRemark;
 
-    public Relay(Doc node){
+    public Relay(Doc node) {
+        this.type = 1;
         this.id = node.id;
+        this.department = node.department;
+        this.personnel = node.personnel;
+        this.level = node.level;
+        this.docNo = node.docNo;
+        this.docTitle = node.docTitle;
+        this.docSummary = node.docSummary;
+        this.signNum = node.signNum;
+        this.signStatus = node.signStatus;
+        this.isuse = node.isuse;
+        this.remark = node.remark;
+        this.cuid = node.cuid;
+        this.uuid = node.uuid;
+        this.signUid = node.signUid;
+        this.orderBy = node.orderBy;
+        this.attachmentList = node.attachmentList;
+        this.createTime = node.createTime;
+        this.sendDepartmentInfo = node.sendDepartmentInfo;
+        this.departmentInfo = node.departmentInfo;
+        this.didtask = node.didtask;
         this.tid = node.tid;
     }
 
+    public Relay(Meet node) {
+        this.type = 2;
+        this.id = node.id;
+        this.name = node.name;
+        this.meetTime = node.meetTime;
+        this.meetCompany = node.meetCompany;
+        this.department = node.department;
+        this.level = node.level;
+        this.docNo = node.docNo;
+        this.docTitle = node.docTitle;
+        this.docSummary = node.docSummary;
+        this.contactName = node.contactName;
+        this.contactPhone = node.contactPhone;
+        this.addr = node.addr;
+        this.signNum = node.signNum;
+        this.signStatus = node.signStatus;
+        this.isuse = node.isuse;
+        this.remark = node.remark;
+        this.cuid = node.cuid;
+        this.uuid = node.uuid;
+        this.orderBy = node.orderBy;
+        this.attachmentList = node.attachmentList;
+        this.createTime = node.createTime;
+        this.sendDepartmentInfo = node.sendDepartmentInfo;
+        this.departmentInfo = node.departmentInfo;
+        this.didtask = node.didtask;
+        this.meetTimeString = node.meetTimeString;
+        this.meetCompanyName = node.meetCompanyName;
+        this.tid = node.tid;
+        this.passStatus = node.passStatus;
+    }
+
+    public Relay(Notify node) {
+        this.type = 3;
+        this.id = node.id;
+        this.docTitle = node.title;
+        this.docSummary = node.summary;
+        this.department = node.department;
+        this.sendDepartmentInfo = node.departmentName;
+        this.cuid = node.cuid;
+        this.createTime = node.createTime;
+        this.tid = node.tid;
+    }
 
     public Relay() {
     }

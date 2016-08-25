@@ -127,6 +127,7 @@ public class ItemTableRow extends TableRow implements View.OnClickListener {
             case R.id.text5:{//重新报名
                 title = "重新报名";
                 skip2edit(title);
+                this.user.passStatus = 3;
                 break;
             }
             case R.id.text6:{//修改

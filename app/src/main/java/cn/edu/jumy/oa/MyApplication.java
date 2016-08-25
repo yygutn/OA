@@ -32,10 +32,11 @@ import okhttp3.OkHttpClient;
 public class MyApplication extends MultiDexApplication {
     private static volatile Context context;
     private static volatile MyApplication instance;
+    public static boolean isFirst = true;
 
     @Override
     public void onCreate() {
-        if (!isInMainProcess(this)){
+        if (!isInMainProcess(this)) {
             return;
         }
         super.onCreate();
@@ -47,13 +48,14 @@ public class MyApplication extends MultiDexApplication {
         //HX
         DemoApplication.getInstance().init(this);
         //
-        if (BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             Logger.init("Jumy").hideThreadInfo().methodOffset(0);
         } else {
             Logger.init("Release").logLevel(LogLevel.NONE);
         }
         LitePalApplication.initialize(this);
     }
+
     private void initOkHttpUtils() {
         HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory(null, null, null);//可访问所有Https网站
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -76,10 +78,11 @@ public class MyApplication extends MultiDexApplication {
         }
         return context;
     }
-    public static MyApplication getInstance(){
-        if (instance == null){
-            synchronized (MyApplication.class){
-                if (instance == null){
+
+    public static MyApplication getInstance() {
+        if (instance == null) {
+            synchronized (MyApplication.class) {
+                if (instance == null) {
                     instance = new MyApplication();
                 }
                 return instance;

@@ -104,6 +104,8 @@ public class DetailsActivity extends BaseActivity {
     @Extra("FromFQ")
     boolean fromFQ = false;
 
+    public static boolean FROM_NOTIFY = false;
+
     TableLayout mTableDone;
     TableLayout mTableUndo;
     ArrayList<Relay> mListUndo;
@@ -244,7 +246,8 @@ public class DetailsActivity extends BaseActivity {
             }
         });
     }
-    private void NoticeSign(){
+
+    private void NoticeSign() {
         OAService.noticeSign(mNode.tid, new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int ID) {
@@ -262,7 +265,7 @@ public class DetailsActivity extends BaseActivity {
                 } else {
                     if (!TextUtils.isEmpty(baseResponse.msg)) {
                         showToast(baseResponse.msg);
-                        if (baseResponse.msg.contains("已签收")){
+                        if (baseResponse.msg.contains("已签收")) {
                             setResult(1025);
                         }
                     }

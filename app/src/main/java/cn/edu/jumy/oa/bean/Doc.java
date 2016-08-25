@@ -89,7 +89,7 @@ public class Doc extends DataSupport implements Parcelable {
     /**
      * 附件
      */
-    public List<Attachment> attachmentList = new ArrayList<>();
+    public ArrayList<Attachment> attachmentList = new ArrayList<>();
 
     /**
      * 创建时间

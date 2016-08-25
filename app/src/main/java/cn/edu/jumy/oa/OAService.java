@@ -1059,4 +1059,23 @@ public class OAService {
             }
         });
     }
+    //接收单位报名表提交审批
+    public static void updateTaskPassStatus(final String tid, final Callback callback) {
+        getTime(new DateCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int ID) {
+                callback.onError(call, e, ID);
+            }
+
+            @Override
+            public void onResponse(String response, int ID) {
+                OkHttpUtils.post()
+                        .url(BASE_URL + "updateTaskPassStatus")
+                        .addParams("value", response)
+                        .addParams("tid", tid)
+                        .build()
+                        .execute(callback);
+            }
+        });
+    }
 }

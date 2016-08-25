@@ -6,8 +6,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.widget.TableLayout;
+
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.androidannotations.annotations.AfterExtras;
 import org.androidannotations.annotations.AfterViews;
@@ -26,16 +30,18 @@ import cn.edu.jumy.oa.CallBack.AuditCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.AuditResponse;
+import cn.edu.jumy.oa.Response.BaseResponse;
+import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity;
 import cn.edu.jumy.oa.bean.AuditUser;
 import cn.edu.jumy.oa.widget.customview.ItemTableRow;
 import cn.edu.jumy.oa.widget.customview.ItemTableRow_;
+import okhttp3.Call;
 
 /**
  * Created by Jumy on 16/7/5 16:46.
  * Copyright (c) 2016, yygutn@gmail.com All Rights Reserved.
  */
 @EActivity(R.layout.activity_sign_up_details)
-@OptionsMenu(R.menu.back2meet)
 public class SignUpDetailsActivity extends BaseActivity {
     @ViewById(R.id.tool_bar)
     Toolbar mToolBar;
@@ -57,6 +63,7 @@ public class SignUpDetailsActivity extends BaseActivity {
     ArrayList<AuditUser> mListLeaved = new ArrayList<>();
     ArrayList<AuditUser> mListJoined = new ArrayList<>();
     ArrayList<AuditUser> mListListen = new ArrayList<>();
+    ArrayList<AuditUser> mList = new ArrayList<>();
 
     ArrayList<ItemTableRow> mItemLeaved = new ArrayList<>();
     ArrayList<ItemTableRow> mItemJoined = new ArrayList<>();
@@ -76,7 +83,8 @@ public class SignUpDetailsActivity extends BaseActivity {
                 mItemLeaved.clear();
                 mItemJoined.clear();
                 mItemListen.clear();
-                for (AuditUser auditUser : response.data) {
+                mList = response.data;
+                for (AuditUser auditUser : mList) {
                     if (auditUser.type == 2) {
                         mListLeaved.add(auditUser);
                     } else if (auditUser.type == 1) {
@@ -150,8 +158,47 @@ public class SignUpDetailsActivity extends BaseActivity {
         getData();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (DetailsActivity.FROM_NOTIFY){
+            getMenuInflater().inflate(R.menu.back2notify,menu);
+        } else {
+            getMenuInflater().inflate(R.menu.back2meet, menu);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
     @OptionsItem(R.id.action_back2meet)
     void back(){
+        doUpdate();
         AppManager.getInstance().back2Level2();
+    }
+    @OptionsItem(R.id.action_back2notify)
+    void back2notify(){
+        doUpdate();
+        AppManager.getInstance().back2Level1();
+    }
+
+    /**
+     * 判断是否需要提交审批
+     */
+    private void doUpdate() {
+        boolean flag = false;
+        for (AuditUser user : mList) {
+            if (user.passStatus == 1){
+                flag = true;
+                break;
+            }
+        }
+        if (!flag){
+            OAService.updateTaskPassStatus(tid,null);
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        doUpdate();
+        super.onBackPressed();
     }
 }

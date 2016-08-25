@@ -112,7 +112,7 @@ public class Meet extends DataSupport implements Parcelable {
     /**
      * 附件
      */
-    public List<Attachment> attachmentList = new ArrayList<>();
+    public ArrayList<Attachment> attachmentList = new ArrayList<>();
     /**
      * 会议时间-转化
      */

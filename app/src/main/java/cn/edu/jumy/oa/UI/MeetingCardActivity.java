@@ -39,6 +39,7 @@ import cn.edu.jumy.oa.CallBack.MeetCallback;
 import cn.edu.jumy.oa.OAService;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.MeetResponse;
+import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity;
 import cn.edu.jumy.oa.bean.Meet;
 import cn.edu.jumy.oa.fragment.BaseSearchRefreshFragment;
 import cn.edu.jumy.oa.fragment.MeetAllFragment_;
@@ -152,6 +153,8 @@ public class MeetingCardActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+
+        DetailsActivity.FROM_NOTIFY = false;
     }
 
     @PageScrollStateChanged(R.id.document_viewPager)

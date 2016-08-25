@@ -153,16 +153,19 @@ public class TaskFragment extends BaseFragment implements MyItemTouchCallback.On
                         break;
                     }
                     case 2: {//邮件
-                        final ProgressDialog progressDialog = new ProgressDialog(mContext);
-                        progressDialog.setMessage("邮箱加载中...");
-                        progressDialog.show();
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                K9.getInstance().onCreate(MyApplication.getInstance());
-                                progressDialog.dismiss();
-                            }
-                        },1500);
+                        if (MyApplication.isFirst){
+                            final ProgressDialog progressDialog = new ProgressDialog(mContext);
+                            progressDialog.setMessage("邮箱加载中...");
+                            progressDialog.show();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    K9.getInstance().onCreate(MyApplication.getInstance());
+                                    progressDialog.dismiss();
+                                }
+                            },1500);
+                            MyApplication.isFirst = false;
+                        }
                         startActivity(new Intent(mContext, Accounts.class));
                         break;
                     }

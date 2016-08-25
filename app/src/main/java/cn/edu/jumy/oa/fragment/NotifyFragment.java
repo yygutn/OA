@@ -29,6 +29,7 @@ import cn.edu.jumy.oa.CallBack.MeetCallback;
 import cn.edu.jumy.oa.CallBack.RelayCallback2;
 import cn.edu.jumy.oa.CallBack.StringCallback2;
 import cn.edu.jumy.oa.OAService;
+import cn.edu.jumy.oa.OaPreference;
 import cn.edu.jumy.oa.R;
 import cn.edu.jumy.oa.Response.BaseResponse;
 import cn.edu.jumy.oa.Response.DocResponse;
@@ -37,6 +38,7 @@ import cn.edu.jumy.oa.Response.NotifyBroadCastResponse;
 import cn.edu.jumy.oa.Response.Relay2Response;
 import cn.edu.jumy.oa.Response.SingleNotifyResponse;
 import cn.edu.jumy.oa.Response.StringListResponse;
+import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity;
 import cn.edu.jumy.oa.UI.TaskItem.DetailsActivity_;
 import cn.edu.jumy.oa.Utils.NotifyUtils;
 import cn.edu.jumy.oa.adapter.NotifyCardAdapter;
@@ -81,7 +83,7 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
     PullToRefreshRecyclerView mListView;
 
     ImageView mEmptyImageView;
-    private final CopyOnWriteArrayList<Node> mList = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<Relay> mList = new CopyOnWriteArrayList<>();
     NotifyCardAdapter adapter;
     private int lastClickPosition = 0;
 
@@ -151,9 +153,10 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                 new Handler().post(new Runnable() {
                     @Override
                     public void run() {
-                        for (Relay relay : response.data) {
-                            mList.add(new Node(relay));
-                        }
+//                        for (Relay relay : response.data) {
+//                            mList.add(new Node(relay));
+//                        }
+                        mList.addAll(response.data);
                         response.data = null;
                         mListView.postDelayed(new Runnable() {
                             @Override
@@ -203,7 +206,8 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
 
     @Override
     public void onItemClick(ViewGroup parent, View view, Object o, int position) {
-        Node node = (Node) o;
+        Node node = new Node((Relay)o);
+        DetailsActivity.FROM_NOTIFY = true;
         DetailsActivity_.intent(mContext).extra("details", node).startForResult(2048);
         lastClickPosition = position;
     }
@@ -241,12 +245,12 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                     try {
                         if (response.data.pageObject.size() > 0) {
                             Doc doc = response.data.pageObject.get(0);
-                            for (Node node : mList) {
+                            for (Relay node : mList) {
                                 if (doc.id.equals(node.id)) {
                                     mList.remove(node);
                                 }
                             }
-                            mList.add(0, new Node(doc));
+                            mList.add(0, new Relay(doc));
                             response.data = null;
                             adapter.notifyDataSetChanged();
                         }
@@ -269,12 +273,12 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                     if (response.data.pageObject.size() > 0) {
                         try {
                             Meet meet = response.data.pageObject.get(0);
-                            for (Node node : mList) {
+                            for (Relay node : mList) {
                                 if (meet.id.equals(node.id)) {
                                     mList.remove(node);
                                 }
                             }
-                            mList.add(0, new Node(response.data.pageObject.get(0)));
+                            mList.add(0, new Relay(response.data.pageObject.get(0)));
                             response.data = null;
                             adapter.notifyDataSetChanged();
                         } catch (Exception e) {
@@ -295,8 +299,8 @@ public class NotifyFragment extends BaseFragment implements OnItemClickListener 
                 }
                 synchronized (mList) {
                     try {
-                        Node temp = new Node(response.data);
-                        for (Node node : mList) {
+                        Relay temp = new Relay(response.data);
+                        for (Relay node : mList) {
                             if (node.id.equals(temp.id)) {
                                 mList.remove(node);
                             }
