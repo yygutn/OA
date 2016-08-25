@@ -10,7 +10,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cn.edu.jumy.oa.R;
-import cn.edu.jumy.oa.bean.Account;
 import cn.edu.jumy.oa.bean.OrgRelay;
 import cn.edu.jumy.oa.widget.IndexableStickyListView.IndexableAdapter;
 

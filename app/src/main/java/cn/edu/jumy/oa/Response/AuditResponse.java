@@ -1,9 +1,7 @@
 package cn.edu.jumy.oa.Response;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import cn.edu.jumy.oa.bean.Account;
 import cn.edu.jumy.oa.bean.AuditUser;
 
 /**

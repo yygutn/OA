@@ -38,22 +38,22 @@ public class Account extends IndexEntity implements Parcelable {
      */
     public String id;
     public String name;
-    public String typeid;
-    public String pid;
-    public String sort;
-    public int level;
-    public String contact1;
-    public String contact2;
-    public String contact3;
-    public int isdef;
-    public int isuse;
-    public String remark;
-    public String cuid;
-    public String uuid;
-    public long createTime;
-    public long updataTime;
-    public String orderBy;
-    public List<Account> organizationList;
+//    public String typeid;
+//    public String pid;
+//    public String sort;
+//    public int level;
+//    public String contact1;
+//    public String contact2;
+//    public String contact3;
+//    public int isdef;
+//    public int isuse;
+//    public String remark;
+//    public String cuid;
+//    public String uuid;
+//    public long createTime;
+//    public long updataTime;
+//    public String orderBy;
+//    public List<Account> organizationList;
 
     public boolean checked = false;
 
@@ -73,6 +73,9 @@ public class Account extends IndexEntity implements Parcelable {
         this.name = name;
     }
 
+    public Account() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -82,50 +85,16 @@ public class Account extends IndexEntity implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.name);
-        dest.writeString(this.typeid);
-        dest.writeString(this.pid);
-        dest.writeString(this.sort);
-        dest.writeInt(this.level);
-        dest.writeString(this.contact1);
-        dest.writeString(this.contact2);
-        dest.writeString(this.contact3);
-        dest.writeInt(this.isdef);
-        dest.writeInt(this.isuse);
-        dest.writeString(this.remark);
-        dest.writeString(this.cuid);
-        dest.writeString(this.uuid);
-        dest.writeLong(this.createTime);
-        dest.writeLong(this.updataTime);
-        dest.writeString(this.orderBy);
-        dest.writeList(this.organizationList);
-    }
-
-    public Account() {
+        dest.writeByte(this.checked ? (byte) 1 : (byte) 0);
     }
 
     protected Account(Parcel in) {
         this.id = in.readString();
         this.name = in.readString();
-        this.typeid = in.readString();
-        this.pid = in.readString();
-        this.sort = in.readString();
-        this.level = in.readInt();
-        this.contact1 = in.readString();
-        this.contact2 = in.readString();
-        this.contact3 = in.readString();
-        this.isdef = in.readInt();
-        this.isuse = in.readInt();
-        this.remark = in.readString();
-        this.cuid = in.readString();
-        this.uuid = in.readString();
-        this.createTime = in.readLong();
-        this.updataTime = in.readLong();
-        this.orderBy = in.readString();
-        this.organizationList = new ArrayList<Account>();
-        in.readList(this.organizationList, Account.class.getClassLoader());
+        this.checked = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<Account> CREATOR = new Parcelable.Creator<Account>() {
+    public static final Creator<Account> CREATOR = new Creator<Account>() {
         @Override
         public Account createFromParcel(Parcel source) {
             return new Account(source);
